@@ -1,5 +1,7 @@
 package com.dubu.backend.member.dto;
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
 public record MemberLocation(
@@ -12,5 +14,4 @@ public record MemberLocation(
         @DecimalMax(value = "90.0", message = "y_coordinate 값은 90보다 작아야 합니다.")
         Double y_coordinate
 ) {
-}
 }
