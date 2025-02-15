@@ -21,3 +21,12 @@ export const TODO_TYPE = {
   tomorrow: 'TOMORROW',
   route: 'PATH',
 } as const;
+
+export const CATEGORY_LABEL_MAPPER = {
+  READING: '독서',
+  ENGLISH: '영어',
+  LANGUAGE: '제2외국어',
+  NEWS: '뉴스/시사',
+  HOBBY: '취미',
+  OTHERS: '기타',
+} as const;
