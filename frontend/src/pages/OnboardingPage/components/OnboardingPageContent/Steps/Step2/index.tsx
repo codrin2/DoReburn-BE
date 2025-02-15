@@ -19,8 +19,8 @@ const Step2 = () => {
   ) => {
     setUserInfo((prev) => ({
       ...prev,
-      [`${selectedAddressType}Title`]: title,
-      [`${selectedAddressType}Address`]: address,
+      [`${selectedAddressType}Title`]: title || address,
+      [`${selectedAddressType}Address`]: address || title,
       [`${selectedAddressType}AddressX`]: coordinateX,
       [`${selectedAddressType}AddressY`]: coordinateY,
     }));
