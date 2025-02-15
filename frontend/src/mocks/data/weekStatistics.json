@@ -22,32 +22,32 @@
       {
         "category": "ENGLISH",
         "count": 6,
-        "time": 124
+        "usageTime": 124
       },
       {
         "category": "NEWS",
         "count": 4,
-        "time": 83
+        "usageTime": 83
       },
       {
         "category": "READING",
         "count": 3,
-        "time": 62
+        "usageTime": 62
       },
       {
         "category": "HOBBY",
         "count": 2,
-        "time": 41
+        "usageTime": 41
       },
       {
         "category": "LANGUAGE",
         "count": 2,
-        "time": 41
+        "usageTime": 41
       },
       {
         "category": "OTHERS",
         "count": 1,
-        "time": 21
+        "usageTime": 21
       }
     ]
   }

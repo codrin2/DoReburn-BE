@@ -4,7 +4,7 @@ import * as S from './WeekCategoryList.styled';
 interface WeekTodoListProps {
   categoryRanking: {
     category: string;
-    time: number;
+    usageTime: number;
     count: number;
   }[];
 }

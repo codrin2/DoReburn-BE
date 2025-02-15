@@ -14,7 +14,7 @@ interface WeekStatistics {
   categoryTodoCounts: {
     category: string;
     count: number;
-    time: number;
+    usageTime: number;
   }[];
 }
 
