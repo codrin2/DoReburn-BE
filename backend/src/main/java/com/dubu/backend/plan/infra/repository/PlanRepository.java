@@ -13,14 +13,6 @@ import java.util.Optional;
 public interface PlanRepository extends JpaRepository<Plan, Long> {
     Optional<Plan> findTopByMemberIdOrderByCreatedAtDesc(Long memberId);
 
-    @Query("SELECT p FROM Plan p " +
-            "JOIN FETCH p.feedback " +
-            "JOIN FETCH p.paths pa " +
-            "JOIN pa.todos t " +
-            "WHERE p.member = :member AND t.type = :type AND t.isCompleted = :isCompleted AND p.createdAt between :startTime AND :endTime"
-    )
-    List<Plan> findByMemberAndTypeAndIsCompletedAndCreatedAtBetween(Member member, TodoType type, boolean isCompleted, LocalDateTime startTime, LocalDateTime endTime);
-
     @Query("SELECT p FROM Plan p JOIN FETCH p.feedback WHERE p.member = :member AND p.createdAt between :startTime AND :endTime")
     List<Plan> findByMemberAndCreatedAtBetween(Member member, LocalDateTime startTime, LocalDateTime endTime);
 }
