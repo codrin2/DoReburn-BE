@@ -9,10 +9,10 @@ import {
 
 const StepDescription = () => {
   const { onboardingUserInfo, onboardingStep } = useOnboarding();
-  const { StepValidityMapper } = useStepValidity();
+  const { isCurrentStepValid } = useStepValidity();
 
   const isLastStepValid =
-    onboardingStep === ONBOARDING_LAST_STEP && StepValidityMapper[onboardingStep]?.();
+    onboardingStep === ONBOARDING_LAST_STEP && isCurrentStepValid(onboardingStep);
 
   if (isLastStepValid) {
     return (
