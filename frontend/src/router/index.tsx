@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router';
 
 import FlexPageLayout from './layout/FlexPageLayout';
 
+import DayStatisticsPage from '@/pages/DayStatisticsPage';
 import EditPage from '@/pages/EditPage';
 import FeedbackPage from '@/pages/FeedbackPage';
 import KakaoLoginPage from '@/pages/KakaoLoginPage';
@@ -87,5 +88,9 @@ export const router = createBrowserRouter([
   {
     path: '/statistics/week',
     element: <WeekStatisticsPage />,
+  },
+  {
+    path: '/statistics/day',
+    element: <DayStatisticsPage />,
   },
 ]);
