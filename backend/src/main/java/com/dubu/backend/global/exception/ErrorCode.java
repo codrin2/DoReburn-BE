@@ -11,6 +11,7 @@ import static org.springframework.http.HttpStatus.*;
 public enum ErrorCode {
 
     // Common
+    INVALID_JSON(BAD_REQUEST,"잘못된 JSON 형식입니다. 요청 데이터를 확인하세요."),
     FIELD_ERROR(BAD_REQUEST,"입력이 잘못되었습니다."),
     URL_PARAMETER_ERROR(BAD_REQUEST,"입력이 잘못되었습니다."),
     METHOD_ARGUMENT_TYPE_MISMATCH(BAD_REQUEST,"입력한 값의 타입이 잘못되었습니다."),
