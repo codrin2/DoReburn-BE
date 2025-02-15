@@ -1,10 +1,9 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import type { PluginOption } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     VitePWA({
@@ -27,7 +26,7 @@ export default defineConfig({
         ],
         screenshots: [
           {
-            src: '/icons/android-chrome-512x512.png',
+            src: '/icons/512x512.png',
             sizes: '512x512',
             type: 'image/png',
             form_factor: 'wide',
@@ -42,10 +41,13 @@ export default defineConfig({
           },
         ],
       },
+      devOptions: {
+        enabled: mode !== 'development', // 개발 환경에서는 PWA 서비스 워커 비활성화
+      },
       registerType: 'autoUpdate',
-    }) as unknown as PluginOption,
+    }),
   ],
   resolve: {
     alias: [{ find: '@', replacement: '/src' }],
   },
-});
+}));
