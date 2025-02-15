@@ -5,4 +5,6 @@ export const WeekStatisticsPageContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.2rem;
+  overflow: hidden;
+  height: 100%;
 `;
