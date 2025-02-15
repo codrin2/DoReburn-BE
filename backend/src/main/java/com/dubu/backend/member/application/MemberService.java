@@ -13,6 +13,7 @@ import com.dubu.backend.member.dto.response.MemberSavedAddressResponse;
 import com.dubu.backend.member.dto.response.MemberStatusResponse;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.exception.MemberSavedAddressNotFoundException;
+import com.dubu.backend.member.exception.RedisUnavailableException;
 import com.dubu.backend.member.infra.repository.AddressRepository;
 import com.dubu.backend.member.infra.repository.LocationRedisRepository;
 import com.dubu.backend.member.infra.repository.MemberCategoryRepository;
@@ -22,6 +23,7 @@ import com.dubu.backend.todo.entity.Category;
 import com.dubu.backend.todo.exception.CategoryNotFoundException;
 import com.dubu.backend.todo.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -210,6 +212,11 @@ public class MemberService {
         memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
-        locationRedisRepository.saveMemberLocation(memberId, location);
+        try {
+            locationRedisRepository.saveMemberLocation(memberId, location);
+        }
+        catch (RedisConnectionFailureException e) {
+            throw new RedisUnavailableException();
+        }
     }
 }
