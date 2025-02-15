@@ -37,7 +37,7 @@ public class StatisticServiceImpl implements StatisticService {
     public DayStatisticInfo collectDayStatistic(Long memberId, LocalDate date) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
         List<Category> categories = categoryRepository.findAll();
-        List<Plan> dayPlans = planRepository.findByMemberAndTypeAndCreatedAtBetween(member, TodoType.DONE, date.atStartOfDay(), date.atTime(LocalTime.MAX));
+        List<Plan> dayPlans = planRepository.findByMemberAndTypeAndIsCompletedAndCreatedAtBetween(member, TodoType.DONE, true, date.atStartOfDay(), date.atTime(LocalTime.MAX));
 
         if(dayPlans == null || dayPlans.isEmpty()){
             return null;
@@ -51,7 +51,7 @@ public class StatisticServiceImpl implements StatisticService {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
         List<Category> categories = categoryRepository.findAll();
 
-        List<Plan> thisWeekPlans = planRepository.findByMemberAndTypeAndCreatedAtBetween(member, TodoType.DONE, date.atStartOfDay(), date.plusWeeks(1).atTime(LocalTime.MAX));
+        List<Plan> thisWeekPlans = planRepository.findByMemberAndTypeAndIsCompletedAndCreatedAtBetween(member, TodoType.DONE, true, date.atStartOfDay(), date.plusWeeks(1).atTime(LocalTime.MAX));
 
         if(thisWeekPlans == null || thisWeekPlans.isEmpty()){
             return null;
@@ -75,13 +75,13 @@ public class StatisticServiceImpl implements StatisticService {
 
            for(Path path: plan.getPaths()){
                 for(Todo todo: path.getTodos()){
-                    categoryTodoStatistics.countDoneTodoByCategory(todo);
+                    categoryTodoStatistics.countDoneTodo(todo);
                     totalUsageTime += todo.getSpentTime();
                 }
             }
         }
 
-        return DayStatisticInfo.of(totalMoveTime, totalUsageTime, feedbacks, categoryTodoStatistics.getCategoryTodoCount());
+        return DayStatisticInfo.of(totalMoveTime, totalUsageTime, feedbacks, categoryTodoStatistics.getCategoryTodoTimeCount());
     }
 
     private WeekStatisticInfo buildWeekStatisticInfo(LocalDate startDate, List<Category> categories, List<Plan> thisWeekPlans, List<Plan> lastWeekPlans){
@@ -98,14 +98,14 @@ public class StatisticServiceImpl implements StatisticService {
             for(Path path: plan.getPaths()){
                 for(Todo todo: path.getTodos()){
                     totalTodoCount += 1;
-                    categoryTodoStatistics.countDoneTodoByCategory(todo);
+                    categoryTodoStatistics.recordDoneTodo(todo);
                     totalUsageTime += todo.getSpentTime();
                 }
             }
         }
         int lastWeekDiff = totalUsageTime - calculateWeeklyUsageTime(lastWeekPlans);
 
-        return WeekStatisticInfo.of(dateUsageTimeStatistics.getDateUsageTime(), totalTodoCount, lastWeekDiff, totalMoveTime, totalUsageTime, categoryTodoStatistics.getCategoryTodoCount());
+        return WeekStatisticInfo.of(dateUsageTimeStatistics.getDateUsageTime(), totalTodoCount, lastWeekDiff, totalMoveTime, totalUsageTime, categoryTodoStatistics.getCategoryTodoTimeCount());
     }
 
     private int calculateWeeklyUsageTime(List<Plan> plans){

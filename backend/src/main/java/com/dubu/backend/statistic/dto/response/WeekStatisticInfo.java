@@ -1,5 +1,7 @@
 package com.dubu.backend.statistic.dto.response;
 
+import com.dubu.backend.statistic.service.collection.CategoryTodoStatistics;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -12,14 +14,14 @@ public record WeekStatisticInfo(
         int totalUsageTime,
         List<CategoryTodoInfo> categoryTodoCounts
 ) {
-    public static WeekStatisticInfo of(Map<LocalDate, Integer> dateUsageTime, int totalTodoCount, int lastWeekDiff, int totalMoveTime, int totalUsageTime, Map<String, Integer> categoryTodoCount){
+    public static WeekStatisticInfo of(Map<LocalDate, Integer> dateUsageTime, int totalTodoCount, int lastWeekDiff, int totalMoveTime, int totalUsageTime, Map<String, CategoryTodoStatistics.TimeCount> categoryTodoTimeCount){
         return new WeekStatisticInfo(
                 DayUsageTime.fromDateUsageTime(dateUsageTime),
                 totalTodoCount,
                 lastWeekDiff,
                 totalMoveTime,
                 totalUsageTime,
-                CategoryTodoInfo.fromCategoryTodoCount(categoryTodoCount)
+                CategoryTodoInfo.fromCategoryTodoTimeCount(categoryTodoTimeCount)
         );
     }
 
