@@ -1,5 +1,9 @@
 {
   "data": {
+    "totalTodoCount": 18,
+    "lastWeekDiff": 5,
+    "totalMoveTime": 450,
+    "totalUsageTime": 372,
     "dayUsageTimes": [
       {
         "date": "2025-02-11",
@@ -11,37 +15,39 @@
       },
       {
         "date": "2025-02-14",
-        "usageTime": 90
+        "usageTime": 172
       }
     ],
-    "totalTodoCount": 18,
-    "lastWeekDiff": 5,
-    "totalMoveTime": 240,
-    "totalUsageTime": 800,
     "categoryTodoCounts": [
       {
-        "category": "HOBBY",
-        "count": 2
+        "category": "ENGLISH",
+        "count": 6,
+        "time": 124
       },
       {
         "category": "NEWS",
-        "count": 4
-      },
-      {
-        "category": "ENGLISH",
-        "count": 6
-      },
-      {
-        "category": "LANGUAGE",
-        "count": 2
-      },
-      {
-        "category": "OTHERS",
-        "count": 1
+        "count": 4,
+        "time": 83
       },
       {
         "category": "READING",
-        "count": 3
+        "count": 3,
+        "time": 62
+      },
+      {
+        "category": "HOBBY",
+        "count": 2,
+        "time": 41
+      },
+      {
+        "category": "LANGUAGE",
+        "count": 2,
+        "time": 41
+      },
+      {
+        "category": "OTHERS",
+        "count": 1,
+        "time": 21
       }
     ]
   }
