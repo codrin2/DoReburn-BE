@@ -10,6 +10,7 @@ import com.dubu.backend.member.dto.request.MemberStatusUpdateRequest;
 import com.dubu.backend.member.dto.response.MemberInfoResponse;
 import com.dubu.backend.member.dto.response.MemberSavedAddressResponse;
 import com.dubu.backend.member.dto.response.MemberStatusResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -90,7 +91,7 @@ public class MemberController implements MemberApi {
     @PutMapping("/location")
     public void updateMemberLocation(
             @RequestAttribute("memberId") Long memberId,
-            @RequestBody MemberLocation memberLocation
+            @Valid @RequestBody MemberLocation memberLocation
     ) {
         memberService.updateMemberLocation(memberId, memberLocation);
     }
