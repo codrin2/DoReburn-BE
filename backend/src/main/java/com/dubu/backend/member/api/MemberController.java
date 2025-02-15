@@ -1,7 +1,9 @@
 package com.dubu.backend.member.api;
 
+import com.dubu.backend.global.anotation.Polling;
 import com.dubu.backend.global.domain.SuccessResponse;
 import com.dubu.backend.member.application.MemberService;
+import com.dubu.backend.member.dto.MemberLocation;
 import com.dubu.backend.member.dto.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.dto.request.MemberOnboardingRequest;
 import com.dubu.backend.member.dto.request.MemberStatusUpdateRequest;
@@ -81,5 +83,15 @@ public class MemberController implements MemberApi {
             @RequestBody MemberStatusUpdateRequest request
     ) {
         memberService.updateMemberStatus(memberId, request.status());
+    }
+
+    @Polling
+    @ResponseStatus(NO_CONTENT)
+    @PutMapping("/location")
+    public void updateMemberLocation(
+            @RequestAttribute("memberId") Long memberId,
+            @RequestBody MemberLocation memberLocation
+    ) {
+        memberService.updateMemberLocation(memberId, memberLocation);
     }
 }
