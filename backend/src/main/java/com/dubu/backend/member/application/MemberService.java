@@ -5,6 +5,7 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.MemberCategory;
 import com.dubu.backend.member.domain.enums.AddressType;
 import com.dubu.backend.member.domain.enums.Status;
+import com.dubu.backend.member.dto.MemberLocation;
 import com.dubu.backend.member.dto.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.dto.request.MemberOnboardingRequest;
 import com.dubu.backend.member.dto.response.MemberInfoResponse;
@@ -13,6 +14,7 @@ import com.dubu.backend.member.dto.response.MemberStatusResponse;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.exception.MemberSavedAddressNotFoundException;
 import com.dubu.backend.member.infra.repository.AddressRepository;
+import com.dubu.backend.member.infra.repository.LocationRedisRepository;
 import com.dubu.backend.member.infra.repository.MemberCategoryRepository;
 import com.dubu.backend.member.infra.repository.MemberRepository;
 import com.dubu.backend.plan.exception.InvalidMemberStatusException;
@@ -35,6 +37,7 @@ public class MemberService {
     private final CategoryRepository categoryRepository;
     private final MemberCategoryRepository memberCategoryRepository;
     private final AddressRepository addressRepository;
+    private final LocationRedisRepository locationRedisRepository;
 
     @Transactional(readOnly = true)
     public MemberInfoResponse findMemberInfo(Long memberId) {
@@ -201,5 +204,9 @@ public class MemberService {
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
         currentMember.updateStatus(Status.fromString(status));
+    }
+
+    public void updateMemberLocation(Long memberId, MemberLocation location) {
+        locationRedisRepository.saveMemberLocation(memberId, location);
     }
 }
