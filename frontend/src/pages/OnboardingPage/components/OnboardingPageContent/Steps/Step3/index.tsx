@@ -32,6 +32,7 @@ const Step3 = () => {
     if (!nickname) {
       setNicknameStatus('DEFAULT');
       setNicknameValidMsg(MESSAGES.DEFAULT);
+
       return;
     }
 
