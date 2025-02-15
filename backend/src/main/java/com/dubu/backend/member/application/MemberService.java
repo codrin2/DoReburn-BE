@@ -207,6 +207,9 @@ public class MemberService {
     }
 
     public void updateMemberLocation(Long memberId, MemberLocation location) {
+        memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
+
         locationRedisRepository.saveMemberLocation(memberId, location);
     }
 }
