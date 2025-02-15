@@ -123,7 +123,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleInternalServerErrorException(InternalServerException e) {
         log.error(e.getMessage(), e);
 
-        return new ErrorResponse(ErrorCode.SERVER_ERROR);
+        return new ErrorResponse(e);
     }
 
     @ExceptionHandler
