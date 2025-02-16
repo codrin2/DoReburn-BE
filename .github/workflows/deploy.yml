@@ -86,6 +86,8 @@ jobs:
               -e ODSAY_CLIENT_API_KEY=${{ secrets.ODSAY_CLIENT_API_KEY }} \
               -e VAPID_PUBLIC_KEY=${{ secrets.VAPID_PUBLIC_KEY }} \
               -e VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }} \
+              -e ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }} \
+              -e APP_PUSH_DELAY_MS=${{ secrets.APP_PUSH_DELAY_MS }} \
               -e PROD_SERVER_URL=${{ secrets.PROD_SERVER_URL }} \
               --name ${{ secrets.DOCKER_REPOSITORY }} \
               ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
