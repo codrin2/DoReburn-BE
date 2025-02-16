@@ -1,3 +1,5 @@
+import { DayInfo } from './WeekStatisticsPage.types';
+
 export const getStartOfWeek = (dateStr: string) => {
   const date = new Date(dateStr);
   const day = date.getDay();
@@ -19,4 +21,23 @@ export const isTodayInWeek = (weekStartDate: string) => {
   endOfWeek.setDate(startOfWeek.getDate() + 6);
 
   return today >= startOfWeek && today <= endOfWeek;
+};
+
+export const isToday = (day: DayInfo) => {
+  const today = new Date();
+
+  return (
+    day.year === today.getFullYear() &&
+    day.month === today.getMonth() + 1 &&
+    day.day === today.getDate()
+  );
+};
+
+export const getWeekDateRange = (weekDays: DayInfo[]) => {
+  if (weekDays.length === 0) return '';
+
+  const start = weekDays[0];
+  const end = weekDays[6];
+
+  return `${start.month}월 ${start.day}일 (월) - ${end.month}월 ${end.day}일 (일)`;
 };
