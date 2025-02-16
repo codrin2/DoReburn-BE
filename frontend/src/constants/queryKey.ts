@@ -14,4 +14,5 @@ export const QUERY_KEY = {
   nearbyUsers: 'nearbyUsers',
   memberStatus: 'memberStatus',
   memberInfo: 'memberInfo',
+  weekStatistics: 'weekStatistics',
 } as const;

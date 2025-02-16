@@ -13,6 +13,7 @@ import PlanPage from '@/pages/PlanPage';
 import RecommendTodoPage from '@/pages/RecommendTodoPage';
 import RouteSelectPage from '@/pages/RouteSelectPage';
 import RouteTodoEditPage from '@/pages/RouteTodoEditPage';
+import WeekStatisticsPage from '@/pages/WeekStatisticsPage';
 
 export const router = createBrowserRouter([
   {
@@ -82,5 +83,9 @@ export const router = createBrowserRouter([
   {
     path: '/login/kakao',
     element: <KakaoLoginPage />,
+  },
+  {
+    path: '/statistics/week',
+    element: <WeekStatisticsPage />,
   },
 ]);

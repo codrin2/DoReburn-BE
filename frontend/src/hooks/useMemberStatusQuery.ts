@@ -8,6 +8,7 @@ const useMemberStatusQuery = () => {
     queryKey: [QUERY_KEY.memberStatus],
     queryFn: getMemberStatus,
     retry: 0,
+    gcTime: 0,
   });
 };
 
