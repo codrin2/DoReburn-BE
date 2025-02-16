@@ -35,6 +35,7 @@ export const IconButtonWrapper = styled(IconButton)<{ $isSelected: boolean }>`
 `;
 
 export const FilterWrapper = styled.div`
+  background-color: ${({ theme }) => theme.colors.white};
   display: flex;
   gap: 0.8rem;
   padding: 0.5rem 2.4rem;
