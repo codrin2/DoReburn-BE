@@ -185,7 +185,7 @@ public interface TodoApi {
             @Parameter(description = "경로 ID - type = path 인 경우만 사용") @Nullable @RequestParam("pathId") Long pathId,
             @RequestBody TodoCreateRequest request);
 
-    @Operation(summary = "다른 할 일로부터 할 일 생성", description = "다른 할 일로부터 할 일을 추가합니다.")
+    @Operation(summary = "다른 할 일로부터 할 일 생성 - 지도(공유)에서도 사용", description = "다른 할 일로부터 할 일을 추가합니다.지도(공유)에서 사용 시 type=save 로 설정")
     @ApiResponses({
             @ApiResponse(responseCode = "201",
                     description = "할 일 생성 성공",
@@ -197,7 +197,7 @@ public interface TodoApi {
                             ),
                             examples = {
                                     @ExampleObject(
-                                            name = "직접 [오늘, 즐겨찾기, 경로별] 할 일 생성 성공",
+                                            name = "[오늘, 즐겨찾기, 경로별, 지도] 할 일 생성 성공",
                                             value = """
                                                     {
                                                         "data": {
