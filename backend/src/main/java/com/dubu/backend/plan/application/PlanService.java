@@ -4,6 +4,8 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.notification.dto.PushMessageDto;
+import com.dubu.backend.notification.infra.amqp.PushMessageProducer;
 import com.dubu.backend.plan.domain.Feedback;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
@@ -42,6 +44,7 @@ public class PlanService {
     private final ScheduleRepository scheduleRepository;
     private final TodoRepository todoRepository;
     private final FeedbackRepository feedbackRepository;
+    private final PushMessageProducer pushMessageProducer;
 
     @Transactional
     public Long savePlan(Long memberId, PlanCreateRequest planCreateRequest) {
@@ -76,7 +79,11 @@ public class PlanService {
         }
         todoRepository.saveAll(newTodos);
         currentMember.updateStatus(Status.MOVE);
+
         taskSchedulerService.scheduleFeedbackStatusUpdate(memberId, newPlan);
+
+        PushMessageDto message = new PushMessageDto(memberId, newPlan.getId(), "안녕", "문희상");
+        pushMessageProducer.sendDelayedPush(message);
 
         return newPlan.getId();
     }

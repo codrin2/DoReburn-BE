@@ -71,9 +71,10 @@ public enum ErrorCode {
     // Schedule
     SCHEDULE_NOT_FOUND(NOT_FOUND, "스케줄을 찾을 수 없습니다."),
 
-    // External API
+    // External
     NAVER_SERVICE_UNAVAILABLE(SERVICE_UNAVAILABLE, "네이버 API 서버가 장애 상태입니다."),
     KAKAO_SERVICE_UNAVAILABLE(SERVICE_UNAVAILABLE, "카카오 API 서버가 장애 상태입니다."),
+    UNAVAILABLE_PUSH_SERVICE(SERVICE_UNAVAILABLE, "현재 푸시 서비스를 이용할 수 없습니다.")
     ;
 
     public final HttpStatus httpStatus;

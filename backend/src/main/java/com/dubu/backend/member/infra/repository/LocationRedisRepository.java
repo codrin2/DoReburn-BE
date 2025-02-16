@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Component
 @RequiredArgsConstructor
 public class LocationRedisRepository {
@@ -23,9 +22,7 @@ public class LocationRedisRepository {
 
     public void saveMemberLocation(Long memberId, MemberLocation memberLocation) {
         GeoOperations<String, String> geoOperations = redisTemplate.opsForGeo();
-
         Point point = new Point(memberLocation.x_coordinate(), memberLocation.y_coordinate());
-
         geoOperations.add(GEO_KEY, point, String.valueOf(memberId));
     }
 
@@ -59,3 +56,5 @@ public class LocationRedisRepository {
         return memberLocationInfos;
     }
 }
+
+

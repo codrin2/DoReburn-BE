@@ -6,6 +6,7 @@ import com.dubu.backend.share.dto.response.ShareInfo;
 import com.dubu.backend.share.dto.response.ShareTodoInfo;
 import com.dubu.backend.todo.controller.TodoApi;
 import com.dubu.backend.todo.dto.response.TodoSuccessResponse;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,12 +15,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @Tag(name = "Share API", description = "지도(공유) API")
 public interface ShareApi {
@@ -256,4 +257,5 @@ public interface ShareApi {
             @RequestAttribute Long memberId,
             @Parameter(description = "주변 사용자의 할 일 id", example = "9999") @RequestParam Long surroundingMemberTodoId
     );
+
 }
