@@ -32,7 +32,7 @@ public class ShareServiceImpl implements ShareService {
 
     @Override
     @Transactional
-    public ShareInfo findSurroundingMemberInfo(Long memberId, SurroundingMemberQueryRequest request){
+    public ShareInfo findSurroundingMembersInfo(Long memberId, SurroundingMemberQueryRequest request){
         memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
         List<Category> categories = categoryRepository.findAll();
 
