@@ -1,0 +1,81 @@
+package com.dubu.backend.notification.application;
+
+
+import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.exception.MemberNotFoundException;
+import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.notification.config.VapidKeyConfig;
+import com.dubu.backend.notification.domain.PushSubscription;
+import com.dubu.backend.notification.dto.PushMessageDto;
+import com.dubu.backend.notification.dto.PushSubscriptionDto;
+import com.dubu.backend.notification.exception.UnavailablePushServiceException;
+import com.dubu.backend.notification.infra.amqp.repository.PushSubscriptionRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import nl.martijndwars.webpush.Notification;
+import nl.martijndwars.webpush.PushService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
+import java.util.List;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class NotificationService {
+    private final VapidKeyConfig vapidKeyConfig;
+    private final MemberRepository memberRepository;
+    private final PushSubscriptionRepository subscriptionRepository;
+
+    @Transactional
+    public void saveSubscription(Long memberId, PushSubscriptionDto subscriptionDto) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
+
+        PushSubscription pushSubscription = PushSubscription.builder()
+                .member(member)
+                .endPoint(subscriptionDto.endpoint())
+                .p256dh(subscriptionDto.keys().p256dh())
+                .auth(subscriptionDto.keys().auth())
+                .build();
+
+        subscriptionRepository.save(pushSubscription);
+        log.info("[구독 저장] memberId={}, endpoint={}", memberId, subscriptionDto.endpoint());
+    }
+
+    public void sendPushNotification(PushMessageDto message) {
+        List<PushSubscription> subscriptions = subscriptionRepository.findByMemberId((message.memberId()));
+        PushService pushService;
+
+        try {
+            pushService = new PushService(vapidKeyConfig.publicKey(), vapidKeyConfig.privateKey(), "robotmun@gmail.com");
+        } catch (GeneralSecurityException e) {
+            throw new UnavailablePushServiceException();
+        }
+
+        for (PushSubscription sub : subscriptions) {
+            try {
+                String payload = """
+                {
+                    "title": "%s",
+                    "body": "%s"
+                }
+                """.formatted(message.title(), message.body());
+
+                Notification notification = new Notification(
+                        sub.getEndPoint(),
+                        sub.getP256dh(),
+                        sub.getAuth(),
+                        payload.getBytes(StandardCharsets.UTF_8)
+                );
+
+                pushService.send(notification);
+                log.info("[푸시 알림 전송] memberId={} ", message.memberId());
+            } catch (Exception e) {
+                throw new UnavailablePushServiceException();
+            }
+        }
+    }
+}
