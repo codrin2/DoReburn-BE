@@ -3,7 +3,7 @@ package com.dubu.backend.auth.application;
 import com.dubu.backend.auth.dto.TokenResponse;
 import com.dubu.backend.auth.exception.*;
 import com.dubu.backend.auth.infra.repository.TokenRedisRepository;
-import com.dubu.backend.global.config.JwtConfig;
+import com.dubu.backend.auth.config.JwtConfig;
 import io.jsonwebtoken.Claims;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
