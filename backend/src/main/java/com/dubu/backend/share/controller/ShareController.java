@@ -33,7 +33,7 @@ public class ShareController implements ShareApi{
 
     @GetMapping("/members/todos")
     public SuccessResponse<List<ShareTodoInfo>> getTodosForSurroundingMember(
-            @RequestParam Long memberId,
+            @RequestAttribute Long memberId,
             @RequestParam Long surroundingMemberId
     ){
         return new SuccessResponse<List<ShareTodoInfo>>(shareTodoService.findTodosOfSurroundMember(memberId, surroundingMemberId));
@@ -42,7 +42,7 @@ public class ShareController implements ShareApi{
     @DeleteMapping("/todo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTodo(
-            @RequestParam Long memberId,
+            @RequestAttribute Long memberId,
             @RequestParam Long surroundingMemberTodoId
     ){
         shareTodoService.removeTodoFromSurroundingMemberTodo(memberId, surroundingMemberTodoId);
