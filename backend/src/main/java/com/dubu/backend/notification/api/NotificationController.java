@@ -24,7 +24,7 @@ public class NotificationController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping("/")
+    @PostMapping
     public void sendNotification(@RequestBody PushMessageDto message) {
         notificationService.sendPushNotification(message);
     }
