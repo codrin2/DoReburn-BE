@@ -1,7 +1,7 @@
-import { TabContent, TabList } from './FavoritePage.styled';
 import FavoriteTab from '../EditPage/components/FavoriteTab';
 import RecommendTodoContainer from '../RecommendTodoPage/components/RecommendTodoContainer';
 import FavoriteHeader from './components/FavoriteHeader/FavoriteHeader';
+import * as S from './FavoritePage.styled';
 
 import { Tab } from '@/components/Tab';
 import { TODO_TYPE } from '@/constants/config';
@@ -15,18 +15,17 @@ const FavoritePage = () => {
   return (
     <Tab.Root tabList={FAVORITE_TABS}>
       <FavoriteHeader />
-
-      <TabList>
+      <S.TabList>
         {FAVORITE_TABS.map((tab) => (
           <li key={tab.value}>
             <Tab.Trigger value={tab.value}>{tab.label}</Tab.Trigger>
           </li>
         ))}
-      </TabList>
-      <TabContent>
+      </S.TabList>
+      <S.TabContent>
         <FavoriteTab todoType={TODO_TYPE.SAVE} />
         <RecommendTodoContainer isFavoritePage />
-      </TabContent>
+      </S.TabContent>
     </Tab.Root>
   );
 };
