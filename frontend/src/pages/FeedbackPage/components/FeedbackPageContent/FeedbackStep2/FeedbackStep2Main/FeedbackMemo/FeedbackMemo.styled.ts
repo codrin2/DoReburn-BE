@@ -10,8 +10,19 @@ export const FeedbackMemoLayout = styled.div`
   border-radius: 2.4rem;
 `;
 
+export const MemoTitleLayout = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 export const Title = styled.div`
   ${({ theme }) => theme.fonts.body15};
+  color: ${({ theme }) => theme.colors.gray600};
+`;
+
+export const MemoLength = styled.div`
+  ${({ theme }) => theme.fonts.label13};
   color: ${({ theme }) => theme.colors.gray600};
 `;
 

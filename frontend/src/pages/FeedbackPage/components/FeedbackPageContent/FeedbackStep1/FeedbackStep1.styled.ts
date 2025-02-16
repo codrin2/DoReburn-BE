@@ -5,18 +5,17 @@ export const FeedbackStep1Layout = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
   height: 100%;
-  gap: 6rem;
+  gap: 5rem;
 `;
 
 export const Title = styled.h1`
-  ${({ theme }) => theme.fonts.headline18};
+  ${({ theme }) => theme.fonts.heading20};
   color: ${({ theme }) => theme.colors.gray950};
 `;
 
 export const AnimationContainer = styled.div`
-  width: 24rem;
-  height: 24rem;
   display: flex;
   justify-content: center;
   align-items: center;
