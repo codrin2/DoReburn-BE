@@ -42,6 +42,10 @@ public class LocationRedisRepository {
     private List<MemberLocationInfo> convertGeoResultToMemberLocationInfo(GeoResults<RedisGeoCommands.GeoLocation<String>> geoResults){
         List<MemberLocationInfo> memberLocationInfos = new ArrayList<>();
 
+        if(geoResults == null){
+            return null;
+        }
+
         for (GeoResult<RedisGeoCommands.GeoLocation<String>> geoResult : geoResults.getContent()) {
             RedisGeoCommands.GeoLocation<String> geoLocation = geoResult.getContent();
             long memberId = Long.parseLong(geoLocation.getName());

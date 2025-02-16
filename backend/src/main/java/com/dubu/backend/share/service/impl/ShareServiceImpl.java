@@ -38,6 +38,10 @@ public class ShareServiceImpl implements ShareService {
 
         List<MemberLocationInfo> memberLocationInfos = locationRedisRepository.findMemberLocations(request);
 
+        if(memberLocationInfos == null || memberLocationInfos.isEmpty()){
+            return null;
+        }
+
         List<Member> neighborhoodMembers = memberRepository.findMembersByMemberIds(extractMemberIds(memberLocationInfos));
 
         Map<String, Long> todoCountGroupByCategoryForStopMembers = todoRepository.findTodoCountGroupByCategoryForStopMembers(splitStopMember(neighborhoodMembers), LocalDate.now());
