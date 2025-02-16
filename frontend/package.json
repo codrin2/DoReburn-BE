@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "cd .. && husky frontend/.husky",
-    "test": "vitest"
+    "test": "vitest",
+    "ci": "pnpm install --frozen-lockfile"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.64.2",
