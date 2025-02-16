@@ -32,22 +32,32 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	// JWT
-	implementation "io.jsonwebtoken:jjwt-api:0.12.5"
-	implementation "io.jsonwebtoken:jjwt-impl:0.12.5"
-	implementation "io.jsonwebtoken:jjwt-jackson:0.12.5"
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.12.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 
 	// jpa
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 	// Querydsl
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-	annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
-	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
+	annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+	annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
 
 	// DB
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	implementation "org.springframework.boot:spring-boot-starter-data-redis"
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// web -push
+	implementation 'nl.martijndwars:web-push:5.1.0'
+
+	// MQ
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
+	// BouncyCastle
+	implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+	implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
 
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
