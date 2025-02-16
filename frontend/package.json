@@ -9,7 +9,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepare": "cd .. && husky frontend/.husky"
+    "prepare": "cd .. && husky frontend/.husky",
+    "test": "vitest",
+    "ci": "pnpm install --frozen-lockfile"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.64.2",
@@ -23,6 +25,9 @@
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "@tanstack/eslint-plugin-query": "^5.64.2",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.10.10",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
@@ -34,6 +39,7 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^15.14.0",
     "husky": "^9.1.7",
+    "jsdom": "^26.0.0",
     "kakao.maps.d.ts": "^0.1.40",
     "lint-staged": "^15.4.2",
     "msw": "^2.7.0",
@@ -41,6 +47,7 @@
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.5",
+    "vitest": "^3.0.5",
     "vite-plugin-pwa": "^0.21.1"
   },
   "lint-staged": {
