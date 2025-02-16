@@ -7,27 +7,21 @@ import DayFeedback from './components/DayFeedback';
 import DayStatisticsHeader from './components/DayStatisticsHeader';
 import DayTimeOverview from './components/DayTimeOverview';
 import * as S from './DayStatisticsPage.styled';
+import { changeDateByDirection, getFormattedDate } from './DayStatisticsPage.utils';
 import useDayStatisticsQuery from './hooks/useDayStatisticsQuery';
 
 const DayStatisticsPage = () => {
   const navigate = useNavigate();
   const today = new Date();
-  const todayYear = today.getFullYear();
-  const todayMonth = (today.getMonth() + 1).toString().padStart(2, '0');
-  const todayDate = today.getDate().toString().padStart(2, '0');
-
   const [searchParams] = useSearchParams();
-  const [date, setDate] = useState(
-    searchParams.get('date') ?? `${todayYear}-${todayMonth}-${todayDate}`,
-  );
+  const [date, setDate] = useState(searchParams.get('date') ?? getFormattedDate(today));
 
   const { data: dayStatistics } = useDayStatisticsQuery(date);
 
   const handleClickDay = (direction: 'prev' | 'next') => {
-    const newDate = new Date(date);
-    newDate.setDate(newDate.getDate() + (direction === 'prev' ? -1 : 1));
-    setDate(newDate.toISOString().split('T')[0]);
-    navigate(`/statistics/day?date=${newDate.toISOString().split('T')[0]}`);
+    const newDate = changeDateByDirection(date, direction);
+    setDate(newDate);
+    navigate(`/statistics/day?date=${newDate}`);
   };
 
   return (
