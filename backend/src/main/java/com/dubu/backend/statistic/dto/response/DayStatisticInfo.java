@@ -1,6 +1,7 @@
 package com.dubu.backend.statistic.dto.response;
 
 import com.dubu.backend.plan.domain.Feedback;
+import com.dubu.backend.statistic.service.collection.CategoryTodoStatistics;
 
 import java.util.List;
 import java.util.Map;
@@ -11,13 +12,13 @@ public record DayStatisticInfo(
         List<FeedbackInfo> feedbacks,
         List<CategoryTodoInfo> categoryTodoCounts
 ) {
-    public static DayStatisticInfo of(int totalMoveTime, int totalUsageTime, List<Feedback> feedbacks, Map<String, Integer> categoryTodoCount){
+    public static DayStatisticInfo of(int totalMoveTime, int totalUsageTime, List<Feedback> feedbacks, Map<String, CategoryTodoStatistics.TimeCount> categoryTodoCount){
 
         return new DayStatisticInfo(
                 totalMoveTime,
                 totalUsageTime,
                 FeedbackInfo.fromFeedbacks(feedbacks),
-                CategoryTodoInfo.fromCategoryTodoCount(categoryTodoCount)
+                CategoryTodoInfo.fromCategoryTodoTimeCount(categoryTodoCount)
         );
     }
 

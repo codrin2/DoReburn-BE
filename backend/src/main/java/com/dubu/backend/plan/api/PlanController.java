@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/plans")
@@ -18,21 +20,25 @@ public class PlanController implements PlanApi {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void createPlan(
+    public SuccessResponse<Map<String, Long>> createPlan(
             @RequestAttribute("memberId") Long memberId,
             @RequestBody PlanCreateRequest planCreateRequest
     ) {
-        planService.savePlan(memberId, planCreateRequest);
+        Long planId = planService.savePlan(memberId, planCreateRequest);
+
+        return new SuccessResponse<>(Map.of("planId", planId));
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{planId}/feedbacks")
-    public void createPlanFeedback(
+    public SuccessResponse<Map<String, Long>> createPlanFeedback(
             @RequestAttribute("memberId") Long memberId,
             @PathVariable Long planId,
             @RequestBody PlanFeedbackCreateRequest planFeedbackCreateRequest
     ) {
-        planService.savePlanFeedback(memberId, planId, planFeedbackCreateRequest);
+        Long feedbackId = planService.savePlanFeedback(memberId, planId, planFeedbackCreateRequest);
+
+        return new SuccessResponse<>(Map.of("feedbackId", feedbackId));
     }
 
     @GetMapping("/recent")

@@ -17,9 +17,15 @@ export const USER_STATUS = {
 } as const;
 
 export const TODO_TYPE = {
-  today: 'TODAY',
-  tomorrow: 'TOMORROW',
-  route: 'PATH',
+  TODAY: 'TODAY',
+  TOMORROW: 'TOMORROW',
+  SAVE: 'SAVE',
+  PATH: 'PATH',
+} as const;
+
+export const DATE_TYPE = {
+  TODAY: 'TODAY',
+  TOMORROW: 'TOMORROW',
 } as const;
 
 export const CATEGORY_LABEL_MAPPER = {

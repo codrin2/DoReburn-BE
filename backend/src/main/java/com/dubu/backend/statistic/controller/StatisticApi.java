@@ -130,74 +130,76 @@ public interface StatisticApi {
                                     @ExampleObject(
                                             name = "주간 통계 데이터가 있을 경우",
                                             value = """
-                                                    {
-                                                        "data": {
-                                                            "dayUsageTimes": [
-                                                                {
-                                                                    "date": "2025-01-15",
-                                                                    "usageTime": 113
-                                                                },
-                                                                {
-                                                                    "date": "2025-01-14",
-                                                                    "usageTime": 178
-                                                                },
-                                                                {
-                                                                    "date": "2025-01-13",
-                                                                    "usageTime": 187
-                                                                },
-                                                                {
-                                                                    "date": "2025-01-20",
-                                                                    "usageTime": 200
-                                                                },
-                                                                {
-                                                                    "date": "2025-01-19",
-                                                                    "usageTime": 134
-                                                                },
-                                                                {
-                                                                    "date": "2025-01-18",
-                                                                    "usageTime": 125
-                                                                },
-                                                                {
-                                                                    "date": "2025-01-17",
-                                                                    "usageTime": 184
-                                                                },
-                                                                {
-                                                                    "date": "2025-01-16",
-                                                                    "usageTime": 165
-                                                                }
-                                                            ],
-                                                            "totalTodoCount": 288,
-                                                            "lastWeekDiff": -355,
-                                                            "totalMoveTime": 1286,
-                                                            "totalUsageTime": 876,
-                                                            "categoryTodoCounts": [
-                                                                {
-                                                                    "category": "HOBBY",
-                                                                    "count": 66
-                                                                },
-                                                                {
-                                                                    "category": "NEWS",
-                                                                    "count": 56
-                                                                },
-                                                                {
-                                                                    "category": "ENGLISH",
-                                                                    "count": 50
-                                                                },
-                                                                {
-                                                                    "category": "LANGUAGE",
-                                                                    "count": 44
-                                                                },
-                                                                {
-                                                                    "category": "OTHERS",
-                                                                    "count": 36
-                                                                },
-                                                                {
-                                                                    "category": "READING",
-                                                                    "count": 36
-                                                                }
-                                                            ]
-                                                        }
-                                                    }
+                                            {
+                                                 "data": {
+                                                     "dayUsageTimes": [
+                                                         {
+                                                             "date": "2025-01-27",
+                                                             "usageTime": 227
+                                                         },
+                                                         {
+                                                             "date": "2025-01-28",
+                                                             "usageTime": 140
+                                                         },
+                                                         {
+                                                             "date": "2025-01-29",
+                                                             "usageTime": 70
+                                                         },
+                                                         {
+                                                             "date": "2025-01-30",
+                                                             "usageTime": 224
+                                                         },
+                                                         {
+                                                             "date": "2025-01-31",
+                                                             "usageTime": 160
+                                                         },
+                                                         {
+                                                             "date": "2025-02-01",
+                                                             "usageTime": 0
+                                                         },
+                                                         {
+                                                             "date": "2025-02-02",
+                                                             "usageTime": 0
+                                                         }
+                                                     ],
+                                                     "totalTodoCount": 180,
+                                                     "lastWeekDiff": -697,
+                                                     "totalMoveTime": 821,
+                                                     "totalUsageTime": 558,
+                                                     "categoryTodoCounts": [
+                                                         {
+                                                             "category": "ENGLISH",
+                                                             "usageTime": 128,
+                                                             "count": 36
+                                                         },
+                                                         {
+                                                             "category": "LANGUAGE",
+                                                             "usageTime": 114,
+                                                             "count": 38
+                                                         },
+                                                         {
+                                                             "category": "OTHERS",
+                                                             "usageTime": 84,
+                                                             "count": 30
+                                                         },
+                                                         {
+                                                             "category": "NEWS",
+                                                             "usageTime": 80,
+                                                             "count": 22
+                                                         },
+                                                         {
+                                                             "category": "HOBBY",
+                                                             "usageTime": 78,
+                                                             "count": 30
+                                                         },
+                                                         {
+                                                             "category": "READING",
+                                                             "usageTime": 74,
+                                                             "count": 24
+                                                         }
+                                                     ]
+                                                 }
+                                             }
                                             """
                                     ),
                                     @ExampleObject(

@@ -1,8 +1,10 @@
 package com.dubu.backend.member.api;
 
 import com.dubu.backend.global.domain.SuccessResponse;
+import com.dubu.backend.member.dto.MemberLocation;
 import com.dubu.backend.member.dto.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.dto.request.MemberOnboardingRequest;
+import com.dubu.backend.member.dto.request.MemberStatusUpdateRequest;
 import com.dubu.backend.member.dto.response.MemberInfoResponse;
 import com.dubu.backend.member.dto.response.MemberSavedAddressResponse;
 import com.dubu.backend.member.dto.response.MemberStatusResponse;
@@ -423,6 +425,139 @@ public interface MemberApi {
                     )
             )
             @RequestBody MemberInfoUpdateRequest request
+    );
+
+    @Operation(
+            summary = "회원 상태 변경",
+            description = """
+                    요청한 값으로 회원의 상태(Status)를 변경한다.
+                    """
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "회원 상태 업데이트 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "회원이 존재하지 않는 경우 (MEMBER_NOT_FOUND)",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(
+                                    implementation = ErrorResponseExample.class,
+                                    description = "에러 응답 예시"
+                            ),
+                            examples = {
+                                    @ExampleObject(name = "회원 미존재 에러 예시",
+                                            value = """
+                                                    {
+                                                      "errorCode": "MEMBER_NOT_FOUND",
+                                                      "message": "회원을 찾을 수 없습니다. memberId : 9999"
+                                                    }
+                                                    """)
+                            }
+                    )
+            )
+    })
+    void updateMemberStatus(
+            @Parameter(hidden = true)
+            @RequestAttribute("memberId") Long memberId,
+
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "회원 상태 업데이트 요청 DTO",
+                    required = true,
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MemberStatusUpdateRequest.class),
+                            examples = {
+                                    @ExampleObject(name = "회원 상태 업데이트 요청 예시",
+                                            value = """
+                                                    {
+                                                      "status": "FEEDBACK"
+                                                    }
+                                                    """)
+                            }
+                    )
+            )
+            @RequestBody MemberStatusUpdateRequest request
+    );
+
+    @Operation(
+            summary = "회원 위치 업데이트",
+            description = "회원의 현재 위치(x, y 좌표)를 업데이트한다. polling을 통해 5분에 한번씩 업데이트 한다."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "회원 위치 업데이트 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청 데이터 (FIELD_ERROR)",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseExample.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "잘못된 요청 예시",
+                                            value = """
+                                                    {
+                                                      "errorCode": "FIELD_ERROR",
+                                                      "message": "입력이 잘못되었습니다.",
+                                                      "fieldErrors": [
+                                                        {
+                                                          "field": "x_coordinate",
+                                                          "rejectedValue": null,
+                                                          "reason": "x_coordinate 값은 필수입니다."
+                                                        }
+                                                      ]
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "회원이 존재하지 않는 경우 (MEMBER_NOT_FOUND)",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseExample.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "회원 미존재 에러 예시",
+                                            value = """
+                                                    {
+                                                      "errorCode": "MEMBER_NOT_FOUND",
+                                                      "message": "회원을 찾을 수 없습니다. memberId : 9999"
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            )
+    })
+    void updateMemberLocation(
+            Long memberId,
+
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "회원 위치 업데이트 요청 DTO",
+                    required = true,
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MemberLocation.class),
+                            examples = {
+                                    @ExampleObject(name = "회원 위치 업데이트 요청 예시",
+                                            value = """
+                                                    {
+                                                      "x_coordinate": 127.0276009,
+                                                      "y_coordinate": 37.4979421
+                                                    }
+                                                    """)
+                            }
+                    )
+            )
+            MemberLocation memberLocation
     );
 
     @Schema(name = "ErrorResponseExample", description = "에러 응답 예시")

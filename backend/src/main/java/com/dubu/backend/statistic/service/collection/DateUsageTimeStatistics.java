@@ -3,6 +3,7 @@ package com.dubu.backend.statistic.service.collection;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -16,7 +17,9 @@ public class DateUsageTimeStatistics {
                 .boxed()
                 .collect(Collectors.toMap(
                         i -> startDate.plusDays(i),
-                        i -> 0
+                        i -> 0,
+                        (a, b) -> a,
+                        LinkedHashMap::new
                 ));
     }
 

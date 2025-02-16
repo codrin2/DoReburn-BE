@@ -11,7 +11,7 @@ export const DayButton = styled.button`
   justify-content: center;
 
   &:disabled {
-    cursor: default;
+    cursor: not-allowed;
   }
 `;
 
@@ -32,7 +32,7 @@ export const Day = styled.div<{ $isToday: boolean; $isFutureDay: boolean }>`
     }
   }};
   background-color: ${({ $isToday, theme }) => ($isToday ? theme.colors.green50 : 'transparent')};
-  border-radius: ${({ $isToday }) => ($isToday ? '50%' : '0')};
+  border-radius: 50%;
 `;
 
 export const DayUsageTime = styled.div`

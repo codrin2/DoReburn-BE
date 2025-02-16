@@ -44,7 +44,7 @@ public class PlanService {
     private final FeedbackRepository feedbackRepository;
 
     @Transactional
-    public void savePlan(Long memberId, PlanCreateRequest planCreateRequest) {
+    public Long savePlan(Long memberId, PlanCreateRequest planCreateRequest) {
         Member currentMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
@@ -60,7 +60,7 @@ public class PlanService {
                 .toList();
         pathRepository.saveAll(paths);
 
-        Schedule schedule = scheduleRepository.findScheduleByMemberAndDate(currentMember, LocalDate.now())
+        Schedule schedule = scheduleRepository.findLatestSchedule(currentMember, LocalDate.now())
                 .orElseThrow(() -> new ScheduleNotFoundException());
 
         List<Todo> existingTodos = schedule.getTodos();
@@ -77,10 +77,12 @@ public class PlanService {
         todoRepository.saveAll(newTodos);
         currentMember.updateStatus(Status.MOVE);
         taskSchedulerService.scheduleFeedbackStatusUpdate(memberId, newPlan);
+
+        return newPlan.getId();
     }
 
     @Transactional
-    public void savePlanFeedback(Long memberId, Long planId, PlanFeedbackCreateRequest request) {
+    public Long savePlanFeedback(Long memberId, Long planId, PlanFeedbackCreateRequest request) {
         Member currentMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
@@ -98,6 +100,8 @@ public class PlanService {
         Feedback newFeedback = Feedback.createFeedback(currentPlan, request.mood(), request.memo());
         feedbackRepository.save(newFeedback);
         currentMember.updateStatus(Status.STOP);
+
+        return newFeedback.getId();
     }
 
     @Transactional(readOnly = true)

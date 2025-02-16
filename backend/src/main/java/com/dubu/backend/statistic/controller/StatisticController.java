@@ -19,8 +19,7 @@ public class StatisticController implements StatisticApi{
     public SuccessResponse<DayStatisticInfo> getDayStatistic(
             @RequestAttribute Long memberId,
             @RequestParam LocalDate date
-            )
-    {
+    ) {
         return new SuccessResponse<>(statisticService.collectDayStatistic(memberId, date));
     }
 
@@ -28,7 +27,7 @@ public class StatisticController implements StatisticApi{
     public SuccessResponse<WeekStatisticInfo> getWeekStatistic(
             @RequestAttribute Long memberId,
             @RequestParam LocalDate startDate
-    ){
+    ) {
         return new SuccessResponse<>(statisticService.collectWeekStatistic(memberId, startDate));
     }
 }
