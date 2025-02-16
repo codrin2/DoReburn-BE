@@ -6,6 +6,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -63,6 +64,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        log.warn(e.getMessage());
+
+        return new ErrorResponse(ErrorCode.INVALID_JSON);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequestException(BadRequestException e) {
         log.warn(e.getMessage());
 
@@ -114,7 +123,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleInternalServerErrorException(InternalServerException e) {
         log.error(e.getMessage(), e);
 
-        return new ErrorResponse(ErrorCode.SERVER_ERROR);
+        return new ErrorResponse(e);
     }
 
     @ExceptionHandler

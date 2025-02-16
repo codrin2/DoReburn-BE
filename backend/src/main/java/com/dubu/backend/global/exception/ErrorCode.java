@@ -11,6 +11,7 @@ import static org.springframework.http.HttpStatus.*;
 public enum ErrorCode {
 
     // Common
+    INVALID_JSON(BAD_REQUEST,"잘못된 JSON 형식입니다. 요청 데이터를 확인하세요."),
     FIELD_ERROR(BAD_REQUEST,"입력이 잘못되었습니다."),
     URL_PARAMETER_ERROR(BAD_REQUEST,"입력이 잘못되었습니다."),
     METHOD_ARGUMENT_TYPE_MISMATCH(BAD_REQUEST,"입력한 값의 타입이 잘못되었습니다."),
@@ -20,6 +21,7 @@ public enum ErrorCode {
     METHOD_NOT_SUPPORTED(METHOD_NOT_ALLOWED,"허용되지 않은 메서드입니다."),
     MEDIA_TYPE_NOT_SUPPORTED(UNSUPPORTED_MEDIA_TYPE,"허용되지 않은 미디어 타입입니다."),
     SERVER_ERROR(INTERNAL_SERVER_ERROR,"서버 오류가 발생했습니다. 관리자에게 문의하세요."),
+    REDIS_UNAVAILABLE(INTERNAL_SERVER_ERROR,"Redis 서버에 연결할 수 없습니다."),
 
     // Token
     INVALID_TOKEN_HEADER(UNAUTHORIZED, "토큰 헤더 형식이 잘못되었습니다."),
@@ -63,7 +65,6 @@ public enum ErrorCode {
     ALREADY_ADDED_TODO(BAD_REQUEST, "이미 추가된 할 일 입니다."),
     TODO_LIMIT_EXCEEDED(BAD_REQUEST, "%s 할 일은 최대 %d 개까지 추가할 수 있습니다."),
     TODO_TYPE_MISMATCH(BAD_REQUEST, "할 일의 타입과 요청 타입이 일치하지 않습니다. 할 일 타입 = %s, 요청 타입 = %s"),
-
     INVALID_TODO_REQUEST_TYPE(BAD_REQUEST, "잘못된 할 일 요청 유형입니다. type = %s"),
 
     // Schedule

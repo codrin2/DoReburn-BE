@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Component
 @RequiredArgsConstructor
 public class LocationRedisRepository {
@@ -57,3 +56,5 @@ public class LocationRedisRepository {
         return memberLocationInfos;
     }
 }
+
+

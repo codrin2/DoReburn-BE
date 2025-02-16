@@ -1,0 +1,54 @@
+{
+  "data": {
+    "totalTodoCount": 18,
+    "lastWeekDiff": 5,
+    "totalMoveTime": 450,
+    "totalUsageTime": 372,
+    "dayUsageTimes": [
+      {
+        "date": "2025-02-11",
+        "usageTime": 120
+      },
+      {
+        "date": "2025-02-12",
+        "usageTime": 150
+      },
+      {
+        "date": "2025-02-14",
+        "usageTime": 172
+      }
+    ],
+    "categoryTodoCounts": [
+      {
+        "category": "ENGLISH",
+        "count": 6,
+        "usageTime": 124
+      },
+      {
+        "category": "NEWS",
+        "count": 4,
+        "usageTime": 83
+      },
+      {
+        "category": "READING",
+        "count": 3,
+        "usageTime": 62
+      },
+      {
+        "category": "HOBBY",
+        "count": 2,
+        "usageTime": 41
+      },
+      {
+        "category": "LANGUAGE",
+        "count": 2,
+        "usageTime": 41
+      },
+      {
+        "category": "OTHERS",
+        "count": 1,
+        "usageTime": 21
+      }
+    ]
+  }
+}

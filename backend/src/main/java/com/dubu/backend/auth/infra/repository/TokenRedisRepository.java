@@ -1,5 +1,6 @@
 package com.dubu.backend.auth.infra.repository;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -7,13 +8,10 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @Component
+@RequiredArgsConstructor
 public class TokenRedisRepository {
 
     private final RedisTemplate<String, String> redisTemplate;
-
-    public TokenRedisRepository(RedisTemplate<String, String> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
 
     public void saveRefreshToken(String memberId, String refreshToken, long refreshTokenTime) {
         redisTemplate.opsForValue().set(memberId, refreshToken, refreshTokenTime, TimeUnit.MILLISECONDS);

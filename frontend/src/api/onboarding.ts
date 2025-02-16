@@ -15,7 +15,7 @@ interface OnboardingUserInfo extends Record<string, string | number | string[] |
   nickname: string;
 }
 
-export const postOnboarding = async (userInfo: OnboardingUserInfo) => {
+export const saveOnboarding = async (userInfo: OnboardingUserInfo) => {
   const result = await fetchClient.patch<{ message: string }>(API_URL.onboarding, {
     body: userInfo,
   });

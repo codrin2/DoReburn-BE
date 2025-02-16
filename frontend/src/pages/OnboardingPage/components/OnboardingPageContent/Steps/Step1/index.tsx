@@ -22,6 +22,7 @@ const Step1 = () => {
       if (updatedCategories.length <= MAX_NUM) {
         return { ...prev, categories: updatedCategories };
       }
+
       return prev;
     });
   };

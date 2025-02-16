@@ -5,6 +5,7 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.MemberCategory;
 import com.dubu.backend.member.domain.enums.AddressType;
 import com.dubu.backend.member.domain.enums.Status;
+import com.dubu.backend.member.dto.MemberLocation;
 import com.dubu.backend.member.dto.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.dto.request.MemberOnboardingRequest;
 import com.dubu.backend.member.dto.response.MemberInfoResponse;
@@ -12,7 +13,9 @@ import com.dubu.backend.member.dto.response.MemberSavedAddressResponse;
 import com.dubu.backend.member.dto.response.MemberStatusResponse;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.exception.MemberSavedAddressNotFoundException;
+import com.dubu.backend.member.exception.RedisUnavailableException;
 import com.dubu.backend.member.infra.repository.AddressRepository;
+import com.dubu.backend.member.infra.repository.LocationRedisRepository;
 import com.dubu.backend.member.infra.repository.MemberCategoryRepository;
 import com.dubu.backend.member.infra.repository.MemberRepository;
 import com.dubu.backend.plan.exception.InvalidMemberStatusException;
@@ -20,6 +23,7 @@ import com.dubu.backend.todo.entity.Category;
 import com.dubu.backend.todo.exception.CategoryNotFoundException;
 import com.dubu.backend.todo.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +39,7 @@ public class MemberService {
     private final CategoryRepository categoryRepository;
     private final MemberCategoryRepository memberCategoryRepository;
     private final AddressRepository addressRepository;
+    private final LocationRedisRepository locationRedisRepository;
 
     @Transactional(readOnly = true)
     public MemberInfoResponse findMemberInfo(Long memberId) {
@@ -201,5 +206,17 @@ public class MemberService {
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
         currentMember.updateStatus(Status.fromString(status));
+    }
+
+    public void updateMemberLocation(Long memberId, MemberLocation location) {
+        memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
+
+        try {
+            locationRedisRepository.saveMemberLocation(memberId, location);
+        }
+        catch (RedisConnectionFailureException e) {
+            throw new RedisUnavailableException();
+        }
     }
 }

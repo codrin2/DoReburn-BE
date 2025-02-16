@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router';
 
 import FlexPageLayout from './layout/FlexPageLayout';
 
+import DayStatisticsPage from '@/pages/DayStatisticsPage';
 import EditPage from '@/pages/EditPage';
 import FeedbackPage from '@/pages/FeedbackPage';
 import KakaoLoginPage from '@/pages/KakaoLoginPage';
@@ -13,6 +14,7 @@ import PlanPage from '@/pages/PlanPage';
 import RecommendTodoPage from '@/pages/RecommendTodoPage';
 import RouteSelectPage from '@/pages/RouteSelectPage';
 import RouteTodoEditPage from '@/pages/RouteTodoEditPage';
+import WeekStatisticsPage from '@/pages/WeekStatisticsPage';
 
 export const router = createBrowserRouter([
   {
@@ -82,5 +84,13 @@ export const router = createBrowserRouter([
   {
     path: '/login/kakao',
     element: <KakaoLoginPage />,
+  },
+  {
+    path: '/statistics/week',
+    element: <WeekStatisticsPage />,
+  },
+  {
+    path: '/statistics/day',
+    element: <DayStatisticsPage />,
   },
 ]);

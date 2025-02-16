@@ -23,7 +23,7 @@ interface TodoEditParams {
 }
 
 const getTodayTodoHandler = () => {
-  const todayTodo = { ...TODO_DATA, data: TODO_DATA.data.filter((todo) => todo.type === 'today') };
+  const todayTodo = { ...TODO_DATA, data: TODO_DATA.data.filter((todo) => todo.type === 'TODAY') };
 
   return HttpResponse.json(todayTodo);
 };
@@ -31,7 +31,7 @@ const getTodayTodoHandler = () => {
 const getTomorrowTodoHandler = () => {
   const tomorrowTodo = {
     ...TODO_DATA,
-    data: TODO_DATA.data.filter((todo) => todo.type === 'tomorrow'),
+    data: TODO_DATA.data.filter((todo) => todo.type === 'TOMORROW'),
   };
 
   return HttpResponse.json(tomorrowTodo);
