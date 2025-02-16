@@ -7,6 +7,7 @@ import * as S from './WeekStatisticsMain.styled';
 
 import useWeekStatisticsQuery from '@/pages/WeekStatisticsPage/hooks/useWeekStatisticsQuery';
 import { getStartOfWeek } from '@/pages/WeekStatisticsPage/WeekStatisticsPage.utils';
+import { CategoryType } from '@/types/filter';
 
 const WeekStatisticsMain = () => {
   const today = new Date().toISOString();
@@ -43,7 +44,12 @@ const WeekStatisticsMain = () => {
       />
       <S.WeekAchievementContainer>
         <WeekOverview {...overviewProps} />
-        <WeekCategoryList categoryRanking={weekStatistics?.categoryTodoCounts ?? []} />
+        <WeekCategoryList
+          categoryRanking={(weekStatistics?.categoryTodoCounts ?? []).map((item) => ({
+            ...item,
+            category: item.category as CategoryType,
+          }))}
+        />
       </S.WeekAchievementContainer>
     </S.WeekStatisticsMainContainer>
   );
