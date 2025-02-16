@@ -24,6 +24,12 @@ spring:
       timeout: 10
       password: ""
 
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
@@ -67,6 +73,17 @@ kakao:
 odsay:
   client:
     api-key: ${ODSAY_CLIENT_API_KEY}
+
+vapid:
+  public-key: ${VAPID_PUBLIC_KEY}
+  private-key: ${VAPID_PRIVATE_KEY}
+
+admin:
+  email: ${ADMIN_EMAIL}
+
+app:
+  push:
+    delay-ms: ${APP_PUSH_DELAY_MS}
 
 logging:
   level:

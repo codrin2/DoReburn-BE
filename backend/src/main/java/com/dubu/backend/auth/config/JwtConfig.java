@@ -1,4 +1,4 @@
-package com.dubu.backend.global.config;
+package com.dubu.backend.auth.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
