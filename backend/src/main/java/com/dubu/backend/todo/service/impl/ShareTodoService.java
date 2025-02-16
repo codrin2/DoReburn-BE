@@ -7,7 +7,9 @@ import com.dubu.backend.share.dto.response.ShareTodoInfo;
 import com.dubu.backend.todo.entity.Schedule;
 import com.dubu.backend.todo.entity.Todo;
 import com.dubu.backend.todo.entity.TodoType;
+import com.dubu.backend.todo.exception.SaveTodoNotFoundFromTargetParentException;
 import com.dubu.backend.todo.exception.ScheduleNotFoundException;
+import com.dubu.backend.todo.exception.TodoNotFoundException;
 import com.dubu.backend.todo.repository.ScheduleRepository;
 import com.dubu.backend.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +44,15 @@ public class ShareTodoService {
                                 todo.getCategory().getName(),
                                 surroundMemberParentTodoIds.contains(todo.getId())))
                 .toList();
+    }
+    @Transactional
+    public void removeTodoFromSurroundingMemberTodo(Long memberId, Long parentTodoId){
+        Member selfMember = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
+
+        Todo parentTodo = todoRepository.findById(parentTodoId).orElseThrow(() -> new TodoNotFoundException(parentTodoId));
+
+        Todo targetTodo = todoRepository.findByMemberAndParentTodoAndType(selfMember, parentTodo, TodoType.SAVE).orElseThrow(() -> new SaveTodoNotFoundFromTargetParentException(parentTodoId));
+
+        todoRepository.delete(targetTodo);
     }
 }
