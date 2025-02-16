@@ -1,9 +1,11 @@
 import WeekCategoryItem from './WeekCategoryItem';
 import * as S from './WeekCategoryList.styled';
 
+import { CategoryType } from '@/types/filter';
+
 interface WeekTodoListProps {
   categoryRanking: {
-    category: string;
+    category: CategoryType;
     usageTime: number;
     count: number;
   }[];
