@@ -18,11 +18,17 @@ export const useStepValidity = () => {
     );
   };
 
-  return {
-    StepValidityMapper: {
+  const isCurrentStepValid = (step: number): boolean => {
+    const validityCheckers = {
       1: checkStep1Validity,
       2: checkStep2Validity,
       3: checkStep3Validity,
-    },
+    };
+
+    return validityCheckers[step as keyof typeof validityCheckers]?.() ?? false;
+  };
+
+  return {
+    isCurrentStepValid,
   };
 };

@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router';
 
-import { postOnboarding } from '@/api/onboarding';
 import Header from '@/components/Header';
 import { useOnboarding } from '@/pages/OnboardingPage/hooks/useOnboarding';
+import useOnboardingMutation from '@/pages/OnboardingPage/hooks/useOnboardingMutation';
 import { useStepValidity } from '@/pages/OnboardingPage/hooks/useStepValidity';
 import {
   ONBOARDING_FIRST_STEP,
@@ -12,9 +12,9 @@ import {
 const OnboardingHeader = () => {
   const { onboardingStep, setOnboardingStep, onboardingUserInfo } = useOnboarding();
   const navigate = useNavigate();
-  const { StepValidityMapper } = useStepValidity();
-  const isButtonDisabled = !StepValidityMapper[onboardingStep as keyof typeof StepValidityMapper];
-
+  const { isCurrentStepValid } = useStepValidity();
+  const isButtonDisabled = !isCurrentStepValid(onboardingStep);
+  const { mutate: saveOnboarding } = useOnboardingMutation();
   const goToStep = (newStep: number) => {
     setOnboardingStep(newStep);
     navigate(`/onboarding?step=${newStep}`);
@@ -35,9 +35,7 @@ const OnboardingHeader = () => {
   };
 
   const goToMain = async () => {
-    postOnboarding(onboardingUserInfo).then(() => {
-      navigate('/');
-    });
+    saveOnboarding(onboardingUserInfo);
   };
 
   return (
