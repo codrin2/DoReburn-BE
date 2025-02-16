@@ -4,7 +4,7 @@ import { useFeedback } from '@/pages/FeedbackPage/hooks/useFeedback';
 
 const MEMO_MAX_LENGTH = 20;
 const isMemoValid = (memo: string) => {
-  const regex = /^[A-Za-z0-9ㄱ-ㅎㅏ-ㅣ가-힣!@#$%^&*()_+={}[\]:;"'<>,.?/`~|-]+$/;
+  const regex = /^[A-Za-z0-9ㄱ-ㅎㅏ-ㅣ가-힣!@#$%^&*()_+={}[\]:;"'<>,.?/`~|\-\s]+$/;
 
   return regex.test(memo);
 };
@@ -32,7 +32,10 @@ const FeedbackMemo = () => {
 
   return (
     <S.FeedbackMemoLayout>
-      <S.Title>남기고 싶은 메모가 있나요?</S.Title>
+      <S.MemoTitleLayout>
+        <S.Title>남기고 싶은 메모가 있나요?</S.Title>
+        <S.MemoLength>{feedbackData.memo.length} / 20</S.MemoLength>
+      </S.MemoTitleLayout>
       <S.MemoInput
         placeholder="오늘의 코멘트 남기기"
         onChange={handleMemoChange}
