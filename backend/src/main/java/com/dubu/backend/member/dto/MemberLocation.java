@@ -15,3 +15,4 @@ public record MemberLocation(
         Double y_coordinate
 ) {
 }
+
