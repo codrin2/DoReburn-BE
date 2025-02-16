@@ -8,7 +8,7 @@ import useEditTodoBottomSheet from '../../hooks/useEditTodoBottomSheet';
 import BottomSheet from '@/components/BottomSheet';
 import IconButton from '@/components/Button/IconButton';
 import Icon from '@/components/Icon';
-import { MAX_TODO_ITEM_LENGTH } from '@/constants/config';
+import { MAX_TODO_ITEM_LENGTH, TODO_TYPE } from '@/constants/config';
 import { TODO_TOAST_MESSAGE } from '@/constants/message';
 import useQueryParamsDate from '@/hooks/useQueryParamsDate';
 import useRouteTodoQuery from '@/hooks/useRouteTodoQuery';
@@ -48,7 +48,9 @@ const TodoTab = ({ todoType, planId }: TodoTabProps) => {
   } = useEditTodoBottomSheet(todoType, planId);
 
   const handleClickAddTodo = () => {
-    if (currentTodoList && currentTodoList.length >= MAX_TODO_ITEM_LENGTH) {
+    const isLimitType = todoType === TODO_TYPE.TODAY || todoType === TODO_TYPE.TOMORROW;
+
+    if (isLimitType && currentTodoList && currentTodoList.length >= MAX_TODO_ITEM_LENGTH) {
       toast({ message: TODO_TOAST_MESSAGE.limit });
 
       return;
