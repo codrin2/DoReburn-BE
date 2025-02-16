@@ -4,6 +4,7 @@ import RecommendTodoContainer from '../RecommendTodoPage/components/RecommendTod
 import FavoriteHeader from './components/FavoriteHeader/FavoriteHeader';
 
 import { Tab } from '@/components/Tab';
+import { TODO_TYPE } from '@/constants/config';
 
 const FAVORITE_TABS = [
   { label: '즐겨찾기', value: 'favorite' },
@@ -23,8 +24,8 @@ const FavoritePage = () => {
         ))}
       </TabList>
       <TabContent>
-        <FavoriteTab todoType="SAVE" />
-        <RecommendTodoContainer />
+        <FavoriteTab todoType={TODO_TYPE.SAVE} />
+        <RecommendTodoContainer isFavoritePage />
       </TabContent>
     </Tab.Root>
   );
