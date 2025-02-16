@@ -85,6 +85,12 @@ app:
   push:
     delay-ms: ${APP_PUSH_DELAY_MS}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
 logging:
   level:
     root: info
