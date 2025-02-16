@@ -40,10 +40,7 @@ const FeedbackPageContent = () => {
   return (
     <S.FeedbackPageLayout>
       {currentStepComponent}
-      <S.ButtonBox
-        className="button-box"
-        onClick={feedbackStep === 1 ? goToNextStep : handleCompleteButtonClick}
-      >
+      <S.ButtonBox onClick={feedbackStep === 1 ? goToNextStep : handleCompleteButtonClick}>
         <Icon icon="Fire" width={20} height={20} color={theme.colors.green50} />
         {buttonText}
       </S.ButtonBox>
