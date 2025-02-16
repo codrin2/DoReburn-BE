@@ -15,4 +15,5 @@ export const QUERY_KEY = {
   memberStatus: 'memberStatus',
   memberInfo: 'memberInfo',
   weekStatistics: 'weekStatistics',
+  dayStatistics: 'dayStatistics',
 } as const;

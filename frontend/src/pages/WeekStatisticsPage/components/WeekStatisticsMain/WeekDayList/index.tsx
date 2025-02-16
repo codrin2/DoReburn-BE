@@ -5,7 +5,13 @@ import WeekDayItem from './WeekDayItem';
 import * as S from './WeekDayList.styled';
 
 import Icon from '@/components/Icon';
-import { getStartOfWeek, isTodayInWeek } from '@/pages/WeekStatisticsPage/WeekStatisticsPage.utils';
+import { DayInfo } from '@/pages/WeekStatisticsPage/WeekStatisticsPage.types';
+import {
+  getStartOfWeek,
+  getWeekDateRange,
+  isToday,
+  isTodayInWeek,
+} from '@/pages/WeekStatisticsPage/WeekStatisticsPage.utils';
 import theme from '@/styles/theme';
 
 const WEEK_DAYS = 7;
@@ -17,12 +23,6 @@ interface WeekDateProps {
     date: string;
     usageTime: number;
   }[];
-}
-
-interface DayInfo {
-  year: number;
-  month: number;
-  day: number;
 }
 
 const WeekDayList = ({ weekStartDate, setWeekStartDate, dayUsageTime }: WeekDateProps) => {
@@ -58,27 +58,13 @@ const WeekDayList = ({ weekStartDate, setWeekStartDate, dayUsageTime }: WeekDate
     navigate(`/statistics/week?startDate=${newWeekStartDate}`);
   };
 
-  const isToday = (day: DayInfo) => {
-    const today = new Date();
-
-    return (
-      day.year === today.getFullYear() &&
-      day.month === today.getMonth() + 1 &&
-      day.day === today.getDate()
-    );
-  };
-
   return (
     <S.WeekDateContainer>
       <S.WeekDateInfoContainer>
         <button onClick={() => handleWeekChange(-WEEK_DAYS)}>
           <Icon icon="FilledArrow" rotate={90} />
         </button>
-        <div>
-          {weekDays.length > 0 && weekDays[0].month}월 {weekDays.length > 0 && weekDays[0].day}일
-          (월) - {weekDays.length > 0 && weekDays[6].month}월{' '}
-          {weekDays.length > 0 && weekDays[6].day}일 (일)
-        </div>
+        <div>{getWeekDateRange(weekDays)}</div>
         <button onClick={() => handleWeekChange(WEEK_DAYS)} disabled={isTodayInWeek(weekStartDate)}>
           <Icon
             icon="FilledArrow"
@@ -88,7 +74,7 @@ const WeekDayList = ({ weekStartDate, setWeekStartDate, dayUsageTime }: WeekDate
         </button>
       </S.WeekDateInfoContainer>
 
-      <S.WeekDayList className="week-day-list">
+      <S.WeekDayList>
         {weekDays.map((date) => {
           const usageTime = getUsageTimeForDay(date);
 
