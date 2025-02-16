@@ -9,11 +9,12 @@ import com.dubu.backend.notification.domain.PushSubscription;
 import com.dubu.backend.notification.dto.PushMessageDto;
 import com.dubu.backend.notification.dto.PushSubscriptionDto;
 import com.dubu.backend.notification.exception.UnavailablePushServiceException;
-import com.dubu.backend.notification.infra.amqp.repository.PushSubscriptionRepository;
+import com.dubu.backend.notification.infra.repository.PushSubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,9 @@ public class NotificationService {
     private final VapidKeyConfig vapidKeyConfig;
     private final MemberRepository memberRepository;
     private final PushSubscriptionRepository subscriptionRepository;
+
+    @Value("${admin.email}")
+    private String adminEmail;
 
     @Transactional
     public void saveSubscription(Long memberId, PushSubscriptionDto subscriptionDto) {
@@ -50,7 +54,7 @@ public class NotificationService {
         PushService pushService;
 
         try {
-            pushService = new PushService(vapidKeyConfig.publicKey(), vapidKeyConfig.privateKey(), "robotmun@gmail.com");
+            pushService = new PushService(vapidKeyConfig.publicKey(), vapidKeyConfig.privateKey(), adminEmail);
         } catch (GeneralSecurityException e) {
             throw new UnavailablePushServiceException();
         }

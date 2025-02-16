@@ -16,7 +16,7 @@ public class RabbitMQConfig {
     public static final String DELAY_ROUTING_KEY = "plan.delay.key";
     public static final String DLX_ROUTING_KEY = "plan.dlx.key";
 
-    @Value("${app.push.delay-ms:20000}")
+    @Value("${app.push.delay-ms}")
     private long pushDelayMs;
 
     @Bean

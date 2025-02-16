@@ -78,6 +78,13 @@ vapid:
   public-key: ${VAPID_PUBLIC_KEY}
   private-key: ${VAPID_PRIVATE_KEY}
 
+admin:
+  email: ${ADMIN_EMAIL}
+
+app:
+  push:
+    delay-ms: ${APP_PUSH_DELAY_MS}
+
 logging:
   level:
     root: info
