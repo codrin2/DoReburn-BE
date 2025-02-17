@@ -4,7 +4,7 @@ import com.dubu.backend.global.anotation.Polling;
 import com.dubu.backend.global.domain.SuccessResponse;
 import com.dubu.backend.share.dto.request.SurroundingMemberQueryRequest;
 import com.dubu.backend.share.dto.response.ShareInfo;
-import com.dubu.backend.share.dto.response.ShareTodoInfo;
+import com.dubu.backend.share.dto.response.SurroundingMemberInfo;
 import com.dubu.backend.share.service.ShareService;
 import com.dubu.backend.todo.service.impl.ShareTodoService;
 
@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/share")
@@ -32,11 +30,11 @@ public class ShareController implements ShareApi{
     }
 
     @GetMapping("/members/todos")
-    public SuccessResponse<List<ShareTodoInfo>> getTodosForSurroundingMember(
+    public SuccessResponse<SurroundingMemberInfo> getTodosForSurroundingMember(
             @RequestAttribute Long memberId,
             @RequestParam Long surroundingMemberId
     ){
-        return new SuccessResponse<List<ShareTodoInfo>>(shareTodoService.findTodosOfSurroundMember(memberId, surroundingMemberId));
+        return new SuccessResponse<SurroundingMemberInfo>(shareTodoService.findTodosOfSurroundMember(memberId, surroundingMemberId));
     }
 
     @DeleteMapping("/todos")
