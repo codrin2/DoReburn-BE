@@ -95,6 +95,7 @@ public class Todo extends BaseTimeEntity {
 
     public void updateTodoType(TodoType todoType){
         this.type = todoType;
+        this.parentTodo = null;
     }
 
     private void updateTitle(String title){
