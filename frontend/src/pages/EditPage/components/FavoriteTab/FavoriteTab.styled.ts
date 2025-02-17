@@ -8,3 +8,7 @@ export const FavoriteTabLayout = styled.ul`
   border-top: 0.15rem solid ${({ theme }) => theme.colors.gray50};
   border-bottom: 0.15rem solid ${({ theme }) => theme.colors.gray50};
 `;
+
+export const LoadingBlock = styled.div`
+  height: 81.5rem;
+`;
