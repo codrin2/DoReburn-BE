@@ -14,7 +14,7 @@ const RecommendTodoPage = () => {
         </Header.Center>
       </Header>
 
-      <RecommendTodoContainer />
+      <RecommendTodoContainer isFavoritePage={false} />
     </>
   );
 };

@@ -5,6 +5,7 @@ import * as S from './RecommendTodoContainer.styled';
 import useFilterBottomSheet from '../../hooks/useFilterBottomSheet';
 import useMemberInfoQuery from '../../hooks/useMemberInfoQuery';
 import useRecommendTodoFilterQuery from '../../hooks/useRecommendTodoFilterQuery';
+import { getTodoType } from '../../RecommendTodoPage.utils';
 import FilterForm from '../FilterForm';
 
 import BottomSheet from '@/components/BottomSheet';
@@ -19,7 +20,11 @@ import TodoEditItem from '@/pages/EditPage/components/TodoEditItem';
 import useAddTodoFromArchivedMutation from '@/pages/EditPage/hooks/useAddTodoFromArchivedMutation';
 import { CategoryType, DifficultyType } from '@/types/filter';
 
-const RecommendTodoContainer = () => {
+interface RecommendTodoContainerProps {
+  isFavoritePage: boolean;
+}
+
+const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps) => {
   const { planId } = useParams();
   const { dateType } = useQueryParamsDate();
   const { isOpen, open, close } = useFilterBottomSheet();
@@ -31,7 +36,7 @@ const RecommendTodoContainer = () => {
   const { data: memberInfo } = useMemberInfoQuery();
   const { data: todoList } = useTodoListQuery(dateType, Number(planId));
 
-  const todoType = planId ? TODO_TYPE.PATH : dateType;
+  const todoType = getTodoType({ dateType, isFavoritePage, planId });
 
   const { data: recommendList, isLoading } = useRecommendTodoFilterQuery(
     todoType,
@@ -55,7 +60,9 @@ const RecommendTodoContainer = () => {
   };
 
   const handleAddTodoFromRecommendAll = (todoId: number) => {
-    if (todoList && todoList.length >= MAX_TODO_ITEM_LENGTH) {
+    const isLimitType = todoType === TODO_TYPE.TODAY || todoType === TODO_TYPE.TOMORROW;
+
+    if (isLimitType && todoList && todoList.length >= MAX_TODO_ITEM_LENGTH) {
       toast({ message: TODO_TOAST_MESSAGE.limit });
 
       return;
@@ -63,7 +70,12 @@ const RecommendTodoContainer = () => {
 
     addTodoFromArchived(
       { todoType, todoId, planId: Number(planId) },
-      { onSuccess: () => toast({ message: TODO_TOAST_MESSAGE.add }) },
+      {
+        onSuccess: () =>
+          toast({
+            message: isFavoritePage ? TODO_TOAST_MESSAGE.addFavorite : TODO_TOAST_MESSAGE.add,
+          }),
+      },
     );
   };
 

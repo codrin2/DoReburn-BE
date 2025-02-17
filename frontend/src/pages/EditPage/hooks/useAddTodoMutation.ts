@@ -26,6 +26,10 @@ const useAddTodoMutation = () => {
         queryClient.invalidateQueries({
           queryKey: [QUERY_KEY.todoList, params.todoType],
         });
+
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEY.favorite, params.todoType],
+        });
       }
     },
   });

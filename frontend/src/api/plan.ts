@@ -52,7 +52,7 @@ export const cancelPlan = async (planId: number) => {
 };
 
 export const createPlan = async (request: CreatePlanRequest) => {
-  return await fetchClient.post(API_URL.createPlan, { body: request });
+  return await fetchClient.post(API_URL.plan(), { body: request });
 };
 
 export const checkTodo = async (todoId: number, isCompleted: boolean) => {
