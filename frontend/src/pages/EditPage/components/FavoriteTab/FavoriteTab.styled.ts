@@ -10,5 +10,5 @@ export const FavoriteTabLayout = styled.ul`
 `;
 
 export const LoadingBlock = styled.div`
-  height: 81.5rem;
+  min-height: 81.5rem;
 `;

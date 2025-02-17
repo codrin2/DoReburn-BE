@@ -46,7 +46,7 @@ export interface TodoCreateResponse {
   data: Todo;
 }
 
-interface RecommendAllTodoResponse {
+export interface RecommendAllTodoResponse {
   hasNext: boolean;
   nextCursor: {
     cursorCategoryId: number;
@@ -134,7 +134,7 @@ export const getRecommendAllTodoList = async (params: RecommendAllTodoParams) =>
     API_URL.recommendAllTodo(queryParams),
   );
 
-  return result.data;
+  return result;
 };
 
 export const addTodo = async ({ todoType, todo, planId }: TodoAddParams) => {

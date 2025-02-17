@@ -34,3 +34,7 @@ export const FilterWrapper = styled.div`
   gap: 0.8rem;
   padding: 0.5rem 2.4rem;
 `;
+
+export const LoadingBlock = styled.div`
+  min-height: 81.5rem;
+`;
