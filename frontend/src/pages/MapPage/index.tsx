@@ -6,6 +6,7 @@ import useMapBottomSheet from './hooks/useMapBottomSheet';
 import useMarker from './hooks/useMarker';
 import useMarkerBottomSheet from './hooks/useMarkerBottomSheet';
 import useNearbyUsersQuery from './hooks/useNearbyUsersQuery';
+import useUpdateCurrentLocation from './hooks/useUpdateCurrentLocation';
 import * as S from './MapPage.styled';
 
 import BottomSheet from '@/components/BottomSheet';
@@ -19,7 +20,12 @@ const MapPage = () => {
   const { putMarkerList } = useMarker();
   const { categoryFilters, handleCheckFilters } = useCategoryFilters();
   const { isOpen, close } = useMapBottomSheet();
-  const { data: nearbyUsersData } = useNearbyUsersQuery({ lng: center.lng, lat: center.lat });
+  const { data: nearbyUsersData } = useNearbyUsersQuery({
+    lng: center.lng,
+    lat: center.lat,
+  });
+
+  const { updateCurrentLocation } = useUpdateCurrentLocation();
 
   const {
     isOpen: isMarkerBottomSheetOpen,
@@ -34,6 +40,13 @@ const MapPage = () => {
     mapRef.current?.setCenter(new kakao.maps.LatLng(center.lat, center.lng));
 
     handleDragEnd();
+  };
+
+  const handleReload = async () => {
+    await updateCurrentLocation({
+      x_coordinate: center.lng,
+      y_coordinate: center.lat,
+    });
   };
 
   return (
@@ -75,19 +88,27 @@ const MapPage = () => {
         content={markerBottomSheetContent}
       />
 
-      {/* 현재 위치로 이동 버튼 */}
-      <S.CurrentLocationButton
-        icon={
-          <Icon
-            icon="Target"
-            width={32}
-            height={32}
-            cursor="pointer"
-            color={isDragged ? colors.iconBlue : colors.gray400}
-          />
-        }
-        onClick={handleBackCenter}
-      />
+      <S.FloatingButtonContainer>
+        {/* 주변 사용자 갱신 */}
+        <S.ReloadButton
+          icon={<Icon icon="Reload" width={28} height={28} cursor="pointer" />}
+          onClick={handleReload}
+        />
+
+        {/* 현재 위치로 이동 버튼 */}
+        <S.CurrentLocationButton
+          icon={
+            <Icon
+              icon="Target"
+              width={32}
+              height={32}
+              cursor="pointer"
+              color={isDragged ? colors.iconBlue : colors.gray400}
+            />
+          }
+          onClick={handleBackCenter}
+        />
+      </S.FloatingButtonContainer>
     </S.MapContainer>
   );
 };

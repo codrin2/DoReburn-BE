@@ -55,14 +55,33 @@ export const FilterBadge = styled.button<{ $isSelected: boolean; $category: Cate
     color 0.2s;
 `;
 
-export const CurrentLocationButton = styled(IconButton)`
+export const FloatingButtonContainer = styled.div`
   position: absolute;
   bottom: 1rem;
   right: 1rem;
   z-index: 2;
 
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+`;
+
+export const CurrentLocationButton = styled(IconButton)`
   background-color: ${({ theme }) => theme.colors.white};
   padding: 1.2rem;
   border-radius: 50%;
   box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.2);
+  aspect-ratio: 1;
+`;
+
+export const ReloadButton = styled(IconButton)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: ${({ theme }) => theme.colors.white};
+  padding: 1.2rem;
+  border-radius: 50%;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.2);
+  aspect-ratio: 1;
 `;
