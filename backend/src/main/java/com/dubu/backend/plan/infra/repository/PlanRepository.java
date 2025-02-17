@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PlanRepository extends JpaRepository<Plan, Long> {
+    @Query("SELECT p FROM Plan p LEFT JOIN FETCH p.feedback WHERE p.member.id = :memberId ORDER BY p.createdAt DESC LIMIT 1")
     Optional<Plan> findTopByMemberIdOrderByCreatedAtDesc(Long memberId);
 
     @Query("SELECT p FROM Plan p JOIN FETCH p.feedback WHERE p.member = :member AND p.createdAt between :startTime AND :endTime")
