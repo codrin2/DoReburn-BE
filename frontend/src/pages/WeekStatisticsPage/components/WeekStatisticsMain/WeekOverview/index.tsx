@@ -21,7 +21,8 @@ const WeekOverview = ({ moveTime, usageTime, lastWeekDiff, todoCount }: WeekOver
         <S.CompareLastWeek>
           <S.CompareTitle>지난 주와의 비교</S.CompareTitle>
           <S.CompareValue>
-            {lastWeekDiff >= 0 ? '+' : '-'} {lastWeekDiff}분
+            {lastWeekDiff > 0 && '+'}
+            {lastWeekDiff}분
           </S.CompareValue>
         </S.CompareLastWeek>
 
