@@ -6,9 +6,6 @@ ENV TZ=Asia/Seoul
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime && \
     echo "Asia/Seoul" > /etc/timezone
 
-# Pinpoint Agent 복사 (EC2에서 직접 지정한 절대경로 사용)
-COPY /home/ec2-user/pinpoint-agent-2.3.3-NCP-RC3 /pinpoint-agent
-
 # JAR_FILE 변수 선언
 ARG JAR_FILE=build/libs/*.jar
 
