@@ -1,6 +1,8 @@
 import { useRef } from 'react';
 
 import { NearbyMember } from '@/api/map';
+import Marker from '@/assets/images/marker.svg';
+import { createMarkerImage } from '@/utils/map';
 
 const useMarker = () => {
   const markerListRef = useRef<kakao.maps.Marker[]>([]);
@@ -18,8 +20,11 @@ const useMarker = () => {
   };
 
   const putMarker = (map: kakao.maps.Map | null, coord: NearbyMember, onClick: () => void) => {
+    const markerImage = createMarkerImage(Marker, 40, 48);
+
     const marker = new kakao.maps.Marker({
       position: new kakao.maps.LatLng(coord.y_coordinate, coord.x_coordinate),
+      image: markerImage,
     });
 
     addMarker(marker);
