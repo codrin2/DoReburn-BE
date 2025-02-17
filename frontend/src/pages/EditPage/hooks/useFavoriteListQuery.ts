@@ -4,7 +4,7 @@ import { getFavoriteTodoList } from '@/api/todo';
 import { QUERY_KEY } from '@/constants/queryKey';
 import { TodoType } from '@/types/todo';
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
 
 const useFavoriteTodoListQuery = (todoType: TodoType, planId?: number) => {
   return useInfiniteQuery({
@@ -15,7 +15,7 @@ const useFavoriteTodoListQuery = (todoType: TodoType, planId?: number) => {
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       // getNextPageParam에서 null 또는 undefined 반환 시 hasNextPage: false
-      if (lastPage.hasNext) return null;
+      if (!lastPage.hasNext) return null;
 
       return lastPage.nextCursor;
     },

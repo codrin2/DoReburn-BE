@@ -2,12 +2,6 @@ import styled from 'styled-components';
 
 import IconButton from '@/components/Button/IconButton';
 
-export const RecommendTodoLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-`;
-
 export const RecommendTabList = styled.ul`
   background-color: ${({ theme }) => theme.colors.white};
   display: flex;
