@@ -1,17 +1,13 @@
 package com.dubu.backend.share.dto.response;
 
-import java.util.Comparator;
 import java.util.List;
 
-public record ShareInfo(List<MemberLocationInfo> memberLocations, List<CategoryInfo> categoryRank) {
+public record ShareInfo(List<MemberInfo> memberInfos, List<CategoryRankInfo> categoryRank) {
 
-    public static ShareInfo of(List<MemberLocationInfo> memberLocationInfos, List<CategoryInfo> categoryInfos){
+    public static ShareInfo of(List<MemberInfo> memberInfos, List<CategoryRankInfo> categoryRankInfos){
         return new ShareInfo(
-                memberLocationInfos,
-                categoryInfos.stream()
-                        .sorted(Comparator.comparing(CategoryInfo::count).reversed())
-                        .limit(3)
-                        .toList()
+                memberInfos,
+                categoryRankInfos.subList(0, 3)
                 );
     }
 
