@@ -3,7 +3,7 @@ package com.dubu.backend.share.controller;
 import com.dubu.backend.global.domain.SuccessResponse;
 import com.dubu.backend.share.dto.request.SurroundingMemberQueryRequest;
 import com.dubu.backend.share.dto.response.ShareInfo;
-import com.dubu.backend.share.dto.response.ShareTodoInfo;
+import com.dubu.backend.share.dto.response.SurroundingMemberInfo;
 import com.dubu.backend.todo.controller.TodoApi;
 import com.dubu.backend.todo.dto.response.TodoSuccessResponse;
 
@@ -16,11 +16,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Share API", description = "지도(공유) API")
 public interface ShareApi {
@@ -190,26 +187,29 @@ public interface ShareApi {
                                             name = "주변 사용자 할 일 조회 성공",
                                             value = """
                                             {
-                                                "data": [
-                                                    {
-                                                        "todoId": 589879,
-                                                        "title": "Todo 4",
-                                                        "category": "NEWS",
-                                                        "isSaved": true
-                                                    },
-                                                    {
-                                                        "todoId": 589880,
-                                                        "title": "Todo 5",
-                                                        "category": "NEWS",
-                                                        "isSaved": false
-                                                    },
-                                                    {
-                                                        "todoId": 589881,
-                                                        "title": "Todo 6",
-                                                        "category": "NEWS",
-                                                        "isSaved": true
-                                                    }
+                                              "data": {
+                                                "nickname": "mtripett1",
+                                                "todos": [
+                                                  {
+                                                    "todoId": 589879,
+                                                    "title": "Todo 4",
+                                                    "category": "NEWS",
+                                                    "isSaved": false
+                                                  },
+                                                  {
+                                                    "todoId": 589880,
+                                                    "title": "Todo 5",
+                                                    "category": "NEWS",
+                                                    "isSaved": false
+                                                  },
+                                                  {
+                                                    "todoId": 589881,
+                                                    "title": "Todo 6",
+                                                    "category": "NEWS",
+                                                    "isSaved": false
+                                                  }
                                                 ]
+                                              }
                                             }
                                             """
                                     )
@@ -235,7 +235,7 @@ public interface ShareApi {
                     )
             ),
     })
-    SuccessResponse<List<ShareTodoInfo>> getTodosForSurroundingMember(
+    SuccessResponse<SurroundingMemberInfo> getTodosForSurroundingMember(
             @RequestAttribute Long memberId,
             @Parameter(description = "주변 사용자 id", example = "9999") @RequestParam Long surroundingMemberId
     );
