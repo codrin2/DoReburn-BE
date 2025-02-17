@@ -25,7 +25,14 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
   const { dateType } = useQueryParamsDate();
 
   const { data: todoList } = useTodoListQuery(dateType, Number(planId));
-  const { data: favoriteTodoList } = useFavoriteTodoListQuery(todoType, Number(planId));
+  const {
+    data: favoriteTodoList,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isFetching,
+  } = useFavoriteTodoListQuery(todoType, Number(planId));
+
   const { mutate: addTodoFromArchived } = useAddTodoFromArchivedMutation();
   const { mutate: deleteTodo } = useDeleteTodoMutation(todoType);
 
@@ -125,6 +132,13 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
             isFull={true}
             onClick={openAddBottomSheet}
           />
+        )}
+
+        {isFetching && <div>로딩중...</div>}
+        {!isFetching && hasNextPage && (
+          <button onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage}>
+            더보기
+          </button>
         )}
       </S.FavoriteTabLayout>
       <BottomSheet
