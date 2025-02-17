@@ -1,11 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 
 import { getRecommendAllTodoList } from '@/api/todo';
 import { QUERY_KEY } from '@/constants/queryKey';
 import { CategoryType, DifficultyType } from '@/types/filter';
 import { TodoType } from '@/types/todo';
 
-const RECOMMEND_TODO_SIZE = 20;
+const PAGE_SIZE = 10;
 
 const useRecommendTodoFilterQuery = (
   todoType: TodoType,
@@ -13,17 +13,28 @@ const useRecommendTodoFilterQuery = (
   difficultyList: DifficultyType[],
   pathId?: number,
 ) => {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: [QUERY_KEY.recommendAll, todoType, ...categoryList, ...difficultyList, pathId || 0],
-    queryFn: () =>
+    queryFn: ({ pageParam }) =>
       getRecommendAllTodoList({
         modifyType: todoType,
-        category: categoryList,
-        difficulty: difficultyList,
-        size: RECOMMEND_TODO_SIZE,
+        size: PAGE_SIZE,
         pathId,
+        cursorCategoryId: pageParam.cursorCategoryId,
+        cursorDifficulty: pageParam.cursorDifficulty,
+        cursorTodoId: pageParam.cursorTodoId,
       }),
-    staleTime: Infinity,
+    placeholderData: keepPreviousData,
+    initialPageParam: {
+      cursorCategoryId: 0,
+      cursorDifficulty: 'EASY' as DifficultyType,
+      cursorTodoId: 0,
+    },
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.hasNext) return null;
+
+      return lastPage.nextCursor;
+    },
   });
 };
 
