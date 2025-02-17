@@ -1,9 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import { getNearbyUsers } from '@/api/map';
 import { QUERY_KEY } from '@/constants/queryKey';
 
-const AROUND_RADIUS = 3;
+const INITIAL_RADIUS = 3;
 
 interface useNearbyUsersQueryProps {
   lng: number;
@@ -15,11 +15,14 @@ const useNearbyUsersQuery = ({ lng, lat }: useNearbyUsersQueryProps) => {
     queryKey: [QUERY_KEY.nearbyUsers, lng, lat],
     queryFn: () =>
       getNearbyUsers({
-        radius: AROUND_RADIUS,
+        radius: INITIAL_RADIUS,
         x_coordinate: lng,
         y_coordinate: lat,
       }),
     enabled: !!lng && !!lat,
+    gcTime: 0,
+
+    placeholderData: keepPreviousData,
   });
 };
 
