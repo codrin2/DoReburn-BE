@@ -1,16 +1,24 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 
 import { getFavoriteTodoList } from '@/api/todo';
 import { QUERY_KEY } from '@/constants/queryKey';
 import { TodoType } from '@/types/todo';
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 10;
 
 const useFavoriteTodoListQuery = (todoType: TodoType, planId?: number) => {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: [QUERY_KEY.favorite, todoType, planId || 0],
-    queryFn: () => getFavoriteTodoList(todoType, PAGE_SIZE, planId),
-    staleTime: Infinity,
+    queryFn: ({ pageParam }) =>
+      getFavoriteTodoList({ modifyType: todoType, size: PAGE_SIZE, planId, cursor: pageParam }),
+    placeholderData: keepPreviousData,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      // getNextPageParam에서 null 또는 undefined 반환 시 hasNextPage: false
+      if (lastPage.hasNext) return null;
+
+      return lastPage.nextCursor;
+    },
   });
 };
 
