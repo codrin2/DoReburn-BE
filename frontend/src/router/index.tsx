@@ -4,6 +4,7 @@ import FlexPageLayout from './layout/FlexPageLayout';
 
 import DayStatisticsPage from '@/pages/DayStatisticsPage';
 import EditPage from '@/pages/EditPage';
+import FavoritePage from '@/pages/FavoritePage';
 import FeedbackPage from '@/pages/FeedbackPage';
 import KakaoLoginPage from '@/pages/KakaoLoginPage';
 import LandingPage from '@/pages/LandingPage';
@@ -97,5 +98,15 @@ export const router = createBrowserRouter([
   {
     path: '/my-page',
     element: <MyPage />,
+  },
+  {
+    path: '/favorite',
+    element: <FlexPageLayout />,
+    children: [
+      {
+        index: true,
+        element: <FavoritePage />,
+      },
+    ],
   },
 ]);

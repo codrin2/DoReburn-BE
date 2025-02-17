@@ -12,5 +12,8 @@ public interface PathRepository extends JpaRepository<Path, Long>, CustomPathRep
     List<Path> findByPlanIdOrderByPathOrderAsc(Long id);
 
     @Query("SELECT p FROM Path p JOIN FETCH p.todos t WHERE p.plan in :plans AND t.type = :type AND t.isCompleted = :isCompleted")
-    List<Path> findByPlanAndTypeAndIsCompleted(List<Plan> plans, TodoType type, boolean isCompleted);
+    List<Path> findByPlansAndTypeAndIsCompleted(List<Plan> plans, TodoType type, boolean isCompleted);
+
+    @Query("SELECT p FROM Path p JOIN FETCH p.todos t WHERE p.plan = :plan AND t.type = :type")
+    List<Path> findByPlanAndType(Plan plan, TodoType type);
 }

@@ -14,7 +14,7 @@ const useRecommendTodoFilterQuery = (
   pathId?: number,
 ) => {
   return useQuery({
-    queryKey: [QUERY_KEY.recommendAll, todoType, ...categoryList, ...difficultyList, pathId],
+    queryKey: [QUERY_KEY.recommendAll, todoType, ...categoryList, ...difficultyList, pathId || 0],
     queryFn: () =>
       getRecommendAllTodoList({
         modifyType: todoType,

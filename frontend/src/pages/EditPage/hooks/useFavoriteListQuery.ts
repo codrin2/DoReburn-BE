@@ -4,11 +4,11 @@ import { getFavoriteTodoList } from '@/api/todo';
 import { QUERY_KEY } from '@/constants/queryKey';
 import { TodoType } from '@/types/todo';
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 20;
 
 const useFavoriteTodoListQuery = (todoType: TodoType, planId?: number) => {
   return useQuery({
-    queryKey: [QUERY_KEY.favorite, todoType, planId],
+    queryKey: [QUERY_KEY.favorite, todoType, planId || 0],
     queryFn: () => getFavoriteTodoList(todoType, PAGE_SIZE, planId),
     staleTime: Infinity,
   });

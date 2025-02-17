@@ -6,7 +6,7 @@ import { QUERY_KEY } from '@/constants/queryKey';
 
 const useRouteTodoQuery = (planId?: number) => {
   return useQuery({
-    queryKey: [QUERY_KEY.routeTodoList, TODO_TYPE.PATH, planId],
+    queryKey: [QUERY_KEY.routeTodoList, TODO_TYPE.PATH, planId || 0],
     queryFn: () => {
       if (typeof planId === 'undefined') {
         throw new Error('planId가 존재하지 않습니다.');

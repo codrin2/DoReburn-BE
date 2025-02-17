@@ -4,6 +4,8 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.notification.dto.PushMessageDto;
+import com.dubu.backend.notification.infra.amqp.PushMessageProducer;
 import com.dubu.backend.plan.domain.Feedback;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
@@ -12,7 +14,7 @@ import com.dubu.backend.plan.dto.request.PlanFeedbackCreateRequest;
 import com.dubu.backend.plan.dto.response.FeedbackWritePageInfoResponse;
 import com.dubu.backend.plan.dto.response.PlanRecentResponse;
 import com.dubu.backend.plan.exception.InvalidMemberStatusException;
-import com.dubu.backend.plan.exception.NotFoundPlanException;
+import com.dubu.backend.plan.exception.PlanNotFoundException;
 import com.dubu.backend.plan.exception.UnauthorizedPlanDeletionException;
 import com.dubu.backend.plan.infra.repository.FeedbackRepository;
 import com.dubu.backend.plan.infra.repository.PathRepository;
@@ -42,6 +44,7 @@ public class PlanService {
     private final ScheduleRepository scheduleRepository;
     private final TodoRepository todoRepository;
     private final FeedbackRepository feedbackRepository;
+    private final PushMessageProducer pushMessageProducer;
 
     @Transactional
     public Long savePlan(Long memberId, PlanCreateRequest planCreateRequest) {
@@ -76,7 +79,11 @@ public class PlanService {
         }
         todoRepository.saveAll(newTodos);
         currentMember.updateStatus(Status.MOVE);
+
         taskSchedulerService.scheduleFeedbackStatusUpdate(memberId, newPlan);
+
+        PushMessageDto message = new PushMessageDto(memberId, newPlan.getId(), "안녕", "문희상");
+        pushMessageProducer.sendDelayedPush(message);
 
         return newPlan.getId();
     }
@@ -91,7 +98,7 @@ public class PlanService {
         }
 
         Plan currentPlan = planRepository.findById(planId)
-                .orElseThrow(() -> new NotFoundPlanException(planId));
+                .orElseThrow(() -> new PlanNotFoundException(planId));
 
         if (!currentPlan.getMember().getId().equals(memberId)) {
             throw new UnauthorizedPlanDeletionException(memberId, planId);
@@ -110,7 +117,7 @@ public class PlanService {
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
         Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
-                .orElseThrow(() -> new NotFoundPlanException());
+                .orElseThrow(() -> new PlanNotFoundException());
 
         List<Path> paths = pathRepository.findByPlanWithTodosOrderByPathOrder(recentPlan);
 
@@ -127,7 +134,7 @@ public class PlanService {
         }
 
         Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
-                .orElseThrow(() -> new NotFoundPlanException());
+                .orElseThrow(() -> new PlanNotFoundException());
 
         return FeedbackWritePageInfoResponse.of(recentPlan);
     }
@@ -142,7 +149,7 @@ public class PlanService {
         }
 
         Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
-                .orElseThrow(() -> new NotFoundPlanException());
+                .orElseThrow(() -> new PlanNotFoundException());
 
         recentPlan.getPaths().forEach(path -> {
             List<Todo> todos = path.getTodos();
@@ -172,13 +179,13 @@ public class PlanService {
         }
 
         Plan planToDelete = planRepository.findById(planId)
-                .orElseThrow(() -> new NotFoundPlanException(planId));
+                .orElseThrow(() -> new PlanNotFoundException(planId));
 
         if (!planToDelete.getMember().getId().equals(memberId)) {
             throw new UnauthorizedPlanDeletionException(memberId, planId);
         }
-
         taskSchedulerService.cancelScheduledPlan(planId);
+        currentMember.updateStatus(Status.STOP);
 
         planRepository.delete(planToDelete);
     }

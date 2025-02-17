@@ -3,17 +3,20 @@ import styled from 'styled-components';
 import BackgroundFeedback from '@/assets/images/backgroundFeedback.png';
 
 export const FeedbackPageLayout = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
+  justify-content: center;
 
-  position: relative;
-  height: 100%;
   width: 100%;
+  height: 100vh;
   background-image: url(${BackgroundFeedback});
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   padding-bottom: 3rem;
+  overflow: hidden;
 
   touch-action: none;
 `;

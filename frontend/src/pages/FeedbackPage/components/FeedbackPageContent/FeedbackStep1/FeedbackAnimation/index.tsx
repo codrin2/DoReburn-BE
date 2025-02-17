@@ -14,8 +14,6 @@ interface FeedbackAnimationProps {
 const FeedbackAnimation = ({ progress }: FeedbackAnimationProps) => {
   const { View, animationItem } = useLottie({
     animationData: feedbackAnimation,
-    loop: true,
-    autoplay: false,
   });
 
   if (animationItem) {

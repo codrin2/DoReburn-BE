@@ -10,12 +10,12 @@ const useEditTodoMutation = (todoType: TodoType) => {
   return useMutation({
     mutationFn: ({ todo, planId }: { todo: Todo; planId?: number }) => editTodo(todo, todoType),
 
-    onSuccess: (_, params) => {
-      if (params.planId) {
-        queryClient.invalidateQueries({ queryKey: [QUERY_KEY.routeTodoList, todoType] });
-      } else {
-        queryClient.invalidateQueries({ queryKey: [QUERY_KEY.todoList, todoType] });
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.routeTodoList, todoType] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.todoList, todoType] });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.favorite, todoType],
+      });
     },
   });
 };

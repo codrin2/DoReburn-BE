@@ -44,7 +44,7 @@ public class StatisticServiceImpl implements StatisticService {
 
         // 쿼리 최적 -> 쿼리 분리
         List<Plan> dayPlans = planRepository.findByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.plusWeeks(1).atTime(LocalTime.MAX));
-        List<Path> dayPaths = pathRepository.findByPlanAndTypeAndIsCompleted(dayPlans, TodoType.DONE, true);
+        List<Path> dayPaths = pathRepository.findByPlansAndTypeAndIsCompleted(dayPlans, TodoType.DONE, true);
 
         if(dayPlans == null || dayPlans.isEmpty() || dayPaths == null || dayPaths.isEmpty()){
             return null;
@@ -60,7 +60,7 @@ public class StatisticServiceImpl implements StatisticService {
 
         // 쿼리 최적 -> 쿼리 분리
         List<Plan> thisWeekPlans = planRepository.findByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.plusWeeks(1).atTime(LocalTime.MAX));
-        List<Path> thisWeekPaths = pathRepository.findByPlanAndTypeAndIsCompleted(thisWeekPlans, TodoType.DONE, true);
+        List<Path> thisWeekPaths = pathRepository.findByPlansAndTypeAndIsCompleted(thisWeekPlans, TodoType.DONE, true);
 
         if(thisWeekPlans == null || thisWeekPlans.isEmpty()){
             return null;

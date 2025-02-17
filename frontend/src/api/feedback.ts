@@ -16,9 +16,13 @@ export interface TodayAchievement {
   };
 }
 
-export interface saveFeedback {
+export interface saveFeedbackRequest {
   mood: string;
   memo: string;
+}
+
+interface SaveFeedbackResponse {
+  data: saveFeedbackRequest;
 }
 
 export const getTodayAchievement = async (): Promise<TodayAchievement> => {
@@ -27,13 +31,13 @@ export const getTodayAchievement = async (): Promise<TodayAchievement> => {
   return result;
 };
 
-export const saveFeedback = async (planId: number, body: saveFeedback) => {
-  const result = await fetchClient.post<saveFeedback>(API_URL.saveFeedback(planId), {
+export const saveFeedback = async (planId: number, body: saveFeedbackRequest) => {
+  const result = await fetchClient.post<SaveFeedbackResponse>(API_URL.saveFeedback(planId), {
     body: {
       mood: body.mood,
       memo: body.memo,
     },
   });
 
-  return result;
+  return result.data;
 };
