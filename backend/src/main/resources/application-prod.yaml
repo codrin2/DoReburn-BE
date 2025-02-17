@@ -22,7 +22,7 @@ spring:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
       timeout: 10
-      password: ""
+      password: ${REDIS_PASSWORD}
 
   rabbitmq:
     host: ${RABBITMQ_HOST}
