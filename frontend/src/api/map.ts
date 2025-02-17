@@ -52,6 +52,11 @@ interface NearbyUserParams {
   category?: CategoryType;
 }
 
+export interface CurrentLocationParams {
+  x_coordinate: number;
+  y_coordinate: number;
+}
+
 export const getTodoDetail = async (memberId: number) => {
   const result = await fetchClient.get<TodoDetailResponse>(API_URL.todoDetail(memberId));
 
@@ -86,4 +91,10 @@ export const getNearbyUsers = async (params: NearbyUserParams) => {
   const result = await fetchClient.get<NearbyUserResponse>(API_URL.getNearbyUsers(queryParams));
 
   return result.data;
+};
+
+export const updateCurrentLocation = async (params: CurrentLocationParams) => {
+  return await fetchClient.put(API_URL.updateCurrentLocation, {
+    body: { ...params },
+  });
 };

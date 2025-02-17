@@ -42,6 +42,7 @@ export const API_URL = {
   checkTodo: (todoId: number) => `${BASE_URL}/api/v1/todos/check?todoId=${todoId}`,
   finishPlan: `${BASE_URL}/api/v1/plans/move-complete`,
   dayStatistics: `${BASE_URL}/api/v1/statistics/day`,
+  updateCurrentLocation: `${BASE_URL}/api/v1/members/location`,
 };
 
 export const MOCK_API_URL = {
@@ -73,4 +74,5 @@ export const MOCK_API_URL = {
   weekStatistics: `${BASE_URL}/api/v1/statistics/week`,
   createPlan: `${BASE_URL}/api/v1/plans`,
   dayStatistics: `${BASE_URL}/api/v1/statistics/day`,
+  updateCurrentLocation: `${BASE_URL}/api/v1/members/location`,
 };
