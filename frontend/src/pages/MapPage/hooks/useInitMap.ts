@@ -45,18 +45,6 @@ const useInitMap = () => {
         });
       }
     }
-
-    const currentMapRef = mapRef.current; // mapRef.current를 변수에 복사
-
-    if (currentMapRef) {
-      kakao.maps.event.addListener(currentMapRef, 'dragstart', handleDragStart);
-    }
-
-    return () => {
-      if (currentMapRef) {
-        kakao.maps.event.removeListener(currentMapRef, 'dragstart', handleDragStart);
-      }
-    };
   }, [center]);
 
   useEffect(() => {
@@ -94,9 +82,17 @@ const useInitMap = () => {
 
     kakao.maps.load(() => initMap());
 
+    if (mapRef.current) {
+      kakao.maps.event.addListener(mapRef.current, 'dragstart', handleDragStart);
+    }
+
     return () => {
       if (navigatorRef.current) {
         navigator.geolocation.clearWatch(navigatorRef.current);
+      }
+
+      if (mapRef.current) {
+        kakao.maps.event.removeListener(mapRef.current, 'dragstart', handleDragStart);
       }
     };
   }, []);
