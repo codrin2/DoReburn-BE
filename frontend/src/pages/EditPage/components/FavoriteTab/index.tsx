@@ -79,42 +79,44 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
   return (
     <>
       <S.FavoriteTabLayout>
-        {favoriteTodoList.map((todo) => (
-          <TodoEditItem
-            key={todo.todoId}
-            todo={todo}
-            disabled={todo.hasChild}
-            left={
-              isFavoritePage ? (
-                <IconButton
-                  icon={<Icon icon="MinusCircle" cursor="pointer" />}
-                  onClick={() => handleDeleteTodo(todo.todoId)}
-                  disabled={todo.hasChild}
-                />
-              ) : (
-                <IconButton
-                  icon={
-                    todo.hasChild ? (
-                      <Icon icon="CheckCircle" cursor="pointer" />
-                    ) : (
-                      <Icon icon="PlusCircle" cursor="pointer" />
-                    )
-                  }
-                  onClick={() => handleAddTodoFromFavorite(todo.todoId)}
-                  disabled={todo.hasChild}
-                />
-              )
-            }
-            right={
-              isFavoritePage && (
-                <IconButton
-                  icon={<Icon icon="Edit" cursor="pointer" />}
-                  onClick={() => openEditBottomSheet(todo)}
-                />
-              )
-            }
-          />
-        ))}
+        {favoriteTodoList.pages.map((page) =>
+          page.data.map((todo) => (
+            <TodoEditItem
+              key={todo.todoId}
+              todo={todo}
+              disabled={todo.hasChild}
+              left={
+                isFavoritePage ? (
+                  <IconButton
+                    icon={<Icon icon="MinusCircle" cursor="pointer" />}
+                    onClick={() => handleDeleteTodo(todo.todoId)}
+                    disabled={todo.hasChild}
+                  />
+                ) : (
+                  <IconButton
+                    icon={
+                      todo.hasChild ? (
+                        <Icon icon="CheckCircle" cursor="pointer" />
+                      ) : (
+                        <Icon icon="PlusCircle" cursor="pointer" />
+                      )
+                    }
+                    onClick={() => handleAddTodoFromFavorite(todo.todoId)}
+                    disabled={todo.hasChild}
+                  />
+                )
+              }
+              right={
+                isFavoritePage && (
+                  <IconButton
+                    icon={<Icon icon="Edit" cursor="pointer" />}
+                    onClick={() => openEditBottomSheet(todo)}
+                  />
+                )
+              }
+            />
+          )),
+        )}
 
         {isFavoritePage && (
           <IconButton
