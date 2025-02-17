@@ -4,7 +4,7 @@ import { getFavoriteTodoList } from '@/api/todo';
 import { QUERY_KEY } from '@/constants/queryKey';
 import { TodoType } from '@/types/todo';
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 10;
 
 const useFavoriteTodoListQuery = (todoType: TodoType, planId?: number) => {
   return useInfiniteQuery({
