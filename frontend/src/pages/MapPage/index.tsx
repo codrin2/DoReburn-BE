@@ -1,6 +1,6 @@
 import { CATEGORY_OPTIONS } from '../EditPage/EditPage.constants';
 import CategoryRank from './components/CategoryRank';
-import useCategoryFilters from './hooks/useCategoryFilters';
+import useCategoryFilter from './hooks/useCategoryFilter';
 import useInitMap from './hooks/useInitMap';
 import useMapBottomSheet from './hooks/useMapBottomSheet';
 import useMarker from './hooks/useMarker';
@@ -12,20 +12,25 @@ import * as S from './MapPage.styled';
 import BottomSheet from '@/components/BottomSheet';
 import Header from '@/components/Header';
 import Icon from '@/components/Icon';
+import RadioGroup from '@/components/RadioGroup';
 import { MAP_ID } from '@/constants/config';
 import { colors } from '@/styles/theme';
 
 const MapPage = () => {
+  const { updateCurrentLocation } = useUpdateCurrentLocation();
+
   const { mapRef, center, isDragged, handleDragEnd } = useInitMap();
   const { putMarkerList } = useMarker();
-  const { categoryFilters, handleCheckFilters } = useCategoryFilters();
   const { isOpen, close } = useMapBottomSheet();
+
   const { data: nearbyUsersData } = useNearbyUsersQuery({
     lng: center.lng,
     lat: center.lat,
   });
 
-  const { updateCurrentLocation } = useUpdateCurrentLocation();
+  const { category, handleSelectCategoryFilter, filteredLocations } = useCategoryFilter(
+    nearbyUsersData?.memberLocations ?? [],
+  );
 
   const {
     isOpen: isMarkerBottomSheetOpen,
@@ -33,8 +38,6 @@ const MapPage = () => {
     close: closeMarkerBottomSheet,
     content: markerBottomSheetContent,
   } = useMarkerBottomSheet();
-
-  putMarkerList(mapRef.current, openMarkerBottomSheet, nearbyUsersData?.memberLocations);
 
   const handleBackCenter = () => {
     mapRef.current?.setCenter(new kakao.maps.LatLng(center.lat, center.lng));
@@ -49,6 +52,13 @@ const MapPage = () => {
     });
   };
 
+  putMarkerList({
+    map: mapRef.current,
+    onClick: openMarkerBottomSheet,
+    category,
+    nearbyMemberList: filteredLocations,
+  });
+
   return (
     <S.MapContainer id={MAP_ID}>
       <S.HeaderOverlay>
@@ -60,18 +70,18 @@ const MapPage = () => {
             <Header.MenuButton />
           </Header.Right>
         </Header>
+
         <S.FilterBadgeWrapper>
-          {CATEGORY_OPTIONS.map((filter) => (
-            <S.FilterBadge
-              key={filter.value}
-              value={filter.value}
-              $isSelected={categoryFilters[filter.value]}
-              onClick={() => handleCheckFilters(filter.value)}
-              $category={filter.value}
-            >
-              {filter.label}
-            </S.FilterBadge>
-          ))}
+          <RadioGroup
+            type="checkbox"
+            name="category"
+            filters={CATEGORY_OPTIONS}
+            handleChange={handleSelectCategoryFilter}
+            selectedValue={category ?? ''}
+            category={category}
+            width="100%"
+            isFilter
+          />
         </S.FilterBadgeWrapper>
       </S.HeaderOverlay>
 

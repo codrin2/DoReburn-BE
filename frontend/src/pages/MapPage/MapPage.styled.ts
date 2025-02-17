@@ -22,8 +22,7 @@ export const HeaderOverlay = styled.div`
 export const FilterBadgeWrapper = styled.div`
   display: flex;
   gap: 0.8rem;
-  width: 100vw;
-  overflow-x: scroll;
+  width: 100%;
   padding: 1rem;
 `;
 
