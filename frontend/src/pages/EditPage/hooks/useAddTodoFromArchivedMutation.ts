@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { addTodoFromArchived, RecommendTodo } from '@/api/todo';
+import { addTodoFromArchived, FavoriteTodoResponse, RecommendTodo } from '@/api/todo';
 import { QUERY_KEY } from '@/constants/queryKey';
 import { CategoryType, DifficultyType } from '@/types/filter';
 import { TodoType } from '@/types/todo';
@@ -39,18 +39,20 @@ const useAddTodoFromArchivedMutation = (
       );
 
       // 응답값으로 쿼리 캐싱 갱신 (즐겨찾기)
-      queryClient.setQueryData<RecommendTodo[]>(
+      queryClient.setQueryData<{ pages: FavoriteTodoResponse[] }>(
         [QUERY_KEY.favorite, todoType, planId || 0],
         (old) => {
           if (!old) return old;
 
-          return old.map((todo) => {
-            if (todo.todoId === todoId) {
-              return { ...todo, hasChild: !todo.hasChild };
-            }
-
-            return todo;
-          });
+          return {
+            ...old,
+            pages: old.pages.map((page) => ({
+              ...page,
+              data: page.data.map((todo) =>
+                todo.todoId === todoId ? { ...todo, hasChild: !todo.hasChild } : todo,
+              ),
+            })),
+          };
         },
       );
 
@@ -75,6 +77,7 @@ const useAddTodoFromArchivedMutation = (
           });
         },
       );
+
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.todoList, todoType, planId || 0] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.routeTodoList, todoType, planId || 0] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.favorite, todoType, planId || 0] });
