@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 
 import useCancelPlanMutation from '../../hooks/useCancelPlanMutation';
+import usePlanInfoQuery from '../../hooks/usePlanInfoQuery';
 import HomeModal from '../HomeModal';
 
 import Header from '@/components/Header';
 
 const PlanHeader = () => {
   const navigate = useNavigate();
-  const { planId } = useParams();
+  const { data: planInfo } = usePlanInfoQuery();
   const { mutate: cancelPlan } = useCancelPlanMutation();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +18,7 @@ const PlanHeader = () => {
   const close = () => setIsOpen(false);
 
   const handleConfirm = () => {
-    cancelPlan(Number(planId), {
+    cancelPlan(Number(planInfo?.planId), {
       onSuccess: () => {
         close();
         navigate('/', { replace: true });
