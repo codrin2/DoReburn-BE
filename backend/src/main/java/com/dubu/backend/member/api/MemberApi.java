@@ -43,8 +43,14 @@ public interface MemberApi {
                                                         "email": "test@example.com",
                                                         "nickname": "홍길동",
                                                         "categories": ["READING", "ENGLISH"],
-                                                        "homeTitle": "집",
-                                                        "schoolTitle": "학교"
+                                                        "homeTitle": "역삼 자이",
+                                                        "homeAddress": "서울시 강남구 역삼동 123",
+                                                        "homeAddressX": 127.0000,
+                                                        "homeAddressY": 37.0000,
+                                                        "schoolTitle": "서울대학교",
+                                                        "schoolAddress": "서울시 관악구 관악로 1",
+                                                        "schoolAddressX": 126.9528804,
+                                                        "schoolAddressY": 37.4784966
                                                       }
                                                     }
                                                     """
