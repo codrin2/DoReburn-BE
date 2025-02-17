@@ -20,6 +20,8 @@ const useRecommendTodoFilterQuery = (
         modifyType: todoType,
         size: PAGE_SIZE,
         pathId,
+        category: categoryList,
+        difficulty: difficultyList,
         cursorCategoryId: pageParam.cursorCategoryId,
         cursorDifficulty: pageParam.cursorDifficulty,
         cursorTodoId: pageParam.cursorTodoId,
