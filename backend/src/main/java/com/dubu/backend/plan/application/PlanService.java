@@ -184,8 +184,8 @@ public class PlanService {
         if (!planToDelete.getMember().getId().equals(memberId)) {
             throw new UnauthorizedPlanDeletionException(memberId, planId);
         }
-
         taskSchedulerService.cancelScheduledPlan(planId);
+        currentMember.updateStatus(Status.STOP);
 
         planRepository.delete(planToDelete);
     }
