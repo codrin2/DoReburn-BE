@@ -60,8 +60,8 @@ const getNearbyUsersHandler = async ({ request }: { request: Request }) => {
 };
 
 export const handlers = [
-  http.get(MOCK_API_URL.todoDetail, getTodoDetailHandler),
   http.post(MOCK_API_URL.addFavoriteFromOther, addFavoriteFromOtherHandler),
   http.delete(MOCK_API_URL.deleteFavoriteFromOther, deleteFavoriteFromOtherHandler),
   http.get(MOCK_API_URL.getNearbyUsers, getNearbyUsersHandler),
+  http.get(MOCK_API_URL.todoDetail, getTodoDetailHandler),
 ];

@@ -29,7 +29,7 @@ export interface NearbyMember {
   memberId: number;
   x_coordinate: number;
   y_coordinate: number;
-  category: CategoryType;
+  category: CategoryType[];
 }
 
 export interface CategoryRank {

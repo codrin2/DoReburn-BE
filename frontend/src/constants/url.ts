@@ -68,7 +68,7 @@ export const MOCK_API_URL = {
   todoDetail: `${BASE_URL}/api/v1/share/members/:memberId`,
   addFavoriteFromOther: `${BASE_URL}/api/v1/share/todos`,
   deleteFavoriteFromOther: `${BASE_URL}/api/v1/share/todos`,
-  getNearbyUsers: `${BASE_URL}/api/v1/share/realtime-user-category`,
+  getNearbyUsers: `${BASE_URL}/api/v1/share/members/surrounding`,
   todayAchievement: `${BASE_URL}/api/v1/plans/feedbacks`,
   saveFeedback: (planId: number) => `${BASE_URL}/api/v1/plans/${planId}/feedbacks`,
   weekStatistics: `${BASE_URL}/api/v1/statistics/week`,
