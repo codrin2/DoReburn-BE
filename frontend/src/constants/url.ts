@@ -29,9 +29,8 @@ export const API_URL = {
   memberStatus: `${BASE_URL}/api/v1/members/status`,
   todoDetail: (memberId: number) =>
     `${BASE_URL}/api/v1/share/members/todos?surroundingMemberId=${memberId}`,
-  addFavoriteFromOther: `${BASE_URL}/api/v1/share/todos`,
-  deleteFavoriteFromOther: (todoId: number) =>
-    `${BASE_URL}/api/v1/share/todos${todoId ? `?todoId=${todoId}` : ''}`,
+  deleteFavoriteFromOther: (memberId: number) =>
+    `${BASE_URL}/api/v1/share/todos${memberId ? `?surroundingMemberId=${memberId}` : ''}`,
   getNearbyUsers: (queryParams: string) =>
     `${BASE_URL}/api/v1/share/members/surrounding${queryParams}`,
   todayAchievement: `${BASE_URL}/api/v1/plans/feedbacks`,
@@ -54,7 +53,7 @@ export const MOCK_API_URL = {
   addTodo: `${BASE_URL}/api/v1/todos/:dateType/manual/:planId?`,
   deleteTodo: `${BASE_URL}/api/v1/todos/:todoId?type=:dateType`,
   editTodo: `${BASE_URL}/api/v1/todos/:todoId?type=:dateType`,
-  addTodoFromArchived: `${BASE_URL}/api/v1/todos/:dateType/from-archived/:planId?`,
+  addTodoFromArchived: `${BASE_URL}/api/v1/todos/:todoType/from-archived/:planId?`,
   routeTodo: `${BASE_URL}/api/v1/routes/:planId/todos`,
   searchAddress: `${BASE_URL}/api/v1/places/search`,
   searchRoutes: `${BASE_URL}/api/v1/routes/search`,

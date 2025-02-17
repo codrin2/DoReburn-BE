@@ -8,7 +8,7 @@ import TODO_DATA from '../data/todoData.json';
 import { MOCK_API_URL } from '@/constants/url';
 
 interface TodoCreateParams {
-  dateType: string;
+  todoType: string;
   planId?: string;
 }
 
@@ -125,7 +125,7 @@ const addTodoHandler = async ({
   if (requestParams.planId) {
     ROUTE_TODO_DATA.data.push({
       ...newTodo,
-      type: requestParams.dateType,
+      type: requestParams.todoType,
       todoId: ROUTE_TODO_DATA.data.length + 1,
     });
 
@@ -134,7 +134,7 @@ const addTodoHandler = async ({
 
   TODO_DATA.data.push({
     ...newTodo,
-    type: requestParams.dateType,
+    type: requestParams.todoType,
     todoId: TODO_DATA.data.length + 1,
   });
 
@@ -183,7 +183,7 @@ const addTodoFromArchivedHandler = async ({
   params: TodoCreateParams;
   request: Request;
 }) => {
-  const { dateType, planId } = params;
+  const { todoType, planId } = params;
   const { todoId } = await request.json();
 
   const newTodo = ARCHIVED_TODO_DATA.data.find((todo) => todo.todoId === Number(todoId));
@@ -200,14 +200,14 @@ const addTodoFromArchivedHandler = async ({
   if (planId) {
     ROUTE_TODO_DATA.data.push({
       ...newTodo,
-      type: dateType,
+      type: todoType,
       todoId: ROUTE_TODO_DATA.data.length + 1,
     });
 
     return HttpResponse.json(newTodo);
   }
 
-  TODO_DATA.data.push({ ...newTodo, type: dateType, todoId: TODO_DATA.data.length + 1 });
+  TODO_DATA.data.push({ ...newTodo, type: todoType, todoId: TODO_DATA.data.length + 1 });
 
   return HttpResponse.json(newTodo);
 };
