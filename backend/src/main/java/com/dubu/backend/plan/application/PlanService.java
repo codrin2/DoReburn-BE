@@ -14,7 +14,7 @@ import com.dubu.backend.plan.dto.request.PlanFeedbackCreateRequest;
 import com.dubu.backend.plan.dto.response.FeedbackWritePageInfoResponse;
 import com.dubu.backend.plan.dto.response.PlanRecentResponse;
 import com.dubu.backend.plan.exception.InvalidMemberStatusException;
-import com.dubu.backend.plan.exception.NotFoundPlanException;
+import com.dubu.backend.plan.exception.PlanNotFoundException;
 import com.dubu.backend.plan.exception.UnauthorizedPlanDeletionException;
 import com.dubu.backend.plan.infra.repository.FeedbackRepository;
 import com.dubu.backend.plan.infra.repository.PathRepository;
@@ -98,7 +98,7 @@ public class PlanService {
         }
 
         Plan currentPlan = planRepository.findById(planId)
-                .orElseThrow(() -> new NotFoundPlanException(planId));
+                .orElseThrow(() -> new PlanNotFoundException(planId));
 
         if (!currentPlan.getMember().getId().equals(memberId)) {
             throw new UnauthorizedPlanDeletionException(memberId, planId);
@@ -117,7 +117,7 @@ public class PlanService {
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
         Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
-                .orElseThrow(() -> new NotFoundPlanException());
+                .orElseThrow(() -> new PlanNotFoundException());
 
         List<Path> paths = pathRepository.findByPlanWithTodosOrderByPathOrder(recentPlan);
 
@@ -134,7 +134,7 @@ public class PlanService {
         }
 
         Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
-                .orElseThrow(() -> new NotFoundPlanException());
+                .orElseThrow(() -> new PlanNotFoundException());
 
         return FeedbackWritePageInfoResponse.of(recentPlan);
     }
@@ -149,7 +149,7 @@ public class PlanService {
         }
 
         Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
-                .orElseThrow(() -> new NotFoundPlanException());
+                .orElseThrow(() -> new PlanNotFoundException());
 
         recentPlan.getPaths().forEach(path -> {
             List<Todo> todos = path.getTodos();
@@ -179,7 +179,7 @@ public class PlanService {
         }
 
         Plan planToDelete = planRepository.findById(planId)
-                .orElseThrow(() -> new NotFoundPlanException(planId));
+                .orElseThrow(() -> new PlanNotFoundException(planId));
 
         if (!planToDelete.getMember().getId().equals(memberId)) {
             throw new UnauthorizedPlanDeletionException(memberId, planId);
