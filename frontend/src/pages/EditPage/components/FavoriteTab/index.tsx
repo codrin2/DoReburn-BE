@@ -1,10 +1,10 @@
 import * as S from './FavoriteTab.styled';
+import IntersectionObserverScroll from '../../../../components/IntersectionObserverScroll/IntersectionObserverScroll';
 import { useAddTodoBottomSheet } from '../../hooks/useAddTodoBottomSheet';
 import useAddTodoFromArchivedMutation from '../../hooks/useAddTodoFromArchivedMutation';
 import useDeleteTodoMutation from '../../hooks/useDeleteTodoMutation';
 import useEditTodoBottomSheet from '../../hooks/useEditTodoBottomSheet';
 import useFavoriteTodoListQuery from '../../hooks/useFavoriteListQuery';
-import IntersectionObserverScroll from '../IntersectionObserverScroll/IntersectionObserverScroll';
 import TodoEditItem from '../TodoEditItem';
 
 import BottomSheet from '@/components/BottomSheet';
