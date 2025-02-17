@@ -32,17 +32,17 @@ export interface NearbyMember {
   category: CategoryType;
 }
 
-export interface CategoryRanking {
+export interface CategoryRank {
   rank: number;
   category: CategoryType;
-  num: number;
+  count: number;
 }
 
 interface NearbyUserResponse {
   data: {
-    nearMember: NearbyMember[];
-    categoryRanking: CategoryRanking[];
-  };
+    memberLocations: NearbyMember[];
+    categoryRank: CategoryRank[];
+  } | null;
 }
 
 interface NearbyUserParams {

@@ -28,7 +28,7 @@ const MapPage = () => {
     content: markerBottomSheetContent,
   } = useMarkerBottomSheet();
 
-  putMarkerList(mapRef.current, openMarkerBottomSheet, nearbyUsersData?.nearMember);
+  putMarkerList(mapRef.current, openMarkerBottomSheet, nearbyUsersData?.memberLocations);
 
   const handleBackCenter = () => {
     mapRef.current?.setCenter(new kakao.maps.LatLng(center.lat, center.lng));

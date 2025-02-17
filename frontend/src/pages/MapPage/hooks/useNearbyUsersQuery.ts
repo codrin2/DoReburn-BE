@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getNearbyUsers } from '@/api/map';
 import { QUERY_KEY } from '@/constants/queryKey';
 
-const AROUND_RADIUS = 3000;
+const AROUND_RADIUS = 3;
 
 interface useNearbyUsersQueryProps {
   lng: number;

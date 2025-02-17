@@ -10,7 +10,7 @@ interface CategoryRankProps {
 const CategoryRank = ({ lng, lat }: CategoryRankProps) => {
   const { data: nearbyUsersData } = useNearbyUsersQuery({ lng, lat });
 
-  const categoryRankList = nearbyUsersData?.categoryRanking;
+  const categoryRankList = nearbyUsersData?.categoryRank;
 
   return (
     <S.CategoryRankLayout>
