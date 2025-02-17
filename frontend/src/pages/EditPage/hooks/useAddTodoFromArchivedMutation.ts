@@ -54,11 +54,15 @@ const useAddTodoFromArchivedMutation = (
         },
       );
 
-      if (!categoryList || !difficultyList) return;
-
       // 응답값으로 쿼리 캐싱 갱신 (모든 추천)
       queryClient.setQueryData<RecommendTodo[]>(
-        [QUERY_KEY.recommendAll, todoType, ...categoryList, ...difficultyList, planId || 0],
+        [
+          QUERY_KEY.recommendAll,
+          todoType,
+          ...(categoryList || []),
+          ...(difficultyList || []),
+          planId || 0,
+        ],
         (old) => {
           if (!old) return old;
 
@@ -71,7 +75,6 @@ const useAddTodoFromArchivedMutation = (
           });
         },
       );
-
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.todoList, todoType, planId || 0] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.routeTodoList, todoType, planId || 0] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.favorite, todoType, planId || 0] });
