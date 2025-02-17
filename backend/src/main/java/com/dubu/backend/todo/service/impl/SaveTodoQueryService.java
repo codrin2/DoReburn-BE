@@ -42,10 +42,11 @@ public class SaveTodoQueryService implements TodoQueryService {
     public PageResponse<Long, List<TodoInfo>> findSaveTodos(TodoIdentifier identifier, Long cursor, SaveTodoQueryRequest request) {
         Member member = memberRepository.findById(identifier.memberId()).orElseThrow(() -> new MemberNotFoundException(identifier.memberId()));
 
-        // 회원의 상태는 정지여야 한다.
-        if(!member.getStatus().equals(Status.STOP)){
+        // 회원의 상태 STOP 또는 MOVE 여야 한다.
+        if(member.getStatus().equals(Status.ONBOARDING) || member.getStatus().equals(Status.FEEDBACK)){
             throw new InvalidMemberStatusException(member.getStatus().name());
         }
+
         Slice<Todo> todoSlice = todoRepository.findTodosUsingSingleCursor(cursor,
                 TodoSearchCond.builder()
                         .member(member)
@@ -67,8 +68,8 @@ public class SaveTodoQueryService implements TodoQueryService {
     public List<TodoInfo> findPersonalizedRecommendTodos(TodoIdentifier identifier) {
         Member member = memberRepository.findById(identifier.memberId()).orElseThrow(() -> new MemberNotFoundException(identifier.memberId()));
 
-        // 회원의 상태는 정지여야 한다.
-        if(!member.getStatus().equals(Status.STOP)){
+        // 회원의 상태 STOP 또는 MOVE 여야 한다.
+        if(member.getStatus().equals(Status.ONBOARDING) || member.getStatus().equals(Status.FEEDBACK)){
             throw new InvalidMemberStatusException(member.getStatus().name());
         }
         // 회원의 카테고리 정보에 해당하는 추천 할 일을 가져온다.
@@ -94,8 +95,8 @@ public class SaveTodoQueryService implements TodoQueryService {
     public PageResponse<Cursor, List<TodoInfo>> findAllRecommendTodos(TodoIdentifier identifier, Cursor cursor, RecommendTodoQueryRequest request) {
         Member member = memberRepository.findById(identifier.memberId()).orElseThrow(() -> new MemberNotFoundException(identifier.memberId()));
 
-        // 회원의 상태는 정지여야 한다.
-        if(!member.getStatus().equals(Status.STOP)){
+        // 회원의 상태 STOP 또는 MOVE 여야 한다.
+        if(member.getStatus().equals(Status.ONBOARDING) || member.getStatus().equals(Status.FEEDBACK)){
             throw new InvalidMemberStatusException(member.getStatus().name());
         }
 

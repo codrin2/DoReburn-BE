@@ -4,7 +4,12 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.exception.InvalidMemberStatusException;
+import com.dubu.backend.plan.exception.PlanNotFoundException;
+import com.dubu.backend.plan.infra.repository.PathRepository;
+import com.dubu.backend.plan.infra.repository.PlanRepository;
 import com.dubu.backend.todo.dto.common.TodoIdentifier;
 import com.dubu.backend.todo.dto.request.TodoCreateFromArchivedRequest;
 import com.dubu.backend.todo.dto.request.TodoCreateRequest;
@@ -22,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,13 +37,15 @@ public class SaveTodoManagementService implements TodoManagementService {
     private final CategoryRepository categoryRepository;
     private final TodoRepository todoRepository;
     private final ScheduleRepository scheduleRepository;
+    private final PlanRepository planRepository;
+    private final PathRepository pathRepository;
 
     @Override
     public TodoManageResult<?> createTodo(TodoIdentifier identifier, TodoCreateRequest todoCreateRequest) {
         Member member = memberRepository.findById(identifier.memberId()).orElseThrow(() -> new MemberNotFoundException(identifier.memberId()));
 
-        // 회원의 상태는 정지여야 한다.
-        if(!member.getStatus().equals(Status.STOP)){
+        // 회원의 상태 STOP 또는 MOVE 여야 한다.
+        if(member.getStatus().equals(Status.ONBOARDING) || member.getStatus().equals(Status.FEEDBACK)){
             throw new InvalidMemberStatusException(member.getStatus().name());
         }
         Category category = categoryRepository.findByName(todoCreateRequest.category()).orElseThrow(() -> new CategoryNotFoundException(todoCreateRequest.category()));
@@ -52,8 +60,8 @@ public class SaveTodoManagementService implements TodoManagementService {
     public TodoManageResult<?> createTodoFromArchived(TodoIdentifier identifier, TodoCreateFromArchivedRequest todoCreateRequest) {
         Member member = memberRepository.findById(identifier.memberId()).orElseThrow(() -> new MemberNotFoundException(identifier.memberId()));
 
-        // 회원의 상태는 정지여야 한다.
-        if(!member.getStatus().equals(Status.STOP)){
+        // 회원의 상태 STOP 또는 MOVE 여야 한다.
+        if(member.getStatus().equals(Status.ONBOARDING) || member.getStatus().equals(Status.FEEDBACK)){
             throw new InvalidMemberStatusException(member.getStatus().name());
         }
 
@@ -71,8 +79,8 @@ public class SaveTodoManagementService implements TodoManagementService {
     public TodoManageResult<?> modifyTodo(TodoIdentifier identifier, TodoUpdateRequest todoUpdateRequest) {
         Member member = memberRepository.findById(identifier.memberId()).orElseThrow(() -> new MemberNotFoundException(identifier.memberId()));
 
-        // 회원의 상태는 정지여야 한다.
-        if(!member.getStatus().equals(Status.STOP)){
+        // 회원의 상태 STOP 또는 MOVE 여야 한다.
+        if(member.getStatus().equals(Status.ONBOARDING) || member.getStatus().equals(Status.FEEDBACK)){
             throw new InvalidMemberStatusException(member.getStatus().name());
         }
 
@@ -91,6 +99,19 @@ public class SaveTodoManagementService implements TodoManagementService {
             // 오늘 할 일 관련
             Schedule todaySchedule = scheduleRepository.findLatestSchedule(member, LocalDate.now()).orElseThrow(ScheduleNotFoundException::new);
             todoRepository.findByParentTodoAndSchedule(todo, todaySchedule).ifPresent(Todo::clearParentTodo);
+
+            // 경로별 할 일 관련
+            // 최근 계획(Plan 조회)
+            Plan latestPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(identifier.memberId()).orElseThrow(PlanNotFoundException::new);
+            List<Path> pathsOfLatestPlan = pathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS);
+
+            pathsOfLatestPlan.stream()
+                    .flatMap(path -> path.getTodos().stream())
+                    .filter(pathTodo -> {
+                        Todo parentTodo = pathTodo.getParentTodo();
+                        return parentTodo != null && parentTodo.getId().equals(todo.getId());
+                    })
+                    .forEach(Todo::clearParentTodo);
 
             // 해당 할 일 관련
             todo.clearParentTodo();
@@ -116,8 +137,8 @@ public class SaveTodoManagementService implements TodoManagementService {
     public TodoManageResult<?> removeTodo(TodoIdentifier identifier) {
         Member member = memberRepository.findById(identifier.memberId()).orElseThrow(() -> new MemberNotFoundException(identifier.memberId()));
 
-        // 회원의 상태는 정지여야 한다.
-        if(!member.getStatus().equals(Status.STOP)){
+        // 회원의 상태 STOP 또는 MOVE 여야 한다.
+        if(member.getStatus().equals(Status.ONBOARDING) || member.getStatus().equals(Status.FEEDBACK)){
             throw new InvalidMemberStatusException(member.getStatus().name());
         }
 
@@ -133,6 +154,20 @@ public class SaveTodoManagementService implements TodoManagementService {
 
         Schedule todaySchedule = scheduleRepository.findLatestSchedule(member, LocalDate.now()).orElseThrow(ScheduleNotFoundException::new);
         todoRepository.findByParentTodoAndSchedule(todo, todaySchedule).ifPresent(Todo::clearParentTodo);
+
+        // 즐겨찾기 할 일로부터 생성된 경로별 할 일의 부모 id 삭제
+        // 최근 계획(Plan 조회)
+        Plan latestPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(identifier.memberId()).orElseThrow(PlanNotFoundException::new);
+        List<Path> pathsOfLatestPlan = pathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS);
+
+        pathsOfLatestPlan.stream()
+                .flatMap(path -> path.getTodos().stream())
+                .filter(pathTodo -> {
+                    Todo parentTodo = pathTodo.getParentTodo();
+                    return parentTodo != null && parentTodo.getId().equals(todo.getId());
+                })
+                .forEach(Todo::clearParentTodo);
+
 
         todoRepository.delete(todo);
 
