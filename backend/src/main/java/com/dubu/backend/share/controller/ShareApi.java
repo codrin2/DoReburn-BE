@@ -3,7 +3,7 @@ package com.dubu.backend.share.controller;
 import com.dubu.backend.global.domain.SuccessResponse;
 import com.dubu.backend.share.dto.request.SurroundingMemberQueryRequest;
 import com.dubu.backend.share.dto.response.ShareInfo;
-import com.dubu.backend.share.dto.response.ShareTodoInfo;
+import com.dubu.backend.share.dto.response.SurroundingMemberInfo;
 import com.dubu.backend.todo.controller.TodoApi;
 import com.dubu.backend.todo.dto.response.TodoSuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,12 +14,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 @Tag(name = "Share API", description = "지도(공유) API")
 public interface ShareApi {
@@ -39,69 +38,111 @@ public interface ShareApi {
                                             name = "주변 사용자 위치 정보 및 카테고리 랭킹 조회 성공",
                                             value = """
                                             {
-                                                "data": {
-                                                     "memberLocations": [
-                                                         {
-                                                             "memberId": 9,
-                                                             "x_coordinate": 127.03299969434738,
-                                                             "y_coordinate": 37.50300047180349
-                                                         },
-                                                         {
-                                                             "memberId": 2,
-                                                             "x_coordinate": 127.0429989695549,
-                                                             "y_coordinate": 37.52600053160333
-                                                         },
-                                                         {
-                                                             "memberId": 8,
-                                                             "x_coordinate": 127.04900175333023,
-                                                             "y_coordinate": 37.505000366798214
-                                                         },
-                                                         {
-                                                             "memberId": 5,
-                                                             "x_coordinate": 127.06299751996994,
-                                                             "y_coordinate": 37.509998836924424
-                                                         },
-                                                         {
-                                                             "memberId": 1,
-                                                             "x_coordinate": 127.04732805490494,
-                                                             "y_coordinate": 37.51723546583434
-                                                         },
-                                                         {
-                                                             "memberId": 3,
-                                                             "x_coordinate": 127.05499917268753,
-                                                             "y_coordinate": 37.520000846619176
-                                                         },
-                                                         {
-                                                             "memberId": 10,
-                                                             "x_coordinate": 127.0370015501976,
-                                                             "y_coordinate": 37.497000786819335
-                                                         },
-                                                         {
-                                                             "memberId": 6,
-                                                             "x_coordinate": 127.0370015501976,
-                                                             "y_coordinate": 37.49900068181405
-                                                         },
-                                                         {
-                                                             "memberId": 7,
-                                                             "x_coordinate": 127.04799860715866,
-                                                             "y_coordinate": 37.499999361950834
-                                                         }
-                                                     ],
-                                                     "categoryRank": [
-                                                         {
-                                                             "category": "NEWS",
-                                                             "count": 8
-                                                         },
-                                                         {
-                                                             "category": "READING",
-                                                             "count": 5
-                                                         },
-                                                         {
-                                                             "category": "ENGLISH",
-                                                             "count": 5
-                                                         }
-                                                     ]
-                                                }
+                                              "data": {
+                                                "memberInfos": [
+                                                  {
+                                                    "memberId": 9,
+                                                    "x_coordinate": 127.03299969434738,
+                                                    "y_coordinate": 37.50300047180349,
+                                                    "category": [
+                                                      "HOBBY",
+                                                      "OTHERS"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "memberId": 2,
+                                                    "x_coordinate": 127.0429989695549,
+                                                    "y_coordinate": 37.52600053160333,
+                                                    "category": [
+                                                      "NEWS"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "memberId": 8,
+                                                    "x_coordinate": 127.04900175333023,
+                                                    "y_coordinate": 37.505000366798214,
+                                                    "category": [
+                                                      "READING",
+                                                      "LANGUAGE",
+                                                      "OTHERS"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "memberId": 5,
+                                                    "x_coordinate": 127.06299751996994,
+                                                    "y_coordinate": 37.509998836924424,
+                                                    "category": [
+                                                      "LANGUAGE",
+                                                      "NEWS",
+                                                      "OTHERS"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "memberId": 1,
+                                                    "x_coordinate": 127.04732805490494,
+                                                    "y_coordinate": 37.51723039639202,
+                                                    "category": [
+                                                      "READING"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "memberId": 3,
+                                                    "x_coordinate": 127.05499917268753,
+                                                    "y_coordinate": 37.520000846619176,
+                                                    "category": [
+                                                      "READING",
+                                                      "NEWS"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "memberId": 10,
+                                                    "x_coordinate": 127.0370015501976,
+                                                    "y_coordinate": 37.497000786819335,
+                                                    "category": [
+                                                      "NEWS",
+                                                      "HOBBY"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "memberId": 6,
+                                                    "x_coordinate": 127.0370015501976,
+                                                    "y_coordinate": 37.49900068181405,
+                                                    "category": [
+                                                      "OTHERS",
+                                                      "ENGLISH",
+                                                      "READING",
+                                                      "HOBBY"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "memberId": 7,
+                                                    "x_coordinate": 127.04799860715866,
+                                                    "y_coordinate": 37.499999361950834,
+                                                    "category": [
+                                                      "READING",
+                                                      "ENGLISH",
+                                                      "HOBBY"
+                                                    ]
+                                                  }
+                                                ],
+                                                "categoryRank": [
+                                                  {
+                                                    "category": "READING",
+                                                    "rank": 1,
+                                                    "count": 5
+                                                  },
+                                                  {
+                                                    "category": "OTHERS",
+                                                    "rank": 2,
+                                                    "count": 4
+                                                  },
+                                                  {
+                                                    "category": "NEWS",
+                                                    "rank": 2,
+                                                    "count": 4
+                                                  }
+                                                ]
+                                              }
                                             }
                                             """
                                     )
@@ -147,26 +188,29 @@ public interface ShareApi {
                                             name = "주변 사용자 할 일 조회 성공",
                                             value = """
                                             {
-                                                "data": [
-                                                    {
-                                                        "todoId": 589879,
-                                                        "title": "Todo 4",
-                                                        "category": "NEWS",
-                                                        "isSaved": true
-                                                    },
-                                                    {
-                                                        "todoId": 589880,
-                                                        "title": "Todo 5",
-                                                        "category": "NEWS",
-                                                        "isSaved": false
-                                                    },
-                                                    {
-                                                        "todoId": 589881,
-                                                        "title": "Todo 6",
-                                                        "category": "NEWS",
-                                                        "isSaved": true
-                                                    }
+                                              "data": {
+                                                "nickname": "mtripett1",
+                                                "todos": [
+                                                  {
+                                                    "todoId": 589879,
+                                                    "title": "Todo 4",
+                                                    "category": "NEWS",
+                                                    "isSaved": false
+                                                  },
+                                                  {
+                                                    "todoId": 589880,
+                                                    "title": "Todo 5",
+                                                    "category": "NEWS",
+                                                    "isSaved": false
+                                                  },
+                                                  {
+                                                    "todoId": 589881,
+                                                    "title": "Todo 6",
+                                                    "category": "NEWS",
+                                                    "isSaved": false
+                                                  }
                                                 ]
+                                              }
                                             }
                                             """
                                     )
@@ -192,7 +236,7 @@ public interface ShareApi {
                     )
             ),
     })
-    SuccessResponse<List<ShareTodoInfo>> getTodosForSurroundingMember(
+    SuccessResponse<SurroundingMemberInfo> getTodosForSurroundingMember(
             @RequestAttribute Long memberId,
             @Parameter(description = "주변 사용자 id", example = "9999") @RequestParam Long surroundingMemberId
     );
