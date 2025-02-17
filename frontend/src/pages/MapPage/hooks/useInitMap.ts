@@ -93,6 +93,12 @@ const useInitMap = () => {
     };
 
     kakao.maps.load(() => initMap());
+
+    return () => {
+      if (navigatorRef.current) {
+        navigator.geolocation.clearWatch(navigatorRef.current);
+      }
+    };
   }, []);
 
   return { mapRef, currentLocationRef, center, isDragged, handleDragEnd };
