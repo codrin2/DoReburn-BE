@@ -13,9 +13,9 @@ ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} /app.jar
 
 # 환경 변수 설정 (Docker 내부에서 사용)
-ENV JAVA_OPTS="-javaagent:/pinpoint-agent/pinpoint-bootstrap.jar \
+ENV JAVA_OPTS="-javaagent:/pinpoint-agent/pinpoint-bootstrap-2.3.3-NCP-RC3.jar \
     -Dpinpoint.applicationName=doreburn \
     -Dpinpoint.agentId=admin"
 
 # ENTRYPOINT 설정 (Pinpoint 적용)
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "-javaagent:/pinpoint-agent/pinpoint-bootstrap.jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "-javaagent:/pinpoint-agent/pinpoint-bootstrap-2.3.3-NCP-RC3.jar", "/app.jar"]

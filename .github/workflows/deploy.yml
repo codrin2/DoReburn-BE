@@ -90,8 +90,10 @@ jobs:
               -e ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }} \
               -e APP_PUSH_DELAY_MS=${{ secrets.APP_PUSH_DELAY_MS }} \
               -e PROD_SERVER_URL=${{ secrets.PROD_SERVER_URL }} \
+              # pinpoint-agent 디렉토리를 /pinpoint-agent 로 마운트
               -v /home/ec2-user/pinpoint-agent-2.3.3-NCP-RC3:/pinpoint-agent \
-              -e JAVA_OPTS="-javaagent:/pinpoint-agent/pinpoint-bootstrap.jar -Dpinpoint.applicationName=doreburn -Dpinpoint.agentId=admin" \
+              # 환경 변수로 동일한 pinpoint-bootstrap-2.3.3-NCP-RC3.jar 사용
+              -e JAVA_OPTS="-javaagent:/pinpoint-agent/pinpoint-bootstrap-2.3.3-NCP-RC3.jar -Dpinpoint.applicationName=doreburn -Dpinpoint.agentId=admin" \
               --name ${{ secrets.DOCKER_REPOSITORY }} \
               ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
             sudo docker image prune -f
