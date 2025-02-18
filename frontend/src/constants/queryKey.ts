@@ -16,4 +16,5 @@ export const QUERY_KEY = {
   memberInfo: 'memberInfo',
   weekStatistics: 'weekStatistics',
   dayStatistics: 'dayStatistics',
+  currentLocation: 'currentLocation',
 } as const;

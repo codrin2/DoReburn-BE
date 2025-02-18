@@ -49,7 +49,7 @@ const fetchClient = {
     });
   },
   delete<T = void>(url: string, options: FetchProps = {}): Promise<T> {
-    return this.request(url, { method: 'DELETE', headers: options.headers });
+    return this.request(url, { method: 'DELETE', body: options.body, headers: options.headers });
   },
   patch<T = void>(url: string, options: FetchProps = {}): Promise<T> {
     return this.request(url, {
@@ -59,7 +59,7 @@ const fetchClient = {
     });
   },
   put<T = void>(url: string, options: FetchProps = {}): Promise<T> {
-    return this.request(url, { method: 'PUT', headers: options.headers });
+    return this.request(url, { method: 'PUT', body: options.body, headers: options.headers });
   },
 };
 

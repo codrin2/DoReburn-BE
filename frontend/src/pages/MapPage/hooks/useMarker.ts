@@ -1,6 +1,9 @@
 import { useRef } from 'react';
 
 import { NearbyMember } from '@/api/map';
+import Marker from '@/assets/images/marker.svg';
+import { CategoryType } from '@/types/filter';
+import { createMarkerImage } from '@/utils/map';
 
 const useMarker = () => {
   const markerListRef = useRef<kakao.maps.Marker[]>([]);
@@ -17,9 +20,22 @@ const useMarker = () => {
     markerListRef.current = [];
   };
 
-  const putMarker = (map: kakao.maps.Map | null, coord: NearbyMember, onClick: () => void) => {
+  const putMarker = ({
+    map,
+    coord,
+    onClick,
+    category,
+  }: {
+    map: kakao.maps.Map | null;
+    coord: NearbyMember;
+    onClick: () => void;
+    category: CategoryType | null;
+  }) => {
+    const markerImage = createMarkerImage(Marker, 40, 48, category);
+
     const marker = new kakao.maps.Marker({
       position: new kakao.maps.LatLng(coord.y_coordinate, coord.x_coordinate),
+      image: markerImage,
     });
 
     addMarker(marker);
@@ -30,13 +46,25 @@ const useMarker = () => {
     marker.setMap(map);
   };
 
-  const putMarkerList = (
-    map: kakao.maps.Map | null,
-    onClick: (memberId: number) => void,
-    nearbyMemberList?: NearbyMember[],
-  ) => {
+  const putMarkerList = ({
+    map,
+    onClick,
+    category,
+    nearbyMemberList,
+  }: {
+    map: kakao.maps.Map | null;
+    onClick: (memberId: number) => void;
+    category: CategoryType | null;
+    nearbyMemberList?: NearbyMember[];
+  }) => {
+    clearMarkerList();
     nearbyMemberList?.forEach((nearByMember) => {
-      putMarker(map, nearByMember, () => onClick(nearByMember.memberId));
+      putMarker({
+        map,
+        coord: nearByMember,
+        onClick: () => onClick(nearByMember.memberId),
+        category,
+      });
     });
   };
 
