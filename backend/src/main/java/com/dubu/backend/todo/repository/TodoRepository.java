@@ -61,3 +61,4 @@ public interface TodoRepository extends JpaRepository<Todo, Long>, CustomTodoRep
     @Query("SELECT t FROM Todo t WHERE t.path.id IN :pathIds AND t.type = :type AND t.isCompleted = true")
     List<Todo> findByPathIdsAndTypeAndIsCompleted(List<Long> pathIds, TodoType type);
 }
+
