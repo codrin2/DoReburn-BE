@@ -12,6 +12,7 @@ const useDeleteFavoriteFromOther = () => {
     },
     onSuccess: (_, params) => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.detailTodo, params.memberId] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.favorite] });
     },
   });
 };
