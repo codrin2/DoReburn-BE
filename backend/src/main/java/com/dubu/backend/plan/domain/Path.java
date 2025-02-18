@@ -29,6 +29,7 @@ public class Path extends BaseTimeEntity {
     @JoinColumn(name = "plan_id", nullable = false)
     private Plan plan;
 
+//    @BatchSize(size = 100)
     @Builder.Default
     @OneToMany(mappedBy = "path", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Todo> todos = new ArrayList<>();
