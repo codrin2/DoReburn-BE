@@ -14,7 +14,7 @@ const ICON_MAPPER: Record<string, IconType> = {
 const renderRouteItem = (path: PathType, index: number) => {
   if (path.trafficType === 'WALK') return null;
 
-  const pathColor = getPathColor(path);
+  const pathColor = getPathColor(path.trafficType, path.subwayCode);
   const isSubway = path.trafficType === 'SUBWAY';
   const pathName = isSubway
     ? SUBWAY_LINES[path.subwayCode as keyof typeof SUBWAY_LINES]?.name
