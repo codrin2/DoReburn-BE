@@ -36,7 +36,7 @@ public class ShareServiceImpl implements ShareService {
         memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
         List<Category> categories = categoryRepository.findAll();
 
-        List<MemberLocationInfo> memberLocationInfos = locationRedisRepository.findMemberLocations(request);
+        List<MemberLocationInfo> memberLocationInfos = locationRedisRepository.findMemberLocations(memberId, request);
 
         if(memberLocationInfos == null || memberLocationInfos.isEmpty()){
             return null;
