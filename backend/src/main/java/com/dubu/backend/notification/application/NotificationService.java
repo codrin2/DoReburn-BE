@@ -8,6 +8,7 @@ import com.dubu.backend.notification.config.VapidKeyConfig;
 import com.dubu.backend.notification.domain.PushSubscription;
 import com.dubu.backend.notification.dto.PushMessageDto;
 import com.dubu.backend.notification.dto.PushSubscriptionDto;
+import com.dubu.backend.notification.exception.DuplicateSubscriptionException;
 import com.dubu.backend.notification.exception.UnavailablePushServiceException;
 import com.dubu.backend.notification.infra.repository.PushSubscriptionRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,18 +37,17 @@ public class NotificationService {
 
     @Transactional
     public void saveSubscription(Long memberId, PushSubscriptionDto subscriptionDto) {
-        Member member = memberRepository.findById(memberId)
+        Member currentMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
-        PushSubscription pushSubscription = PushSubscription.builder()
-                .member(member)
-                .endPoint(subscriptionDto.endpoint())
-                .p256dh(subscriptionDto.keys().p256dh())
-                .auth(subscriptionDto.keys().auth())
-                .build();
+        PushSubscription pushSubscription = PushSubscription.createSubscription(currentMember, subscriptionDto);
 
-        subscriptionRepository.save(pushSubscription);
-        log.info("[구독 저장] memberId={}, endpoint={}", memberId, subscriptionDto.endpoint());
+        try {
+            subscriptionRepository.save(pushSubscription);
+            log.info("[구독 저장] memberId={}, endpoint={}", memberId, subscriptionDto.endpoint());
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateSubscriptionException();
+        }
     }
 
     public void sendPushNotification(PushMessageDto message) {
