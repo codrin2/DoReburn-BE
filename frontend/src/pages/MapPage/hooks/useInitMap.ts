@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import CurrentLocationMarker from '@/assets/images/currentLocationMarker.svg';
 import { MAP_ID } from '@/constants/config';
+import { createMarkerImage } from '@/utils/map';
 
 const INIT_CENTER = {
   lat: 37.468665,
@@ -11,6 +12,7 @@ const INIT_CENTER = {
 const useInitMap = () => {
   const [center, setCenter] = useState(INIT_CENTER);
 
+  const navigatorRef = useRef<number | null>(null);
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const currentLocationRef = useRef<kakao.maps.Marker | null>(null);
   const [isDragged, setIsDragged] = useState(false);
@@ -27,15 +29,7 @@ const useInitMap = () => {
     const locPosition = new kakao.maps.LatLng(center.lat, center.lng);
     mapRef.current?.setCenter(locPosition);
 
-    const myMarker = CurrentLocationMarker;
-    const myMarkerSize = new window.kakao.maps.Size(28, 28);
-    const myMarkerOption = { offset: new window.kakao.maps.Point(0, 0) };
-
-    const myMarkerPosition = new window.kakao.maps.MarkerImage(
-      myMarker,
-      myMarkerSize,
-      myMarkerOption,
-    );
+    const currentLocationImage = createMarkerImage(CurrentLocationMarker, 28, 28, null);
 
     if (mapRef.current) {
       if (currentLocationRef.current) {
@@ -45,38 +39,30 @@ const useInitMap = () => {
         // 마커가 없으면 새로 생성
         currentLocationRef.current = new window.kakao.maps.Marker({
           map: mapRef.current,
-          image: myMarkerPosition,
+          image: currentLocationImage,
           position: locPosition,
           zIndex: 1,
         });
       }
     }
-
-    const currentMapRef = mapRef.current; // mapRef.current를 변수에 복사
-
-    if (currentMapRef) {
-      kakao.maps.event.addListener(currentMapRef, 'dragstart', handleDragStart);
-    }
-
-    return () => {
-      if (currentMapRef) {
-        kakao.maps.event.removeListener(currentMapRef, 'dragstart', handleDragStart);
-      }
-    };
   }, [center]);
 
   useEffect(() => {
     const initMap = () => {
+      if (mapRef.current) return;
+
       const container = document.getElementById(MAP_ID) as HTMLElement;
       const options = {
         center: new kakao.maps.LatLng(INIT_CENTER.lat, INIT_CENTER.lng),
         level: 5,
+        draggable: true,
+        scrollwheel: true,
       };
 
       mapRef.current = new kakao.maps.Map(container, options);
 
       if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(
+        navigatorRef.current = navigator.geolocation.watchPosition(
           (pos) => {
             setCenter({ lat: pos.coords.latitude, lng: pos.coords.longitude });
           },
@@ -95,6 +81,20 @@ const useInitMap = () => {
     };
 
     kakao.maps.load(() => initMap());
+
+    if (mapRef.current) {
+      kakao.maps.event.addListener(mapRef.current, 'dragstart', handleDragStart);
+    }
+
+    return () => {
+      if (navigatorRef.current) {
+        navigator.geolocation.clearWatch(navigatorRef.current);
+      }
+
+      if (mapRef.current) {
+        kakao.maps.event.removeListener(mapRef.current, 'dragstart', handleDragStart);
+      }
+    };
   }, []);
 
   return { mapRef, currentLocationRef, center, isDragged, handleDragEnd };

@@ -1,46 +1,82 @@
 {
   "data": {
-    "nearMember": [
+    "memberLocations": [
       {
-        "memberId": 0,
-        "x_coordinate": 127.02724786333501,
-        "y_coordinate": 37.51327682201149,
-        "category": "READING"
+        "memberId": 5,
+        "x_coordinate": 127.0293465256691,
+        "y_coordinate": 37.514269842077915,
+        "category": ["READING", "ENGLISH", "LANGUAGE"]
       },
       {
-        "memberId": 1,
-        "x_coordinate": 127.02624776333501,
-        "y_coordinate": 37.52427685201149,
-        "category": "NEWS"
+        "memberId": 6,
+        "x_coordinate": 127.03380972146988,
+        "y_coordinate": 37.513111474508094,
+        "category": ["READING", "ENGLISH"]
       },
       {
         "memberId": 2,
-        "x_coordinate": 127.02623736333501,
-        "y_coordinate": 37.51327688501149,
-        "category": "ENGLISH"
+        "x_coordinate": 127.0378115773201,
+        "y_coordinate": 37.51810994463431,
+        "category": ["READING"]
+      },
+      {
+        "memberId": 7,
+        "x_coordinate": 127.0318141579628,
+        "y_coordinate": 37.52411216433963,
+        "category": ["ENGLISH"]
+      },
+      {
+        "memberId": 8,
+        "x_coordinate": 127.03580992460251,
+        "y_coordinate": 37.52511084447641,
+        "category": ["NEWS"]
       },
       {
         "memberId": 3,
-        "x_coordinate": 127.02524756333501,
-        "y_coordinate": 37.51227691201149,
-        "category": "READING"
+        "x_coordinate": 127.03281049013138,
+        "y_coordinate": 37.50911168451866,
+        "category": ["NEWS", "OTHERS"]
+      },
+      {
+        "memberId": 4,
+        "x_coordinate": 127.03381363630295,
+        "y_coordinate": 37.52111105448697,
+        "category": ["HOBBY", "LANGUAGE"]
+      },
+      {
+        "memberId": 1,
+        "x_coordinate": 127.03881399869919,
+        "y_coordinate": 37.52211226934491,
+        "category": ["NEWS", "READING", "ENGLISH"]
+      },
+      {
+        "memberId": 9,
+        "x_coordinate": 127.03981395869919,
+        "y_coordinate": 37.52311226934491,
+        "category": ["READING", "ENGLISH"]
+      },
+      {
+        "memberId": 10,
+        "x_coordinate": 127.03081397869919,
+        "y_coordinate": 37.52411226934491,
+        "category": ["NEWS", "READING", "ENGLISH"]
       }
     ],
-    "categoryRanking": [
+    "categoryRank": [
       {
         "rank": 1,
         "category": "READING",
-        "num": 40
+        "count": 40
       },
       {
         "rank": 2,
         "category": "ENGLISH",
-        "num": 32
+        "count": 32
       },
       {
         "rank": 3,
         "category": "LANGUAGE",
-        "num": 12
+        "count": 12
       }
     ]
   }

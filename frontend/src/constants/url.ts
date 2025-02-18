@@ -29,9 +29,8 @@ export const API_URL = {
   memberStatus: `${BASE_URL}/api/v1/members/status`,
   todoDetail: (memberId: number) =>
     `${BASE_URL}/api/v1/share/members/todos?surroundingMemberId=${memberId}`,
-  addFavoriteFromOther: `${BASE_URL}/api/v1/share/todos`,
-  deleteFavoriteFromOther: (todoId: number) =>
-    `${BASE_URL}/api/v1/share/todos${todoId ? `?todoId=${todoId}` : ''}`,
+  deleteFavoriteFromOther: (memberId: number) =>
+    `${BASE_URL}/api/v1/share/todos${memberId ? `?surroundingMemberId=${memberId}` : ''}`,
   getNearbyUsers: (queryParams: string) =>
     `${BASE_URL}/api/v1/share/members/surrounding${queryParams}`,
   todayAchievement: `${BASE_URL}/api/v1/plans/feedbacks`,
@@ -42,6 +41,7 @@ export const API_URL = {
   checkTodo: (todoId: number) => `${BASE_URL}/api/v1/todos/check?todoId=${todoId}`,
   finishPlan: `${BASE_URL}/api/v1/plans/move-complete`,
   dayStatistics: `${BASE_URL}/api/v1/statistics/day`,
+  updateCurrentLocation: `${BASE_URL}/api/v1/members/location`,
 };
 
 export const MOCK_API_URL = {
@@ -53,7 +53,7 @@ export const MOCK_API_URL = {
   addTodo: `${BASE_URL}/api/v1/todos/:dateType/manual/:planId?`,
   deleteTodo: `${BASE_URL}/api/v1/todos/:todoId?type=:dateType`,
   editTodo: `${BASE_URL}/api/v1/todos/:todoId?type=:dateType`,
-  addTodoFromArchived: `${BASE_URL}/api/v1/todos/:dateType/from-archived/:planId?`,
+  addTodoFromArchived: `${BASE_URL}/api/v1/todos/:todoType/from-archived/:planId?`,
   routeTodo: `${BASE_URL}/api/v1/routes/:planId/todos`,
   searchAddress: `${BASE_URL}/api/v1/places/search`,
   searchRoutes: `${BASE_URL}/api/v1/routes/search`,
@@ -67,10 +67,11 @@ export const MOCK_API_URL = {
   todoDetail: `${BASE_URL}/api/v1/share/members/:memberId`,
   addFavoriteFromOther: `${BASE_URL}/api/v1/share/todos`,
   deleteFavoriteFromOther: `${BASE_URL}/api/v1/share/todos`,
-  getNearbyUsers: `${BASE_URL}/api/v1/share/realtime-user-category`,
+  getNearbyUsers: `${BASE_URL}/api/v1/share/members/surrounding`,
   todayAchievement: `${BASE_URL}/api/v1/plans/feedbacks`,
   saveFeedback: (planId: number) => `${BASE_URL}/api/v1/plans/${planId}/feedbacks`,
   weekStatistics: `${BASE_URL}/api/v1/statistics/week`,
   createPlan: `${BASE_URL}/api/v1/plans`,
   dayStatistics: `${BASE_URL}/api/v1/statistics/day`,
+  updateCurrentLocation: `${BASE_URL}/api/v1/members/location`,
 };
