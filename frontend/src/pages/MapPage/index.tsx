@@ -19,14 +19,8 @@ const MapPage = () => {
   const { putMarkerList } = useMarker();
   const { categoryFilters, handleCheckFilters } = useCategoryFilters();
   const { isOpen, close } = useMapBottomSheet();
+  const openMarkerBottomSheet = useMarkerBottomSheet();
   const { data: nearbyUsersData } = useNearbyUsersQuery({ lng: center.lng, lat: center.lat });
-
-  const {
-    isOpen: isMarkerBottomSheetOpen,
-    open: openMarkerBottomSheet,
-    close: closeMarkerBottomSheet,
-    content: markerBottomSheetContent,
-  } = useMarkerBottomSheet();
 
   putMarkerList(mapRef.current, openMarkerBottomSheet, nearbyUsersData?.nearMember);
 
@@ -67,12 +61,6 @@ const MapPage = () => {
         onClose={close}
         content={<CategoryRank lng={center.lng} lat={center.lat} />}
         subTitle="반경 3km 이내"
-      />
-
-      <BottomSheet
-        isOpen={isMarkerBottomSheetOpen}
-        onClose={closeMarkerBottomSheet}
-        content={markerBottomSheetContent}
       />
 
       {/* 현재 위치로 이동 버튼 */}

@@ -1,11 +1,10 @@
 import TodoEditItem from '../TodoEditItem';
 import * as S from './TodoTab.styled';
 import { TODO_TAB_TEXT } from '../../EditPage.constants';
-import { useAddTodoBottomSheet } from '../../hooks/useAddTodoBottomSheet';
+import useAddTodoBottomSheet from '../../hooks/useAddTodoBottomSheet';
 import useDeleteTodoMutation from '../../hooks/useDeleteTodoMutation';
 import useEditTodoBottomSheet from '../../hooks/useEditTodoBottomSheet';
 
-import BottomSheet from '@/components/BottomSheet';
 import IconButton from '@/components/Button/IconButton';
 import Icon from '@/components/Icon';
 import { MAX_TODO_ITEM_LENGTH, TODO_TYPE } from '@/constants/config';
@@ -24,28 +23,15 @@ interface TodoTabProps {
 const TodoTab = ({ todoType, planId }: TodoTabProps) => {
   const { dateType } = useQueryParamsDate();
 
-  const { toast } = useToast();
   const { data: currentTodoList } = useTodoListQuery(dateType, Number(planId));
   const { data: routeTodoList } = useRouteTodoQuery(Number(planId));
   const { mutate: deleteTodo } = useDeleteTodoMutation(todoType);
 
   const todoList = currentTodoList || routeTodoList;
 
-  const {
-    isOpen: isAddOpen,
-    open: openAddBottomSheet,
-    close: closeAddBottomSheet,
-    content: addContent,
-    title: addTodoForm,
-  } = useAddTodoBottomSheet(todoType, planId);
-
-  const {
-    isOpen: isEditOpen,
-    open: openEditBottomSheet,
-    close: closeEditBottomSheet,
-    content: editTodoForm,
-    title: editTitle,
-  } = useEditTodoBottomSheet(todoType, planId);
+  const { toast } = useToast();
+  const openAddTodoBottomSheet = useAddTodoBottomSheet({ todoType, planId });
+  const openEditBottomSheet = useEditTodoBottomSheet({ todoType, planId });
 
   const handleClickAddTodo = () => {
     const isLimitType = todoType === TODO_TYPE.TODAY || todoType === TODO_TYPE.TOMORROW;
@@ -56,7 +42,7 @@ const TodoTab = ({ todoType, planId }: TodoTabProps) => {
       return;
     }
 
-    openAddBottomSheet();
+    openAddTodoBottomSheet();
   };
 
   const handleDeleteTodo = (todoId: number) => {
@@ -97,19 +83,6 @@ const TodoTab = ({ todoType, planId }: TodoTabProps) => {
           onClick={handleClickAddTodo}
         />
       </S.TodoEditList>
-
-      <BottomSheet
-        isOpen={isAddOpen}
-        title={addTodoForm}
-        content={addContent}
-        onClose={closeAddBottomSheet}
-      />
-      <BottomSheet
-        isOpen={isEditOpen}
-        title={editTitle}
-        content={editTodoForm}
-        onClose={closeEditBottomSheet}
-      />
     </S.TodoTabLayout>
   );
 };

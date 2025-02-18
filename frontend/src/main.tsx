@@ -5,6 +5,7 @@ import { RouterProvider } from 'react-router';
 import { ThemeProvider } from 'styled-components';
 
 import ToastProvider from './components/Toast/ToastProvider';
+import { OverlayProvider } from './providers/OverlayProvider';
 import { router } from './router';
 import GlobalStyle from './styles/GlobalStyle.js';
 import theme from './styles/theme';
@@ -27,7 +28,9 @@ enableMocking().then(() => {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <ToastProvider>
-          <RouterProvider router={router} />
+          <OverlayProvider>
+            <RouterProvider router={router} />
+          </OverlayProvider>
         </ToastProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </ThemeProvider>

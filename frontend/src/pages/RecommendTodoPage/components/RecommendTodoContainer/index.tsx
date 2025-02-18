@@ -6,9 +6,7 @@ import useFilterBottomSheet from '../../hooks/useFilterBottomSheet';
 import useMemberInfoQuery from '../../hooks/useMemberInfoQuery';
 import useRecommendTodoFilterQuery from '../../hooks/useRecommendTodoFilterQuery';
 import { getTodoType } from '../../RecommendTodoPage.utils';
-import FilterForm from '../FilterForm';
 
-import BottomSheet from '@/components/BottomSheet';
 import IconButton from '@/components/Button/IconButton';
 import Icon from '@/components/Icon';
 import { MAX_TODO_ITEM_LENGTH, TODO_TYPE } from '@/constants/config';
@@ -27,7 +25,7 @@ interface RecommendTodoContainerProps {
 const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps) => {
   const { planId } = useParams();
   const { dateType } = useQueryParamsDate();
-  const { isOpen, open, close } = useFilterBottomSheet();
+  const openFilterBottomSheet = useFilterBottomSheet();
 
   const [categoryList, setCategoryList] = useState<CategoryType[]>([]);
   const [difficultyList, setDifficultyList] = useState<DifficultyType[]>([]);
@@ -95,7 +93,11 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
 
   return (
     <>
-      <S.FilterWrapper onClick={open}>
+      <S.FilterWrapper
+        onClick={() =>
+          openFilterBottomSheet({ categoryList, difficultyList, onConfirm: handleFilter })
+        }
+      >
         <S.IconButtonWrapper
           $isSelected={isCategory}
           flex="row-reverse"
@@ -132,18 +134,6 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
           />
         ))}
       </S.RecommendTabList>
-      <BottomSheet
-        isOpen={isOpen}
-        onClose={close}
-        content={
-          <FilterForm
-            selectedCategoryList={categoryList}
-            selectedDifficultyList={difficultyList}
-            onClose={close}
-            onConfirm={handleFilter}
-          />
-        }
-      />
     </>
   );
 };
