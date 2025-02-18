@@ -1,0 +1,9 @@
+{
+  "data": {
+    "email": "test@example.com",
+    "nickname": "홍길동",
+    "categories": ["READING", "ENGLISH"],
+    "homeTitle": "집",
+    "schoolTitle": "학교"
+  }
+}

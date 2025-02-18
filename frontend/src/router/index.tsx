@@ -10,6 +10,7 @@ import KakaoLoginPage from '@/pages/KakaoLoginPage';
 import LandingPage from '@/pages/LandingPage';
 import MainPage from '@/pages/MainPage';
 import MapPage from '@/pages/MapPage';
+import MyPage from '@/pages/MyPage';
 import OnboardingPage from '@/pages/OnboardingPage';
 import PlanPage from '@/pages/PlanPage';
 import RecommendTodoPage from '@/pages/RecommendTodoPage';
@@ -94,7 +95,10 @@ export const router = createBrowserRouter([
     path: '/statistics/day',
     element: <DayStatisticsPage />,
   },
-
+  {
+    path: '/my-page',
+    element: <MyPage />,
+  },
   {
     path: '/favorite',
     element: <FlexPageLayout />,
