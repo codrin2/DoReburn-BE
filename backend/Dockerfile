@@ -18,4 +18,4 @@ ENV JAVA_OPTS="-javaagent:/pinpoint-agent/pinpoint-bootstrap-2.3.3-NCP-RC3.jar \
     -Dpinpoint.agentId=admin"
 
 # ENTRYPOINT 설정 (Pinpoint 적용)
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "-javaagent:/pinpoint-agent/pinpoint-bootstrap-2.3.3-NCP-RC3.jar", "/app.jar"]
+ENTRYPOINT ["/bin/sh", "-c", "java $JAVA_OPTS -Dspring.profiles.active=prod -jar /app.jar"]
