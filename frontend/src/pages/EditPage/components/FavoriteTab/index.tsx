@@ -38,7 +38,7 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
     const isLimitType = todoType === TODO_TYPE.TODAY || todoType === TODO_TYPE.TOMORROW;
 
     if (isLimitType && todoList && todoList.length >= MAX_TODO_ITEM_LENGTH) {
-      toast({ message: TODO_TOAST_MESSAGE.limit });
+      toast({ message: TODO_TOAST_MESSAGE.limit(dateType) });
 
       return;
     }
@@ -47,7 +47,7 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
       { todoType, todoId, planId: Number(planId) },
       {
         onSuccess: () => {
-          toast({ message: TODO_TOAST_MESSAGE.add });
+          toast({ message: TODO_TOAST_MESSAGE.add(todoType) });
         },
       },
     );
