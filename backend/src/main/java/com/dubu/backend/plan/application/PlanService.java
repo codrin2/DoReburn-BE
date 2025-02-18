@@ -82,7 +82,12 @@ public class PlanService {
 
         taskSchedulerService.scheduleFeedbackStatusUpdate(memberId, newPlan);
 
-        PushMessageDto message = new PushMessageDto(memberId, newPlan.getId(), "안녕", "문희상");
+        PushMessageDto message = new PushMessageDto(
+                memberId,
+                newPlan.getId(),
+                "잘 도착하셨나요? 30분 뒤면 오늘 한 일을 체크할 수 없어요😭",
+                "얼른 돌아와서 오늘 한 일을 체크하고 피드백을 남겨보세요~"
+        );
         pushMessageProducer.sendDelayedPush(message);
 
         return newPlan.getId();
