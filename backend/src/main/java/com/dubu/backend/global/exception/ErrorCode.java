@@ -42,6 +42,9 @@ public enum ErrorCode {
     // Address
     MEMBER_SAVED_ADDRESS_NOT_FOUND(NOT_FOUND, "회원이 저장한 주소를 찾을 수 없습니다. memberId : %d"),
 
+    // Subscription
+    DUPLICATE_SUBSCRIPTION(CONFLICT, "이미 알림을 구독한 브라우저입니다."),
+
     // Category
     CATEGORY_NOT_FOUND(NOT_FOUND, "카테고리를 찾을 수 없습니다. categoryName : %s"),
 

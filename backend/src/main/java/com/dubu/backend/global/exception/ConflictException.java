@@ -1,7 +1,7 @@
 package com.dubu.backend.global.exception;
 
-public abstract class BadRequestException extends RuntimeException {
-    public BadRequestException(String message) {
+public abstract class ConflictException extends RuntimeException {
+    public ConflictException(String message) {
         super(message);
     }
 
