@@ -26,7 +26,7 @@ public class LocationRedisRepository {
         geoOperations.add(GEO_KEY, point, String.valueOf(memberId));
     }
 
-    public List<MemberLocationInfo> findMemberLocations(SurroundingMemberQueryRequest request){
+    public List<MemberLocationInfo> findMemberLocations(Long memberId, SurroundingMemberQueryRequest request){
         GeoOperations<String, String> geoOperations = redisTemplate.opsForGeo();
         GeoResults<RedisGeoCommands.GeoLocation<String>> result = geoOperations.search(
                 GEO_KEY,
@@ -35,10 +35,10 @@ public class LocationRedisRepository {
                 RedisGeoCommands.GeoSearchCommandArgs.newGeoSearchArgs().includeCoordinates()
         );
 
-        return convertGeoResultToMemberLocationInfo(result);
+        return convertGeoResultToMemberLocationInfo(memberId, result);
     }
 
-    private List<MemberLocationInfo> convertGeoResultToMemberLocationInfo(GeoResults<RedisGeoCommands.GeoLocation<String>> geoResults){
+    private List<MemberLocationInfo> convertGeoResultToMemberLocationInfo(Long memberId, GeoResults<RedisGeoCommands.GeoLocation<String>> geoResults){
         List<MemberLocationInfo> memberLocationInfos = new ArrayList<>();
 
         if(geoResults == null){
@@ -47,10 +47,13 @@ public class LocationRedisRepository {
 
         for (GeoResult<RedisGeoCommands.GeoLocation<String>> geoResult : geoResults.getContent()) {
             RedisGeoCommands.GeoLocation<String> geoLocation = geoResult.getContent();
-            long memberId = Long.parseLong(geoLocation.getName());
+            long surroundingMemberId = Long.parseLong(geoLocation.getName());
+
+            if(surroundingMemberId == memberId) continue;
+
             Point point = geoLocation.getPoint();
 
-            memberLocationInfos.add(MemberLocationInfo.of(memberId, point.getX(), point.getY()));
+            memberLocationInfos.add(MemberLocationInfo.of(surroundingMemberId, point.getX(), point.getY()));
         }
 
         return memberLocationInfos;
