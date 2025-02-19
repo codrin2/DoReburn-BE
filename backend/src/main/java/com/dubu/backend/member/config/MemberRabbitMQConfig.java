@@ -19,7 +19,7 @@ public class MemberRabbitMQConfig {
     private long pushDelayMs;
 
     @Bean
-    public Queue delayQueue() {
+    public Queue memberDelayQueue() {
         return QueueBuilder.durable(DELAY_QUEUE_NAME)
                 .withArgument("x-dead-letter-exchange", MEMBER_EXCHANGE_NAME)
                 .withArgument("x-dead-letter-routing-key", DLX_ROUTING_KEY)
@@ -28,7 +28,7 @@ public class MemberRabbitMQConfig {
     }
 
     @Bean
-    public Queue dlxQueue() {
+    public Queue memberDlxQueue() {
         return QueueBuilder.durable(DLX_QUEUE_NAME).build();
     }
 
@@ -38,15 +38,15 @@ public class MemberRabbitMQConfig {
     }
 
     @Bean
-    public Binding delayQueueBinding(Queue delayQueue, DirectExchange memberExchange) {
-        return BindingBuilder.bind(delayQueue)
+    public Binding memberDelayQueueBinding(Queue memberDelayQueue, DirectExchange memberExchange) {
+        return BindingBuilder.bind(memberDelayQueue)
                 .to(memberExchange)
                 .with(DELAY_ROUTING_KEY);
     }
 
     @Bean
-    public Binding dlxQueueBinding(Queue dlxQueue, DirectExchange memberExchange) {
-        return BindingBuilder.bind(dlxQueue)
+    public Binding memberDlxQueueBinding(Queue memberDlxQueue, DirectExchange memberExchange) {
+        return BindingBuilder.bind(memberDlxQueue)
                 .to(memberExchange)
                 .with(DLX_ROUTING_KEY);
     }

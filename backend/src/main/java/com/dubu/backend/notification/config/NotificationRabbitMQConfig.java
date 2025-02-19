@@ -19,7 +19,7 @@ public class NotificationRabbitMQConfig {
     private long pushDelayMs;
 
     @Bean
-    public Queue delayQueue() {
+    public Queue notificationDelayQueue() {
         return QueueBuilder.durable(DELAY_QUEUE_NAME)
                 .withArgument("x-dead-letter-exchange", NOTIFICATION_EXCHANGE_NAME)
                 .withArgument("x-dead-letter-routing-key", DLX_ROUTING_KEY)
@@ -28,7 +28,7 @@ public class NotificationRabbitMQConfig {
     }
 
     @Bean
-    public Queue dlxQueue() {
+    public Queue notificationDlxQueue() {
         return QueueBuilder.durable(DLX_QUEUE_NAME).build();
     }
 
@@ -38,15 +38,15 @@ public class NotificationRabbitMQConfig {
     }
 
     @Bean
-    public Binding delayQueueBinding(Queue delayQueue, DirectExchange notificationExchange) {
-        return BindingBuilder.bind(delayQueue)
+    public Binding notificationDelayQueueBinding(Queue notificationDelayQueue, DirectExchange notificationExchange) {
+        return BindingBuilder.bind(notificationDelayQueue)
                 .to(notificationExchange)
                 .with(DELAY_ROUTING_KEY);
     }
 
     @Bean
-    public Binding dlxQueueBinding(Queue dlxQueue, DirectExchange notificationExchange) {
-        return BindingBuilder.bind(dlxQueue)
+    public Binding notificationDlxQueueBinding(Queue notificationDlxQueue, DirectExchange notificationExchange) {
+        return BindingBuilder.bind(notificationDlxQueue)
                 .to(notificationExchange)
                 .with(DLX_ROUTING_KEY);
     }
