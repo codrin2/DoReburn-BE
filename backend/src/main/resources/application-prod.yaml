@@ -29,6 +29,9 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
+    ttl:
+      app-push: ${APP_PUSH_DELAY_MS}
+      member-status: ${MEMBER_STATUS_DELAY_MS}
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -80,10 +83,6 @@ vapid:
 
 admin:
   email: ${ADMIN_EMAIL}
-
-app:
-  push:
-    delay-ms: ${APP_PUSH_DELAY_MS}
 
 management:
   endpoints:
