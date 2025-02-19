@@ -382,7 +382,7 @@ public interface PlanApi {
                     )
             )
     })
-    void completePlanMove(
+    void completeMove(
             Long memberId
     );
 
