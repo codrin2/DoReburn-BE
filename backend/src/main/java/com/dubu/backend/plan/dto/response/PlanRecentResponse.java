@@ -28,6 +28,7 @@ public record PlanRecentResponse(
             Integer sectionTime,
             Integer subwayCode,
             String busNumber,
+            Integer busType,
             String startName,
             String endName,
             List<PlanRecentResponse.PathTodoResponse> todos
@@ -39,6 +40,7 @@ public record PlanRecentResponse(
                     path.getSectionTime(),
                     path.getSubwayCode(),
                     path.getBusNumber(),
+                    path.getBusType(),
                     path.getStartName(),
                     path.getEndName(),
                     path.getTodos().stream().map(PathTodoResponse::from).toList()

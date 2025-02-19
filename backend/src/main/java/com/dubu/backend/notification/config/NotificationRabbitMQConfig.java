@@ -6,23 +6,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabbitMQConfig {
+public class NotificationRabbitMQConfig {
     public static final String DELAY_QUEUE_NAME = "plan.delay.queue";
     public static final String DLX_QUEUE_NAME = "plan.dlx.queue";
 
-    public static final String DELAY_EXCHANGE_NAME = "plan.delay.exchange";
-    public static final String DLX_EXCHANGE_NAME = "plan.dlx.exchange";
+    public static final String NOTIFICATION_EXCHANGE_NAME = "plan.exchange";
 
     public static final String DELAY_ROUTING_KEY = "plan.delay.key";
     public static final String DLX_ROUTING_KEY = "plan.dlx.key";
 
-    @Value("${app.push.delay-ms}")
+    @Value("${spring.rabbitmq.ttl.app-push}")
     private long pushDelayMs;
 
     @Bean
     public Queue delayQueue() {
         return QueueBuilder.durable(DELAY_QUEUE_NAME)
-                .withArgument("x-dead-letter-exchange", DLX_EXCHANGE_NAME)
+                .withArgument("x-dead-letter-exchange", NOTIFICATION_EXCHANGE_NAME)
                 .withArgument("x-dead-letter-routing-key", DLX_ROUTING_KEY)
                 .withArgument("x-message-ttl", pushDelayMs)
                 .build();
@@ -34,26 +33,21 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public DirectExchange delayExchange() {
-        return new DirectExchange(DELAY_EXCHANGE_NAME);
+    public DirectExchange notificationExchange() {
+        return new DirectExchange(NOTIFICATION_EXCHANGE_NAME);
     }
 
     @Bean
-    public DirectExchange dlxExchange() {
-        return new DirectExchange(DLX_EXCHANGE_NAME);
-    }
-
-    @Bean
-    public Binding delayQueueBinding(Queue delayQueue, DirectExchange delayExchange) {
+    public Binding delayQueueBinding(Queue delayQueue, DirectExchange notificationExchange) {
         return BindingBuilder.bind(delayQueue)
-                .to(delayExchange)
+                .to(notificationExchange)
                 .with(DELAY_ROUTING_KEY);
     }
 
     @Bean
-    public Binding dlxQueueBinding(Queue dlxQueue, DirectExchange dlxExchange) {
+    public Binding dlxQueueBinding(Queue dlxQueue, DirectExchange notificationExchange) {
         return BindingBuilder.bind(dlxQueue)
-                .to(dlxExchange)
+                .to(notificationExchange)
                 .with(DLX_ROUTING_KEY);
     }
 }

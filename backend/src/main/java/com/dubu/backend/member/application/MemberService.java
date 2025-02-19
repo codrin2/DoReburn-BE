@@ -5,7 +5,8 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.MemberCategory;
 import com.dubu.backend.member.domain.enums.AddressType;
 import com.dubu.backend.member.domain.enums.Status;
-import com.dubu.backend.member.dto.MemberLocation;
+import com.dubu.backend.member.dto.MemberLocationDto;
+import com.dubu.backend.member.dto.MemberStatusChangeDto;
 import com.dubu.backend.member.dto.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.dto.request.MemberOnboardingRequest;
 import com.dubu.backend.member.dto.response.MemberInfoResponse;
@@ -18,7 +19,10 @@ import com.dubu.backend.member.infra.repository.AddressRepository;
 import com.dubu.backend.member.infra.repository.LocationRedisRepository;
 import com.dubu.backend.member.infra.repository.MemberCategoryRepository;
 import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.exception.InvalidMemberStatusException;
+import com.dubu.backend.plan.exception.PlanNotFoundException;
+import com.dubu.backend.plan.infra.repository.PlanRepository;
 import com.dubu.backend.todo.entity.Category;
 import com.dubu.backend.todo.exception.CategoryNotFoundException;
 import com.dubu.backend.todo.repository.CategoryRepository;
@@ -39,6 +43,7 @@ public class MemberService {
     private final CategoryRepository categoryRepository;
     private final MemberCategoryRepository memberCategoryRepository;
     private final AddressRepository addressRepository;
+    private final PlanRepository planRepository;
     private final LocationRedisRepository locationRedisRepository;
 
     @Transactional(readOnly = true)
@@ -208,7 +213,22 @@ public class MemberService {
         currentMember.updateStatus(Status.fromString(status));
     }
 
-    public void updateMemberLocation(Long memberId, MemberLocation location) {
+    @Transactional
+    public void updateMemberStatusByPlanChange(MemberStatusChangeDto memberStatusChangeDto) {
+        Member currentMember = memberRepository.findById(memberStatusChangeDto.memberId())
+                .orElseThrow(() -> new MemberNotFoundException(memberStatusChangeDto.memberId()));
+
+        Plan currentPlan = planRepository.findById(memberStatusChangeDto.planId())
+                .orElseThrow(() -> new PlanNotFoundException(memberStatusChangeDto.planId()));
+
+        if (currentPlan.isCompleted()) {
+            return;
+        }
+
+        currentMember.updateStatus(Status.FEEDBACK);
+    }
+
+    public void updateMemberLocation(Long memberId, MemberLocationDto location) {
         memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
