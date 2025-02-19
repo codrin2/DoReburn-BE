@@ -12,7 +12,7 @@ export const Home = ({ onClick }: HomeProps) => {
 
   return (
     <S.HomeButton onClick={onClick || goToHome} aria-label={BUTTONS.HOME.text}>
-      <Icon icon={BUTTONS.HOME.icon as IconType} />
+      <Icon icon={BUTTONS.HOME.icon as IconType} cursor="pointer" />
       <span>{BUTTONS.HOME.text}</span>
     </S.HomeButton>
   );
