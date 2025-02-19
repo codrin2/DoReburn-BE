@@ -183,4 +183,15 @@ public class TodoController implements TodoApi{
         TodoQueryService todoQueryService = todoQueryServiceRegistry.getService(PATH.getQueryServiceName());
         return new SuccessResponse<>(((TargetTodoQueryService)todoQueryService).findTargetTodos(new TodoIdentifier(memberId, null, pathId)));
     }
+
+    @PatchMapping("/path")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void patchTodoPath(
+            @RequestAttribute("memberId") Long memberId,
+            @RequestParam Long todoId,
+            @ModelAttribute TodoPathUpdateRequest request)
+    {
+        TodoManagementService todoManagementService = todoManagementServiceRegistry.getService(PATH.getManagementServiceName());
+        ((PathTodoManagementService)todoManagementService).modifyTodoPath(new TodoIdentifier(memberId, todoId, null), request);
+    }
 }
