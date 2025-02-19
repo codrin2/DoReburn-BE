@@ -7,7 +7,7 @@ export const SearchAddressLayout = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 37.5rem;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -20,14 +20,13 @@ export const TopContainer = styled.div`
   align-items: center;
   width: 100%;
   gap: 2rem;
-  padding: 2rem 0 4rem 0;
+  padding: 2rem 3.6rem 4rem 3.6rem;
 `;
 
 export const ShortcutButtonContainer = styled.div`
   display: flex;
   gap: 2.4rem;
   align-self: flex-start;
-  padding-left: 3.6rem;
 `;
 
 export const IconButtonWrapper = styled(IconButton)`
