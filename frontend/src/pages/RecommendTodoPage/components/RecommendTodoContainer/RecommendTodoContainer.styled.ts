@@ -2,12 +2,6 @@ import styled from 'styled-components';
 
 import IconButton from '@/components/Button/IconButton';
 
-export const RecommendTodoLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-`;
-
 export const RecommendTabList = styled.ul`
   background-color: ${({ theme }) => theme.colors.white};
   display: flex;
@@ -39,4 +33,8 @@ export const FilterWrapper = styled.div`
   display: flex;
   gap: 0.8rem;
   padding: 0.5rem 2.4rem;
+`;
+
+export const LoadingBlock = styled.div`
+  min-height: 81.5rem;
 `;

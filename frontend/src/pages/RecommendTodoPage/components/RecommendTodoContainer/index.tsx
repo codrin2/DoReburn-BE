@@ -11,6 +11,7 @@ import FilterForm from '../FilterForm';
 import BottomSheet from '@/components/BottomSheet';
 import IconButton from '@/components/Button/IconButton';
 import Icon from '@/components/Icon';
+import IntersectionObserverScroll from '@/components/IntersectionObserverScroll/IntersectionObserverScroll';
 import { MAX_TODO_ITEM_LENGTH, TODO_TYPE } from '@/constants/config';
 import { TODO_TOAST_MESSAGE } from '@/constants/message';
 import useQueryParamsDate from '@/hooks/useQueryParamsDate';
@@ -38,12 +39,13 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
 
   const todoType = getTodoType({ dateType, isFavoritePage, planId });
 
-  const { data: recommendList, isLoading } = useRecommendTodoFilterQuery(
-    todoType,
-    categoryList,
-    difficultyList,
-    Number(planId),
-  );
+  const {
+    data: recommendList,
+    isLoading,
+    isFetching,
+    hasNextPage,
+    fetchNextPage,
+  } = useRecommendTodoFilterQuery(todoType, categoryList, difficultyList, Number(planId));
   const { mutate: addTodoFromArchived } = useAddTodoFromArchivedMutation(
     categoryList,
     difficultyList,
@@ -111,26 +113,31 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
         />
       </S.FilterWrapper>
       <S.RecommendTabList>
-        {recommendList?.map((todo) => (
-          <TodoEditItem
-            key={todo.todoId}
-            todo={todo}
-            disabled={todo.hasChild}
-            left={
-              <IconButton
-                icon={
-                  todo.hasChild ? (
-                    <Icon icon="CheckCircle" cursor="pointer" />
-                  ) : (
-                    <Icon icon="PlusCircle" cursor="pointer" />
-                  )
-                }
-                onClick={() => handleAddTodoFromRecommendAll(todo.todoId)}
+        <IntersectionObserverScroll hasNextPage={hasNextPage} onReachBottom={fetchNextPage}>
+          {recommendList.pages.map((page) =>
+            page.data.map((todo) => (
+              <TodoEditItem
+                key={todo.todoId}
+                todo={todo}
                 disabled={todo.hasChild}
+                left={
+                  <IconButton
+                    icon={
+                      todo.hasChild ? (
+                        <Icon icon="CheckCircle" cursor="pointer" />
+                      ) : (
+                        <Icon icon="PlusCircle" cursor="pointer" />
+                      )
+                    }
+                    onClick={() => handleAddTodoFromRecommendAll(todo.todoId)}
+                    disabled={todo.hasChild}
+                  />
+                }
               />
-            }
-          />
-        ))}
+            )),
+          )}
+          {isFetching && <S.LoadingBlock />}
+        </IntersectionObserverScroll>
       </S.RecommendTabList>
       <BottomSheet
         isOpen={isOpen}

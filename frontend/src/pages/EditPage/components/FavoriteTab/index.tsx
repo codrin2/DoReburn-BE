@@ -1,4 +1,5 @@
 import * as S from './FavoriteTab.styled';
+import IntersectionObserverScroll from '../../../../components/IntersectionObserverScroll/IntersectionObserverScroll';
 import { useAddTodoBottomSheet } from '../../hooks/useAddTodoBottomSheet';
 import useAddTodoFromArchivedMutation from '../../hooks/useAddTodoFromArchivedMutation';
 import useDeleteTodoMutation from '../../hooks/useDeleteTodoMutation';
@@ -25,7 +26,13 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
   const { dateType } = useQueryParamsDate();
 
   const { data: todoList } = useTodoListQuery(dateType, Number(planId));
-  const { data: favoriteTodoList } = useFavoriteTodoListQuery(todoType, Number(planId));
+  const {
+    data: favoriteTodoList,
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+  } = useFavoriteTodoListQuery(todoType, Number(planId));
+
   const { mutate: addTodoFromArchived } = useAddTodoFromArchivedMutation();
   const { mutate: deleteTodo } = useDeleteTodoMutation(todoType);
 
@@ -78,53 +85,59 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
 
   return (
     <>
-      <S.FavoriteTabLayout>
-        {favoriteTodoList.map((todo) => (
-          <TodoEditItem
-            key={todo.todoId}
-            todo={todo}
-            disabled={todo.hasChild}
-            left={
-              isFavoritePage ? (
-                <IconButton
-                  icon={<Icon icon="MinusCircle" cursor="pointer" />}
-                  onClick={() => handleDeleteTodo(todo.todoId)}
-                  disabled={todo.hasChild}
-                />
-              ) : (
-                <IconButton
-                  icon={
-                    todo.hasChild ? (
-                      <Icon icon="CheckCircle" cursor="pointer" />
-                    ) : (
-                      <Icon icon="PlusCircle" cursor="pointer" />
-                    )
-                  }
-                  onClick={() => handleAddTodoFromFavorite(todo.todoId)}
-                  disabled={todo.hasChild}
-                />
-              )
-            }
-            right={
-              isFavoritePage && (
-                <IconButton
-                  icon={<Icon icon="Edit" cursor="pointer" />}
-                  onClick={() => openEditBottomSheet(todo)}
-                />
-              )
-            }
-          />
-        ))}
+      <IntersectionObserverScroll hasNextPage={hasNextPage} onReachBottom={fetchNextPage}>
+        <S.FavoriteTabLayout>
+          {favoriteTodoList.pages.map((page) =>
+            page.data.map((todo) => (
+              <TodoEditItem
+                key={todo.todoId}
+                todo={todo}
+                disabled={todo.hasChild}
+                left={
+                  isFavoritePage ? (
+                    <IconButton
+                      icon={<Icon icon="MinusCircle" cursor="pointer" />}
+                      onClick={() => handleDeleteTodo(todo.todoId)}
+                      disabled={todo.hasChild}
+                    />
+                  ) : (
+                    <IconButton
+                      icon={
+                        todo.hasChild ? (
+                          <Icon icon="CheckCircle" cursor="pointer" />
+                        ) : (
+                          <Icon icon="PlusCircle" cursor="pointer" />
+                        )
+                      }
+                      onClick={() => handleAddTodoFromFavorite(todo.todoId)}
+                      disabled={todo.hasChild}
+                    />
+                  )
+                }
+                right={
+                  isFavoritePage && (
+                    <IconButton
+                      icon={<Icon icon="Edit" cursor="pointer" />}
+                      onClick={() => openEditBottomSheet(todo)}
+                    />
+                  )
+                }
+              />
+            )),
+          )}
 
-        {isFavoritePage && (
-          <IconButton
-            icon={<Icon icon="PlusCircle" cursor="pointer" />}
-            text="직접 추가하기"
-            isFull={true}
-            onClick={openAddBottomSheet}
-          />
-        )}
-      </S.FavoriteTabLayout>
+          {isFavoritePage && (
+            <IconButton
+              icon={<Icon icon="PlusCircle" cursor="pointer" />}
+              text="직접 추가하기"
+              isFull={true}
+              onClick={openAddBottomSheet}
+            />
+          )}
+
+          {isFetching && <S.LoadingBlock />}
+        </S.FavoriteTabLayout>
+      </IntersectionObserverScroll>
       <BottomSheet
         isOpen={isAddOpen}
         title={addTodoForm}
