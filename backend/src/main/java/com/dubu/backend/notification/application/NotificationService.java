@@ -82,7 +82,7 @@ public class NotificationService {
                         "body": "%s"
                     },
                     "data": {
-                        "url": "%s",
+                        "url": "%s"
                     }
                 }
                 """.formatted(message.title(), message.body(), planUrl);
