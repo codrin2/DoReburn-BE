@@ -52,7 +52,7 @@ export const TimeBlockHeader = styled.div`
 
 export const SectionTime = styled.span`
   ${({ theme }) => theme.fonts.body15};
-  color: ${({ theme }) => theme.colors.Subway};
+  color: ${({ theme }) => theme.colors.gray600};
   opacity: 0.7;
 `;
 
