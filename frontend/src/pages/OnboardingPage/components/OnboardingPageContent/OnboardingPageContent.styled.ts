@@ -14,6 +14,7 @@ export const OnboardingMainLayout = styled.main`
   flex-direction: column;
   align-items: center;
   gap: 4rem;
+  width: 100%;
 `;
 
 export const TextContainer = styled.div`
