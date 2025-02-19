@@ -3,6 +3,8 @@ import styled, { keyframes } from 'styled-components';
 export const SheetContainer = styled.div`
   position: absolute;
   bottom: 0;
+
+  width: 100%;
   height: 100%;
 
   z-index: 2;
@@ -11,13 +13,13 @@ export const SheetContainer = styled.div`
 export const Backdrop = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   background-color: ${({ $isOpen }) => ($isOpen ? 'rgba(0, 0, 0, 0.6)' : 'transparent')};
-  width: 37.5rem; // 반응형 필요
+  width: 100%;
   height: 100%;
 `;
 
 export const Sheet = styled.div<{ $isOpen: boolean; $delay: number }>`
   position: absolute;
-  width: 37.5rem; // 반응형 필요
+  width: 100%;
   bottom: 0;
   border-radius: 2.4rem 2.4rem 0 0;
   padding: 0 2.4rem 1.6rem 2.4rem;
