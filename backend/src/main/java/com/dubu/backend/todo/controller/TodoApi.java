@@ -3,10 +3,13 @@ package com.dubu.backend.todo.controller;
 import com.dubu.backend.global.domain.PageResponse;
 import com.dubu.backend.global.domain.SuccessResponse;
 import com.dubu.backend.todo.dto.common.Cursor;
+import com.dubu.backend.todo.dto.common.TodoIdentifier;
 import com.dubu.backend.todo.dto.enums.TodoRequestType;
 import com.dubu.backend.todo.dto.request.*;
 import com.dubu.backend.todo.dto.response.TodoInfo;
 import com.dubu.backend.todo.dto.response.TodoSuccessResponse;
+import com.dubu.backend.todo.service.TodoQueryService;
+import com.dubu.backend.todo.service.impl.PathTodoManagementService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Locale;
+
+import static com.dubu.backend.todo.dto.enums.TodoRequestType.PATH;
 
 @Tag(name = "Todo API", description = "할 일 관리 API")
 public interface TodoApi {
@@ -1465,6 +1470,89 @@ public interface TodoApi {
             @Nullable @ModelAttribute Cursor cursor,
             @ModelAttribute RecommendTodoQueryRequest request);
 
+
+    @Operation(summary = "할 일의 경로 수정", description = "드래그-드랍을 하여 할 일의 경로를 수정한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200",
+                    description = "할 일의 경로 수정 성공",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(
+                                    implementation = TodoSuccessResponse.class,
+                                    description = "할 일 성공 응답"
+                            ),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "할 일의 경로 수정 성공",
+                                            value = "NO CONTENT"
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(responseCode = "400",
+                    description = """
+                        다음 경우에 발생할 수 있습니다.
+                        1. 회원의 상태가 해당 API를 호출할 없는 경우 (INVALID_MEMBER_STATUS)
+                        2. 할 일 타입과 요청 타입이 일치하지 않은 경우 (TODO_TYPE_MISMATCH)
+                    """,
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseExample.class),
+                            examples = {
+                                    @ExampleObject(name = "유효하지 않은 회원의 상태 예시",
+                                            value = """
+                                            {
+                                                "errorCode": "INVALID_MEMBER_STATUS",
+                                                "message": "회원의 상태가 STOP인 경우 해당 API를 이용할 수 없습니다."
+                                            }
+                                            """
+                                    ),
+                                    @ExampleObject(name = "일치하지 않은 할 일 타입과 요청 타입 예시",
+                                            value = """
+                                                    {
+                                                        "errorCode": "TODO_TYPE_MISMATCH",
+                                                        "message": "할 일의 타입과 요청 타입이 일치하지 않습니다. 할 일 타입 = SCHEDULED, 요청 타입 = IN_PROGRESS"
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+
+            ),
+            @ApiResponse(responseCode = "404",
+                    description = """
+                        다음 경우에 발생할 수 있습니다:
+                        1. 회원을 찾을 수 없는 경우 (MEMBER_NOT_FOUND)
+                        2. 경로를 찾을 수 없는 경우 (PATH_NOT_FOUND)
+                    """,
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseExample.class),
+                            examples = {
+                                    @ExampleObject(name = "회원 미존재 예시",
+                                            value = """
+                                            {
+                                              "errorCode": "MEMBER_NOT_FOUND",
+                                              "message": "회원을 찾을 수 없습니다. memberId : 9999"
+                                            }
+                                            """
+                                    ),
+                                    @ExampleObject(name = "경로 미존재 예시",
+                                            value = """
+                                            {
+                                                "errorCode": "PATH_NOT_FOUND",
+                                                "message": "경로를 찾을 수 없습니다. pathId : 9999"
+                                            }
+                                            """
+                                    )
+                            }
+                    )
+            ),
+    })
+    void patchTodoPath(
+            @RequestAttribute("memberId") Long memberId,
+            @Parameter(description = "할일 ID", required = true) @RequestParam Long todoId,
+            @ModelAttribute TodoPathUpdateRequest request);
 
     @Schema(name = "ErrorResponseExample", description = "에러 응답 예시")
     class ErrorResponseExample {
