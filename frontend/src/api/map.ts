@@ -29,20 +29,20 @@ export interface NearbyMember {
   memberId: number;
   x_coordinate: number;
   y_coordinate: number;
-  category: CategoryType;
+  category: CategoryType[];
 }
 
-export interface CategoryRanking {
+export interface CategoryRank {
   rank: number;
   category: CategoryType;
-  num: number;
+  count: number;
 }
 
 interface NearbyUserResponse {
   data: {
-    nearMember: NearbyMember[];
-    categoryRanking: CategoryRanking[];
-  };
+    memberLocations: NearbyMember[];
+    categoryRank: CategoryRank[];
+  } | null;
 }
 
 interface NearbyUserParams {
@@ -50,6 +50,11 @@ interface NearbyUserParams {
   x_coordinate: number;
   y_coordinate: number;
   category?: CategoryType;
+}
+
+export interface CurrentLocationParams {
+  x_coordinate: number;
+  y_coordinate: number;
 }
 
 export const getTodoDetail = async (memberId: number) => {
@@ -60,7 +65,7 @@ export const getTodoDetail = async (memberId: number) => {
 
 export const addFavoriteFromOther = async (todoId: number) => {
   const result = await fetchClient.post<TodoFavoriteFromOtherResponse>(
-    API_URL.addFavoriteFromOther,
+    API_URL.addTodoFromArchived('SAVE'),
     { body: { todoId } },
   );
 
@@ -86,4 +91,10 @@ export const getNearbyUsers = async (params: NearbyUserParams) => {
   const result = await fetchClient.get<NearbyUserResponse>(API_URL.getNearbyUsers(queryParams));
 
   return result.data;
+};
+
+export const updateCurrentLocation = async (params: CurrentLocationParams) => {
+  return await fetchClient.put(API_URL.updateCurrentLocation, {
+    body: { ...params },
+  });
 };

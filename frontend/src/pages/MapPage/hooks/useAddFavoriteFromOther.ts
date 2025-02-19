@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { addFavoriteFromOther } from '@/api/map';
+import { addTodoFromArchived } from '@/api/todo';
 import { QUERY_KEY } from '@/constants/queryKey';
 
 const useAddFavoriteFromOther = () => {
@@ -8,7 +8,7 @@ const useAddFavoriteFromOther = () => {
 
   return useMutation({
     mutationFn: ({ todoId, memberId }: { todoId: number; memberId: number }) => {
-      return addFavoriteFromOther(todoId);
+      return addTodoFromArchived('SAVE', todoId);
     },
     onSuccess: (_, { memberId }) => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.detailTodo, memberId] });

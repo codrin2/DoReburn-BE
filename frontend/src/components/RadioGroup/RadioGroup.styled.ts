@@ -1,9 +1,13 @@
 import styled from 'styled-components';
 
-export const RadioGroupWrapper = styled.div`
+import theme from '@/styles/theme';
+import { CategoryType } from '@/types/filter';
+
+export const RadioGroupWrapper = styled.div<{ $width?: string; $isFilter?: boolean }>`
   display: flex;
+  justify-content: ${({ $isFilter }) => ($isFilter ? 'space-between' : 'flex-start')};
   gap: 1.3rem 0.8rem;
-  width: 20rem;
+  width: ${({ $width }) => $width ?? '20rem'};
   flex-wrap: wrap;
 `;
 
@@ -18,17 +22,21 @@ export const HiddenInput = styled.input`
   width: 1px;
 `;
 
-export const RadioBadge = styled.span<{ $isSelected: boolean; $disabled?: boolean }>`
+export const RadioBadge = styled.span<{
+  $isSelected: boolean;
+  $disabled?: boolean;
+  $category?: CategoryType | null;
+  $isFilter?: boolean;
+}>`
   ${({ theme }) => theme.fonts.label14Reg};
 
-  padding: 0.5rem 1.2rem;
+  padding: ${({ $isFilter }) => ($isFilter ? '0.5rem 0.8rem' : '0.5rem 1.2rem')};
   border-radius: 0.8rem;
 
   background-color: ${({ theme, $isSelected }) =>
     $isSelected ? theme.colors.white : theme.colors.gray50};
 
-  color: ${({ theme, $isSelected }) =>
-    $isSelected ? theme.colors.green700 : theme.colors.gray700};
+  color: ${({ $isSelected, $category }) => getColor($isSelected, $category)};
 
   outline: ${({ theme, $isSelected }) =>
     $isSelected ? `0.1rem solid ${theme.colors.green600}` : 'none'};
@@ -40,3 +48,11 @@ export const RadioBadge = styled.span<{ $isSelected: boolean; $disabled?: boolea
     background-color 0.2s,
     color 0.2s;
 `;
+
+const getColor = (isSelected: boolean, category?: CategoryType | null) => {
+  if (isSelected) {
+    return category ? theme.colors[category] : theme.colors.green700;
+  }
+
+  return theme.colors.gray700;
+};

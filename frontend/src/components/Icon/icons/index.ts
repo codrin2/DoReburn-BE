@@ -33,4 +33,5 @@ export { default as Search } from './Search';
 export { default as Subway } from './Subway';
 export { default as Switch } from './Switch';
 export { default as Target } from './Target';
+export { default as Reload } from './Reload';
 export { default as User } from './User';
