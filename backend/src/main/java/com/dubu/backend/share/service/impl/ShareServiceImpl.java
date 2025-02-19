@@ -2,7 +2,7 @@ package com.dubu.backend.share.service.impl;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
-import com.dubu.backend.member.dto.MemberLocation;
+import com.dubu.backend.member.dto.MemberLocationDto;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.infra.repository.LocationRedisRepository;
 import com.dubu.backend.member.infra.repository.MemberRepository;
@@ -52,7 +52,7 @@ public class ShareServiceImpl implements ShareService {
                 memberCategoryInfosForMoveOrFeedbackMembers.stream()
         ).collect(Collectors.toList()));
 
-        locationRedisRepository.saveMemberLocation(memberId, new MemberLocation(request.x_coordinate(), request.y_coordinate()));
+        locationRedisRepository.saveMemberLocation(memberId, new MemberLocationDto(request.x_coordinate(), request.y_coordinate()));
 
         return ShareInfo.of(MemberInfo.from(memberLocationInfos, memberCategoryCollection.getMemberToCategories()), CategoryRankInfo.from(memberCategoryCollection.getCategoryMemberCount()));
     }
