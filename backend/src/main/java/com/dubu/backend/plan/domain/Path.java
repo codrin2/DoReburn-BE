@@ -43,6 +43,9 @@ public class Path extends BaseTimeEntity {
     @Column(length = 20)
     private String busNumber;
 
+    @Column(columnDefinition = "SMALLINT")
+    private Integer busType;
+
     @Column(nullable = false, length = 20)
     private String startName;
 
