@@ -27,16 +27,22 @@ public class Plan extends BaseTimeEntity {
     @OneToMany(mappedBy = "plan", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Path> paths = new ArrayList<>();
 
+    @OneToOne(mappedBy = "plan")
+    private Feedback feedback;
+
     @Column(nullable = false, columnDefinition = "SMALLINT")
     private Integer totalTime;
 
-    @OneToOne(mappedBy = "plan")
-    private Feedback feedback;
+    private boolean isCompleted;
 
     public static Plan createPlan(Member member, Integer totalTime) {
         return Plan.builder()
                 .member(member)
                 .totalTime(totalTime)
                 .build();
+    }
+
+    public void updateIsCompleted(boolean isCompleted) {
+        this.isCompleted = isCompleted;
     }
 }
