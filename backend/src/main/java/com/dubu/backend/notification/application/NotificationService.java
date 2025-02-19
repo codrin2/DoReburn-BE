@@ -77,9 +77,13 @@ public class NotificationService {
             try {
                 String payload = """
                 {
-                    "title": "%s",
-                    "body": "%s",
-                    "url": "%s"
+                    "notification": {
+                        "title": "%s",
+                        "body": "%s"
+                    },
+                    "data": {
+                        "url": "%s",
+                    }
                 }
                 """.formatted(message.title(), message.body(), planUrl);
 
