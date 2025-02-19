@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const DrawerLayout = styled.div<{ $isOpen: boolean }>`
-  position: fixed;
+  position: absolute;
   top: 0;
   bottom: 0;
   right: 50%;
