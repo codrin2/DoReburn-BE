@@ -38,6 +38,8 @@ public class NotificationService {
 
     @Value("${admin.email}")
     private String adminEmail;
+    @Value("${notification.url}")
+    private String planUrl;
 
     @Transactional
     public void saveSubscription(Long memberId, PushSubscriptionDto subscriptionDto) {
@@ -77,9 +79,9 @@ public class NotificationService {
                 {
                     "title": "%s",
                     "body": "%s",
-                    "url": "https://do-reburn.site/plan"
+                    "url": "%s"
                 }
-                """.formatted(message.title(), message.body());
+                """.formatted(message.title(), message.body(), planUrl);
 
                 Notification notification = new Notification(
                         sub.getEndPoint(),

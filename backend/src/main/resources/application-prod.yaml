@@ -84,6 +84,9 @@ vapid:
 admin:
   email: ${ADMIN_EMAIL}
 
+notification:
+  url: ${NOTIFICATION_URL}
+
 management:
   endpoints:
     web:
