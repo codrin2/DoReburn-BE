@@ -2,6 +2,7 @@ package com.dubu.backend.notification.domain;
 
 import com.dubu.backend.global.domain.BaseTimeEntity;
 import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.notification.dto.PushSubscriptionDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,6 +11,9 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"member_id", "end_point", "p256dh", "auth"})
+})
 public class PushSubscription extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +31,13 @@ public class PushSubscription extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String auth;
+
+    public static PushSubscription createSubscription(Member member, PushSubscriptionDto pushSubscriptionDto) {
+        return PushSubscription.builder()
+                .member(member)
+                .endPoint(pushSubscriptionDto.endpoint())
+                .p256dh(pushSubscriptionDto.keys().p256dh())
+                .auth(pushSubscriptionDto.keys().auth())
+                .build();
+    }
 }

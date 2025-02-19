@@ -2,7 +2,6 @@ package com.dubu.backend.plan.dto.response;
 
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
-import com.dubu.backend.plan.domain.enums.TrafficType;
 import com.dubu.backend.todo.entity.Todo;
 
 import java.time.LocalDateTime;
@@ -38,8 +37,8 @@ public record PlanRecentResponse(
                     path.getId(),
                     path.getTrafficType().name(),
                     path.getSectionTime(),
-                    path.getTrafficType() == TrafficType.SUBWAY ? path.getPlan().getId().intValue() : null,
-                    path.getTrafficType() == TrafficType.BUS ? path.getStartName() : null,
+                    path.getSubwayCode(),
+                    path.getBusNumber(),
                     path.getStartName(),
                     path.getEndName(),
                     path.getTodos().stream().map(PathTodoResponse::from).toList()

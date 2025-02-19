@@ -61,6 +61,7 @@ export const MenuItem = styled.li`
   text-align: left;
   ${({ theme }) => theme.fonts.body16};
   font-weight: 500;
+  color: ${({ theme }) => theme.colors.gray950};
 
   position: relative;
   padding-bottom: 1rem;
@@ -78,6 +79,8 @@ export const MenuItem = styled.li`
   }
 
   a {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
   }
 `;

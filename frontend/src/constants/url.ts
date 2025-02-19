@@ -73,4 +73,5 @@ export const MOCK_API_URL = {
   createPlan: `${BASE_URL}/api/v1/plans`,
   dayStatistics: `${BASE_URL}/api/v1/statistics/day`,
   updateCurrentLocation: `${BASE_URL}/api/v1/members/location`,
+  memberInfo: `${BASE_URL}/api/v1/members`,
 };
