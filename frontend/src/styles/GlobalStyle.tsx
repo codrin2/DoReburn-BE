@@ -66,12 +66,18 @@ html {
     font-size: 62.5%;
   }
 
+  @media (min-width: 480px) {
+	html {
+		font-size: 75%;
+	}
+}
+
 body {
 	line-height: 1;
-  width: 375px;
+  max-width: 54rem;
 	height: 100vh;
 	margin: 0 auto;
-	border: 0.1px solid black;
+	
   
   -ms-overflow-style: none;
   overflow-y: hidden;
