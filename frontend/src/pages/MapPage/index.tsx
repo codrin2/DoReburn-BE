@@ -23,6 +23,7 @@ const MapPage = () => {
   const { putMarkerList } = useMarker();
   const { isOpen, close } = useMapBottomSheet();
 
+  const openMarkerBottomSheet = useMarkerBottomSheet();
   const { data: nearbyUsersData } = useNearbyUsersQuery({
     lng: center.lng,
     lat: center.lat,
@@ -31,13 +32,6 @@ const MapPage = () => {
   const { category, handleSelectCategoryFilter, filteredLocations } = useCategoryFilter(
     nearbyUsersData?.memberLocations ?? [],
   );
-
-  const {
-    isOpen: isMarkerBottomSheetOpen,
-    open: openMarkerBottomSheet,
-    close: closeMarkerBottomSheet,
-    content: markerBottomSheetContent,
-  } = useMarkerBottomSheet();
 
   const handleBackCenter = () => {
     mapRef.current?.setCenter(new kakao.maps.LatLng(center.lat, center.lng));
@@ -90,12 +84,6 @@ const MapPage = () => {
         onClose={close}
         content={<CategoryRank lng={center.lng} lat={center.lat} />}
         subTitle="반경 3km 이내"
-      />
-
-      <BottomSheet
-        isOpen={isMarkerBottomSheetOpen}
-        onClose={closeMarkerBottomSheet}
-        content={markerBottomSheetContent}
       />
 
       <S.FloatingButtonContainer>

@@ -1,13 +1,12 @@
 import * as S from './FavoriteTab.styled';
 import IntersectionObserverScroll from '../../../../components/IntersectionObserverScroll/IntersectionObserverScroll';
-import { useAddTodoBottomSheet } from '../../hooks/useAddTodoBottomSheet';
+import useAddTodoBottomSheet from '../../hooks/useAddTodoBottomSheet';
 import useAddTodoFromArchivedMutation from '../../hooks/useAddTodoFromArchivedMutation';
 import useDeleteTodoMutation from '../../hooks/useDeleteTodoMutation';
 import useEditTodoBottomSheet from '../../hooks/useEditTodoBottomSheet';
 import useFavoriteTodoListQuery from '../../hooks/useFavoriteListQuery';
 import TodoEditItem from '../TodoEditItem';
 
-import BottomSheet from '@/components/BottomSheet';
 import IconButton from '@/components/Button/IconButton';
 import Icon from '@/components/Icon';
 import { MAX_TODO_ITEM_LENGTH, TODO_TYPE } from '@/constants/config';
@@ -37,21 +36,8 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
   const { mutate: deleteTodo } = useDeleteTodoMutation(todoType);
 
   const { toast } = useToast();
-  const {
-    isOpen: isAddOpen,
-    open: openAddBottomSheet,
-    close: closeAddBottomSheet,
-    content: addContent,
-    title: addTodoForm,
-  } = useAddTodoBottomSheet(todoType, planId);
-
-  const {
-    isOpen: isEditOpen,
-    open: openEditBottomSheet,
-    close: closeEditBottomSheet,
-    content: editTodoForm,
-    title: editTitle,
-  } = useEditTodoBottomSheet(todoType, planId);
+  const openAddBottomSheet = useAddTodoBottomSheet({ todoType, planId });
+  const openEditBottomSheet = useEditTodoBottomSheet({ todoType, planId });
 
   const isFavoritePage = todoType === TODO_TYPE.SAVE;
 
@@ -138,18 +124,6 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
           {isFetching && <S.LoadingBlock />}
         </S.FavoriteTabLayout>
       </IntersectionObserverScroll>
-      <BottomSheet
-        isOpen={isAddOpen}
-        title={addTodoForm}
-        content={addContent}
-        onClose={closeAddBottomSheet}
-      />
-      <BottomSheet
-        isOpen={isEditOpen}
-        title={editTitle}
-        content={editTodoForm}
-        onClose={closeEditBottomSheet}
-      />
     </>
   );
 };

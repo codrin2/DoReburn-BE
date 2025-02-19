@@ -1,31 +1,15 @@
-import { useState } from 'react';
-
 import DetailUserTodo from '../components/DetailTodo';
 
-import useBaseBottomSheet from '@/hooks/useBaseBottomSheet';
+import useOverlay from '@/hooks/useOverlay';
 
 const useMarkerBottomSheet = () => {
-  const {
-    isOpen,
-    dispatch: { open, close },
-  } = useBaseBottomSheet();
-  const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
+  const overlay = useOverlay();
 
-  const handleOpen = (memberId: number) => {
-    setSelectedMemberId(memberId);
-    open();
+  const openMarkerBottomSheet = (memberId: number) => {
+    overlay.open(() => <DetailUserTodo memberId={memberId} />);
   };
 
-  const handleClose = () => {
-    setSelectedMemberId(null);
-    close();
-  };
-
-  return {
-    isOpen,
-    open: handleOpen,
-    close: handleClose,
-    content: selectedMemberId !== null && <DetailUserTodo memberId={selectedMemberId} />,
-  };
+  return openMarkerBottomSheet;
 };
+
 export default useMarkerBottomSheet;
