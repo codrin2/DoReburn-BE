@@ -11,6 +11,9 @@ import com.dubu.backend.notification.dto.PushSubscriptionDto;
 import com.dubu.backend.notification.exception.DuplicateSubscriptionException;
 import com.dubu.backend.notification.exception.UnavailablePushServiceException;
 import com.dubu.backend.notification.infra.repository.PushSubscriptionRepository;
+import com.dubu.backend.plan.domain.Plan;
+import com.dubu.backend.plan.exception.PlanNotFoundException;
+import com.dubu.backend.plan.infra.repository.PlanRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.martijndwars.webpush.Notification;
@@ -30,6 +33,7 @@ import java.util.List;
 public class NotificationService {
     private final VapidKeyConfig vapidKeyConfig;
     private final MemberRepository memberRepository;
+    private final PlanRepository planRepository;
     private final PushSubscriptionRepository subscriptionRepository;
 
     @Value("${admin.email}")
@@ -51,6 +55,13 @@ public class NotificationService {
     }
 
     public void sendPushNotification(PushMessageDto message) {
+        Plan currentPlan = planRepository.findById(message.planId())
+                .orElseThrow(() -> new PlanNotFoundException(message.planId()));
+
+        if (currentPlan.isCompleted()) {
+            return;
+        }
+
         List<PushSubscription> subscriptions = subscriptionRepository.findByMemberId((message.memberId()));
         PushService pushService;
 
@@ -65,7 +76,8 @@ public class NotificationService {
                 String payload = """
                 {
                     "title": "%s",
-                    "body": "%s"
+                    "body": "%s",
+                    "url": "https://do-reburn.site/plan"
                 }
                 """.formatted(message.title(), message.body());
 
