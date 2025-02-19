@@ -14,7 +14,7 @@ public record RouteSearchResponse(
             String subwayName,
             Integer subwayCode,
             String busNumber,
-            Integer busId,
+            Integer busType,
             String startName,
             String endName
     ) {

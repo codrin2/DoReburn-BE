@@ -93,6 +93,7 @@ public interface PlanApi {
                                                   "sectionTime": 20,
                                                   "subwayCode": 1002,
                                                   "busNumber": null,
+                                                  "busType": null,
                                                   "startName": "선릉",
                                                   "endName": "역삼"
                                                 },
@@ -101,6 +102,7 @@ public interface PlanApi {
                                                   "sectionTime": 20,
                                                   "subwayCode": null,
                                                   "busNumber": "143",
+                                                  "busType": 1,
                                                   "startName": "역삼",
                                                   "endName": "강남"
                                                 }
@@ -232,6 +234,7 @@ public interface PlanApi {
                                                     "sectionTime": 20,
                                                     "subwayCode": 1002,
                                                     "busNumber": null,
+                                                    "busType": null,
                                                     "startName": "선릉",
                                                     "endName": "역삼",
                                                     "todos": [

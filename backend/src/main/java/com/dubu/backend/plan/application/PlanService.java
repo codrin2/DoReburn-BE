@@ -39,7 +39,6 @@ import java.util.stream.IntStream;
 @Service
 @RequiredArgsConstructor
 public class PlanService {
-    private final TaskSchedulerService taskSchedulerService;
     private final MemberRepository memberRepository;
     private final PlanRepository planRepository;
     private final PathRepository pathRepository;
