@@ -96,4 +96,8 @@ management:
 logging:
   level:
     root: info
-    com.p6spy: debug
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false
