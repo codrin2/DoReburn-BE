@@ -2,10 +2,11 @@ package com.dubu.backend.todo.repository;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.plan.domain.QPlan;
+import com.dubu.backend.share.dto.response.MemberCategoryInfo;
 import com.dubu.backend.todo.dto.common.Cursor;
 import com.dubu.backend.todo.dto.search.TodoSearchCond;
 import com.dubu.backend.todo.entity.*;
-import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
@@ -17,8 +18,6 @@ import org.springframework.data.domain.SliceImpl;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.dubu.backend.plan.domain.QPath.*;
 import static com.dubu.backend.plan.domain.QPlan.*;
@@ -71,10 +70,11 @@ public class CustomTodoRepositoryImpl implements CustomTodoRepository{
     }
 
     @Override
-    public Map<String, Long> findTodoCountGroupByCategoryForStopMembers(List<Member> members, LocalDate date){
+    public List<MemberCategoryInfo> findTodoCountGroupByCategoryForStopMembers(List<Member> members, LocalDate date){
         QSchedule scheduleSub = new QSchedule("scheduleSub");
 
-        List<Tuple> result = jpaQueryFactory.select(todo.category.name, todo.count())
+        return jpaQueryFactory.select(Projections.constructor(MemberCategoryInfo.class, todo.member.id, todo.category.name))
+                .distinct()
                 .from(todo)
                 .where(todo.schedule.in(
                         JPAExpressions.select(schedule)
@@ -86,24 +86,16 @@ public class CustomTodoRepositoryImpl implements CustomTodoRepository{
                                                         .and(scheduleSub.date.loe(date)))
                                                 .groupBy(scheduleSub.member)
                                 )))
-                ).groupBy(todo.category)
+                )
                 .fetch();
-
-        return result.stream()
-                .collect(Collectors.toMap(
-                        t -> t.get(todo.category.name),
-                        t -> {
-                            Long count = t.get(todo.count());
-                            return count == null ? 0: count;
-                        }
-                ));
     }
 
     @Override
-    public Map<String, Long> findTodoCountGroupByCategoryForMoveOrFeedbackMembers(List<Member> members){
+    public List<MemberCategoryInfo> findTodoCountGroupByCategoryForMoveOrFeedbackMembers(List<Member> members){
         QPlan planSub = new QPlan("planSub");
 
-        List<Tuple> result = jpaQueryFactory.select(todo.category.name, todo.count())
+        return jpaQueryFactory.select(Projections.constructor(MemberCategoryInfo.class, todo.member.id, todo.category.name))
+                .distinct()
                 .from(todo)
                 .where(todo.path.in(
                         JPAExpressions.select(path)
@@ -118,17 +110,8 @@ public class CustomTodoRepositoryImpl implements CustomTodoRepository{
                                                                 .groupBy(planSub.member)
                                                 ))
                                 ))
-                )).groupBy(todo.category)
+                ))
                 .fetch();
-
-        return result.stream()
-                .collect(Collectors.toMap(
-                        t -> t.get(todo.category.name),
-                        t -> {
-                            Long count = t.get(todo.count());
-                            return count == null ? 0: count;
-                        }
-                ));
     }
 
     private BooleanExpression cursor(Cursor cursor){

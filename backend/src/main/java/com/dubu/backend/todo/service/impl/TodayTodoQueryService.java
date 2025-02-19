@@ -97,15 +97,14 @@ public class TodayTodoQueryService implements TargetTodoQueryService {
 
         List<Todo> saveTodos = todoSlice.getContent();
 
-        // 오늘 할 일 의 부모 할 일로 즐겨찾기 할 일이 있는지를 확인하고 있으면 hasChild = true, 없으면 hasChild = false 설정
-        List<Long> parentIdsOfTodayTodos = todoRepository.findParentTodoIdsByParentTodosAndSchedule(saveTodos, schedule);
-        HashSet<Long> parentIdOfTodayTodoSet = new HashSet<>(parentIdsOfTodayTodos);
+        // 오늘 할 일 의 부모 할 일이 즐겨찾기 할 일이거나 같은 부모 할 일을 가진 경우 hasChild = true
+        List<Long> todayParentTodoIds = todoRepository.findParentTodoIdsByScheduleAndParentTodoNotNull(schedule);
+        HashSet<Long> todayParentTodoIdSet = new HashSet<>(todayParentTodoIds);
         List<TodoInfo> todoInfos = saveTodos.stream()
-                .map(t -> {
-                    if (parentIdOfTodayTodoSet.contains(t.getId())) {
-                        return TodoInfo.fromEntity(true, t);
-                    }
-                    return TodoInfo.fromEntity(false, t);
+                .map(st -> {
+                    boolean hasChild = todayParentTodoIdSet.contains(st.getId())
+                            || (st.getParentTodo() != null && todayParentTodoIdSet.contains(st.getParentTodo().getId()));
+                    return TodoInfo.fromEntity(hasChild, st);
                 }).toList();
 
         if(todoInfos.isEmpty()){
@@ -132,16 +131,17 @@ public class TodayTodoQueryService implements TargetTodoQueryService {
 
         List<Todo> personalizedTodos = todoRandomSelector.selectTodos(5, recommendTodos);
 
-        // 오늘 할 일 의 부모 할 일로 추천 할 일이 있는지를 확인하고 있으면 hasChild = true, 없으면 hasChild = false 설정
-        List<Long> parentIdsOfTodayTodos = todoRepository.findParentTodoIdsByParentTodosAndSchedule(personalizedTodos, schedule);
-        HashSet<Long> parentIdOfTodayTodoSet = new HashSet<>(parentIdsOfTodayTodos);
+        // 오늘 할 일 의 부모 할 일이 추천 할 일이거나 즐겨찾기 할 일인데 즐겨찾기 할 일의 부모 할 일이 추천 할 일이라면 hasChild = true
+        List<Long> todayParentTodoIds = todoRepository.findParentTodoIdsByScheduleAndParentTodoNotNull(schedule);
+        List<Long> saveParentTodoIds = todoRepository.findParentTodoIdsByIdsAndTypeAndParentTodoNotNull(todayParentTodoIds, TodoType.SAVE);
+
+        HashSet<Long> parentTodoIds = new HashSet<>(todayParentTodoIds);
+        parentTodoIds.addAll(saveParentTodoIds);
 
         return personalizedTodos.stream()
-                .map(t -> {
-                    if (parentIdOfTodayTodoSet.contains(t.getId())) {
-                        return TodoInfo.fromEntity(true, t);
-                    }
-                    return TodoInfo.fromEntity(false, t);
+                .map(pt -> {
+                    boolean hasChild = parentTodoIds.contains(pt.getId());
+                    return TodoInfo.fromEntity(hasChild, pt);
                 }).toList();
     }
 
@@ -176,16 +176,17 @@ public class TodayTodoQueryService implements TargetTodoQueryService {
 
         List<Todo> recommendTodos = todoSlice.getContent();
 
-        // 오늘 할 일 의 부모 할 일로 추천 할 일이 있는지를 확인하고 있으면 hasChild = true, 없으면 hasChild = false 설정
-        List<Long> parentIdsOfTodayTodos = todoRepository.findParentTodoIdsByParentTodosAndSchedule(recommendTodos, schedule);
-        HashSet<Long> parentIdOfTodayTodoSet = new HashSet<>(parentIdsOfTodayTodos);
+        // 오늘 할 일 의 부모 할 일이 추천 할 일이거나 즐겨찾기 할 일인데 즐겨찾기 할 일의 부모 할 일이 추천 할 일이라면 hasChild = true
+        List<Long> todayParentTodoIds = todoRepository.findParentTodoIdsByScheduleAndParentTodoNotNull(schedule);
+        List<Long> saveParentTodoIds = todoRepository.findParentTodoIdsByIdsAndTypeAndParentTodoNotNull(todayParentTodoIds, TodoType.SAVE);
+
+        HashSet<Long> parentTodoIds = new HashSet<>(todayParentTodoIds);
+        parentTodoIds.addAll(saveParentTodoIds);
 
         List<TodoInfo> todoInfos = recommendTodos.stream()
-                .map(t -> {
-                    if (parentIdOfTodayTodoSet.contains(t.getId())) {
-                        return TodoInfo.fromEntity(true, t);
-                    }
-                    return TodoInfo.fromEntity(false, t);
+                .map(pt -> {
+                    boolean hasChild = parentTodoIds.contains(pt.getId());
+                    return TodoInfo.fromEntity(hasChild, pt);
                 }).toList();
 
         if(todoInfos.isEmpty()){

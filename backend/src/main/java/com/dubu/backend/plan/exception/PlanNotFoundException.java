@@ -4,12 +4,12 @@ import com.dubu.backend.global.exception.NotFoundException;
 
 import static com.dubu.backend.global.exception.ErrorCode.NOT_FOUND_PLAN;
 
-public class NotFoundPlanException extends NotFoundException {
-    public NotFoundPlanException() {
+public class PlanNotFoundException extends NotFoundException {
+    public PlanNotFoundException() {
         super(NOT_FOUND_PLAN.getMessage().formatted(""));
     }
 
-    public NotFoundPlanException(Long planId) {
+    public PlanNotFoundException(Long planId) {
         super(NOT_FOUND_PLAN.getMessage().formatted(planId));
     }
 

@@ -7,10 +7,9 @@ import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.infra.repository.LocationRedisRepository;
 import com.dubu.backend.member.infra.repository.MemberRepository;
 import com.dubu.backend.share.dto.request.SurroundingMemberQueryRequest;
-import com.dubu.backend.share.dto.response.CategoryInfo;
-import com.dubu.backend.share.dto.response.MemberLocationInfo;
-import com.dubu.backend.share.dto.response.ShareInfo;
+import com.dubu.backend.share.dto.response.*;
 import com.dubu.backend.share.service.ShareService;
+import com.dubu.backend.share.service.collection.MemberCategoryCollection;
 import com.dubu.backend.todo.entity.Category;
 import com.dubu.backend.todo.repository.CategoryRepository;
 import com.dubu.backend.todo.repository.TodoRepository;
@@ -20,7 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +36,7 @@ public class ShareServiceImpl implements ShareService {
         memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
         List<Category> categories = categoryRepository.findAll();
 
-        List<MemberLocationInfo> memberLocationInfos = locationRedisRepository.findMemberLocations(request);
+        List<MemberLocationInfo> memberLocationInfos = locationRedisRepository.findMemberLocations(memberId, request);
 
         if(memberLocationInfos == null || memberLocationInfos.isEmpty()){
             return null;
@@ -44,12 +44,17 @@ public class ShareServiceImpl implements ShareService {
 
         List<Member> neighborhoodMembers = memberRepository.findMembersByMemberIds(extractMemberIds(memberLocationInfos));
 
-        Map<String, Long> todoCountGroupByCategoryForStopMembers = todoRepository.findTodoCountGroupByCategoryForStopMembers(splitStopMember(neighborhoodMembers), LocalDate.now());
-        Map<String, Long> todoCountGroupByCategoryForMoveOrFeedbackMembers = todoRepository.findTodoCountGroupByCategoryForMoveOrFeedbackMembers(splitInProgressOrFeedbackMember(neighborhoodMembers));
+        List<MemberCategoryInfo> memberCategoryInfosForStopMembers = todoRepository.findTodoCountGroupByCategoryForStopMembers(splitStopMember(neighborhoodMembers), LocalDate.now());
+        List<MemberCategoryInfo> memberCategoryInfosForMoveOrFeedbackMembers = todoRepository.findTodoCountGroupByCategoryForMoveOrFeedbackMembers(splitInMoveOrFeedbackMember(neighborhoodMembers));
+
+        MemberCategoryCollection memberCategoryCollection = new MemberCategoryCollection(Stream.concat(
+                memberCategoryInfosForStopMembers.stream(),
+                memberCategoryInfosForMoveOrFeedbackMembers.stream()
+        ).collect(Collectors.toList()));
 
         locationRedisRepository.saveMemberLocation(memberId, new MemberLocation(request.x_coordinate(), request.y_coordinate()));
 
-        return ShareInfo.of(memberLocationInfos, CategoryInfo.merge(categories, todoCountGroupByCategoryForStopMembers, todoCountGroupByCategoryForMoveOrFeedbackMembers));
+        return ShareInfo.of(MemberInfo.from(memberLocationInfos, memberCategoryCollection.getMemberToCategories()), CategoryRankInfo.from(memberCategoryCollection.getCategoryMemberCount()));
     }
 
     private List<Long> extractMemberIds(List<MemberLocationInfo> memberLocationInfos) {
@@ -62,7 +67,7 @@ public class ShareServiceImpl implements ShareService {
         return members.stream().filter(m -> m.getStatus().equals(Status.STOP)).toList();
     }
 
-    private List<Member> splitInProgressOrFeedbackMember(List<Member> members) {
+    private List<Member> splitInMoveOrFeedbackMember(List<Member> members) {
         return members.stream()
                 .filter(m -> m.getStatus().equals(Status.MOVE) || m.getStatus().equals(Status.FEEDBACK))
                 .toList();

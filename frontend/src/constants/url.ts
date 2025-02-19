@@ -5,8 +5,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 export const API_URL = {
   todayTodo: `${BASE_URL}/api/v1/todos/today`,
   tomorrowTodo: `${BASE_URL}/api/v1/todos/tomorrow`,
-  favoriteTodo: (modifyType: TodoType, size: number, planId?: number) =>
-    `${BASE_URL}/api/v1/todos/save?modifyType=${modifyType}&size=${size}${planId ? `&pathId=${planId}` : ''}`,
+  favoriteTodo: (queryParams: string) => `${BASE_URL}/api/v1/todos/save${queryParams}`,
   recommendLimitTodo: (modifyType: TodoType, planId?: number) =>
     `${BASE_URL}/api/v1/todos/recommend/personalized?modifyType=${modifyType}${planId ? `&pathId=${planId}` : ''}`,
   recommendAllTodo: (queryParams: string) => `${BASE_URL}/api/v1/todos/recommend/all${queryParams}`,
@@ -74,4 +73,5 @@ export const MOCK_API_URL = {
   createPlan: `${BASE_URL}/api/v1/plans`,
   dayStatistics: `${BASE_URL}/api/v1/statistics/day`,
   updateCurrentLocation: `${BASE_URL}/api/v1/members/location`,
+  memberInfo: `${BASE_URL}/api/v1/members`,
 };

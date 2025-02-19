@@ -49,7 +49,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
 
       - name: Deploy to prod
-        uses: appleboy/ssh-action@v0.1.5  # 최신 릴리스 버전을 명시하는 것
+        uses: appleboy/ssh-action@v0.1.5
         id: deploy-prod
         if: contains(github.ref, 'develop')
         with:

@@ -12,18 +12,22 @@ public record MemberInfoResponse(
         String nickname,
         List<String> categories,
         String homeTitle,
-        String schoolTitle
+        String homeAddress,
+        double homeAddressX,
+        double homeAddressY,
+        String schoolTitle,
+        String schoolAddress,
+        double schoolAddressX,
+        double schoolAddressY
 ) {
     public static MemberInfoResponse of(Member member, List<Category> categories, List<Address> addresses) {
-        String homeTitle = addresses.stream()
+        Address home = addresses.stream()
                 .filter(address -> address.getAddressType() == AddressType.HOME)
-                .map(Address::getTitle)
                 .findFirst()
                 .orElse(null);
 
-        String schoolTitle = addresses.stream()
+        Address school = addresses.stream()
                 .filter(address -> address.getAddressType() == AddressType.SCHOOL)
-                .map(Address::getTitle)
                 .findFirst()
                 .orElse(null);
 
@@ -31,8 +35,14 @@ public record MemberInfoResponse(
                 member.getEmail(),
                 member.getNickname(),
                 categories.stream().map(Category::getName).toList(),
-                homeTitle,
-                schoolTitle
+                home != null ? home.getTitle() : null,
+                home != null ? home.getRoadAddress() : null,
+                home != null ? home.getXCoordinate() : 0.0,
+                home != null ? home.getYCoordinate() : 0.0,
+                school != null ? school.getTitle() : null,
+                school != null ? school.getRoadAddress() : null,
+                school != null ? school.getXCoordinate() : 0.0,
+                school != null ? school.getYCoordinate() : 0.0
         );
     }
 }

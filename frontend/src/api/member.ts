@@ -16,13 +16,31 @@ interface MemberAddressResponse {
   data: MemberAddress;
 }
 
+interface MemberInfo {
+  categories: CategoryType[];
+  homeTitle: string;
+  homeAddress: string;
+  homeAddressX: number;
+  homeAddressY: number;
+  schoolTitle: string;
+  schoolAddress: string;
+  schoolAddressX: number;
+  schoolAddressY: number;
+}
+
 interface MemberInfoResponse {
   data: {
     email: string;
     nickname: string;
     categories: CategoryType[];
     homeTitle: string;
+    homeAddress: string;
+    homeAddressX: number;
+    homeAddressY: number;
     schoolTitle: string;
+    schoolAddress: string;
+    schoolAddressX: number;
+    schoolAddressY: number;
   };
 }
 
@@ -52,6 +70,22 @@ export const getMemberInfo = async () => {
   const result = await fetchClient.get<MemberInfoResponse>(API_URL.memberInfo);
 
   return result.data;
+};
+
+export const updateMemberInfo = async (memberInfo: MemberInfo) => {
+  return await fetchClient.patch(API_URL.memberInfo, {
+    body: {
+      categories: memberInfo.categories,
+      homeTitle: memberInfo.homeTitle,
+      homeAddress: memberInfo.homeAddress,
+      homeAddressX: memberInfo.homeAddressX,
+      homeAddressY: memberInfo.homeAddressY,
+      schoolTitle: memberInfo.schoolTitle,
+      schoolAddress: memberInfo.schoolAddress,
+      schoolAddressX: memberInfo.schoolAddressX,
+      schoolAddressY: memberInfo.schoolAddressY,
+    },
+  });
 };
 
 export const getMemberStatus = async () => {
