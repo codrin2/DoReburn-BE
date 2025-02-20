@@ -13,7 +13,11 @@ const ICON_MAPPER: Record<string, IconType> = {
 };
 
 const renderRouteItem = (path: PathType, index: number) => {
-  const pathColor = getPathColor(path);
+  const pathColor = getPathColor({
+    trafficType: path.trafficType,
+    subwayCode: path.subwayCode,
+    busType: path.busType,
+  });
   const isSubway = path.trafficType === 'SUBWAY';
   const pathName = isSubway
     ? SUBWAY_LINES[path.subwayCode as keyof typeof SUBWAY_LINES]?.name

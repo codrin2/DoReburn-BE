@@ -10,7 +10,10 @@ interface TimeBlockHeaderProps {
 }
 
 const TimeBlockHeader = ({ trafficType, subwayCode }: TimeBlockHeaderProps) => {
-  const pathColor = getPathColor(trafficType, subwayCode);
+  const pathColor = getPathColor({
+    trafficType,
+    subwayCode,
+  });
 
   return (
     <S.TransportHeader>

@@ -14,7 +14,11 @@ const RouteBar = ({ route }: { route: RouteType }) => {
     <S.RouteBarContainer>
       {route.paths.map((path, index) => {
         const barWidth = getPathBarWidth(path, route.totalTime);
-        const pathColor = getPathColor(path.trafficType, path.subwayCode);
+        const pathColor = getPathColor({
+          trafficType: path.trafficType,
+          subwayCode: path.subwayCode,
+          busType: path.busType,
+        });
 
         return (
           <S.RouteItem key={index} $barWidth={barWidth}>

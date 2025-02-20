@@ -9,20 +9,22 @@ export const getPathBarWidth = (path: PathType, totalTime: number) => {
   return (path.sectionTime / totalTime) * 100;
 };
 
-export const getPathColor = (path: PathType) => {
-  if (path.trafficType === 'BUS') {
-    const busType = BUS_TYPE[path.busType as keyof typeof BUS_TYPE];
+interface GetPathColorProps {
+  trafficType: string;
+  subwayCode?: number | null;
+  busType?: number | null;
+}
 
-    return busType.color || theme.colors.gray950;
+export const getPathColor = ({ trafficType, subwayCode, busType }: GetPathColorProps) => {
+  if (trafficType === 'BUS') {
+    const busColor = BUS_TYPE[busType as keyof typeof BUS_TYPE]?.color;
+
+    return busColor || theme.colors.gray950;
   }
   if (trafficType === 'SUBWAY') {
-    if (subwayCode && subwayCode in SUBWAY_LINES) {
-      const subwayLine = SUBWAY_LINES[subwayCode as keyof typeof SUBWAY_LINES];
+    const subwayColor = SUBWAY_LINES[subwayCode as keyof typeof SUBWAY_LINES]?.color;
 
-      return subwayLine.color;
-    }
-
-    return theme.colors.Subway;
+    return subwayColor || theme.colors.Subway;
   }
 
   return 'transparent';
