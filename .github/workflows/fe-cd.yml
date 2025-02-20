@@ -36,7 +36,7 @@ jobs:
           cache-dependency-path: ./frontend/pnpm-lock.yaml
 
       - name: Generate .env File
-        working-directory: ./frontend-admin
+        working-directory: ./frontend
         run: |
           echo "VITE_BASE_URL=${{ secrets.API_BASE_URL }}" >> .env
           echo "VITE_KAKAO_APP_KEY=${{ secrets.KAKAO_APP_KEY }}" >> .env
