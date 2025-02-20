@@ -22,15 +22,21 @@ const RouteBar = ({ route }: { route: RouteType }) => {
               <S.IconWrapper $color={pathColor}>
                 <Icon
                   icon={ICON_MAPPER[path.trafficType as keyof typeof ICON_MAPPER]}
-                  width={16}
-                  height={16}
+                  width={10}
+                  height={10}
                 />
               </S.IconWrapper>
             )}
             <S.RouteProgressBar
               $isTraffic={path.trafficType === 'BUS' || path.trafficType === 'SUBWAY'}
               $color={pathColor}
-            />
+            >
+              {barWidth > 11 && (
+                <S.RouteProgressBarText $trafficType={path.trafficType}>
+                  {`${path.sectionTime}분`}
+                </S.RouteProgressBarText>
+              )}
+            </S.RouteProgressBar>
           </S.RouteItem>
         );
       })}
