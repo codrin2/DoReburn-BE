@@ -5,7 +5,7 @@ import backgroundMain from '/src/assets/images/backgroundMain.png';
 export const MainPageLayout = styled.main`
   position: relative;
   background-color: ${({ theme }) => theme.colors.green50};
-  height: 100vh;
+  height: 100%;
 
   display: flex;
   flex-direction: column;
