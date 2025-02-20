@@ -49,7 +49,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
 
       - name: Deploy to prod
-        uses: appleboy/ssh-action@v0.1.5  # 최신 릴리스 버전을 명시하는 것
+        uses: appleboy/ssh-action@v0.1.5
         id: deploy-prod
         if: contains(github.ref, 'develop')
         with:
@@ -75,6 +75,8 @@ jobs:
               -e RABBITMQ_PORT=${{ secrets.RABBITMQ_PORT }} \
               -e RABBITMQ_USERNAME=${{ secrets.RABBITMQ_USERNAME }} \
               -e RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }} \
+              -e APP_PUSH_DELAY_MS=${{ secrets.APP_PUSH_DELAY_MS }} \
+              -e MEMBER_STATUS_DELAY_MS=${{ secrets.MEMBER_STATUS_DELAY_MS }} \
               -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
               -e JWT_ACCESS_TOKEN_TIME=${{ secrets.JWT_ACCESS_TOKEN_TIME }} \
               -e JWT_REFRESH_TOKEN_TIME=${{ secrets.JWT_REFRESH_TOKEN_TIME }} \
@@ -88,7 +90,7 @@ jobs:
               -e VAPID_PUBLIC_KEY=${{ secrets.VAPID_PUBLIC_KEY }} \
               -e VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }} \
               -e ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }} \
-              -e APP_PUSH_DELAY_MS=${{ secrets.APP_PUSH_DELAY_MS }} \
+              -e NOTIFICATION_URL=${{ secrets.NOTIFICATION_URL }} \
               -e PROD_SERVER_URL=${{ secrets.PROD_SERVER_URL }} \
               --name ${{ secrets.DOCKER_REPOSITORY }} \
               ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}

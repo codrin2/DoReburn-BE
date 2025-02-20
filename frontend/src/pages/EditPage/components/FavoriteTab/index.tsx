@@ -1,12 +1,12 @@
 import * as S from './FavoriteTab.styled';
-import { useAddTodoBottomSheet } from '../../hooks/useAddTodoBottomSheet';
+import IntersectionObserverScroll from '../../../../components/IntersectionObserverScroll/IntersectionObserverScroll';
+import useAddTodoBottomSheet from '../../hooks/useAddTodoBottomSheet';
 import useAddTodoFromArchivedMutation from '../../hooks/useAddTodoFromArchivedMutation';
 import useDeleteTodoMutation from '../../hooks/useDeleteTodoMutation';
 import useEditTodoBottomSheet from '../../hooks/useEditTodoBottomSheet';
 import useFavoriteTodoListQuery from '../../hooks/useFavoriteListQuery';
 import TodoEditItem from '../TodoEditItem';
 
-import BottomSheet from '@/components/BottomSheet';
 import IconButton from '@/components/Button/IconButton';
 import Icon from '@/components/Icon';
 import { MAX_TODO_ITEM_LENGTH, TODO_TYPE } from '@/constants/config';
@@ -25,26 +25,19 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
   const { dateType } = useQueryParamsDate();
 
   const { data: todoList } = useTodoListQuery(dateType, Number(planId));
-  const { data: favoriteTodoList } = useFavoriteTodoListQuery(todoType, Number(planId));
+  const {
+    data: favoriteTodoList,
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+  } = useFavoriteTodoListQuery(todoType, Number(planId));
+
   const { mutate: addTodoFromArchived } = useAddTodoFromArchivedMutation();
   const { mutate: deleteTodo } = useDeleteTodoMutation(todoType);
 
   const { toast } = useToast();
-  const {
-    isOpen: isAddOpen,
-    open: openAddBottomSheet,
-    close: closeAddBottomSheet,
-    content: addContent,
-    title: addTodoForm,
-  } = useAddTodoBottomSheet(todoType, planId);
-
-  const {
-    isOpen: isEditOpen,
-    open: openEditBottomSheet,
-    close: closeEditBottomSheet,
-    content: editTodoForm,
-    title: editTitle,
-  } = useEditTodoBottomSheet(todoType, planId);
+  const openAddBottomSheet = useAddTodoBottomSheet({ todoType, planId });
+  const openEditBottomSheet = useEditTodoBottomSheet({ todoType, planId });
 
   const isFavoritePage = todoType === TODO_TYPE.SAVE;
 
@@ -78,65 +71,59 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
 
   return (
     <>
-      <S.FavoriteTabLayout>
-        {favoriteTodoList.map((todo) => (
-          <TodoEditItem
-            key={todo.todoId}
-            todo={todo}
-            disabled={todo.hasChild}
-            left={
-              isFavoritePage ? (
-                <IconButton
-                  icon={<Icon icon="MinusCircle" cursor="pointer" />}
-                  onClick={() => handleDeleteTodo(todo.todoId)}
-                  disabled={todo.hasChild}
-                />
-              ) : (
-                <IconButton
-                  icon={
-                    todo.hasChild ? (
-                      <Icon icon="CheckCircle" cursor="pointer" />
-                    ) : (
-                      <Icon icon="PlusCircle" cursor="pointer" />
-                    )
-                  }
-                  onClick={() => handleAddTodoFromFavorite(todo.todoId)}
-                  disabled={todo.hasChild}
-                />
-              )
-            }
-            right={
-              isFavoritePage && (
-                <IconButton
-                  icon={<Icon icon="Edit" cursor="pointer" />}
-                  onClick={() => openEditBottomSheet(todo)}
-                />
-              )
-            }
-          />
-        ))}
+      <IntersectionObserverScroll hasNextPage={hasNextPage} onReachBottom={fetchNextPage}>
+        <S.FavoriteTabLayout>
+          {favoriteTodoList.pages.map((page) =>
+            page.data.map((todo) => (
+              <TodoEditItem
+                key={todo.todoId}
+                todo={todo}
+                disabled={todo.hasChild}
+                left={
+                  isFavoritePage ? (
+                    <IconButton
+                      icon={<Icon icon="MinusCircle" cursor="pointer" />}
+                      onClick={() => handleDeleteTodo(todo.todoId)}
+                      disabled={todo.hasChild}
+                    />
+                  ) : (
+                    <IconButton
+                      icon={
+                        todo.hasChild ? (
+                          <Icon icon="CheckCircle" cursor="pointer" />
+                        ) : (
+                          <Icon icon="PlusCircle" cursor="pointer" />
+                        )
+                      }
+                      onClick={() => handleAddTodoFromFavorite(todo.todoId)}
+                      disabled={todo.hasChild}
+                    />
+                  )
+                }
+                right={
+                  isFavoritePage && (
+                    <IconButton
+                      icon={<Icon icon="Edit" cursor="pointer" />}
+                      onClick={() => openEditBottomSheet(todo)}
+                    />
+                  )
+                }
+              />
+            )),
+          )}
 
-        {isFavoritePage && (
-          <IconButton
-            icon={<Icon icon="PlusCircle" cursor="pointer" />}
-            text="직접 추가하기"
-            isFull={true}
-            onClick={openAddBottomSheet}
-          />
-        )}
-      </S.FavoriteTabLayout>
-      <BottomSheet
-        isOpen={isAddOpen}
-        title={addTodoForm}
-        content={addContent}
-        onClose={closeAddBottomSheet}
-      />
-      <BottomSheet
-        isOpen={isEditOpen}
-        title={editTitle}
-        content={editTodoForm}
-        onClose={closeEditBottomSheet}
-      />
+          {isFavoritePage && (
+            <IconButton
+              icon={<Icon icon="PlusCircle" cursor="pointer" />}
+              text="직접 추가하기"
+              isFull={true}
+              onClick={openAddBottomSheet}
+            />
+          )}
+
+          {isFetching && <S.LoadingBlock />}
+        </S.FavoriteTabLayout>
+      </IntersectionObserverScroll>
     </>
   );
 };

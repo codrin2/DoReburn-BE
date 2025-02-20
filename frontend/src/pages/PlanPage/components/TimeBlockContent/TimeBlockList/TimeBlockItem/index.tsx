@@ -1,11 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 
 import * as S from './TimeBlockItem.styled';
-import TodoShowForm from './TodoShowForm';
 
 import { checkTodo, PathTodo } from '@/api/plan';
-import BottomSheet from '@/components/BottomSheet';
 import Icon from '@/components/Icon';
 import { ICON_MAPPER } from '@/constants/config';
 import useShowTodoBottomSheet from '@/pages/PlanPage/hooks/useShowTodoBottomSheet';
@@ -24,7 +22,7 @@ interface TimeBlockItemProps {
 }
 
 const TimeBlockItem = ({ todo }: TimeBlockItemProps) => {
-  const { isOpen, open, close, title } = useShowTodoBottomSheet();
+  const showTodoBottomSheet = useShowTodoBottomSheet();
   const { mutateAsync: checkTodo } = useCheckTodoMutation();
 
   const [isDone, toggle] = useReducer((prev) => !prev, todo.isDone);
@@ -65,17 +63,11 @@ const TimeBlockItem = ({ todo }: TimeBlockItemProps) => {
           <Icon icon="FilledCheck" cursor="pointer" />
           <Icon icon={ICON_MAPPER[todo.category]} cursor="pointer" />
         </S.CheckIconWrapper>
-        <S.TimeBlockContent onClick={open}>
+        <S.TimeBlockContent onClick={() => showTodoBottomSheet(todo)}>
           <S.TodoTitle $isDone={isDone}>{todo.title}</S.TodoTitle>
           <S.TodoMemo>{todo.memo}</S.TodoMemo>
         </S.TimeBlockContent>
       </S.TimeBlockItem>
-      <BottomSheet
-        isOpen={isOpen}
-        onClose={close}
-        title={title}
-        content={<TodoShowForm todo={todo} />}
-      />
     </>
   );
 };

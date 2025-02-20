@@ -1,40 +1,36 @@
-import { useState } from 'react';
-
 import useEditTodoMutation from './useEditTodoMutation';
 import TodoEditForm from '../components/TodoEditForm';
 
-import useBaseBottomSheet from '@/hooks/useBaseBottomSheet';
+import useOverlay from '@/hooks/useOverlay';
 import { Todo, TodoType } from '@/types/todo';
 
-const useEditTodoBottomSheet = (todoType: TodoType, planId?: number) => {
-  const { isOpen, dispatch } = useBaseBottomSheet();
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const { mutate: editTodo } = useEditTodoMutation(todoType);
+interface UseAddBottomSheetProps {
+  todoType: TodoType;
+  planId?: number;
+}
 
-  const handleOpen = (todo: Todo) => {
-    setSelectedTodo(todo);
-    dispatch.open();
-  };
+const useEditBottomSheet = ({ todoType, planId }: UseAddBottomSheetProps) => {
+  const { mutate: editTodo } = useEditTodoMutation(todoType);
+  const overlay = useOverlay();
 
   const handleEditTodo = (todo: Todo) => {
     editTodo(
       { todo, planId },
       {
         onSuccess: () => {
-          dispatch.close();
+          overlay.close();
         },
       },
     );
   };
 
-  return {
-    isOpen,
-    open: handleOpen,
-    close: dispatch.close,
-    handleEditTodo,
-    content: selectedTodo && <TodoEditForm todo={selectedTodo} handleEditTodo={handleEditTodo} />,
-    title: '할 일 수정하기',
+  const openEditTodoBottomSheet = (todo: Todo) => {
+    overlay.open(() => <TodoEditForm handleEditTodo={handleEditTodo} todo={todo} />, {
+      title: '할 일 수정하기',
+    });
   };
+
+  return openEditTodoBottomSheet;
 };
 
-export default useEditTodoBottomSheet;
+export default useEditBottomSheet;

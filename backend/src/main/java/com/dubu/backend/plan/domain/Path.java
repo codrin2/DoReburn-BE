@@ -6,7 +6,6 @@ import com.dubu.backend.plan.dto.request.PlanCreateRequest;
 import com.dubu.backend.todo.entity.Todo;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +28,7 @@ public class Path extends BaseTimeEntity {
     @JoinColumn(name = "plan_id", nullable = false)
     private Plan plan;
 
+//    @BatchSize(size = 100)
     @Builder.Default
     @OneToMany(mappedBy = "path", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Todo> todos = new ArrayList<>();
@@ -36,6 +36,15 @@ public class Path extends BaseTimeEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TrafficType trafficType;
+
+    @Column(columnDefinition = "SMALLINT")
+    private Integer subwayCode;
+
+    @Column(length = 20)
+    private String busNumber;
+
+    @Column(columnDefinition = "SMALLINT")
+    private Integer busType;
 
     @Column(nullable = false, length = 20)
     private String startName;
@@ -53,6 +62,8 @@ public class Path extends BaseTimeEntity {
         return Path.builder()
                 .plan(plan)
                 .trafficType(TrafficType.from(pathRequest.trafficType()))
+                .subwayCode(pathRequest.subwayCode())
+                .busNumber(pathRequest.busNumber())
                 .startName(pathRequest.startName())
                 .endName(pathRequest.endName())
                 .sectionTime(pathRequest.sectionTime())

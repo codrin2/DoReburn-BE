@@ -9,10 +9,7 @@ import com.dubu.backend.plan.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.exception.PathNotFoundException;
 import com.dubu.backend.plan.infra.repository.PathRepository;
 import com.dubu.backend.todo.dto.common.TodoIdentifier;
-import com.dubu.backend.todo.dto.request.TodoCompletionToggleRequest;
-import com.dubu.backend.todo.dto.request.TodoCreateFromArchivedRequest;
-import com.dubu.backend.todo.dto.request.TodoCreateRequest;
-import com.dubu.backend.todo.dto.request.TodoUpdateRequest;
+import com.dubu.backend.todo.dto.request.*;
 import com.dubu.backend.todo.dto.response.TodoInfo;
 import com.dubu.backend.todo.dto.response.TodoManageResult;
 import com.dubu.backend.todo.entity.Category;
@@ -158,5 +155,23 @@ public class PathTodoManagementService implements TodoManagementService {
         }
 
         todo.updateCompletedStatus(request.isCompleted());
+    }
+
+    public void modifyTodoPath(TodoIdentifier identifier, TodoPathUpdateRequest request){
+        Member member = memberRepository.findById(identifier.memberId()).orElseThrow(() -> new MemberNotFoundException(identifier.memberId()));
+
+        if (!member.getStatus().equals(Status.MOVE)) {
+            throw new InvalidMemberStatusException(member.getStatus().name());
+        }
+
+        Todo todo = todoRepository.findById(identifier.todoId()).orElseThrow(() -> new TodoNotFoundException(identifier.todoId()));
+
+        if(!todo.getType().equals(TodoType.IN_PROGRESS)){
+            throw new TodoTypeMismatchException(todo.getType(), TodoType.IN_PROGRESS);
+        }
+
+        Path newPath = pathRepository.findById(request.newPathId()).orElseThrow(() -> new PathNotFoundException(request.newPathId()));
+
+        todo.updatePath(newPath);
     }
 }

@@ -118,6 +118,10 @@ public class Todo extends BaseTimeEntity {
         this.isCompleted = isCompleted;
     }
 
+    public void updatePath(Path path){
+        this.path = path;
+    }
+
     public void updateTodo(String title, Category category, TodoDifficulty difficulty, String memo){
         if(title != null) updateTitle(title);
         if(category != null) updateCategory(category);

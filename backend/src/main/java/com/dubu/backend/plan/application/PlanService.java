@@ -2,10 +2,12 @@ package com.dubu.backend.plan.application;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
+import com.dubu.backend.member.dto.MemberStatusChangeDto;
 import com.dubu.backend.member.exception.MemberNotFoundException;
+import com.dubu.backend.member.infra.amqp.MemberStatusEventProducer;
 import com.dubu.backend.member.infra.repository.MemberRepository;
 import com.dubu.backend.notification.dto.PushMessageDto;
-import com.dubu.backend.notification.infra.amqp.PushMessageProducer;
+import com.dubu.backend.notification.infra.amqp.PushMessageEventProducer;
 import com.dubu.backend.plan.domain.Feedback;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
@@ -37,14 +39,14 @@ import java.util.stream.IntStream;
 @Service
 @RequiredArgsConstructor
 public class PlanService {
-    private final TaskSchedulerService taskSchedulerService;
     private final MemberRepository memberRepository;
     private final PlanRepository planRepository;
     private final PathRepository pathRepository;
     private final ScheduleRepository scheduleRepository;
     private final TodoRepository todoRepository;
     private final FeedbackRepository feedbackRepository;
-    private final PushMessageProducer pushMessageProducer;
+    private final PushMessageEventProducer pushMessageEventProducer;
+    private final MemberStatusEventProducer memberStatusEventProducer;
 
     @Transactional
     public Long savePlan(Long memberId, PlanCreateRequest planCreateRequest) {
@@ -56,7 +58,7 @@ public class PlanService {
         }
 
         Plan newPlan = Plan.createPlan(currentMember, planCreateRequest.totalSectionTime());
-        planRepository.save(newPlan);
+        Plan createdPlan = planRepository.save(newPlan);
 
         List<Path> paths = IntStream.range(0, planCreateRequest.paths().size())
                 .mapToObj(index -> Path.createPath(newPlan, planCreateRequest.paths().get(index), index))
@@ -80,10 +82,19 @@ public class PlanService {
         todoRepository.saveAll(newTodos);
         currentMember.updateStatus(Status.MOVE);
 
-        taskSchedulerService.scheduleFeedbackStatusUpdate(memberId, newPlan);
+        PushMessageDto pushMessageDto = new PushMessageDto(
+                memberId,
+                newPlan.getId(),
+                "잘 도착하셨나요? 30분 뒤면 오늘 한 일을 체크할 수 없어요😭",
+                "얼른 접속해서 오늘 한 일을 체크하고 피드백을 기록해 보세요~"
+        );
+        pushMessageEventProducer.sendDelayedPush(pushMessageDto);
 
-        PushMessageDto message = new PushMessageDto(memberId, newPlan.getId(), "안녕", "문희상");
-        pushMessageProducer.sendDelayedPush(message);
+        MemberStatusChangeDto memberStatusChangeDto = new MemberStatusChangeDto(
+                memberId,
+                createdPlan.getId()
+        );
+        memberStatusEventProducer.send(memberStatusChangeDto);
 
         return newPlan.getId();
     }
@@ -140,7 +151,7 @@ public class PlanService {
     }
 
     @Transactional
-    public void updateMoveStatusToFeedback(Long memberId) {
+    public void completeMove(Long memberId) {
         Member currentMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
@@ -166,6 +177,7 @@ public class PlanService {
             todos.forEach(todo -> todo.updateTodoType(TodoType.DONE));
         });
 
+        recentPlan.updateIsCompleted(true);
         currentMember.updateStatus(Status.FEEDBACK);
     }
 
@@ -184,7 +196,6 @@ public class PlanService {
         if (!planToDelete.getMember().getId().equals(memberId)) {
             throw new UnauthorizedPlanDeletionException(memberId, planId);
         }
-        taskSchedulerService.cancelScheduledPlan(planId);
         currentMember.updateStatus(Status.STOP);
 
         planRepository.delete(planToDelete);

@@ -6,11 +6,10 @@ import useFilterBottomSheet from '../../hooks/useFilterBottomSheet';
 import useMemberInfoQuery from '../../hooks/useMemberInfoQuery';
 import useRecommendTodoFilterQuery from '../../hooks/useRecommendTodoFilterQuery';
 import { getTodoType } from '../../RecommendTodoPage.utils';
-import FilterForm from '../FilterForm';
 
-import BottomSheet from '@/components/BottomSheet';
 import IconButton from '@/components/Button/IconButton';
 import Icon from '@/components/Icon';
+import IntersectionObserverScroll from '@/components/IntersectionObserverScroll/IntersectionObserverScroll';
 import { MAX_TODO_ITEM_LENGTH, TODO_TYPE } from '@/constants/config';
 import { TODO_TOAST_MESSAGE } from '@/constants/message';
 import useQueryParamsDate from '@/hooks/useQueryParamsDate';
@@ -27,7 +26,7 @@ interface RecommendTodoContainerProps {
 const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps) => {
   const { planId } = useParams();
   const { dateType } = useQueryParamsDate();
-  const { isOpen, open, close } = useFilterBottomSheet();
+  const openFilterBottomSheet = useFilterBottomSheet();
 
   const [categoryList, setCategoryList] = useState<CategoryType[]>([]);
   const [difficultyList, setDifficultyList] = useState<DifficultyType[]>([]);
@@ -38,12 +37,13 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
 
   const todoType = getTodoType({ dateType, isFavoritePage, planId });
 
-  const { data: recommendList, isLoading } = useRecommendTodoFilterQuery(
-    todoType,
-    categoryList,
-    difficultyList,
-    Number(planId),
-  );
+  const {
+    data: recommendList,
+    isLoading,
+    isFetching,
+    hasNextPage,
+    fetchNextPage,
+  } = useRecommendTodoFilterQuery(todoType, categoryList, difficultyList, Number(planId));
   const { mutate: addTodoFromArchived } = useAddTodoFromArchivedMutation(
     categoryList,
     difficultyList,
@@ -95,7 +95,11 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
 
   return (
     <>
-      <S.FilterWrapper onClick={open}>
+      <S.FilterWrapper
+        onClick={() =>
+          openFilterBottomSheet({ categoryList, difficultyList, onConfirm: handleFilter })
+        }
+      >
         <S.IconButtonWrapper
           $isSelected={isCategory}
           flex="row-reverse"
@@ -111,39 +115,32 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
         />
       </S.FilterWrapper>
       <S.RecommendTabList>
-        {recommendList?.map((todo) => (
-          <TodoEditItem
-            key={todo.todoId}
-            todo={todo}
-            disabled={todo.hasChild}
-            left={
-              <IconButton
-                icon={
-                  todo.hasChild ? (
-                    <Icon icon="CheckCircle" cursor="pointer" />
-                  ) : (
-                    <Icon icon="PlusCircle" cursor="pointer" />
-                  )
-                }
-                onClick={() => handleAddTodoFromRecommendAll(todo.todoId)}
+        <IntersectionObserverScroll hasNextPage={hasNextPage} onReachBottom={fetchNextPage}>
+          {recommendList.pages.map((page) =>
+            page.data.map((todo) => (
+              <TodoEditItem
+                key={todo.todoId}
+                todo={todo}
                 disabled={todo.hasChild}
+                left={
+                  <IconButton
+                    icon={
+                      todo.hasChild ? (
+                        <Icon icon="CheckCircle" cursor="pointer" />
+                      ) : (
+                        <Icon icon="PlusCircle" cursor="pointer" />
+                      )
+                    }
+                    onClick={() => handleAddTodoFromRecommendAll(todo.todoId)}
+                    disabled={todo.hasChild}
+                  />
+                }
               />
-            }
-          />
-        ))}
+            )),
+          )}
+          {isFetching && <S.LoadingBlock />}
+        </IntersectionObserverScroll>
       </S.RecommendTabList>
-      <BottomSheet
-        isOpen={isOpen}
-        onClose={close}
-        content={
-          <FilterForm
-            selectedCategoryList={categoryList}
-            selectedDifficultyList={difficultyList}
-            onClose={close}
-            onConfirm={handleFilter}
-          />
-        }
-      />
     </>
   );
 };

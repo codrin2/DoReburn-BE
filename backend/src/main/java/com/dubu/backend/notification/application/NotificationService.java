@@ -8,13 +8,18 @@ import com.dubu.backend.notification.config.VapidKeyConfig;
 import com.dubu.backend.notification.domain.PushSubscription;
 import com.dubu.backend.notification.dto.PushMessageDto;
 import com.dubu.backend.notification.dto.PushSubscriptionDto;
+import com.dubu.backend.notification.exception.DuplicateSubscriptionException;
 import com.dubu.backend.notification.exception.UnavailablePushServiceException;
 import com.dubu.backend.notification.infra.repository.PushSubscriptionRepository;
+import com.dubu.backend.plan.domain.Plan;
+import com.dubu.backend.plan.exception.PlanNotFoundException;
+import com.dubu.backend.plan.infra.repository.PlanRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,28 +33,37 @@ import java.util.List;
 public class NotificationService {
     private final VapidKeyConfig vapidKeyConfig;
     private final MemberRepository memberRepository;
+    private final PlanRepository planRepository;
     private final PushSubscriptionRepository subscriptionRepository;
 
     @Value("${admin.email}")
     private String adminEmail;
+    @Value("${notification.url}")
+    private String planUrl;
 
     @Transactional
     public void saveSubscription(Long memberId, PushSubscriptionDto subscriptionDto) {
-        Member member = memberRepository.findById(memberId)
+        Member currentMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
-        PushSubscription pushSubscription = PushSubscription.builder()
-                .member(member)
-                .endPoint(subscriptionDto.endpoint())
-                .p256dh(subscriptionDto.keys().p256dh())
-                .auth(subscriptionDto.keys().auth())
-                .build();
+        PushSubscription pushSubscription = PushSubscription.createSubscription(currentMember, subscriptionDto);
 
-        subscriptionRepository.save(pushSubscription);
-        log.info("[구독 저장] memberId={}, endpoint={}", memberId, subscriptionDto.endpoint());
+        try {
+            subscriptionRepository.save(pushSubscription);
+            log.info("[구독 저장] memberId={}, endpoint={}", memberId, subscriptionDto.endpoint());
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateSubscriptionException();
+        }
     }
 
     public void sendPushNotification(PushMessageDto message) {
+        Plan currentPlan = planRepository.findById(message.planId())
+                .orElseThrow(() -> new PlanNotFoundException(message.planId()));
+
+        if (currentPlan.isCompleted()) {
+            return;
+        }
+
         List<PushSubscription> subscriptions = subscriptionRepository.findByMemberId((message.memberId()));
         PushService pushService;
 
@@ -63,10 +77,15 @@ public class NotificationService {
             try {
                 String payload = """
                 {
-                    "title": "%s",
-                    "body": "%s"
+                    "notification": {
+                        "title": "%s",
+                        "body": "%s"
+                    },
+                    "data": {
+                        "url": "%s"
+                    }
                 }
-                """.formatted(message.title(), message.body());
+                """.formatted(message.title(), message.body(), planUrl);
 
                 Notification notification = new Notification(
                         sub.getEndPoint(),

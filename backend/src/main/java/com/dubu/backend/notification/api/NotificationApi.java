@@ -45,18 +45,18 @@ public interface NotificationApi {
                     )
             ),
             @ApiResponse(
-                    responseCode = "503",
-                    description = "푸시 서비스 문제로 인해 구독 정보를 등록할 수 없는 경우 (UNAVAILABLE_PUSH_SERVICE)",
+                    responseCode = "409",
+                    description = "이미 해당 브라우저에서 푸시 구독이 완료된 경우 (DUPLICATE_SUBSCRIPTION)",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponseExample.class),
                             examples = {
                                     @ExampleObject(
-                                            name = "푸시 서비스 장애 에러 예시",
+                                            name = "중복 구독 에러 예시",
                                             value = """
                                                     {
-                                                      "errorCode": "UNAVAILABLE_PUSH_SERVICE",
-                                                      "message": "현재 푸시 서비스를 이용할 수 없습니다."
+                                                      "errorCode": "DUPLICATE_SUBSCRIPTION",
+                                                      "message": "이미 알림을 구독한 브라우저입니다."
                                                     }
                                                     """
                                     )
