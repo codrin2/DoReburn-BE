@@ -12,8 +12,8 @@ import com.dubu.backend.statistic.dto.response.DayStatisticInfo;
 import com.dubu.backend.statistic.dto.response.WeekStatisticInfo;
 import com.dubu.backend.statistic.service.StatisticService;
 import com.dubu.backend.statistic.service.collection.CategoryTodoStatistics;
-import com.dubu.backend.statistic.service.collection.DateUsageTimeStatistics;
-import com.dubu.backend.statistic.service.collection.PathIdDateCollection;
+import com.dubu.backend.statistic.service.collection.DateAvailableTimeStatistics;
+import com.dubu.backend.statistic.service.collection.MoodCountCollection;
 import com.dubu.backend.todo.entity.Category;
 import com.dubu.backend.todo.entity.Todo;
 import com.dubu.backend.todo.entity.TodoType;
@@ -44,7 +44,7 @@ public class StatisticServiceImpl implements StatisticService {
         List<Category> categories = categoryRepository.findAll();
 
         // 쿼리 최적 -> 쿼리 분리
-        List<Plan> dayPlans = planRepository.findByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.plusWeeks(1).atTime(LocalTime.MAX));
+        List<Plan> dayPlans = planRepository.findByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.atTime(LocalTime.MAX));
         List<Path> dayPaths = pathRepository.findByPlansAndTypeAndIsCompleted(dayPlans, TodoType.DONE, true);
 
         if(dayPlans == null || dayPlans.isEmpty() || dayPaths == null || dayPaths.isEmpty()){
@@ -60,9 +60,9 @@ public class StatisticServiceImpl implements StatisticService {
         List<Category> categories = categoryRepository.findAll();
 
         // 쿼리 최적 -> 쿼리 분리
-        List<Plan> thisWeekPlans = planRepository.findWithPathsByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.plusWeeks(1).atTime(LocalTime.MAX));
+        List<Plan> thisWeekPlans = planRepository.findWithPathsByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.plusDays(6).atTime(LocalTime.MAX));
 //        List<Long> pathIdsOfWeekPlans = planRepository.findPathIdsWithPathsByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.plusWeeks(1).atTime(LocalTime.MAX));
-        List<Long> pathIdsOfWeekPlans = pathRepository.findPathIdsByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.plusWeeks(1).atTime(LocalTime.MAX));
+        List<Long> pathIdsOfWeekPlans = pathRepository.findPathIdsByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.plusDays(6).atTime(LocalTime.MAX));
         List<Todo> completedTodos = todoRepository.findByPathIdsAndTypeAndIsCompleted(pathIdsOfWeekPlans, TodoType.DONE);
 //        List<Path> thisWeekPaths = pathRepository.findByPlansAndTypeAndIsCompleted(thisWeekPlans, TodoType.DONE, true);
 
@@ -70,10 +70,9 @@ public class StatisticServiceImpl implements StatisticService {
             return null;
         }
 
-        List<Plan> lastWeekPlans = planRepository.findByMemberAndCreatedAtBetween(member, date.minusWeeks(1).atStartOfDay(), date.minusDays(1).atTime(LocalTime.MAX));
-        List<Path> lastWeekPaths = pathRepository.findByPlansAndTypeAndIsCompleted(lastWeekPlans, TodoType.DONE, true);
+        List<Plan> lastWeekPlans = planRepository.findWithPathsByMemberAndCreatedAtBetween(member, date.minusWeeks(1).atStartOfDay(), date.minusDays(1).atTime(LocalTime.MAX));
 
-        return buildWeekStatisticInfoUsingPathIds(date, categories, thisWeekPlans, completedTodos, lastWeekPaths);
+        return buildWeekStatisticInfoUsingPathIds(date, categories, thisWeekPlans, completedTodos, lastWeekPlans);
     }
 
 
@@ -98,79 +97,69 @@ public class StatisticServiceImpl implements StatisticService {
         return DayStatisticInfo.of(totalMoveTime, totalUsageTime, feedbacks, categoryTodoStatistics.getCategoryTodoTimeCount());
     }
 
-    private WeekStatisticInfo buildWeekStatisticInfo(LocalDate startDate, List<Category> categories, List<Plan> thisWeekPlans, List<Path> lastWeekPaths){
-        DateUsageTimeStatistics dateUsageTimeStatistics = new DateUsageTimeStatistics(startDate);
-        int totalMoveTime = 0;
-        int totalUsageTime = 0;
+    private WeekStatisticInfo buildWeekStatisticInfo(LocalDate startDate, List<Category> categories, List<Plan> thisWeekPlans, List<Plan> lastWeekPlans){
+        DateAvailableTimeStatistics dateAvailableTimeStatistics = new DateAvailableTimeStatistics(startDate);
+        int totalAvailableTime = 0;
         int totalTodoCount = 0;
         CategoryTodoStatistics categoryTodoStatistics = new CategoryTodoStatistics(categories);
+        MoodCountCollection moodCountCollection = new MoodCountCollection();
 
         for(Plan plan: thisWeekPlans){
             LocalDate date = plan.getCreatedAt().toLocalDate();
-            totalMoveTime += plan.getTotalTime();
+
+            moodCountCollection.addMood(plan.getFeedback().getMood());
 
             for (Path path : plan.getPaths()) {
+                totalAvailableTime += path.getSectionTime();
+                dateAvailableTimeStatistics.addUsageTimeAtDate(date, path.getSectionTime());
                 for (Todo todo : path.getTodos()) {
-                    dateUsageTimeStatistics.addUsageTimeAtDate(date, todo.getSpentTime());
                     totalTodoCount += 1;
-                    totalUsageTime += todo.getSpentTime();
                     categoryTodoStatistics.recordDoneTodo(todo);
                 }
             }
         }
-        // 저번 주와의 활용 시간 차이
-        int lastWeekDiff = totalUsageTime - calculateWeeklyUsageTime(lastWeekPaths);
+        // 저번 주와의 활용 가능 시간 차이
+        int lastWeekDiff = totalAvailableTime - calculateWeeklyUsageTime(lastWeekPlans);
 
-        return WeekStatisticInfo.of(dateUsageTimeStatistics.getDateUsageTime(), totalTodoCount, lastWeekDiff, totalMoveTime, totalUsageTime, categoryTodoStatistics.getCategoryTodoTimeCount());
+        return WeekStatisticInfo.of(dateAvailableTimeStatistics.getDateUsageTime(), totalTodoCount, lastWeekDiff, totalAvailableTime, moodCountCollection.getMoodCount(), categoryTodoStatistics.getCategoryTodoTimeCount());
     }
 
-    private WeekStatisticInfo buildWeekStatisticInfoUsingPathIds(LocalDate startDate, List<Category> categories, List<Plan> thisWeekPlans, List<Todo> completedTodos, List<Path> lastWeekPaths) {
-        DateUsageTimeStatistics dateUsageTimeStatistics = new DateUsageTimeStatistics(startDate);
-        int totalMoveTime = 0;
-        int totalUsageTime = 0;
+    private WeekStatisticInfo buildWeekStatisticInfoUsingPathIds(LocalDate startDate, List<Category> categories, List<Plan> thisWeekPlans, List<Todo> completedTodos, List<Plan> lastWeekPlans) {
+        DateAvailableTimeStatistics dateAvailableTimeStatistics = new DateAvailableTimeStatistics(startDate);
+        int totalAvailableTime = 0;
         int totalTodoCount = 0;
         CategoryTodoStatistics categoryTodoStatistics = new CategoryTodoStatistics(categories);
-
-        PathIdDateCollection pathIdDateCollection = new PathIdDateCollection();
+        MoodCountCollection moodCountCollection = new MoodCountCollection();
 
         for(Plan plan: thisWeekPlans){
             LocalDate date = plan.getCreatedAt().toLocalDate();
-            totalMoveTime += plan.getTotalTime();
-
-            // pathId 와 날짜 매핑
+            moodCountCollection.addMood(plan.getFeedback().getMood());
+            // 날짜별 통계
             for (Path path : plan.getPaths()) {
                 if(path.getId() != null){
-                    pathIdDateCollection.putLocalDate(path.getId(), date);
+                    dateAvailableTimeStatistics.addUsageTimeAtDate(date, path.getSectionTime());
+                    totalAvailableTime += path.getSectionTime();
                 }
             }
         }
 
-        // 이번 주의 완료된 할 일(completedTodos) 처리: 각 Todo의 spentTime, 날짜별/카테고리별 집계
+        // 이번 주 카테고리별 통계 집계
         for(Todo todo: completedTodos){
-            Path path = todo.getPath();
-            if(path == null) continue;
-
-            LocalDate date = pathIdDateCollection.getLocalDate(path.getId());
-            if(date == null) continue;
-
-            // 날짜별 집계
-            dateUsageTimeStatistics.addUsageTimeAtDate(date, todo.getSpentTime());
             totalTodoCount += 1;
-            totalUsageTime += todo.getSpentTime();
             categoryTodoStatistics.recordDoneTodo(todo);
         }
 
-        // 저번 주와의 활용 시간 차이
-        int lastWeekDiff = totalUsageTime - calculateWeeklyUsageTime(lastWeekPaths);
+        // 저번 주와의 활용 가능한 시간 차이
+        int lastWeekDiff = totalAvailableTime - calculateWeeklyUsageTime(lastWeekPlans);
 
-        return WeekStatisticInfo.of(dateUsageTimeStatistics.getDateUsageTime(), totalTodoCount, lastWeekDiff, totalMoveTime, totalUsageTime, categoryTodoStatistics.getCategoryTodoTimeCount());
+        return WeekStatisticInfo.of(dateAvailableTimeStatistics.getDateUsageTime(), totalTodoCount, lastWeekDiff, totalAvailableTime, moodCountCollection.getMoodCount(), categoryTodoStatistics.getCategoryTodoTimeCount());
     }
 
-
-    private int calculateWeeklyUsageTime(List<Path> paths){
-        return paths.stream()
-                .flatMap(path -> path.getTodos().stream())
-                .mapToInt(Todo::getSpentTime)
+    // 활용 가능한 시간 계산
+    private int calculateWeeklyUsageTime(List<Plan> plans){
+        return plans.stream()
+                .flatMap(plan -> plan.getPaths().stream())
+                .mapToInt(Path::getSectionTime)
                 .sum();
     }
 }
