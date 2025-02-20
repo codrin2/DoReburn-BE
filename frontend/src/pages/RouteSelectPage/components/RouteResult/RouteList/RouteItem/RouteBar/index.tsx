@@ -4,6 +4,8 @@ import * as S from './RouteBar.styled';
 import Icon, { IconType } from '@/components/Icon';
 import { RouteType } from '@/pages/RouteSelectPage/RouteSelectPage.types';
 
+const MIN_BAR_WIDTH = 11;
+
 const ICON_MAPPER = {
   BUS: 'Bus' as const,
   SUBWAY: 'Subway' as const,
@@ -35,7 +37,7 @@ const RouteBar = ({ route }: { route: RouteType }) => {
               $isTraffic={path.trafficType === 'BUS' || path.trafficType === 'SUBWAY'}
               $color={pathColor}
             >
-              {barWidth > 11 && (
+              {barWidth > MIN_BAR_WIDTH && (
                 <S.RouteProgressBarText $trafficType={path.trafficType}>
                   {`${path.sectionTime}분`}
                 </S.RouteProgressBarText>
