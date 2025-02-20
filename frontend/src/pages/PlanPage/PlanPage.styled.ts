@@ -30,25 +30,11 @@ export const TimeBlockSection = styled.section`
   padding: 0 2.4rem;
 `;
 
-// 이동 완료 버튼
-export const FinishButtonWrapper = styled.div`
-  position: absolute;
-  bottom: 0;
-
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 9rem;
-  background: linear-gradient(
-    to bottom,
-    ${({ theme }) => theme.colors.lightWhite},
-    ${({ theme }) => theme.colors.white}
-  );
-`;
-
 export const FinishButton = styled.button`
   position: absolute;
   bottom: 1.6rem;
+  left: 50%;
+  transform: translateX(-50%);
 
   display: flex;
   padding: 1.5rem 3rem;

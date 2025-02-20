@@ -9,16 +9,21 @@ import usePlanInfoQuery from './hooks/usePlanInfoQuery';
 import * as S from './PlanPage.styled';
 
 import { finishPlan } from '@/api/plan';
+import useRedirectByMemberStatus from '@/hooks/useRedirectByMemberStatus';
 
 const useFinishPlanMutation = () => {
   return useMutation({
     mutationFn: finishPlan,
   });
 };
+
 const PlanPage = () => {
+  useRedirectByMemberStatus();
+
   const { data } = usePlanInfoQuery();
   const navigate = useNavigate();
   const { mutate: finishPlan } = useFinishPlanMutation();
+
   const handleClickFinish = () => {
     finishPlan(undefined, {
       onSuccess: () => {
@@ -58,9 +63,7 @@ const PlanPage = () => {
       </S.PlanContent>
 
       {/* 이동 완료 버튼 영역 */}
-      <S.FinishButtonWrapper>
-        <S.FinishButton onClick={handleClickFinish}>이동 완료</S.FinishButton>
-      </S.FinishButtonWrapper>
+      <S.FinishButton onClick={handleClickFinish}>이동 완료</S.FinishButton>
     </S.PlanPageLayout>
   );
 };
