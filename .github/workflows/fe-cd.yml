@@ -1,6 +1,10 @@
 name: FE Deploy
 
 on:
+  pull_request: # 테스트 후 삭제
+    branches: [develop]
+    paths:
+      - frontend/**
   push:
     branches: [main, develop]
     paths:
