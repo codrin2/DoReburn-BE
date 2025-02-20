@@ -8,11 +8,14 @@ import * as S from './MainPage.styled';
 
 import Header from '@/components/Header';
 import SearchAddress from '@/components/SearchAddress';
+import useNotificationPermission from '@/hooks/useNotificationPermission';
 import useQueryParamsDate from '@/hooks/useQueryParamsDate';
 import useRedirectByMemberStatus from '@/hooks/useRedirectByMemberStatus';
 
 const MainPage = () => {
   useRedirectByMemberStatus();
+  useNotificationPermission();
+
   const { isToday } = useQueryParamsDate();
   const [isSwitchAddress, toggle] = useReducer((prev) => !prev, false);
 
