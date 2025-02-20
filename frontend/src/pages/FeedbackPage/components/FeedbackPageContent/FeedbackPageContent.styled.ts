@@ -15,15 +15,18 @@ export const FeedbackPageLayout = styled.div`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  padding-bottom: 3rem;
-  overflow: hidden;
 
+  padding-bottom: 9.6rem;
   touch-action: none;
 `;
 
 export const ButtonBox = styled.button`
   display: flex;
   align-items: center;
+
+  position: absolute;
+  bottom: 1.6rem;
+
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme }) => theme.colors.green600};
   padding: 1.6rem 3rem;
