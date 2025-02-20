@@ -30,7 +30,7 @@ const MapPage = () => {
   });
 
   const { category, handleSelectCategoryFilter, filteredLocations } = useCategoryFilter(
-    nearbyUsersData?.memberLocations ?? [],
+    nearbyUsersData?.memberInfos ?? [],
   );
 
   const handleBackCenter = () => {

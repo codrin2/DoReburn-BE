@@ -6,13 +6,13 @@ export const TransportHeader = styled.div`
   gap: 0.8rem;
 `;
 
-export const TransportIconWrapper = styled.div<{ $trafficType: 'Subway' | 'Bus' }>`
+export const TransportIconWrapper = styled.div<{ $pathColor: string }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.2rem;
 
-  background-color: ${({ theme, $trafficType }) => theme.colors[$trafficType]};
+  background-color: ${({ $pathColor }) => $pathColor};
   border-radius: 0.8rem;
   padding: 0.4rem;
 
@@ -25,8 +25,8 @@ export const SubwayNumber = styled.span`
   line-height: inherit;
 `;
 
-export const TransportType = styled.span<{ $trafficType: 'Subway' | 'Bus' }>`
+export const TransportType = styled.span`
   flex-grow: 1;
   ${({ theme }) => theme.fonts.label14Med};
-  color: ${({ theme, $trafficType }) => theme.colors[$trafficType]};
+  color: ${({ theme }) => theme.colors.gray400};
 `;

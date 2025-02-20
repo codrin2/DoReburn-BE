@@ -11,6 +11,10 @@ import com.dubu.backend.notification.dto.PushSubscriptionDto;
 import com.dubu.backend.notification.exception.DuplicateSubscriptionException;
 import com.dubu.backend.notification.exception.UnavailablePushServiceException;
 import com.dubu.backend.notification.infra.repository.PushSubscriptionRepository;
+import com.dubu.backend.plan.domain.Plan;
+import com.dubu.backend.plan.exception.PlanNotFoundException;
+import com.dubu.backend.plan.infra.repository.PlanRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.martijndwars.webpush.Notification;
@@ -23,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -30,10 +35,14 @@ import java.util.List;
 public class NotificationService {
     private final VapidKeyConfig vapidKeyConfig;
     private final MemberRepository memberRepository;
+    private final PlanRepository planRepository;
     private final PushSubscriptionRepository subscriptionRepository;
+    private final ObjectMapper objectMapper;
 
     @Value("${admin.email}")
     private String adminEmail;
+    @Value("${notification.url}")
+    private String planUrl;
 
     @Transactional
     public void saveSubscription(Long memberId, PushSubscriptionDto subscriptionDto) {
@@ -51,6 +60,13 @@ public class NotificationService {
     }
 
     public void sendPushNotification(PushMessageDto message) {
+        Plan currentPlan = planRepository.findById(message.planId())
+                .orElseThrow(() -> new PlanNotFoundException(message.planId()));
+
+        if (currentPlan.isCompleted()) {
+            return;
+        }
+
         List<PushSubscription> subscriptions = subscriptionRepository.findByMemberId((message.memberId()));
         PushService pushService;
 
@@ -62,12 +78,17 @@ public class NotificationService {
 
         for (PushSubscription sub : subscriptions) {
             try {
-                String payload = """
-                {
-                    "title": "%s",
-                    "body": "%s"
-                }
-                """.formatted(message.title(), message.body());
+                Map<String, Object> payloadMap = Map.of(
+                        "notification", Map.of(
+                                "title", message.title(),
+                                "body", message.body()
+                        ),
+                        "data", Map.of(
+                                "url", planUrl
+                        )
+                );
+
+                String payload = objectMapper.writeValueAsString(payloadMap);
 
                 Notification notification = new Notification(
                         sub.getEndPoint(),

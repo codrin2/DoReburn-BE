@@ -7,14 +7,15 @@ const useCategoryFilter = (memberLocations: NearbyMember[]) => {
   const [category, setCategory] = useState<CategoryType | null>(null);
 
   const filteredLocations = memberLocations.filter((location) => {
-    if (category) {
+    if (category && location.category && location.category.length > 0) {
       if (location.category.includes(category)) {
         return location;
       }
-    } else {
-      return location;
     }
   });
+
+  const locations =
+    filteredLocations.length === 0 && category === null ? memberLocations : filteredLocations;
 
   const handleSelectCategoryFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value as CategoryType;
@@ -26,7 +27,7 @@ const useCategoryFilter = (memberLocations: NearbyMember[]) => {
     }
   };
 
-  return { category, handleSelectCategoryFilter, filteredLocations };
+  return { category, handleSelectCategoryFilter, filteredLocations: locations };
 };
 
 export default useCategoryFilter;

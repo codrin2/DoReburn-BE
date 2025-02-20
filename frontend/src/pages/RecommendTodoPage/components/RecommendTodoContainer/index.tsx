@@ -63,7 +63,7 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
     const isLimitType = todoType === TODO_TYPE.TODAY || todoType === TODO_TYPE.TOMORROW;
 
     if (isLimitType && todoList && todoList.length >= MAX_TODO_ITEM_LENGTH) {
-      toast({ message: TODO_TOAST_MESSAGE.limit });
+      toast({ message: TODO_TOAST_MESSAGE.limit(todoType) });
 
       return;
     }
@@ -73,7 +73,9 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
       {
         onSuccess: () =>
           toast({
-            message: isFavoritePage ? TODO_TOAST_MESSAGE.addFavorite : TODO_TOAST_MESSAGE.add,
+            message: isFavoritePage
+              ? TODO_TOAST_MESSAGE.addFavorite
+              : TODO_TOAST_MESSAGE.add(todoType),
           }),
       },
     );

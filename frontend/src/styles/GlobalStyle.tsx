@@ -129,6 +129,7 @@ table {
 	padding: 0;
 	background-color: transparent;
 	cursor: pointer;
+  color: inherit;
   }
   
   a {
