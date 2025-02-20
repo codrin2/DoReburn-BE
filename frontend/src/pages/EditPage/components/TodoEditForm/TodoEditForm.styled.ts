@@ -16,6 +16,8 @@ export const TodoInputLabel = styled.span`
 `;
 
 export const TodoInput = styled.input`
+  ${({ theme }) => theme.fonts.body15Med};
+  color: ${({ theme }) => theme.colors.gray950};
   flex-grow: 1;
 
   background-color: ${({ theme }) => theme.colors.gray50};
@@ -26,9 +28,16 @@ export const TodoInput = styled.input`
     outline: 0.1rem solid ${({ theme }) => theme.colors.green600};
     background-color: ${({ theme }) => theme.colors.white};
   }
+
+  &::placeholder {
+    ${({ theme }) => theme.fonts.body15Med};
+    color: ${({ theme }) => theme.colors.gray400};
+  }
 `;
 
 export const MemoTextarea = styled.textarea`
+  ${({ theme }) => theme.fonts.body15Med};
+  color: ${({ theme }) => theme.colors.gray950};
   flex-grow: 1;
 
   background-color: ${({ theme }) => theme.colors.gray50};
@@ -38,6 +47,11 @@ export const MemoTextarea = styled.textarea`
   &:focus {
     outline: 0.1rem solid ${({ theme }) => theme.colors.green600};
     background-color: ${({ theme }) => theme.colors.white};
+  }
+
+  &::placeholder {
+    ${({ theme }) => theme.fonts.body15Med};
+    color: ${({ theme }) => theme.colors.gray400};
   }
 `;
 

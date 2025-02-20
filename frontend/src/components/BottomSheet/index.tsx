@@ -16,6 +16,7 @@ interface BottomSheetProps {
   confirmDisabled?: boolean;
   delay?: number;
   subTitle?: string;
+  onAnimationEnd?: () => void;
 }
 
 const BottomSheet = ({
@@ -29,6 +30,7 @@ const BottomSheet = ({
   confirmDisabled,
   delay = 200,
   subTitle,
+  onAnimationEnd,
 }: BottomSheetProps) => {
   const [isAnimating, setIsAnimating] = useState(isOpen);
 
@@ -43,6 +45,7 @@ const BottomSheet = ({
     if (!isOpen) {
       setIsAnimating(false);
       document.body.style.setProperty('overflow', '');
+      if (onAnimationEnd) onAnimationEnd();
     }
   };
 

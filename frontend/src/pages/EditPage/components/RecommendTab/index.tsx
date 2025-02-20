@@ -30,14 +30,14 @@ const RecommendTab = ({ todoType, planId }: RecommendTabProps) => {
 
   const handleAddTodoFromRecommend = (todoId: number) => {
     if (todoList && todoList.length >= MAX_TODO_ITEM_LENGTH) {
-      toast({ message: TODO_TOAST_MESSAGE.limit });
+      toast({ message: TODO_TOAST_MESSAGE.limit(dateType) });
 
       return;
     }
 
     addTodoFromArchived(
       { todoType, todoId, planId: Number(planId) },
-      { onSuccess: () => toast({ message: TODO_TOAST_MESSAGE.add }) },
+      { onSuccess: () => toast({ message: TODO_TOAST_MESSAGE.add(todoType) }) },
     );
   };
 

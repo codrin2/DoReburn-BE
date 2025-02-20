@@ -15,13 +15,13 @@ export const TransportBarWrapper = styled.div`
   min-height: 21.1rem;
 `;
 
-export const TransportBar = styled.div<{ $trafficType: 'Subway' | 'Bus' }>`
+export const TransportBar = styled.div<{ $pathColor: string }>`
   display: flex;
   align-items: center;
 
   width: 0.4rem;
   height: 100%;
-  background-color: ${({ theme, $trafficType }) => theme.colors[$trafficType]};
+  background-color: ${({ $pathColor }) => $pathColor};
 
   border-radius: 0 0 0.4rem 0.4rem;
 `;
@@ -52,7 +52,7 @@ export const TimeBlockHeader = styled.div`
 
 export const SectionTime = styled.span`
   ${({ theme }) => theme.fonts.body15};
-  color: ${({ theme }) => theme.colors.Subway};
+  color: ${({ theme }) => theme.colors.gray600};
   opacity: 0.7;
 `;
 

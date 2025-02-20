@@ -13,7 +13,7 @@ interface TodoDetail {
 interface TodoDetailResponse {
   data: {
     nickname: string;
-    todo: TodoDetail[];
+    todos: TodoDetail[];
   };
 }
 
@@ -29,7 +29,7 @@ export interface NearbyMember {
   memberId: number;
   x_coordinate: number;
   y_coordinate: number;
-  category: CategoryType[];
+  category: CategoryType[] | null;
 }
 
 export interface CategoryRank {
@@ -40,7 +40,7 @@ export interface CategoryRank {
 
 interface NearbyUserResponse {
   data: {
-    memberLocations: NearbyMember[];
+    memberInfos: NearbyMember[];
     categoryRank: CategoryRank[];
   } | null;
 }
