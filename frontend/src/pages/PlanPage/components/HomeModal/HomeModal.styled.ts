@@ -13,11 +13,10 @@ export const ModalDimmed = styled.div`
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(4px);
 `;
 
 export const Modal = styled.div`
-  width: 23.8rem;
+  width: 25.8rem;
   position: fixed;
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 1.4rem;
