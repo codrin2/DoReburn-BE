@@ -7,6 +7,11 @@ import { SUBWAY_LINES } from '@/constants/subwayLines';
 import { PathType, RouteType } from '@/pages/RouteSelectPage/RouteSelectPage.types';
 import theme from '@/styles/theme';
 
+const DEFAULT_PATH_NAME = {
+  BUS: '버스',
+  SUBWAY: '지하철',
+};
+
 const ICON_MAPPER: Record<string, IconType> = {
   BUS: 'Bus',
   SUBWAY: 'Subway',
@@ -20,8 +25,8 @@ const renderRouteItem = (path: PathType, index: number) => {
   });
   const isSubway = path.trafficType === 'SUBWAY';
   const pathName = isSubway
-    ? SUBWAY_LINES[path.subwayCode as keyof typeof SUBWAY_LINES]?.name
-    : BUS_TYPE[path.busType as keyof typeof BUS_TYPE]?.name;
+    ? (SUBWAY_LINES[path.subwayCode as keyof typeof SUBWAY_LINES]?.name ?? DEFAULT_PATH_NAME.SUBWAY)
+    : (BUS_TYPE[path.busType as keyof typeof BUS_TYPE]?.name ?? DEFAULT_PATH_NAME.BUS);
 
   return (
     <S.RouteDetailItem key={index}>
