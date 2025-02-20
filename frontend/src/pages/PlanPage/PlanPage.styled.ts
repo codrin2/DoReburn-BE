@@ -31,7 +31,7 @@ export const TimeBlockSection = styled.section`
 `;
 
 export const FinishButton = styled.button`
-  position: absolute;
+  position: fixed;
   bottom: 1.6rem;
   left: 50%;
   transform: translateX(-50%);
