@@ -4,6 +4,8 @@ import * as S from './RouteBar.styled';
 import Icon, { IconType } from '@/components/Icon';
 import { RouteType } from '@/pages/RouteSelectPage/RouteSelectPage.types';
 
+const MIN_BAR_WIDTH = 11;
+
 const ICON_MAPPER = {
   BUS: 'Bus' as const,
   SUBWAY: 'Subway' as const,
@@ -14,7 +16,11 @@ const RouteBar = ({ route }: { route: RouteType }) => {
     <S.RouteBarContainer>
       {route.paths.map((path, index) => {
         const barWidth = getPathBarWidth(path, route.totalTime);
-        const pathColor = getPathColor(path.trafficType, path.subwayCode);
+        const pathColor = getPathColor({
+          trafficType: path.trafficType,
+          subwayCode: path.subwayCode,
+          busType: path.busType,
+        });
 
         return (
           <S.RouteItem key={index} $barWidth={barWidth}>
@@ -22,15 +28,21 @@ const RouteBar = ({ route }: { route: RouteType }) => {
               <S.IconWrapper $color={pathColor}>
                 <Icon
                   icon={ICON_MAPPER[path.trafficType as keyof typeof ICON_MAPPER]}
-                  width={16}
-                  height={16}
+                  width={10}
+                  height={10}
                 />
               </S.IconWrapper>
             )}
             <S.RouteProgressBar
               $isTraffic={path.trafficType === 'BUS' || path.trafficType === 'SUBWAY'}
               $color={pathColor}
-            />
+            >
+              {barWidth > MIN_BAR_WIDTH && (
+                <S.RouteProgressBarText $trafficType={path.trafficType}>
+                  {`${path.sectionTime}분`}
+                </S.RouteProgressBarText>
+              )}
+            </S.RouteProgressBar>
           </S.RouteItem>
         );
       })}

@@ -27,7 +27,7 @@ const TimeBlockContent = ({
   const navigate = useNavigate();
 
   const isEmptyTodo = todos.length === 0;
-  const pathColor = getPathColor(trafficType, subwayCode);
+  const pathColor = getPathColor({ trafficType, subwayCode });
 
   const goToRouteTodoEdit = () => {
     navigate(`/plan/${pathId}/todos/edit`);

@@ -1,3 +1,4 @@
+import { BUS_TYPE } from '@/constants/busType';
 import { SUBWAY_LINES } from '@/constants/subwayLines';
 import { PathType } from '@/pages/RouteSelectPage/RouteSelectPage.types';
 import theme from '@/styles/theme';
@@ -8,18 +9,22 @@ export const getPathBarWidth = (path: PathType, totalTime: number) => {
   return (path.sectionTime / totalTime) * 100;
 };
 
-export const getPathColor = (trafficType: string, subwayCode: number | null) => {
+interface GetPathColorProps {
+  trafficType: string;
+  subwayCode?: number | null;
+  busType?: number | null;
+}
+
+export const getPathColor = ({ trafficType, subwayCode, busType }: GetPathColorProps) => {
   if (trafficType === 'BUS') {
-    return theme.colors.Bus;
+    const busColor = BUS_TYPE[busType as keyof typeof BUS_TYPE]?.color;
+
+    return busColor || theme.colors.gray950;
   }
   if (trafficType === 'SUBWAY') {
-    if (subwayCode && subwayCode in SUBWAY_LINES) {
-      const subwayLine = SUBWAY_LINES[subwayCode as keyof typeof SUBWAY_LINES];
+    const subwayColor = SUBWAY_LINES[subwayCode as keyof typeof SUBWAY_LINES]?.color;
 
-      return subwayLine.color;
-    }
-
-    return theme.colors.Subway;
+    return subwayColor || theme.colors.Subway;
   }
 
   return 'transparent';

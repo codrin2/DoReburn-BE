@@ -56,7 +56,14 @@ export const colors = {
   },
 
   // transport
-  Bus: '#9C50D3',
+  Bus: {
+    blue: '#0068b7',
+    red: '#e60012',
+    green: '#53b332',
+    lightGreen: '#87C700',
+    gray: '#307164',
+    purple: '#9C50D3',
+  },
   Subway: '#DC831E',
 } as const;
 

@@ -22,7 +22,11 @@ export const StartButton = styled.button`
   border-radius: 0.8rem;
   padding: 1.6rem;
   background-color: ${({ theme }) => theme.colors.green600};
-  box-shadow:
-    0 0.6rem 1.2rem rgba(0, 0, 0, 0.2),
-    0 1rem 2rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0.4rem 0.8rem 0 rgba(0, 0, 0, 0.1);
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.gray200};
+    color: ${({ theme }) => theme.colors.gray400};
+    cursor: not-allowed;
+  }
 `;

@@ -18,8 +18,11 @@ const TimeBlockHeader = ({
   startStation,
   busNumber,
 }: TimeBlockHeaderProps) => {
-  const pathColor = getPathColor(trafficType, subwayCode);
   const subwayLine = SUBWAY_LINES[subwayCode as keyof typeof SUBWAY_LINES];
+  const pathColor = getPathColor({
+    trafficType,
+    subwayCode,
+  });
 
   return (
     <S.TransportHeader>
