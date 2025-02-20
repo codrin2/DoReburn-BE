@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Getter
-public class DateUsageTimeStatistics {
+public class DateAvailableTimeStatistics {
     private final Map<LocalDate, Integer> dateUsageTime;
 
-    public DateUsageTimeStatistics(LocalDate startDate) {
+    public DateAvailableTimeStatistics(LocalDate startDate) {
         dateUsageTime = IntStream.range(0, 7)
                 .boxed()
                 .collect(Collectors.toMap(
