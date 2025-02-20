@@ -3,7 +3,7 @@ export interface PathType {
   sectionTime: number;
   subwayCode: number | null;
   busNumber: string | null;
-  busId: string | null;
+  busType: number | null;
   startName: string | null;
   endName: string | null;
 }

@@ -12,6 +12,7 @@ export const NicknameInput = styled.input`
   padding: 1.2rem;
   width: 30.3rem;
   height: 5rem;
+  ${({ theme }) => theme.fonts.body15Med};
 
   &:focus {
     border-color: ${({ theme }) => theme.colors.green700};

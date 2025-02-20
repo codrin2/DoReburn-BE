@@ -49,9 +49,9 @@ const RouteResult = () => {
         selectedRoute={selectedRoute}
         handleRouteSelect={handleRouteSelect}
       />
-      {selectedRoute && (
-        <S.StartButton onClick={handleStartButtonClick}>이 경로로 출발할까요?</S.StartButton>
-      )}
+      <S.StartButton onClick={handleStartButtonClick} disabled={!selectedRoute}>
+        {selectedRoute ? '이 경로로 출발할까요?' : '경로를 선택해주세요'}
+      </S.StartButton>
     </S.RouteResultContainer>
   );
 };
