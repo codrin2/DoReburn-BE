@@ -10,7 +10,7 @@ export const FeedbackPageLayout = styled.div`
   justify-content: center;
 
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-image: url(${BackgroundFeedback});
   background-repeat: no-repeat;
   background-size: cover;
