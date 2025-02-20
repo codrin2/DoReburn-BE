@@ -72,10 +72,15 @@ html {
 	}
 }
 
+:root {
+  --vh: 100vh; /* 기본값 */
+}
+
 body {
 	line-height: 1;
   max-width: 54rem;
-	height: 100vh;
+  height: var(--vh); /* 기본값 설정 */
+  height: 100dvh; /* 최신 브라우저에서는 dvh 사용 */
 	margin: 0 auto;
 	
   

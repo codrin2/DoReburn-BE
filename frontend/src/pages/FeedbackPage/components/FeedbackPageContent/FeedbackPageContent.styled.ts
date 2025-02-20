@@ -10,20 +10,23 @@ export const FeedbackPageLayout = styled.div`
   justify-content: center;
 
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-image: url(${BackgroundFeedback});
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  padding-bottom: 3rem;
-  overflow: hidden;
 
+  padding-bottom: 9.6rem;
   touch-action: none;
 `;
 
 export const ButtonBox = styled.button`
   display: flex;
   align-items: center;
+
+  position: absolute;
+  bottom: 1.6rem;
+
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme }) => theme.colors.green600};
   padding: 1.6rem 3rem;
