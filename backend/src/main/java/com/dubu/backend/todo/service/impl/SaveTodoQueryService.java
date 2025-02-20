@@ -74,9 +74,10 @@ public class SaveTodoQueryService implements TodoQueryService {
         }
         // 회원의 카테고리 정보에 해당하는 추천 할 일을 가져온다.
         List<Long> categoryIds = memberCategoryRepository.findCategoryIdsByMember(member);
-        List<Todo> recommendTodos = todoRepository.findTodosWithCategoryByCategoryIdsAndType(categoryIds, TodoType.RECOMMEND);
+        List<Long> recommendTodoIds = todoRepository.findTodosWithCategoryByCategoryIdsAndType(categoryIds, TodoType.RECOMMEND);
 
-        List<Todo> personalizedTodos = todoRandomSelector.selectTodos(5, recommendTodos);
+        List<Long> personalizedTodoIds = todoRandomSelector.selectTodos(5, recommendTodoIds);
+        List<Todo> personalizedTodos = todoRepository.findAllById(personalizedTodoIds);
 
         // 즐겨찾기 할 일 의 부모 할 일로 추천 할 일이 있는지를 확인하고 있으면 hasChild = true, 없으면 hasChild = false 설정
         List<Long> parentIdsOfSaveTodos = todoRepository.findParentTodoIdsByParentTodoAndMemberAndType(personalizedTodos, member, TodoType.SAVE);
