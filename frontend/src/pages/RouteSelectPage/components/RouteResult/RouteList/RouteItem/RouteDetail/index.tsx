@@ -2,7 +2,7 @@ import { getPathColor } from '../RouteItem.utils';
 import * as S from './RouteDetail.styled';
 
 import Icon, { IconType } from '@/components/Icon';
-import { BUS_TYPE } from '@/constants/BusType';
+import { BUS_TYPE } from '@/constants/busType';
 import { SUBWAY_LINES } from '@/constants/subwayLines';
 import { PathType, RouteType } from '@/pages/RouteSelectPage/RouteSelectPage.types';
 import theme from '@/styles/theme';
