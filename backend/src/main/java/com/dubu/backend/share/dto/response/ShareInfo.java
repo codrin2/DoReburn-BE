@@ -7,7 +7,7 @@ public record ShareInfo(List<MemberInfo> memberInfos, List<CategoryRankInfo> cat
     public static ShareInfo of(List<MemberInfo> memberInfos, List<CategoryRankInfo> categoryRankInfos){
         return new ShareInfo(
                 memberInfos,
-                categoryRankInfos.subList(0, 3)
+                categoryRankInfos.size() <= 3? categoryRankInfos: categoryRankInfos.subList(0, 3)
                 );
     }
 
