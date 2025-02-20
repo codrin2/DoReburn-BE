@@ -29,7 +29,7 @@ export const API_URL = {
   todoDetail: (memberId: number) =>
     `${BASE_URL}/api/v1/share/members/todos?surroundingMemberId=${memberId}`,
   deleteFavoriteFromOther: (memberId: number) =>
-    `${BASE_URL}/api/v1/share/todos${memberId ? `?surroundingMemberId=${memberId}` : ''}`,
+    `${BASE_URL}/api/v1/share/todos${memberId ? `?surroundingMemberTodoId=${memberId}` : ''}`,
   getNearbyUsers: (queryParams: string) =>
     `${BASE_URL}/api/v1/share/members/surrounding${queryParams}`,
   todayAchievement: `${BASE_URL}/api/v1/plans/feedbacks`,

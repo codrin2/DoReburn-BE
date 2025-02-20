@@ -22,7 +22,7 @@ const useAddTodoBottomSheet = ({ todoType, planId }: UseAddTodoBottomSheetProps)
       { todoType, todo, planId },
       {
         onSuccess: () => {
-          toast({ message: TODO_TOAST_MESSAGE.add });
+          toast({ message: TODO_TOAST_MESSAGE.add(todoType) });
           overlay.close();
         },
       },

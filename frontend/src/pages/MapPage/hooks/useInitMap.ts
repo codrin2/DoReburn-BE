@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import CurrentLocationMarker from '@/assets/images/currentLocationMarker.svg';
 import { MAP_ID } from '@/constants/config';
+import { ERROR_MESSAGE } from '@/constants/message';
+import useToast from '@/hooks/useToast';
 import { createMarkerImage } from '@/utils/map';
 
 const INIT_CENTER = {
@@ -16,6 +18,7 @@ const useInitMap = () => {
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const currentLocationRef = useRef<kakao.maps.Marker | null>(null);
   const [isDragged, setIsDragged] = useState(false);
+  const { toast } = useToast();
 
   const handleDragStart = () => {
     setIsDragged(true);
@@ -67,13 +70,35 @@ const useInitMap = () => {
             setCenter({ lat: pos.coords.latitude, lng: pos.coords.longitude });
           },
           (error) => {
+            const isChangedCenter =
+              center.lat !== INIT_CENTER.lat || center.lng !== INIT_CENTER.lng;
+
             if (error.code === error.PERMISSION_DENIED) {
-              alert('위치 접근이 거부되었습니다. 설정에서 위치 서비스를 활성화해 주세요.');
+              // 권한이 없는 경우 홈으로 라우팅
+              const isConfirm = confirm(ERROR_MESSAGE.locationPermission);
+
+              if (isConfirm) {
+                window.location.href = '/';
+              }
+            } else if (error.code === error.TIMEOUT) {
+              // 한번이라도 값을 받아온 경우 토스트 띄우고 화면 유지
+              if (isChangedCenter) {
+                toast({ message: ERROR_MESSAGE.location });
+
+                return;
+              }
+
+              // 값을 아예 못 불러오는 경우 홈으로 라우팅
+              const isConfirm = confirm(ERROR_MESSAGE.locationPermission);
+
+              if (isConfirm) {
+                window.location.href = '/';
+              }
             }
           },
           {
             enableHighAccuracy: false,
-            timeout: 5000,
+            timeout: 10000,
             maximumAge: 0,
           },
         );

@@ -17,6 +17,7 @@ const DetailUserTodo = ({ memberId }: DetailUserTodoProps) => {
   const { data } = useQuery({
     queryKey: [QUERY_KEY.detailTodo, memberId],
     queryFn: () => getTodoDetail(memberId),
+    enabled: !!memberId,
   });
 
   const { mutate: addFavoriteFromOther } = useAddFavoriteFromOther();
@@ -28,7 +29,7 @@ const DetailUserTodo = ({ memberId }: DetailUserTodoProps) => {
         <S.Nickname>{data?.nickname}님이 오늘 하고 있는 일</S.Nickname>
 
         <S.DetailTodoList>
-          {data?.todo.map((todo) => (
+          {data?.todos.map((todo) => (
             <S.DetailTodoItem key={todo.todoId}>
               <S.TitleWrapper>
                 <Icon icon={ICON_MAPPER[todo.category]} />
