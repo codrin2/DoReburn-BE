@@ -42,7 +42,6 @@ export const RouteProgressBar = styled.div<{ $isTraffic: boolean; $color: string
 `;
 
 export const RouteProgressBarText = styled.div<{ $trafficType: string }>`
-  /* width: 100%; */
   padding-left: 1.2rem;
   display: flex;
   justify-content: center;
