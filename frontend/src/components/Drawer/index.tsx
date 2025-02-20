@@ -15,13 +15,19 @@ const Drawer = () => {
       <S.Overlay onClick={closeDrawer} $isOpen={isOpen} />
       <S.Content $isOpen={isOpen}>
         <Link to="/">
-          <Icon icon="Doreburn" width={120} height={15} />
+          <Icon icon="Doreburn" width={120} height={15} cursor="pointer" />
         </Link>
         <S.MenuList>
           {DRAWER_MENU.map((menu, idx) => (
             <S.MenuItem key={idx}>
               <Link to={menu.path}>
-                <Icon icon={menu.icon} width={16} height={16} color={theme.colors.gray950} />
+                <Icon
+                  icon={menu.icon}
+                  width={16}
+                  height={16}
+                  color={theme.colors.gray950}
+                  cursor="pointer"
+                />
                 <span>{menu.text}</span>
               </Link>
             </S.MenuItem>

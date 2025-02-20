@@ -14,7 +14,7 @@ export const Back = ({ onClick, color }: BackProps) => {
 
   return (
     <S.Button aria-label={BUTTONS.BACK.text} onClick={onClick || goToBack}>
-      <Icon icon={BUTTONS.BACK.icon as IconType} color={color} />
+      <Icon icon={BUTTONS.BACK.icon as IconType} color={color} cursor="pointer" />
     </S.Button>
   );
 };

@@ -44,9 +44,15 @@ export const AddressLabel = styled.div`
   ${({ theme }) => theme.fonts.body15Med};
   color: ${({ theme }) => theme.colors.green700};
   width: 5.4rem;
+  white-space: nowrap;
 `;
 
 export const AddressTitle = styled.div`
   ${({ theme }) => theme.fonts.body15Med};
   color: ${({ theme }) => theme.colors.gray400};
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
 `;
