@@ -12,6 +12,19 @@ export interface TodoAddParams {
   planId?: number;
 }
 
+export interface FavoriteTodoParams {
+  modifyType: TodoType;
+  size: number;
+  cursor?: number;
+  planId?: number;
+}
+
+export interface FavoriteTodoResponse {
+  hasNext: boolean;
+  nextCursor: number;
+  data: RecommendTodo[];
+}
+
 export interface RecommendTodo {
   todoId: number;
   hasChild: boolean;
@@ -33,7 +46,7 @@ export interface TodoCreateResponse {
   data: Todo;
 }
 
-interface RecommendAllTodoResponse {
+export interface RecommendAllTodoResponse {
   hasNext: boolean;
   nextCursor: {
     cursorCategoryId: number;
@@ -66,16 +79,28 @@ export const getTomorrowTodoList = async () => {
   return result.data;
 };
 
-export const getFavoriteTodoList = async (
-  todoType: TodoType,
-  size: number = 5,
-  planId?: number,
-) => {
-  const result = await fetchClient.get<RecommendTodoResponse>(
-    API_URL.favoriteTodo(todoType, size, planId),
-  );
+export const getFavoriteTodoList = async (params: FavoriteTodoParams) => {
+  const urlQueryParams = new URLSearchParams();
 
-  return result.data;
+  Object.entries(params).forEach(([key, value]) => {
+    if (Array.isArray(value) && value.length > 0) {
+      urlQueryParams.append(key, value.join(','));
+    } else if (
+      !Array.isArray(value) &&
+      value !== undefined &&
+      value !== null &&
+      !Number.isNaN(value)
+    ) {
+      urlQueryParams.append(key, value.toString());
+    }
+  });
+
+  const queryString = urlQueryParams.toString();
+  const queryParams = queryString ? `?${queryString}` : queryString;
+
+  const result = await fetchClient.get<FavoriteTodoResponse>(API_URL.favoriteTodo(queryParams));
+
+  return result;
 };
 
 export const getRecommendLimitTodoList = async (todoType: TodoType, planId?: number) => {
@@ -109,7 +134,7 @@ export const getRecommendAllTodoList = async (params: RecommendAllTodoParams) =>
     API_URL.recommendAllTodo(queryParams),
   );
 
-  return result.data;
+  return result;
 };
 
 export const addTodo = async ({ todoType, todo, planId }: TodoAddParams) => {

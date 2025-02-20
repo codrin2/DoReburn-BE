@@ -11,6 +11,7 @@ public record PlanCreateRequest(
             Integer sectionTime,
             Integer subwayCode,
             String busNumber,
+            Integer busType,
             String startName,
             String endName
     ) {

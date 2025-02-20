@@ -43,7 +43,7 @@ public interface RouteApi {
                                                       "subwayName": "2호선",
                                                       "subwayCode": 1002,
                                                       "busNumber": null,
-                                                      "busId": null,
+                                                      "busType": null,
                                                       "startName": "선릉역",
                                                       "endName": "역삼역"
                                                     },
@@ -53,7 +53,7 @@ public interface RouteApi {
                                                       "subwayName": null,
                                                       "subwayCode": null,
                                                       "busNumber": "143",
-                                                      "busId": 300143,
+                                                      "busType": 1,
                                                       "startName": "역삼",
                                                       "endName": "강남"
                                                     }

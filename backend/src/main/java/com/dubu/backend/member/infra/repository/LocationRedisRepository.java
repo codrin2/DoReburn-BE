@@ -1,6 +1,6 @@
 package com.dubu.backend.member.infra.repository;
 
-import com.dubu.backend.member.dto.MemberLocation;
+import com.dubu.backend.member.dto.MemberLocationDto;
 import com.dubu.backend.share.dto.request.SurroundingMemberQueryRequest;
 import com.dubu.backend.share.dto.response.MemberLocationInfo;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +20,13 @@ public class LocationRedisRepository {
     private final RedisTemplate<String, String> redisTemplate;
     private static final String GEO_KEY = "member_location";
 
-    public void saveMemberLocation(Long memberId, MemberLocation memberLocation) {
+    public void saveMemberLocation(Long memberId, MemberLocationDto memberLocationDto) {
         GeoOperations<String, String> geoOperations = redisTemplate.opsForGeo();
-        Point point = new Point(memberLocation.x_coordinate(), memberLocation.y_coordinate());
+        Point point = new Point(memberLocationDto.x_coordinate(), memberLocationDto.y_coordinate());
         geoOperations.add(GEO_KEY, point, String.valueOf(memberId));
     }
 
-    public List<MemberLocationInfo> findMemberLocations(SurroundingMemberQueryRequest request){
+    public List<MemberLocationInfo> findMemberLocations(Long memberId, SurroundingMemberQueryRequest request){
         GeoOperations<String, String> geoOperations = redisTemplate.opsForGeo();
         GeoResults<RedisGeoCommands.GeoLocation<String>> result = geoOperations.search(
                 GEO_KEY,
@@ -35,10 +35,10 @@ public class LocationRedisRepository {
                 RedisGeoCommands.GeoSearchCommandArgs.newGeoSearchArgs().includeCoordinates()
         );
 
-        return convertGeoResultToMemberLocationInfo(result);
+        return convertGeoResultToMemberLocationInfo(memberId, result);
     }
 
-    private List<MemberLocationInfo> convertGeoResultToMemberLocationInfo(GeoResults<RedisGeoCommands.GeoLocation<String>> geoResults){
+    private List<MemberLocationInfo> convertGeoResultToMemberLocationInfo(Long memberId, GeoResults<RedisGeoCommands.GeoLocation<String>> geoResults){
         List<MemberLocationInfo> memberLocationInfos = new ArrayList<>();
 
         if(geoResults == null){
@@ -47,10 +47,13 @@ public class LocationRedisRepository {
 
         for (GeoResult<RedisGeoCommands.GeoLocation<String>> geoResult : geoResults.getContent()) {
             RedisGeoCommands.GeoLocation<String> geoLocation = geoResult.getContent();
-            long memberId = Long.parseLong(geoLocation.getName());
+            long surroundingMemberId = Long.parseLong(geoLocation.getName());
+
+            if(surroundingMemberId == memberId) continue;
+
             Point point = geoLocation.getPoint();
 
-            memberLocationInfos.add(MemberLocationInfo.of(memberId, point.getX(), point.getY()));
+            memberLocationInfos.add(MemberLocationInfo.of(surroundingMemberId, point.getX(), point.getY()));
         }
 
         return memberLocationInfos;

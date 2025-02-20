@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import theme from '../styles/theme';
 
 import ToastProvider from '@/components/Toast/ToastProvider';
+import { OverlayProvider } from '@/providers/OverlayProvider';
 import GlobalStyle from '@/styles/GlobalStyle';
 
 const queryClient = new QueryClient({
@@ -22,7 +23,9 @@ const wrapper = ({ children }: { children: React.ReactNode }) => {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <ToastProvider>
-          <MemoryRouter initialEntries={['/']}>{children}</MemoryRouter>
+          <OverlayProvider>
+            <MemoryRouter initialEntries={['/']}>{children}</MemoryRouter>
+          </OverlayProvider>
         </ToastProvider>
       </ThemeProvider>
     </QueryClientProvider>

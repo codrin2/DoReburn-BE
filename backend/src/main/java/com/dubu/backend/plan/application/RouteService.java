@@ -142,7 +142,7 @@ public class RouteService {
         String subwayName = null;
         Integer subwayCode = null;
         String busNumber = null;
-        Integer busCode = null;
+        Integer busType = null;
         String startName = null;
         String endName = null;
 
@@ -155,7 +155,7 @@ public class RouteService {
                 endName = subPath.endName() + "역";
             } else if ("BUS".equals(trafficType)) {
                 busNumber = lane.busNo();
-                busCode = lane.busID();
+                busType = lane.type();
                 startName = subPath.startName();
                 endName = subPath.endName();
             }
@@ -167,7 +167,7 @@ public class RouteService {
                 subwayName,
                 subwayCode,
                 busNumber,
-                busCode,
+                busType,
                 startName,
                 endName
         );

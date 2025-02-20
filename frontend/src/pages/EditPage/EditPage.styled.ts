@@ -14,6 +14,10 @@ export const TabList = styled(Tab.List)`
   justify-content: space-around;
   height: 4.8rem;
 
+  li {
+    height: 4.8rem;
+  }
+
   button {
     ${({ theme }) => theme.fonts.body15};
 
