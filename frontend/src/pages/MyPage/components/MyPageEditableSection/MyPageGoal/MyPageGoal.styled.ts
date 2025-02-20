@@ -20,13 +20,13 @@ export const GuideMessage = styled.div<{ $isError: boolean }>`
 export const GoalList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.8rem;
   width: 100%;
 `;
 
 export const GoalRow = styled.div`
   display: flex;
-  gap: 1rem;
+  justify-content: space-between;
   width: 100%;
 `;
 

@@ -9,6 +9,7 @@ import usePlanInfoQuery from './hooks/usePlanInfoQuery';
 import * as S from './PlanPage.styled';
 
 import { finishPlan } from '@/api/plan';
+import useRedirectByMemberStatus from '@/hooks/useRedirectByMemberStatus';
 
 const useFinishPlanMutation = () => {
   return useMutation({
@@ -16,6 +17,7 @@ const useFinishPlanMutation = () => {
   });
 };
 const PlanPage = () => {
+  useRedirectByMemberStatus();
   const { data } = usePlanInfoQuery();
   const navigate = useNavigate();
   const { mutate: finishPlan } = useFinishPlanMutation();
