@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 
 import FlexPageLayout from './layout/FlexPageLayout';
+import memberStatusLoader from './memberStatusLoader';
 
 import DayStatisticsPage from '@/pages/DayStatisticsPage';
 import EditPage from '@/pages/EditPage';
@@ -22,6 +23,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <MainPage />,
+    loader: memberStatusLoader,
   },
   {
     path: '/landing',
@@ -40,6 +42,7 @@ export const router = createBrowserRouter([
   {
     path: '/onboarding',
     element: <OnboardingPage />,
+    loader: memberStatusLoader,
   },
   {
     path: '/route-select',
@@ -52,6 +55,7 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <PlanPage />,
+        loader: memberStatusLoader,
       },
     ],
   },
@@ -82,10 +86,12 @@ export const router = createBrowserRouter([
   {
     path: '/feedback',
     element: <FeedbackPage />,
+    loader: memberStatusLoader,
   },
   {
     path: '/login/kakao',
     element: <KakaoLoginPage />,
+    loader: memberStatusLoader,
   },
   {
     path: '/statistics/week',
