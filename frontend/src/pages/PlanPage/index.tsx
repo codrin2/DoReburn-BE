@@ -46,6 +46,7 @@ const PlanPage = () => {
               sectionTime={path.sectionTime}
               todos={path.todos}
               trafficType={path.trafficType}
+              subwayCode={path.subwayCode}
             />
           </S.TimeBlockSection>
         ))}

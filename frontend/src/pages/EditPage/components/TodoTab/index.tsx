@@ -37,7 +37,7 @@ const TodoTab = ({ todoType, planId }: TodoTabProps) => {
     const isLimitType = todoType === TODO_TYPE.TODAY || todoType === TODO_TYPE.TOMORROW;
 
     if (isLimitType && currentTodoList && currentTodoList.length >= MAX_TODO_ITEM_LENGTH) {
-      toast({ message: TODO_TOAST_MESSAGE.limit });
+      toast({ message: TODO_TOAST_MESSAGE.limit(dateType) });
 
       return;
     }
@@ -48,7 +48,7 @@ const TodoTab = ({ todoType, planId }: TodoTabProps) => {
   const handleDeleteTodo = (todoId: number) => {
     deleteTodo(
       { todoId, planId },
-      { onSuccess: () => toast({ message: TODO_TOAST_MESSAGE.delete }) },
+      { onSuccess: () => toast({ message: TODO_TOAST_MESSAGE.delete(dateType) }) },
     );
   };
 

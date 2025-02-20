@@ -24,13 +24,14 @@ const MapPage = () => {
   const { isOpen, close } = useMapBottomSheet();
 
   const openMarkerBottomSheet = useMarkerBottomSheet();
+
   const { data: nearbyUsersData } = useNearbyUsersQuery({
     lng: center.lng,
     lat: center.lat,
   });
 
   const { category, handleSelectCategoryFilter, filteredLocations } = useCategoryFilter(
-    nearbyUsersData?.memberLocations ?? [],
+    nearbyUsersData?.memberInfos ?? [],
   );
 
   const handleBackCenter = () => {

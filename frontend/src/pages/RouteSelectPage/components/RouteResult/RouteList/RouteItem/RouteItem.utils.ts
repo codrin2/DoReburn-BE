@@ -8,14 +8,18 @@ export const getPathBarWidth = (path: PathType, totalTime: number) => {
   return (path.sectionTime / totalTime) * 100;
 };
 
-export const getPathColor = (path: PathType) => {
-  if (path.trafficType === 'BUS') {
+export const getPathColor = (trafficType: string, subwayCode: number | null) => {
+  if (trafficType === 'BUS') {
     return theme.colors.Bus;
   }
-  if (path.trafficType === 'SUBWAY') {
-    const subwayLine = SUBWAY_LINES[path.subwayCode as keyof typeof SUBWAY_LINES];
+  if (trafficType === 'SUBWAY') {
+    if (subwayCode && subwayCode in SUBWAY_LINES) {
+      const subwayLine = SUBWAY_LINES[subwayCode as keyof typeof SUBWAY_LINES];
 
-    return subwayLine.color;
+      return subwayLine.color;
+    }
+
+    return theme.colors.Subway;
   }
 
   return 'transparent';

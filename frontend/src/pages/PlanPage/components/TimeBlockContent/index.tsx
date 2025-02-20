@@ -2,11 +2,11 @@ import { useNavigate } from 'react-router';
 
 import * as S from './TimeBlockContent.styled';
 import TimeBlockList from './TimeBlockList';
-import { TRAFFIC_ICON } from '../../PlanPage.constants';
 import { TrafficType } from '../../PlanPage.types';
 
 import { PathTodo } from '@/api/plan';
 import Icon from '@/components/Icon';
+import { getPathColor } from '@/pages/RouteSelectPage/components/RouteResult/RouteList/RouteItem/RouteItem.utils';
 import { colors } from '@/styles/theme';
 
 interface TimeBlockProps {
@@ -14,12 +14,20 @@ interface TimeBlockProps {
   sectionTime: number;
   todos: PathTodo[];
   trafficType: TrafficType;
+  subwayCode: number | null;
 }
 
-const TimeBlockContent = ({ pathId, sectionTime, todos, trafficType }: TimeBlockProps) => {
+const TimeBlockContent = ({
+  pathId,
+  sectionTime,
+  todos,
+  trafficType,
+  subwayCode,
+}: TimeBlockProps) => {
   const navigate = useNavigate();
 
   const isEmptyTodo = todos.length === 0;
+  const pathColor = getPathColor(trafficType, subwayCode);
 
   const goToRouteTodoEdit = () => {
     navigate(`/plan/${pathId}/todos/edit`);
@@ -29,7 +37,7 @@ const TimeBlockContent = ({ pathId, sectionTime, todos, trafficType }: TimeBlock
     <S.TimeBlockContentSection>
       {/* 대중교통 막대바 */}
       <S.TransportBarWrapper>
-        <S.TransportBar $trafficType={TRAFFIC_ICON[trafficType]} />
+        <S.TransportBar $pathColor={pathColor} />
       </S.TransportBarWrapper>
 
       {/* 타임블럭 */}
