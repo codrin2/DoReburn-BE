@@ -41,8 +41,14 @@ export const OverlayProvider = ({ children }: PropsWithChildren) => {
   const close = useCallback(() => {
     setOverlay((prev) => ({
       ...prev,
-      Component: null,
       isOpen: false,
+    }));
+  }, []);
+
+  const exit = useCallback(() => {
+    setOverlay((prev) => ({
+      ...prev,
+      Component: null,
     }));
   }, []);
 
@@ -51,10 +57,11 @@ export const OverlayProvider = ({ children }: PropsWithChildren) => {
   return (
     <OverlayContext.Provider value={dispatch}>
       {children}
-      {overlay.isOpen && overlay.Component && (
+      {overlay.Component && (
         <BottomSheet
           isOpen={overlay.isOpen}
           onClose={close}
+          onAnimationEnd={exit}
           title={overlay.title}
           subTitle={overlay.subTitle}
           content={<overlay.Component {...overlay} />}

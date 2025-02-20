@@ -11,7 +11,7 @@ export const ProgressContainer = styled.div`
 `;
 
 export const ProgressBackground = styled.div`
-  width: 25.5rem;
+  width: 70%;
   height: 0.3rem;
 
   background-color: ${({ theme }) => theme.colors.gray200};

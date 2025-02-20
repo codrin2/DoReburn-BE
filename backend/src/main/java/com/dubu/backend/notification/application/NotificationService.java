@@ -14,6 +14,7 @@ import com.dubu.backend.notification.infra.repository.PushSubscriptionRepository
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.exception.PlanNotFoundException;
 import com.dubu.backend.plan.infra.repository.PlanRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.martijndwars.webpush.Notification;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -35,6 +37,7 @@ public class NotificationService {
     private final MemberRepository memberRepository;
     private final PlanRepository planRepository;
     private final PushSubscriptionRepository subscriptionRepository;
+    private final ObjectMapper objectMapper;
 
     @Value("${admin.email}")
     private String adminEmail;
@@ -75,17 +78,17 @@ public class NotificationService {
 
         for (PushSubscription sub : subscriptions) {
             try {
-                String payload = """
-                {
-                    "notification": {
-                        "title": "%s",
-                        "body": "%s"
-                    },
-                    "data": {
-                        "url": "%s"
-                    }
-                }
-                """.formatted(message.title(), message.body(), planUrl);
+                Map<String, Object> payloadMap = Map.of(
+                        "notification", Map.of(
+                                "title", message.title(),
+                                "body", message.body()
+                        ),
+                        "data", Map.of(
+                                "url", planUrl
+                        )
+                );
+
+                String payload = objectMapper.writeValueAsString(payloadMap);
 
                 Notification notification = new Notification(
                         sub.getEndPoint(),

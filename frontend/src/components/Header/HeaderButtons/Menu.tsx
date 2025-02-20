@@ -8,7 +8,7 @@ export const Menu = () => {
 
   return (
     <S.Button aria-label={BUTTONS.MENU.text} onClick={openDrawer}>
-      <Icon icon={BUTTONS.MENU.icon as IconType} />
+      <Icon icon={BUTTONS.MENU.icon as IconType} cursor="pointer" />
     </S.Button>
   );
 };

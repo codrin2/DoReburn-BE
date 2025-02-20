@@ -15,10 +15,14 @@ export const getPathColor = (path: PathType) => {
 
     return busType.color || theme.colors.gray950;
   }
-  if (path.trafficType === 'SUBWAY') {
-    const subwayLine = SUBWAY_LINES[path.subwayCode as keyof typeof SUBWAY_LINES];
+  if (trafficType === 'SUBWAY') {
+    if (subwayCode && subwayCode in SUBWAY_LINES) {
+      const subwayLine = SUBWAY_LINES[subwayCode as keyof typeof SUBWAY_LINES];
 
-    return subwayLine.color;
+      return subwayLine.color;
+    }
+
+    return theme.colors.Subway;
   }
 
   return 'transparent';

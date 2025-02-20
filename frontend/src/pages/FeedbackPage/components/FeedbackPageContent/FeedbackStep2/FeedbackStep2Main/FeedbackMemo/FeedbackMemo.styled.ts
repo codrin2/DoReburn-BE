@@ -5,7 +5,7 @@ export const FeedbackMemoLayout = styled.div`
   flex-direction: column;
   gap: 1.2rem;
   padding: 1.6rem;
-  width: 32.7rem;
+  width: 85%;
   background-color: ${({ theme }) => `${theme.colors.green100}4D`};
   border-radius: 2.4rem;
 `;
