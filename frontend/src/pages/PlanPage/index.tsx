@@ -40,7 +40,12 @@ const PlanPage = () => {
       <S.PlanContent>
         {data?.paths.map((path) => (
           <S.TimeBlockSection key={path.pathId}>
-            <TimeBlockHeader trafficType={path.trafficType} subwayCode={path.subwayCode} />
+            <TimeBlockHeader
+              trafficType={path.trafficType}
+              subwayCode={path.subwayCode}
+              startStation={path.startName}
+              busNumber={path.busNumber}
+            />
             <TimeBlockContent
               pathId={path.pathId}
               sectionTime={path.sectionTime}
