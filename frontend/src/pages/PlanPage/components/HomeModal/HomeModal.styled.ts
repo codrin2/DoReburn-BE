@@ -13,6 +13,7 @@ export const ModalDimmed = styled.div`
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 `;
 
 export const Modal = styled.div`
