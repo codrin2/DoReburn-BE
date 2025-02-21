@@ -3,14 +3,17 @@ import fetchClient from './fetchClient';
 import { API_URL } from '@/constants/url';
 
 interface WeekStatistics {
-  dayUsageTimes: {
+  dayAvailableTimes: {
     date: string;
-    usageTime: number;
+    availableTime: number;
   }[];
   totalTodoCount: number;
   lastWeekDiff: number;
-  totalMoveTime: number;
-  totalUsageTime: number;
+  totalAvailableTime: number;
+  moodCounts: {
+    mood: string;
+    count: number;
+  }[];
   categoryTodoCounts: {
     category: string;
     count: number;
