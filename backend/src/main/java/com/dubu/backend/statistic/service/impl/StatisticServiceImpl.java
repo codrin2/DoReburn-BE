@@ -48,10 +48,10 @@ public class StatisticServiceImpl implements StatisticService {
         List<Path> dayPaths = pathRepository.findByPlansAndTypeAndIsCompleted(dayPlans, TodoType.DONE, true);
 
         if(dayPlans == null || dayPlans.isEmpty() || dayPaths == null || dayPaths.isEmpty()){
-            return null;
+            return DayStatisticInfo.of(member.getCreatedAt().toLocalDate());
         }
 
-        return buildDailyStatisticInfo(categories, dayPlans, dayPaths);
+        return buildDailyStatisticInfo(member.getCreatedAt().toLocalDate(), categories, dayPlans, dayPaths);
     }
 
     @Override
@@ -67,37 +67,36 @@ public class StatisticServiceImpl implements StatisticService {
 //        List<Path> thisWeekPaths = pathRepository.findByPlansAndTypeAndIsCompleted(thisWeekPlans, TodoType.DONE, true);
 
         if(thisWeekPlans == null || thisWeekPlans.isEmpty() || pathIdsOfWeekPlans == null || pathIdsOfWeekPlans.isEmpty() || completedTodos == null || completedTodos.isEmpty()){
-            return null;
+            return WeekStatisticInfo.of(member.getCreatedAt().toLocalDate());
         }
 
         List<Plan> lastWeekPlans = planRepository.findWithPathsByMemberAndCreatedAtBetween(member, date.minusWeeks(1).atStartOfDay(), date.minusDays(1).atTime(LocalTime.MAX));
 
-        return buildWeekStatisticInfoUsingPathIds(date, categories, thisWeekPlans, completedTodos, lastWeekPlans);
+        return buildWeekStatisticInfoUsingPathIds(member.getCreatedAt().toLocalDate(), date, categories, thisWeekPlans, completedTodos, lastWeekPlans);
     }
 
 
-    private DayStatisticInfo buildDailyStatisticInfo(List<Category> categories, List<Plan> plans, List<Path> paths) {
-        int totalMoveTime = 0;
+    private DayStatisticInfo buildDailyStatisticInfo(LocalDate memberCreateDate, List<Category> categories, List<Plan> plans, List<Path> paths) {
         int totalUsageTime = 0;
+        int totalTodoCount = 0;
         List<Feedback> feedbacks = new ArrayList<>();
         CategoryTodoStatistics categoryTodoStatistics = new CategoryTodoStatistics(categories);
 
         for(Plan plan: plans){
-            totalMoveTime += plan.getTotalTime();
+            totalUsageTime += plan.getTotalTime();
             feedbacks.add(plan.getFeedback());
         }
-
         for(Path path: paths){
             for(Todo todo: path.getTodos()){
                 categoryTodoStatistics.countDoneTodo(todo);
-                totalUsageTime += todo.getSpentTime();
+                totalTodoCount++;
             }
         }
 
-        return DayStatisticInfo.of(totalMoveTime, totalUsageTime, feedbacks, categoryTodoStatistics.getCategoryTodoTimeCount());
+        return DayStatisticInfo.of(memberCreateDate, totalUsageTime, totalTodoCount, feedbacks, categoryTodoStatistics.getCategoryTodoTimeCount());
     }
 
-    private WeekStatisticInfo buildWeekStatisticInfo(LocalDate startDate, List<Category> categories, List<Plan> thisWeekPlans, List<Plan> lastWeekPlans){
+    private WeekStatisticInfo buildWeekStatisticInfo(LocalDate memberCreateDate, LocalDate startDate, List<Category> categories, List<Plan> thisWeekPlans, List<Plan> lastWeekPlans){
         DateAvailableTimeStatistics dateAvailableTimeStatistics = new DateAvailableTimeStatistics(startDate);
         int totalAvailableTime = 0;
         int totalTodoCount = 0;
@@ -106,11 +105,10 @@ public class StatisticServiceImpl implements StatisticService {
 
         for(Plan plan: thisWeekPlans){
             LocalDate date = plan.getCreatedAt().toLocalDate();
-
+            totalAvailableTime += plan.getTotalTime();
             moodCountCollection.addMood(plan.getFeedback().getMood());
 
             for (Path path : plan.getPaths()) {
-                totalAvailableTime += path.getSectionTime();
                 dateAvailableTimeStatistics.addUsageTimeAtDate(date, path.getSectionTime());
                 for (Todo todo : path.getTodos()) {
                     totalTodoCount += 1;
@@ -121,10 +119,10 @@ public class StatisticServiceImpl implements StatisticService {
         // 저번 주와의 활용 가능 시간 차이
         int lastWeekDiff = totalAvailableTime - calculateWeeklyUsageTime(lastWeekPlans);
 
-        return WeekStatisticInfo.of(dateAvailableTimeStatistics.getDateUsageTime(), totalTodoCount, lastWeekDiff, totalAvailableTime, moodCountCollection.getMoodCount(), categoryTodoStatistics.getCategoryTodoTimeCount());
+        return WeekStatisticInfo.of(memberCreateDate, dateAvailableTimeStatistics.getDateUsageTime(), totalTodoCount, lastWeekDiff, totalAvailableTime, moodCountCollection.getMoodCount(), categoryTodoStatistics.getCategoryTodoTimeCount());
     }
 
-    private WeekStatisticInfo buildWeekStatisticInfoUsingPathIds(LocalDate startDate, List<Category> categories, List<Plan> thisWeekPlans, List<Todo> completedTodos, List<Plan> lastWeekPlans) {
+    private WeekStatisticInfo buildWeekStatisticInfoUsingPathIds(LocalDate memberCreateDate, LocalDate startDate, List<Category> categories, List<Plan> thisWeekPlans, List<Todo> completedTodos, List<Plan> lastWeekPlans) {
         DateAvailableTimeStatistics dateAvailableTimeStatistics = new DateAvailableTimeStatistics(startDate);
         int totalAvailableTime = 0;
         int totalTodoCount = 0;
@@ -152,7 +150,7 @@ public class StatisticServiceImpl implements StatisticService {
         // 저번 주와의 활용 가능한 시간 차이
         int lastWeekDiff = totalAvailableTime - calculateWeeklyUsageTime(lastWeekPlans);
 
-        return WeekStatisticInfo.of(dateAvailableTimeStatistics.getDateUsageTime(), totalTodoCount, lastWeekDiff, totalAvailableTime, moodCountCollection.getMoodCount(), categoryTodoStatistics.getCategoryTodoTimeCount());
+        return WeekStatisticInfo.of(memberCreateDate, dateAvailableTimeStatistics.getDateUsageTime(), totalTodoCount, lastWeekDiff, totalAvailableTime, moodCountCollection.getMoodCount(), categoryTodoStatistics.getCategoryTodoTimeCount());
     }
 
     // 활용 가능한 시간 계산
