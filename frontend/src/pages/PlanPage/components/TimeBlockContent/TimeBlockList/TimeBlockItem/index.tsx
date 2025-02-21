@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useEffect, useReducer, useRef, useState } from 'react';
+import { LegacyRef, TouchEvent, useEffect, useReducer, useRef, useState } from 'react';
 
 import * as S from './TimeBlockItem.styled';
 
@@ -19,9 +19,19 @@ const useCheckTodoMutation = () => {
 
 interface TimeBlockItemProps {
   todo: PathTodo;
+  onTouchStart: (e: TouchEvent<HTMLDivElement>, todo: PathTodo) => void;
+  onTouchEnd: (e: TouchEvent<HTMLDivElement>) => void;
+  onTouchMove: (e: TouchEvent<HTMLDivElement>) => void;
+  itemRef?: LegacyRef<HTMLDivElement>;
 }
 
-const TimeBlockItem = ({ todo }: TimeBlockItemProps) => {
+const TimeBlockItem = ({
+  todo,
+  onTouchStart,
+  onTouchEnd,
+  onTouchMove,
+  itemRef,
+}: TimeBlockItemProps) => {
   const showTodoBottomSheet = useShowTodoBottomSheet();
   const { mutateAsync: checkTodo } = useCheckTodoMutation();
 
@@ -53,7 +63,12 @@ const TimeBlockItem = ({ todo }: TimeBlockItemProps) => {
 
   return (
     <>
-      <S.TimeBlockItem>
+      <S.TimeBlockItemLayout
+        onTouchStart={(e) => onTouchStart(e, todo)}
+        onTouchEnd={onTouchEnd}
+        onTouchMove={onTouchMove}
+        ref={itemRef}
+      >
         <S.CheckIconWrapper
           onClick={isDone ? handleUncheckTodo : handleCheckTodo}
           $isDone={isDone}
@@ -67,7 +82,7 @@ const TimeBlockItem = ({ todo }: TimeBlockItemProps) => {
           <S.TodoTitle $isDone={isDone}>{todo.title}</S.TodoTitle>
           <S.TodoMemo>{todo.memo}</S.TodoMemo>
         </S.TimeBlockContent>
-      </S.TimeBlockItem>
+      </S.TimeBlockItemLayout>
     </>
   );
 };

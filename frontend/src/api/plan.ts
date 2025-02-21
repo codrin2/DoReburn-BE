@@ -12,7 +12,7 @@ interface PlanInfoResponse {
   };
 }
 
-interface Path {
+export interface Path {
   pathId: number;
   trafficType: 'SUBWAY' | 'BUS';
   sectionTime: number;

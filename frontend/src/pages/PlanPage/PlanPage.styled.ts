@@ -16,21 +16,6 @@ export const HorizontalLine = styled.div`
   background-color: ${({ theme }) => theme.colors.gray50};
 `;
 
-// PlanContent (타임 블럭)
-export const PlanContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2.4rem;
-  overflow-y: scroll;
-  padding-bottom: 8rem;
-`;
-
-export const TimeBlockSection = styled.section`
-  display: flex;
-  flex-direction: column;
-  padding: 0 2.4rem;
-`;
-
 // 이동 완료 버튼
 export const FinishButtonWrapper = styled.div`
   position: absolute;

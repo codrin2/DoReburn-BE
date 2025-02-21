@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const TimeBlockItem = styled.div`
+export const TimeBlockItemLayout = styled.div`
   position: relative;
   display: flex;
   align-items: center;
@@ -21,7 +21,7 @@ export const TimeBlockItem = styled.div`
   }
 `;
 
-export const CheckIconWrapper = styled.div<{ $isDone: boolean; $isAnimating: boolean }>`
+export const CheckIconWrapper = styled.div<{ $isDone: boolean; $isAnimating?: boolean }>`
   position: relative;
   width: 2.4rem;
   height: 2.4rem;
@@ -77,4 +77,17 @@ export const TodoMemo = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`;
+
+export const DraggingItem = styled.div`
+  position: fixed;
+  pointer-events: none; // ✅ 터치 이벤트 방지
+  opacity: 0.8;
+  background-color: ${({ theme }) => theme.colors.white};
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+  transform: translate(-50%, -50%);
+  z-index: 1;
+
+  padding: 0.8rem 0.8rem;
+  border-radius: 0.8rem;
 `;

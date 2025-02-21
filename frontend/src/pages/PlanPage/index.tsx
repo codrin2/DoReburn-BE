@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router';
 
 import PlanHeader from './components/PlanHeader';
 import PlanInfoHeader from './components/PlanInfoHeader';
-import TimeBlockContent from './components/TimeBlockContent';
-import TimeBlockHeader from './components/TimeBlockHeader';
+import PlanContent from './components/TimeBlockContent/PlanContent';
 import usePlanInfoQuery from './hooks/usePlanInfoQuery';
 import * as S from './PlanPage.styled';
 
@@ -19,6 +18,7 @@ const PlanPage = () => {
   const { data } = usePlanInfoQuery();
   const navigate = useNavigate();
   const { mutate: finishPlan } = useFinishPlanMutation();
+
   const handleClickFinish = () => {
     finishPlan(undefined, {
       onSuccess: () => {
@@ -37,7 +37,7 @@ const PlanPage = () => {
       <S.HorizontalLine />
 
       {/* 경로별 할 일 정보 */}
-      <S.PlanContent>
+      {/* <S.Plant>
         {data?.paths.map((path) => (
           <S.TimeBlockSection key={path.pathId}>
             <TimeBlockHeader trafficType={path.trafficType} subwayCode={path.subwayCode} />
@@ -50,7 +50,8 @@ const PlanPage = () => {
             />
           </S.TimeBlockSection>
         ))}
-      </S.PlanContent>
+      </S.PlanContent> */}
+      <PlanContent paths={data?.paths} />
 
       {/* 이동 완료 버튼 영역 */}
       <S.FinishButtonWrapper>
