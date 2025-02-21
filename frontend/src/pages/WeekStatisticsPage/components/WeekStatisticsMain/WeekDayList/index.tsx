@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import WeekDayItem from './WeekDayItem';
 import * as S from './WeekDayList.styled';
@@ -19,14 +18,13 @@ const WEEK_DAYS = 7;
 interface WeekDateProps {
   weekStartDate: string;
   setWeekStartDate: (date: string) => void;
-  dayUsageTime: {
+  dayAvailableTimes: {
     date: string;
-    usageTime: number;
+    availableTime: number;
   }[];
 }
 
-const WeekDayList = ({ weekStartDate, setWeekStartDate, dayUsageTime }: WeekDateProps) => {
-  const navigate = useNavigate();
+const WeekDayList = ({ weekStartDate, setWeekStartDate, dayAvailableTimes }: WeekDateProps) => {
   const [weekDays, setWeekDays] = useState<DayInfo[]>([]);
 
   useEffect(() => {
@@ -45,9 +43,9 @@ const WeekDayList = ({ weekStartDate, setWeekStartDate, dayUsageTime }: WeekDate
 
   const getUsageTimeForDay = (day: DayInfo) => {
     const dateString = `${day.year}-${String(day.month).padStart(2, '0')}-${String(day.day).padStart(2, '0')}`;
-    const dayData = dayUsageTime.find((item) => item.date === dateString);
+    const dayData = dayAvailableTimes.find((item) => item.date === dateString);
 
-    return dayData ? dayData.usageTime : 0;
+    return dayData ? dayData.availableTime : 0;
   };
 
   const handleWeekChange = (offset: number) => {
@@ -55,7 +53,7 @@ const WeekDayList = ({ weekStartDate, setWeekStartDate, dayUsageTime }: WeekDate
     currentDate.setDate(currentDate.getDate() + offset);
     const newWeekStartDate = getStartOfWeek(currentDate.toISOString());
     setWeekStartDate(newWeekStartDate);
-    navigate(`/statistics/week?startDate=${newWeekStartDate}`);
+    window.history.replaceState({}, '', `/statistics/week?startDate=${newWeekStartDate}`);
   };
 
   return (

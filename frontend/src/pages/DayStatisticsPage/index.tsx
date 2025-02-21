@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 
 import DayCategoryAchievement from './components/DayCategoryAchievement';
@@ -18,10 +18,23 @@ const DayStatisticsPage = () => {
 
   const { data: dayStatistics } = useDayStatisticsQuery(date);
 
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const date = searchParams.get('date');
+
+    if (date) {
+      setDate(date);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.history.replaceState({}, '', `/statistics/day?date=${date}`);
+  }, [date]);
+
   const handleClickDay = (direction: 'prev' | 'next') => {
     const newDate = changeDateByDirection(date, direction);
     setDate(newDate);
-    navigate(`/statistics/day?date=${newDate}`);
+    window.history.replaceState({}, '', `/statistics/day?date=${newDate}`);
   };
 
   return (
