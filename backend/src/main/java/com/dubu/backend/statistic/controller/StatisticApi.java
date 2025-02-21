@@ -34,52 +34,45 @@ public interface StatisticApi {
                                     @ExampleObject(
                                             name = "일일 통계 데이터가 있을 경우",
                                             value = """
-                                            {
-                                                "data": {
-                                                    "totalMoveTime": 224,
-                                                    "totalUsageTime": 100,
-                                                    "feedbacks": [
-                                                        {
-                                                            "mood": "DISSATISFIED",
-                                                            "memo": "Feedback P"
-                                                        },
-                                                        {
-                                                            "mood": "DISSATISFIED",
-                                                            "memo": "Feedback F"
-                                                        },
-                                                        {
+                                                    {
+                                                      "data": {
+                                                        "memberCreateDate": "2023-02-05",
+                                                        "totalUsageTime": 264,
+                                                        "totalTodoCount": 10,
+                                                        "feedbacks": [
+                                                          {
                                                             "mood": "MODERATE",
-                                                            "memo": "Feedback G"
-                                                        }
-                                                    ],
-                                                    "categoryTodoCounts": [
-                                                        {
-                                                            "category": "OTHERS",
-                                                            "count": 10
-                                                        },
-                                                        {
-                                                            "category": "ENGLISH",
-                                                            "count": 10
-                                                        },
-                                                        {
-                                                            "category": "LANGUAGE",
-                                                            "count": 4
-                                                        },
-                                                        {
-                                                            "category": "NEWS",
-                                                            "count": 4
-                                                        },
-                                                        {
+                                                            "memo": "feedback_974765"
+                                                          },
+                                                          {
+                                                            "mood": "SATISFIED",
+                                                            "memo": "feedback_978139"
+                                                          },
+                                                          {
+                                                            "mood": "MODERATE",
+                                                            "memo": "feedback_983482"
+                                                          }
+                                                        ],
+                                                        "categoryTodoCounts": [
+                                                          {
                                                             "category": "HOBBY",
                                                             "count": 4
-                                                        },
-                                                        {
-                                                            "category": "READING",
-                                                            "count": 4
-                                                        }
-                                                    ]
-                                                }
-                                            }
+                                                          },
+                                                          {
+                                                            "category": "NEWS",
+                                                            "count": 3
+                                                          },
+                                                          {
+                                                            "category": "ENGLISH",
+                                                            "count": 2
+                                                          },
+                                                          {
+                                                            "category": "LANGUAGE",
+                                                            "count": 1
+                                                          }
+                                                        ]
+                                                      }
+                                                    }
                                             """
                                     ),
                                     @ExampleObject(
@@ -130,89 +123,86 @@ public interface StatisticApi {
                                     @ExampleObject(
                                             name = "주간 통계 데이터가 있을 경우",
                                             value = """
-                                                    {
-                                                        "data": {
-                                                          "dayAvailableTimes": [
-                                                            {
-                                                              "date": "2025-01-13",
-                                                              "availableTime": 69
-                                                            },
-                                                            {
-                                                              "date": "2025-01-14",
-                                                              "availableTime": 132
-                                                            },
-                                                            {
-                                                              "date": "2025-01-15",
-                                                              "availableTime": 40
-                                                            },
-                                                            {
-                                                              "date": "2025-01-16",
-                                                              "availableTime": 0
-                                                            },
-                                                            {
-                                                              "date": "2025-01-17",
-                                                              "availableTime": 87
-                                                            },
-                                                            {
-                                                              "date": "2025-01-18",
-                                                              "availableTime": 40
-                                                            },
-                                                            {
-                                                              "date": "2025-01-19",
-                                                              "availableTime": 200
-                                                            }
-                                                          ],
-                                                          "totalTodoCount": 37,
-                                                          "lastWeekDiff": 173,
-                                                          "totalAvailableTime": 568,
-                                                          "moodCounts": [
-                                                            {
-                                                              "mood": "DISSATISFIED",
-                                                              "count": 3
-                                                            },
-                                                            {
-                                                              "mood": "MODERATE",
-                                                              "count": 5
-                                                            },
-                                                            {
-                                                              "mood": "SATISFIED",
-                                                              "count": 6
-                                                            }
-                                                          ],
-                                                          "categoryTodoCounts": [
-                                                            {
-                                                              "category": "NEWS",
-                                                              "usageTime": 53,
-                                                              "count": 9
-                                                            },
-                                                            {
-                                                              "category": "ENGLISH",
-                                                              "usageTime": 46,
-                                                              "count": 6
-                                                            },
-                                                            {
-                                                              "category": "OTHERS",
-                                                              "usageTime": 35,
-                                                              "count": 6
-                                                            },
-                                                            {
-                                                              "category": "HOBBY",
-                                                              "usageTime": 29,
-                                                              "count": 5
-                                                            },
-                                                            {
-                                                              "category": "LANGUAGE",
-                                                              "usageTime": 27,
-                                                              "count": 6
-                                                            },
-                                                            {
-                                                              "category": "READING",
-                                                              "usageTime": 23,
-                                                              "count": 5
-                                                            }
-                                                          ]
-                                                        }
-                                                      }
+                                            {
+                                              "data": {
+                                                "memberCreateDate": "2023-02-05",
+                                                "dayAvailableTimes": [
+                                                  {
+                                                    "date": "2025-01-27",
+                                                    "availableTime": 176
+                                                  },
+                                                  {
+                                                    "date": "2025-01-28",
+                                                    "availableTime": 46
+                                                  },
+                                                  {
+                                                    "date": "2025-01-29",
+                                                    "availableTime": 41
+                                                  },
+                                                  {
+                                                    "date": "2025-01-30",
+                                                    "availableTime": 124
+                                                  },
+                                                  {
+                                                    "date": "2025-01-31",
+                                                    "availableTime": 34
+                                                  },
+                                                  {
+                                                    "date": "2025-02-01",
+                                                    "availableTime": 0
+                                                  },
+                                                  {
+                                                    "date": "2025-02-02",
+                                                    "availableTime": 0
+                                                  }
+                                                ],
+                                                "totalTodoCount": 36,
+                                                "lastWeekDiff": -102,
+                                                "totalAvailableTime": 421,
+                                                "moodCounts": [
+                                                  {
+                                                    "mood": "MODERATE",
+                                                    "count": 5
+                                                  },
+                                                  {
+                                                    "mood": "SATISFIED",
+                                                    "count": 6
+                                                  }
+                                                ],
+                                                "categoryTodoCounts": [
+                                                  {
+                                                    "category": "NEWS",
+                                                    "usageTime": 37,
+                                                    "count": 8
+                                                  },
+                                                  {
+                                                    "category": "OTHERS",
+                                                    "usageTime": 35,
+                                                    "count": 5
+                                                  },
+                                                  {
+                                                    "category": "LANGUAGE",
+                                                    "usageTime": 34,
+                                                    "count": 6
+                                                  },
+                                                  {
+                                                    "category": "ENGLISH",
+                                                    "usageTime": 29,
+                                                    "count": 6
+                                                  },
+                                                  {
+                                                    "category": "HOBBY",
+                                                    "usageTime": 24,
+                                                    "count": 6
+                                                  },
+                                                  {
+                                                    "category": "READING",
+                                                    "usageTime": 16,
+                                                    "count": 5
+                                                  }
+                                                ]
+                                              }
+                                            }
                                             """
                                     ),
                                     @ExampleObject(
