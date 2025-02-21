@@ -22,7 +22,7 @@ export const Sheet = styled.div<{ $isOpen: boolean; $delay: number }>`
   width: 100%;
   bottom: 0;
   border-radius: 2.4rem 2.4rem 0 0;
-  padding: 0 2.4rem 1.6rem 2.4rem;
+  padding: 0 2.4rem 2rem 2.4rem;
 
   background-color: ${({ theme }) => theme.colors.white};
 

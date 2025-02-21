@@ -13,5 +13,5 @@ export const StartButtonLayout = styled(IconButton)`
   border-radius: 3.2rem;
 
   position: absolute;
-  bottom: 1.6rem;
+  bottom: 3.2rem;
 `;

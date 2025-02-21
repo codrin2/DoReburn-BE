@@ -25,8 +25,17 @@ export const SubwayNumber = styled.span`
   line-height: inherit;
 `;
 
-export const TransportType = styled.span`
-  flex-grow: 1;
+export const TransportNumber = styled.span<{ $pathColor: string }>`
+  ${({ theme }) => theme.fonts.label14Med};
+  color: ${({ $pathColor }) => $pathColor};
+  white-space: nowrap;
+`;
+
+export const Station = styled.span`
   ${({ theme }) => theme.fonts.label14Med};
   color: ${({ theme }) => theme.colors.gray400};
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;

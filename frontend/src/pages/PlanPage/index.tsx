@@ -1,6 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
+import HomeModal from './components/HomeModal';
 import PlanHeader from './components/PlanHeader';
 import PlanInfoHeader from './components/PlanInfoHeader';
 import TimeBlockContent from './components/TimeBlockContent';
@@ -16,11 +18,18 @@ const useFinishPlanMutation = () => {
     mutationFn: finishPlan,
   });
 };
+
 const PlanPage = () => {
   useRedirectByMemberStatus();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const open = () => setIsOpen(true);
+  const close = () => setIsOpen(false);
+
   const { data } = usePlanInfoQuery();
   const navigate = useNavigate();
   const { mutate: finishPlan } = useFinishPlanMutation();
+
   const handleClickFinish = () => {
     finishPlan(undefined, {
       onSuccess: () => {
@@ -42,7 +51,12 @@ const PlanPage = () => {
       <S.PlanContent>
         {data?.paths.map((path) => (
           <S.TimeBlockSection key={path.pathId}>
-            <TimeBlockHeader trafficType={path.trafficType} subwayCode={path.subwayCode} />
+            <TimeBlockHeader
+              trafficType={path.trafficType}
+              subwayCode={path.subwayCode}
+              startStation={path.startName}
+              busNumber={path.busNumber}
+            />
             <TimeBlockContent
               pathId={path.pathId}
               sectionTime={path.sectionTime}
@@ -55,9 +69,16 @@ const PlanPage = () => {
       </S.PlanContent>
 
       {/* 이동 완료 버튼 영역 */}
-      <S.FinishButtonWrapper>
-        <S.FinishButton onClick={handleClickFinish}>이동 완료</S.FinishButton>
-      </S.FinishButtonWrapper>
+      <S.FinishButton onClick={open}>이동 완료</S.FinishButton>
+      {isOpen && (
+        <HomeModal
+          title="이동을 완료할까요?"
+          content={['오늘도 수고했어요 🔥', '완료를 누르면 피드백 화면으로 이동합니다.']}
+          confirmText="완료하기"
+          close={close}
+          onConfirm={handleClickFinish}
+        />
+      )}
     </S.PlanPageLayout>
   );
 };

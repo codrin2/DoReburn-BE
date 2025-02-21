@@ -36,6 +36,13 @@ export const TodoItem = styled.div`
   padding: 1.2rem;
 `;
 
+export const TodoTitle = styled.span`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+`;
+
 export const ContentHeader = styled.div`
   display: flex;
   justify-content: space-between;

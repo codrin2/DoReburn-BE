@@ -29,7 +29,7 @@ const AchievementDetail = ({ achievements }: AchievementDetailProps) => {
           return (
             <S.AchievementItem key={index}>
               <Icon icon={ICON_MAPPER[achievement.category]} />
-              <div>{achievement.title}</div>
+              <S.TodoTitle>{achievement.title}</S.TodoTitle>
             </S.AchievementItem>
           );
         })}
