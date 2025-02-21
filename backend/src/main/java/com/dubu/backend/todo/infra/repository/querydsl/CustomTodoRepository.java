@@ -15,7 +15,6 @@ import java.util.List;
 public interface CustomTodoRepository {
     Slice<Todo> findTodosUsingSingleCursor(Long cursor, TodoSearchCond cond, Pageable pageable);
     Slice<Todo> findTodosUsingCompositeCursor(Cursor cursor, TodoSearchCond cond, Pageable pageable);
-    List<MemberCategoryInfo> findTodoCountGroupByCategoryForStopMembers(List<Member> members, LocalDate date);
-    List<MemberCategoryInfo> findTodoCountGroupByCategoryForMoveOrFeedbackMembers(List<Member> members);
+    List<MemberCategoryInfo> findTodoCountGroupByCategory(List<Member> members);
     List<Long> findTodosWithCategoryByCategoryIdsAndType(List<Long> categoryIds, TodoType type);
 }

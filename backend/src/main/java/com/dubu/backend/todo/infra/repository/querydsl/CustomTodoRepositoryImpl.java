@@ -74,28 +74,7 @@ public class CustomTodoRepositoryImpl implements CustomTodoRepository{
     }
 
     @Override
-    public List<MemberCategoryInfo> findTodoCountGroupByCategoryForStopMembers(List<Member> members, LocalDate date){
-        QSchedule scheduleSub = new QSchedule("scheduleSub");
-
-        return jpaQueryFactory.select(Projections.constructor(MemberCategoryInfo.class, todo.member.id, todo.category.name))
-                .distinct()
-                .from(todo)
-                .where(todo.schedule.in(
-                        JPAExpressions.select(schedule)
-                                .from(schedule)
-                                .where(Expressions.list(schedule.member.id, schedule.date).in(
-                                        JPAExpressions.select(scheduleSub.member.id, scheduleSub.date.max())
-                                                .from(scheduleSub)
-                                                .where(scheduleSub.member.in(members)
-                                                        .and(scheduleSub.date.loe(date)))
-                                                .groupBy(scheduleSub.member)
-                                )))
-                )
-                .fetch();
-    }
-
-    @Override
-    public List<MemberCategoryInfo> findTodoCountGroupByCategoryForMoveOrFeedbackMembers(List<Member> members){
+    public List<MemberCategoryInfo> findTodoCountGroupByCategory(List<Member> members){
         QPlan planSub = new QPlan("planSub");
 
         return jpaQueryFactory.select(Projections.constructor(MemberCategoryInfo.class, todo.member.id, todo.category.name))
@@ -110,7 +89,7 @@ public class CustomTodoRepositoryImpl implements CustomTodoRepository{
                                                 .where(Expressions.list(plan.member.id, plan.createdAt).in(
                                                         JPAExpressions.select(planSub.member.id, planSub.createdAt.max())
                                                                 .from(planSub)
-                                                                .where(planSub.member.in(members))
+                                                                .where(planSub.member.in(members), planSub.isCompleted)
                                                                 .groupBy(planSub.member)
                                                 ))
                                 ))
