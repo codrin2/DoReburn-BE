@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 
 import ToastProvider from './components/Toast/ToastProvider';
 import Viewport from './components/Viewport/Viewport';
+import { queryClient } from './constants/queryClient';
 import { OverlayProvider } from './providers/OverlayProvider';
 import { router } from './router';
 import GlobalStyle from './styles/GlobalStyle.js';
@@ -20,8 +21,6 @@ const enableMocking = async () => {
 
   return await worker.start({ onUnhandledRequest: 'bypass' });
 };
-
-const queryClient = new QueryClient();
 
 enableMocking().then(() => {
   createRoot(document.getElementById('root')!).render(

@@ -11,9 +11,11 @@ const useRedirectByMemberStatus = () => {
   const navigate = useNavigate();
   const { dateType } = useQueryParamsDate();
 
-  if (isError) {
-    navigate('/landing');
-  }
+  useEffect(() => {
+    if (isError) {
+      navigate('/landing');
+    }
+  }, [isError, navigate]);
 
   useEffect(() => {
     if (!memberStatus) return;
