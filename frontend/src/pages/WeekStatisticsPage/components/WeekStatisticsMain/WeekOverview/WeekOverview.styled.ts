@@ -53,34 +53,35 @@ export const CompareValue = styled.div`
   color: ${({ theme }) => theme.colors.green800};
 `;
 
-export const TimeInfoWrapper = styled.div`
-  width: 100%;
+export const MoodContainer = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: space-around;
-  gap: 1.2rem;
+  width: 100%;
+  margin-top: 2rem;
 `;
 
-export const TimeInfoBox = styled.div`
+export const MoodItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.8rem;
 `;
 
-export const TimeInfoLabel = styled.div`
-  ${({ theme }) => theme.fonts.body15Med};
-  color: ${({ theme }) => theme.colors.gray600};
+export const MoodImage = styled.img`
+  width: 8.4rem;
+  height: 8.4rem;
+  border-radius: 50%;
+  border: 0.3rem solid ${({ theme }) => theme.colors.green100};
+  object-fit: contain;
 `;
 
-export const TimeInfoValue = styled.div`
-  ${({ theme }) => theme.fonts.headline18};
-  color: ${({ theme }) => theme.colors.gray800};
+export const MoodAnimationLable = styled.span`
+  ${({ theme }) => theme.fonts.label13Med};
+  color: ${({ theme }) => theme.colors.gray400};
 `;
 
-export const Divider = styled.div`
-  width: 0.15rem;
-  height: 5rem;
-  background-color: ${({ theme }) => theme.colors.gray200};
-  border-radius: 0.1rem;
+export const MoodCount = styled.span`
+  ${({ theme }) => theme.fonts.body16};
+  color: ${({ theme }) => theme.colors.green800};
 `;

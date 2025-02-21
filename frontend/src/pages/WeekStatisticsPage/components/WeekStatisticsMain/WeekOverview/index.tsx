@@ -1,9 +1,19 @@
 import * as S from './WeekOverview.styled';
 
-const MOOD_IMAGES = {
-  DISSATISFIED: '/images/mood/dissatisfied.png',
-  NORMAL: '/images/mood/normal.png',
-  SATISFIED: '/images/mood/satisfied.png',
+import MOOD_DISSATISFIED from '@/assets/images/moodDissatisfied.png';
+import MOOD_MODERATE from '@/assets/images/moodModerate.png';
+import MOOD_SATISFIED from '@/assets/images/moodSatisfied.png';
+
+const MOOD_IMAGES: Record<string, string> = {
+  DISSATISFIED: MOOD_DISSATISFIED,
+  MODERATE: MOOD_MODERATE,
+  SATISFIED: MOOD_SATISFIED,
+};
+
+const MOOD_LABELS: Record<string, string> = {
+  DISSATISFIED: '"아쉬워요"',
+  MODERATE: '"보통이에요"',
+  SATISFIED: '"만족해요"',
 };
 
 interface WeekOverviewProps {
@@ -40,26 +50,15 @@ const WeekOverview = ({
           </S.CompareValue>
         </S.CompareLastWeek>
 
-        {/* FIXME: 이미지 넣기 */}
-        <div>
+        <S.MoodContainer>
           {moodCounts.map((mood) => (
-            <div key={mood.mood}>
-              <span>{mood.mood}</span>
-              <span>{mood.count}</span>
-            </div>
+            <S.MoodItem key={mood.mood}>
+              <S.MoodImage src={MOOD_IMAGES[mood.mood]} alt={mood.mood} />
+              <S.MoodAnimationLable>{MOOD_LABELS[mood.mood]}</S.MoodAnimationLable>
+              <S.MoodCount>{mood.count} 개</S.MoodCount>
+            </S.MoodItem>
           ))}
-        </div>
-        {/* <S.TimeInfoWrapper>
-          <S.TimeInfoBox>
-            <S.TimeInfoLabel>총 이동 시간</S.TimeInfoLabel>
-            <S.TimeInfoValue>{totalAvailableTime}분</S.TimeInfoValue>
-          </S.TimeInfoBox>
-          <S.Divider />
-          <S.TimeInfoBox>
-            <S.TimeInfoLabel>총 활용 시간</S.TimeInfoLabel>
-            <S.TimeInfoValue>{totalAvailableTime}분</S.TimeInfoValue>
-          </S.TimeInfoBox>
-        </S.TimeInfoWrapper> */}
+        </S.MoodContainer>
       </S.WeekOverviewContent>
     </S.WeekOverviewContainer>
   );
