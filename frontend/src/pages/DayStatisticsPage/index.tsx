@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 
 import DayCategoryAchievement from './components/DayCategoryAchievement';
 import DayDate from './components/DayDate';
@@ -11,7 +11,6 @@ import { changeDateByDirection, getFormattedDate } from './DayStatisticsPage.uti
 import useDayStatisticsQuery from './hooks/useDayStatisticsQuery';
 
 const DayStatisticsPage = () => {
-  const navigate = useNavigate();
   const today = new Date();
   const [searchParams] = useSearchParams();
   const [date, setDate] = useState(searchParams.get('date') ?? getFormattedDate(today));
@@ -44,9 +43,9 @@ const DayStatisticsPage = () => {
 
       <S.DayStatisticsContent>
         <DayTimeOverview
-          moveTime={dayStatistics?.totalMoveTime ?? 0}
           usageTime={dayStatistics?.totalUsageTime ?? 0}
-          isMoved={(dayStatistics?.totalMoveTime ?? 0) > 0}
+          todoCount={dayStatistics?.totalTodoCount ?? 0}
+          isMoved={(dayStatistics?.totalUsageTime ?? 0) > 0}
         />
 
         {dayStatistics ? (

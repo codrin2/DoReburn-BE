@@ -26,8 +26,9 @@ interface WeekStatisticsResponse {
 }
 
 interface DayStatistics {
-  totalMoveTime: number;
+  memberCreatedDate: string;
   totalUsageTime: number;
+  totalTodoCount: number;
   feedbacks: {
     mood: string;
     memo: string;
