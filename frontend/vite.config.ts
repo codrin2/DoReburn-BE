@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
       includeAssets: ['favicon.ico', 'apple-touch-icon'],
       manifest: {
         name: '통학생을 위한 이동 시간 할일 관리 서비스, 두리번',
-        short_name: 'do-reburn',
+        short_name: '두리번',
         description: '통학생을 위한 이동 시간 할일 관리 서비스, 두리번',
         theme_color: '#ffffff',
         background_color: '#ffffff',

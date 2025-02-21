@@ -18,6 +18,7 @@ export interface Path {
   sectionTime: number;
   subwayCode: number | null;
   busNumber: string | null;
+  busType: number | null;
   startName: string;
   endName: string;
   todos: PathTodo[];

@@ -24,7 +24,7 @@ export const FinishButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 13.9rem;
+  height: 9rem;
   background: linear-gradient(
     to bottom,
     ${({ theme }) => theme.colors.lightWhite},

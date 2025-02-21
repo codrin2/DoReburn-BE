@@ -1,0 +1,61 @@
+name: FE Deploy
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "frontend/**"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+          cache-dependency-path: ./frontend/pnpm-lock.yaml
+
+      - name: Generate .env File
+        working-directory: ./frontend
+        run: |
+          echo "VITE_BASE_URL=${{ secrets.API_BASE_URL }}" >> .env
+          echo "VITE_KAKAO_APP_KEY=${{ secrets.KAKAO_APP_KEY }}" >> .env
+          echo "VITE_KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
+          echo "VITE_KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env
+
+      - name: Install dependencies (npm ci)
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Configure AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ${{ secrets.AWS_REGION }}
+
+      - name: Upload to S3 (Admin)
+        working-directory: ./frontend/dist
+        run: |
+          aws s3 sync . s3://${{ secrets.AWS_S3_BUCKET_FRONT }} --delete
+
+      - name: Invalidate CloudFront Cache (Admin)
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"

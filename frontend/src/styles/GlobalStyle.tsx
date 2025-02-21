@@ -66,12 +66,23 @@ html {
     font-size: 62.5%;
   }
 
+  @media (min-width: 480px) {
+	html {
+		font-size: 75%;
+	}
+}
+
+:root {
+  --vh: 100vh; /* 기본값 */
+}
+
 body {
 	line-height: 1;
-  width: 375px;
-	height: 100vh;
+  max-width: 54rem;
+  height: var(--vh); /* 기본값 설정 */
+  height: 100dvh; /* 최신 브라우저에서는 dvh 사용 */
 	margin: 0 auto;
-	border: 0.1px solid black;
+	
   
   -ms-overflow-style: none;
   overflow-y: hidden;

@@ -39,6 +39,16 @@ const MyPageContent = () => {
         <MyPageAccountInfo email={member?.email ?? ''} nickname={member?.nickname ?? ''} />
         <S.Divider />
         <MyPageEditableSection />
+        <S.NotificationInfoContainer>
+          <S.NotificationInfoTitle>
+            <span>푸시 알림 설정을 변경하시겠어요?</span>
+          </S.NotificationInfoTitle>
+          <S.NotificationInfoText>
+            알림을 다시 설정하려면{' '}
+            <S.NotificationInfoTextStrong>"요청(기본값)"</S.NotificationInfoTextStrong>으로 변경해
+            주세요.
+          </S.NotificationInfoText>
+        </S.NotificationInfoContainer>
       </S.MyPageMainContainer>
     </S.MyPageContainer>
   );

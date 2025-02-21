@@ -1,16 +1,15 @@
 import styled from 'styled-components';
 
 export const DrawerLayout = styled.div<{ $isOpen: boolean }>`
-  position: fixed;
+  position: absolute;
   top: 0;
   bottom: 0;
   right: 50%;
   transform: translateX(50%);
-  width: 37.5rem;
+  width: 100%;
   overflow: hidden;
 
-  height: 100vh;
-
+  height: 100%;
   z-index: 5;
   visibility: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
   opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
@@ -32,7 +31,7 @@ export const Content = styled.div<{ $isOpen: boolean }>`
   top: 0;
   right: 0;
 
-  width: 22.5rem;
+  width: 50%;
   height: 100%;
   padding: 2rem 2.8rem;
 

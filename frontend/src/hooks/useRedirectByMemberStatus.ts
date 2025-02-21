@@ -2,10 +2,14 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import useMemberStatusQuery from './useMemberStatusQuery';
+import useQueryParamsDate from './useQueryParamsDate';
+
+import { DATE_TYPE } from '@/constants/config';
 
 const useRedirectByMemberStatus = () => {
   const { data: memberStatus, isError } = useMemberStatusQuery();
   const navigate = useNavigate();
+  const { dateType } = useQueryParamsDate();
 
   if (isError) {
     navigate('/landing');
@@ -14,12 +18,14 @@ const useRedirectByMemberStatus = () => {
   useEffect(() => {
     if (!memberStatus) return;
 
+    const mainURL = dateType === DATE_TYPE.TODAY ? '/' : `/?dateType=${dateType}`;
+
     switch (memberStatus?.status) {
       case 'ONBOARDING':
         navigate('/onboarding');
         break;
       case 'STOP':
-        navigate('/');
+        navigate(mainURL);
         break;
       case 'MOVE':
         navigate('/plan');
@@ -31,7 +37,7 @@ const useRedirectByMemberStatus = () => {
         navigate('/landing');
         break;
     }
-  }, [memberStatus, navigate]);
+  }, [memberStatus, navigate, dateType]);
 };
 
 export default useRedirectByMemberStatus;

@@ -13,7 +13,34 @@ export const MyPageMainContainer = styled.div`
   gap: 2.4rem;
   margin: 0 3.2rem;
   position: relative;
-  height: 100%;
+  overflow-y: scroll;
+`;
+
+export const NotificationInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: ${({ theme }) => theme.colors.gray100};
+  border-radius: 1.6rem;
+  padding: 1.8rem;
+`;
+
+export const NotificationInfoTitle = styled.p`
+  display: flex;
+  justify-content: space-between;
+  ${({ theme }) => theme.fonts.label13};
+  color: ${({ theme }) => theme.colors.gray950};
+`;
+
+export const NotificationInfoText = styled.p`
+  ${({ theme }) => theme.fonts.caption11};
+  color: ${({ theme }) => theme.colors.gray700};
+`;
+
+export const NotificationInfoTextStrong = styled.strong`
+  ${({ theme }) => theme.fonts.caption11};
+  color: ${({ theme }) => theme.colors.gray950};
+  font-weight: 900;
 `;
 
 export const Divider = styled.div`
