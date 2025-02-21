@@ -69,6 +69,7 @@ public enum ErrorCode {
     TODO_LIMIT_EXCEEDED(BAD_REQUEST, "%s 할 일은 최대 %d 개까지 추가할 수 있습니다."),
     TODO_TYPE_MISMATCH(BAD_REQUEST, "할 일의 타입과 요청 타입이 일치하지 않습니다. 할 일 타입 = %s, 요청 타입 = %s"),
     INVALID_TODO_REQUEST_TYPE(BAD_REQUEST, "잘못된 할 일 요청 유형입니다. type = %s"),
+    NOT_ENOUGH_RECOMMENDED_TODOS(BAD_REQUEST, "추천할 할 일이 부족합니다. 최소 5개 이상의 추천 할 일이 필요합니다."),
     SAVE_TODO_NOT_FOUND_FROM_TARGET_PARENT(NOT_FOUND, "내 즐겨찾기에 해당 할 일을 부모로 하는 할 일이 존재하지 않습니다. 해당 todoId: %d"),
 
     // Schedule

@@ -64,6 +64,7 @@ public class Path extends BaseTimeEntity {
                 .trafficType(TrafficType.from(pathRequest.trafficType()))
                 .subwayCode(pathRequest.subwayCode())
                 .busNumber(pathRequest.busNumber())
+                .busType(pathRequest.busType())
                 .startName(pathRequest.startName())
                 .endName(pathRequest.endName())
                 .sectionTime(pathRequest.sectionTime())

@@ -1,22 +1,24 @@
 package com.dubu.backend.todo.support;
 
-import com.dubu.backend.todo.entity.Todo;
+import com.dubu.backend.todo.exception.NotEnoughRecommendedTodosException;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-
 @Component
 public class TodoRandomSelector {
 
-    public Todo selectOne(List<Todo> todos){
-        return todos.get(ThreadLocalRandom.current().nextInt(todos.size()));
+    public Long selectOne(List<Long> todoIds) {
+        return todoIds.get(ThreadLocalRandom.current().nextInt(todoIds.size()));
     }
 
-    public List<Todo> selectTodos(int num, List<Todo> todos){
-        Collections.shuffle(todos);
-        return todos.subList(0, num);
+    public List<Long> selectTodos(int num, List<Long> todoIds) {
+        if (num > todoIds.size()) {
+            throw new NotEnoughRecommendedTodosException();
+        }
+        Collections.shuffle(todoIds);
+        return todoIds.subList(0, num);
     }
 }
