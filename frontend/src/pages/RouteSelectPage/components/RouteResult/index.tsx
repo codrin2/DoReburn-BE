@@ -32,6 +32,7 @@ const RouteResult = () => {
           trafficType: path.trafficType as 'SUBWAY' | 'BUS',
           sectionTime: path.sectionTime,
           subwayCode: path.subwayCode,
+          busType: path.busType,
           busNumber: path.busNumber,
           startName: path.startName ?? '',
           endName: path.endName ?? '',
