@@ -1,7 +1,10 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router';
 
 import * as S from './FeedbackSuccessModal.styled';
+
+import { QUERY_KEY } from '@/constants/queryKey';
 
 interface FeedbackSuccessModalProps {
   onClose: () => void;
@@ -9,15 +12,17 @@ interface FeedbackSuccessModalProps {
 
 const FeedbackSuccessModal = ({ onClose }: FeedbackSuccessModalProps) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const goToHome = () => {
-    navigate('/');
+  const goToHome = async () => {
+    await queryClient.invalidateQueries({ queryKey: [QUERY_KEY.memberStatus] });
     onClose();
+    navigate('/');
   };
 
   const goToStatistics = () => {
-    navigate('/statistics/week');
     onClose();
+    navigate('/statistics/week');
   };
 
   return createPortal(
