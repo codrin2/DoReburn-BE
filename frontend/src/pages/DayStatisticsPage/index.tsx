@@ -39,7 +39,11 @@ const DayStatisticsPage = () => {
   return (
     <S.DayStatisticsPageContainer>
       <DayStatisticsHeader />
-      <DayDate date={date} onDayChange={handleClickDay} />
+      <DayDate
+        date={date}
+        onDayChange={handleClickDay}
+        memberCreateDate={dayStatistics?.memberCreateDate ?? ''}
+      />
 
       <S.DayStatisticsContent>
         <DayTimeOverview

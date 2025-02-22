@@ -8,6 +8,7 @@ import { DayInfo } from '@/pages/WeekStatisticsPage/WeekStatisticsPage.types';
 import {
   getStartOfWeek,
   getWeekDateRange,
+  isCreatedWeek,
   isToday,
   isTodayInWeek,
 } from '@/pages/WeekStatisticsPage/WeekStatisticsPage.utils';
@@ -22,9 +23,15 @@ interface WeekDateProps {
     date: string;
     availableTime: number;
   }[];
+  memberCreateDate: string;
 }
 
-const WeekDayList = ({ weekStartDate, setWeekStartDate, dayAvailableTimes }: WeekDateProps) => {
+const WeekDayList = ({
+  weekStartDate,
+  setWeekStartDate,
+  dayAvailableTimes,
+  memberCreateDate,
+}: WeekDateProps) => {
   const [weekDays, setWeekDays] = useState<DayInfo[]>([]);
 
   useEffect(() => {
@@ -59,8 +66,15 @@ const WeekDayList = ({ weekStartDate, setWeekStartDate, dayAvailableTimes }: Wee
   return (
     <S.WeekDateContainer>
       <S.WeekDateInfoContainer>
-        <S.IconButton onClick={() => handleWeekChange(-WEEK_DAYS)}>
-          <Icon icon="FilledArrow" rotate={90} />
+        <S.IconButton
+          onClick={() => handleWeekChange(-WEEK_DAYS)}
+          disabled={isCreatedWeek(weekStartDate, memberCreateDate)}
+        >
+          <Icon
+            icon="FilledArrow"
+            rotate={90}
+            color={isCreatedWeek(weekStartDate, memberCreateDate) ? theme.colors.gray200 : ''}
+          />
         </S.IconButton>
         <div>{getWeekDateRange(weekDays)}</div>
         <S.IconButton
@@ -85,6 +99,7 @@ const WeekDayList = ({ weekStartDate, setWeekStartDate, dayAvailableTimes }: Wee
               date={date}
               usageTime={usageTime}
               isToday={isToday(date)}
+              memberCreateDate={memberCreateDate}
             />
           );
         })}

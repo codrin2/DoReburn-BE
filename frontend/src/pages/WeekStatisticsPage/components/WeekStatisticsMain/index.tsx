@@ -41,6 +41,7 @@ const WeekStatisticsMain = () => {
         weekStartDate={weekStartDate}
         setWeekStartDate={setWeekStartDate}
         dayAvailableTimes={weekStatistics?.dayAvailableTimes ?? []}
+        memberCreateDate={weekStatistics?.memberCreateDate ?? ''}
       />
       <S.WeekAchievementContainer>
         <WeekOverview {...overviewProps} />
