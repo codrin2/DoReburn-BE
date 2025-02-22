@@ -3,6 +3,7 @@ import fetchClient from './fetchClient';
 import { API_URL } from '@/constants/url';
 
 interface WeekStatistics {
+  memberCreateDate: string;
   dayAvailableTimes: {
     date: string;
     availableTime: number;
@@ -26,7 +27,7 @@ interface WeekStatisticsResponse {
 }
 
 interface DayStatistics {
-  memberCreatedDate: string;
+  memberCreateDate: string;
   totalUsageTime: number;
   totalTodoCount: number;
   feedbacks: {
