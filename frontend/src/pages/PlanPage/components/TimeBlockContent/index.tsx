@@ -1,36 +1,34 @@
+import { TouchEvent } from 'react';
 import { useNavigate } from 'react-router';
 
+import { DraggingTodo } from './PlanContent';
 import * as S from './TimeBlockContent.styled';
 import TimeBlockList from './TimeBlockList';
-import { TrafficType } from '../../PlanPage.types';
 
-import { PathTodo } from '@/api/plan';
+import { Path, PathTodo } from '@/api/plan';
 import Icon from '@/components/Icon';
 import { getPathColor } from '@/pages/RouteSelectPage/components/RouteResult/RouteList/RouteItem/RouteItem.utils';
 import { colors } from '@/styles/theme';
 
 interface TimeBlockProps {
-  pathId: number;
-  sectionTime: number;
-  todos: PathTodo[];
-  trafficType: TrafficType;
-  subwayCode: number | null;
+  path: Path;
+  draggingTodo: DraggingTodo | null;
+  onTouchStart: (e: TouchEvent<HTMLDivElement>, todo: PathTodo) => void;
+  onTouchMove: (e: TouchEvent<HTMLDivElement>) => void;
 }
 
-const TimeBlockContent = ({
-  pathId,
-  sectionTime,
-  todos,
-  trafficType,
-  subwayCode,
-}: TimeBlockProps) => {
+const TimeBlockContent = ({ path, draggingTodo, onTouchStart, onTouchMove }: TimeBlockProps) => {
   const navigate = useNavigate();
 
-  const isEmptyTodo = todos.length === 0;
-  const pathColor = getPathColor({ trafficType, subwayCode });
+  const isEmptyTodo = path.todos.length === 0;
+  const pathColor = getPathColor({
+    trafficType: path.trafficType,
+    subwayCode: path.subwayCode,
+    busType: path.busType,
+  });
 
   const goToRouteTodoEdit = () => {
-    navigate(`/plan/${pathId}/todos/edit`);
+    navigate(`/plan/${path.pathId}/todos/edit`);
   };
 
   return (
@@ -44,7 +42,7 @@ const TimeBlockContent = ({
       <S.TimeBlockContainer>
         <S.TimeBlockWrapper>
           <S.TimeBlockHeader>
-            <S.SectionTime>{sectionTime}분</S.SectionTime>
+            <S.SectionTime>{path.sectionTime}분</S.SectionTime>
             <S.EditButton
               icon={
                 <Icon
@@ -59,7 +57,12 @@ const TimeBlockContent = ({
               onClick={goToRouteTodoEdit}
             />
           </S.TimeBlockHeader>
-          <TimeBlockList todos={todos} />
+          <TimeBlockList
+            todos={path.todos}
+            draggingTodo={draggingTodo}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+          />
         </S.TimeBlockWrapper>
       </S.TimeBlockContainer>
     </S.TimeBlockContentSection>

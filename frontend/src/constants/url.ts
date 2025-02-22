@@ -44,6 +44,8 @@ export const API_URL = {
   notificationSubscribe: `${BASE_URL}/api/v1/notification/subscribe`,
   updateCurrentLocation: `${BASE_URL}/api/v1/members/location`,
   authReissue: `${BASE_URL}/api/v1/auth/reissue`,
+  updatePathTodo: (todoId: number, newPathId: number) =>
+    `${BASE_URL}/api/v1/todos/path?todoId=${todoId}&newPathId=${newPathId}`,
 };
 
 export const MOCK_API_URL = {

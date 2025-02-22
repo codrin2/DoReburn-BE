@@ -1,5 +1,8 @@
+import { TouchEvent } from 'react';
+
 import TimeBlockItem from './TimeBlockItem';
 import * as S from './TimeBlockList.styled';
+import { DraggingTodo } from '../PlanContent';
 
 import { PathTodo } from '@/api/plan';
 import Icon from '@/components/Icon';
@@ -7,9 +10,12 @@ import { colors } from '@/styles/theme';
 
 interface TimeBlockListProps {
   todos: PathTodo[];
+  draggingTodo: DraggingTodo | null;
+  onTouchStart: (e: TouchEvent<HTMLDivElement>, todo: PathTodo) => void;
+  onTouchMove: (e: TouchEvent<HTMLDivElement>) => void;
 }
 
-const TimeBlockList = ({ todos }: TimeBlockListProps) => {
+const TimeBlockList = ({ todos, draggingTodo, onTouchStart, onTouchMove }: TimeBlockListProps) => {
   if (todos.length === 0) {
     return (
       <S.EmptyTimeBlock>
@@ -22,7 +28,13 @@ const TimeBlockList = ({ todos }: TimeBlockListProps) => {
   return (
     <S.TimeBlockList>
       {todos.map((todo, idx) => (
-        <TimeBlockItem key={idx} todo={todo} />
+        <TimeBlockItem
+          key={idx}
+          todo={todo}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          draggingTodo={draggingTodo}
+        />
       ))}
     </S.TimeBlockList>
   );
