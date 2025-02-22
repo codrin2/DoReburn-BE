@@ -63,9 +63,10 @@ public class Path extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "SMALLINT")
     private Integer pathOrder;
 
-    public static Path createPath(Plan plan, PlanCreateRequest.Path pathRequest, int pathOrder) {
+    public static Path createPath(Plan plan, Route route, PlanCreateRequest.Path pathRequest, int pathOrder) {
         return Path.builder()
                 .plan(plan)
+                .route(route)
                 .trafficType(TrafficType.from(pathRequest.trafficType()))
                 .subwayCode(pathRequest.subwayCode())
                 .busNumber(pathRequest.busNumber())
