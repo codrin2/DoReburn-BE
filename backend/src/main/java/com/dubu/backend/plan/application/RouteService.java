@@ -4,18 +4,22 @@ import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.infra.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
+import com.dubu.backend.plan.domain.Route;
 import com.dubu.backend.plan.domain.vo.PathIdentifier;
 import com.dubu.backend.plan.dto.response.OdsayRouteApiResponse;
 import com.dubu.backend.plan.dto.response.RouteSearchResponse;
 import com.dubu.backend.plan.infra.client.OdsayApiClient;
 import com.dubu.backend.plan.infra.repository.PathRepository;
 import com.dubu.backend.plan.infra.repository.PlanRepository;
+import com.dubu.backend.plan.infra.repository.RouteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,6 +28,7 @@ public class RouteService {
     private final OdsayApiClient odsayApiClient;
     private final MemberRepository memberRepository;
     private final PlanRepository planRepository;
+    private final RouteRepository routeRepository;
     private final PathRepository pathRepository;
 
     /**
@@ -41,11 +46,27 @@ public class RouteService {
         OdsayRouteApiResponse odsayRouteApiResponse = odsayApiClient.searchPublicTransportRoute(startX, startY, endX, endY);
 
         List<RouteSearchResponse> response = new ArrayList<>();
-        for (OdsayRouteApiResponse.Path apiPath : odsayRouteApiResponse.result().path()) {
-            boolean isRecentlyUsed = isSameAsRecentlyUsedRoute(apiPath, recentlyUsedRoute);
-            RouteSearchResponse routeDto = convertApiPathToRoute(apiPath, isRecentlyUsed);
-            response.add(routeDto);
+        if (odsayRouteApiResponse == null || odsayRouteApiResponse.result() == null || odsayRouteApiResponse.result().path() == null) {
+            Optional<Route> optionalRoute = routeRepository.findRouteWithPathsByCoordinates(startX, startY, endX, endY);
+
+            if (optionalRoute.isPresent()) {
+                Route route = optionalRoute.get();
+                boolean isRecentlyUsed = false;
+                RouteSearchResponse dto = RouteSearchResponse.fromRoute(route, isRecentlyUsed);
+                response.add(dto);
+            }
+        } else {
+            for (OdsayRouteApiResponse.Path apiPath : odsayRouteApiResponse.result().path()) {
+                boolean isRecentlyUsed = isSameAsRecentlyUsedRoute(apiPath, recentlyUsedRoute);
+                RouteSearchResponse routeDto = convertApiPathToRoute(apiPath, isRecentlyUsed);
+                response.add(routeDto);
+            }
         }
+
+        response.sort(Comparator
+                .comparing(RouteSearchResponse::isRecentlyUsed, Comparator.reverseOrder())
+                .thenComparing(RouteSearchResponse::totalTime)
+        );
 
         return response;
     }
@@ -115,11 +136,11 @@ public class RouteService {
         int totalTime = info.totalTime();
         int totalSectionTime = 0;
 
-        List<RouteSearchResponse.Path> pathDtoList = new ArrayList<>();
+        List<RouteSearchResponse.PathDto> pathDtoList = new ArrayList<>();
 
         // SubPath(=ODsay) → Path(=두리번)Dto 변환
         for (OdsayRouteApiResponse.SubPath subPath : apiPath.subPath()) {
-            RouteSearchResponse.Path dtoPath = convertApiSubPathToPathDto(subPath);
+            RouteSearchResponse.PathDto dtoPath = convertApiSubPathToPathDto(subPath);
 
             if ("BUS".equals(dtoPath.trafficType()) || "SUBWAY".equals(dtoPath.trafficType())) {
                 totalSectionTime += dtoPath.sectionTime();
@@ -130,7 +151,7 @@ public class RouteService {
         return new RouteSearchResponse(isRecentlyUsed, totalTime, totalSectionTime, pathDtoList);
     }
 
-    private RouteSearchResponse.Path convertApiSubPathToPathDto(OdsayRouteApiResponse.SubPath subPath) {
+    private RouteSearchResponse.PathDto convertApiSubPathToPathDto(OdsayRouteApiResponse.SubPath subPath) {
         int tType = subPath.trafficType();
         String trafficType = switch (tType) {
             case 1 -> "SUBWAY";
@@ -139,7 +160,6 @@ public class RouteService {
             default -> "UNKNOWN";
         };
 
-        String subwayName = null;
         Integer subwayCode = null;
         String busNumber = null;
         Integer busType = null;
@@ -149,7 +169,6 @@ public class RouteService {
         if (subPath.lane() != null && !subPath.lane().isEmpty()) {
             OdsayRouteApiResponse.Lane lane = subPath.lane().get(0);
             if ("SUBWAY".equals(trafficType)) {
-                subwayName = lane.name();
                 subwayCode = lane.subwayCode();
                 startName = subPath.startName() + "역";
                 endName = subPath.endName() + "역";
@@ -161,10 +180,9 @@ public class RouteService {
             }
         }
 
-        return new RouteSearchResponse.Path(
+        return new RouteSearchResponse.PathDto(
                 trafficType,
                 subPath.sectionTime(),
-                subwayName,
                 subwayCode,
                 busNumber,
                 busType,
