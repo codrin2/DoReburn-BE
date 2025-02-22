@@ -3,7 +3,7 @@ import fetchClient from './fetchClient';
 import { API_URL } from '@/constants/url';
 import { Todo } from '@/types/todo';
 
-interface PlanInfoResponse {
+export interface PlanInfoResponse {
   data: {
     planId: number;
     totalSectionTime: number;
@@ -33,6 +33,7 @@ interface CreatePlanPath {
   sectionTime: number;
   subwayCode: number | null;
   busNumber: string | null;
+  busType: number | null;
   startName: string;
   endName: string;
 }

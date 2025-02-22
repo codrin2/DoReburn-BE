@@ -34,6 +34,7 @@ const RouteResult = () => {
             sectionTime: path.sectionTime,
             subwayCode: path.subwayCode,
             busNumber: path.busNumber,
+            busType: path.busType,
             startName: path.startName ?? '',
             endName: path.endName ?? '',
           })),
