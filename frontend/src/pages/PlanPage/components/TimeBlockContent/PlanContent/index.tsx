@@ -9,6 +9,8 @@ import { ERROR_MESSAGE } from '@/constants/message';
 import useToast from '@/hooks/useToast';
 import useUpdatePathTodoMutation from '@/pages/PlanPage/hooks/useUpdatePathTodoMutation';
 
+const LONG_PRESS_DURATION = 300;
+
 export interface DraggingTodo {
   todo: PathTodo;
   x: number;
@@ -24,6 +26,7 @@ interface PlanContentProps {
 const PlanContent = ({ paths }: PlanContentProps) => {
   const [draggingTodo, setDraggingTodo] = useState<DraggingTodo | null>(null);
   const timeBlockRefs = useRef(new Map<number, HTMLElement>());
+  const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { mutateAsync: updatePathTodo } = useUpdatePathTodoMutation();
   const { toast } = useToast();
@@ -36,13 +39,15 @@ const PlanContent = ({ paths }: PlanContentProps) => {
     const offsetX = touch.clientX - targetBlock.left;
     const offsetY = touch.clientY - targetBlock.top;
 
-    setDraggingTodo({
-      todo,
-      x: touch.clientX - offsetX,
-      y: touch.clientY - offsetY,
-      offsetX,
-      offsetY,
-    });
+    longPressTimeoutRef.current = setTimeout(() => {
+      setDraggingTodo({
+        todo,
+        x: touch.clientX - offsetX,
+        y: touch.clientY - offsetY,
+        offsetX,
+        offsetY,
+      });
+    }, LONG_PRESS_DURATION);
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
@@ -61,6 +66,10 @@ const PlanContent = ({ paths }: PlanContentProps) => {
   };
 
   const handleTouchEnd = async (e: React.TouchEvent<HTMLElement>) => {
+    if (longPressTimeoutRef.current) {
+      clearTimeout(longPressTimeoutRef.current);
+    }
+
     if (!draggingTodo) return;
 
     const touch = e.changedTouches[0];

@@ -10,6 +10,7 @@ export const TimeBlockItemLayout = styled.div<{
   height: 4rem;
 
   touch-action: none;
+  user-select: none;
 
   ${({ $isDragging }) =>
     $isDragging &&
