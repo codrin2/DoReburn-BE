@@ -11,6 +11,8 @@ export interface DraggingTodo {
   todo: PathTodo;
   x: number;
   y: number;
+  offsetX: number;
+  offsetY: number;
 }
 
 interface PlanContentProps {
@@ -26,9 +28,35 @@ const PlanContent = ({ paths }: PlanContentProps) => {
 
   const handleTouchStart = (e: TouchEvent<HTMLElement>, todo: PathTodo) => {
     const touch = e.touches[0];
+    const targetBlock = (e.target as HTMLElement).getBoundingClientRect();
     touchStartRef.current = { x: touch.clientX, y: touch.clientY };
 
-    setDraggingTodo({ todo, x: touch.clientX, y: touch.clientY });
+    // 터치한 위치와 block의 위치 차이 계산하여 보정
+    const offsetX = touch.clientX - targetBlock.left;
+    const offsetY = touch.clientY - targetBlock.top;
+
+    setDraggingTodo({
+      todo,
+      x: touch.clientX - offsetX,
+      y: touch.clientY - offsetY,
+      offsetX,
+      offsetY,
+    });
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!draggingTodo) return;
+
+    const touch = e.touches[0];
+    setDraggingTodo((prev) =>
+      prev
+        ? {
+            ...prev,
+            x: touch.clientX - prev.offsetX,
+            y: touch.clientY - prev.offsetY,
+          }
+        : null,
+    );
   };
 
   const handleTouchEnd = (e: React.TouchEvent<HTMLElement>) => {
@@ -46,13 +74,6 @@ const PlanContent = ({ paths }: PlanContentProps) => {
     }
 
     setDraggingTodo(null);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (!draggingTodo) return;
-
-    const touch = e.touches[0];
-    setDraggingTodo((prev) => (prev ? { ...prev, x: touch.clientX, y: touch.clientY } : null));
   };
 
   return (
