@@ -16,7 +16,7 @@ export interface FavoriteTodoParams {
   modifyType: TodoType;
   size: number;
   cursor?: number;
-  planId?: number;
+  pathId?: number;
 }
 
 export interface FavoriteTodoResponse {
