@@ -47,7 +47,7 @@ public class StatisticServiceImpl implements StatisticService {
         List<Plan> dayPlans = planRepository.findByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.atTime(LocalTime.MAX));
         List<Path> dayPaths = pathRepository.findByPlansAndTypeAndIsCompleted(dayPlans, TodoType.DONE, true);
 
-        if(dayPlans == null || dayPlans.isEmpty() || dayPaths == null || dayPaths.isEmpty()){
+        if(dayPlans == null || dayPlans.isEmpty()){
             return DayStatisticInfo.of(member.getCreatedAt().toLocalDate());
         }
 
@@ -66,7 +66,7 @@ public class StatisticServiceImpl implements StatisticService {
         List<Todo> completedTodos = todoRepository.findByPathIdsAndTypeAndIsCompleted(pathIdsOfWeekPlans, TodoType.DONE);
 //        List<Path> thisWeekPaths = pathRepository.findByPlansAndTypeAndIsCompleted(thisWeekPlans, TodoType.DONE, true);
 
-        if(thisWeekPlans == null || thisWeekPlans.isEmpty() || pathIdsOfWeekPlans == null || pathIdsOfWeekPlans.isEmpty() || completedTodos == null || completedTodos.isEmpty()){
+        if(thisWeekPlans == null || thisWeekPlans.isEmpty()){
             return WeekStatisticInfo.of(member.getCreatedAt().toLocalDate());
         }
 
