@@ -13,11 +13,7 @@ const useUpdatePathTodoMutation = () => {
     mutationFn: ({ todoId, newPathId }: { todoId: number; newPathId: number }) =>
       updatePathTodo({ todoId, newPathId }),
 
-    onMutate: async ({ todoId, newPathId }) => {
-      await queryClient.cancelQueries({ queryKey: [QUERY_KEY.planInfo] });
-
-      const previousData = queryClient.getQueryData<PlanInfoResponse['data']>([QUERY_KEY.planInfo]);
-
+    onSuccess: async (_, { todoId, newPathId }) => {
       queryClient.setQueryData<PlanInfoResponse['data']>([QUERY_KEY.planInfo], (oldData) => {
         if (!oldData) return oldData;
 
@@ -30,16 +26,7 @@ const useUpdatePathTodoMutation = () => {
 
         return { ...oldData, paths: finalPaths };
       });
-
-      return { previousData };
     },
-
-    onError: (_error, _variables, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData([QUERY_KEY.planInfo], context.previousData);
-      }
-    },
-
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendLimit] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendAll] });
