@@ -36,7 +36,7 @@ export const TimeBlockWrapper = styled.div`
   flex-direction: column;
 
   gap: 1.6rem;
-  min-height: 19.5rem;
+  min-height: 24.3rem;
   max-height: 69.1rem;
 
   padding: 1.6rem 1.2rem;
