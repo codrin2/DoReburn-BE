@@ -1,34 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { Path, PathTodo, PlanInfoResponse } from '@/api/plan';
+import { addTodo, filterTodo, findTodoAndPath } from '../PlanPage.utils';
+
+import { PlanInfoResponse } from '@/api/plan';
 import { updatePathTodo } from '@/api/todo';
 import { QUERY_KEY } from '@/constants/queryKey';
-
-const findTodoAndPath = (paths: Path[], todoId: number) => {
-  for (const path of paths) {
-    const foundTodo = path.todos.find((todo) => todo.todoId === todoId);
-
-    if (foundTodo) {
-      return { oldPath: path, oldTodo: foundTodo };
-    }
-  }
-
-  return { oldPath: null, oldTodo: null };
-};
-
-const filterTodo = (paths: Path[], oldPathId: number, todoId: number) => {
-  return paths.map((path) =>
-    path.pathId === oldPathId
-      ? { ...path, todos: path.todos.filter((todo) => todo.todoId !== todoId) }
-      : path,
-  );
-};
-
-const addTodo = (paths: Path[], newPathId: number, todo: PathTodo) => {
-  return paths.map((path) =>
-    path.pathId === newPathId ? { ...path, todos: [...path.todos, todo] } : path,
-  );
-};
 
 const useUpdatePathTodoMutation = () => {
   const queryClient = useQueryClient();
@@ -36,7 +12,12 @@ const useUpdatePathTodoMutation = () => {
   return useMutation({
     mutationFn: ({ todoId, newPathId }: { todoId: number; newPathId: number }) =>
       updatePathTodo({ todoId, newPathId }),
-    onSuccess: (_, { todoId, newPathId }) => {
+
+    onMutate: async ({ todoId, newPathId }) => {
+      await queryClient.cancelQueries({ queryKey: [QUERY_KEY.planInfo] });
+
+      const previousData = queryClient.getQueryData<PlanInfoResponse['data']>([QUERY_KEY.planInfo]);
+
       queryClient.setQueryData<PlanInfoResponse['data']>([QUERY_KEY.planInfo], (oldData) => {
         if (!oldData) return oldData;
 
@@ -50,6 +31,16 @@ const useUpdatePathTodoMutation = () => {
         return { ...oldData, paths: finalPaths };
       });
 
+      return { previousData };
+    },
+
+    onError: (_error, _variables, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData([QUERY_KEY.planInfo], context.previousData);
+      }
+    },
+
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendLimit] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendAll] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.routeTodoList] });

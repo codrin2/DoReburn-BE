@@ -5,6 +5,8 @@ import * as S from './PlanContent.styled';
 import TimeBlockHeader from '../../TimeBlockHeader';
 
 import { Path, PathTodo } from '@/api/plan';
+import { ERROR_MESSAGE } from '@/constants/message';
+import useToast from '@/hooks/useToast';
 import useUpdatePathTodoMutation from '@/pages/PlanPage/hooks/useUpdatePathTodoMutation';
 
 export interface DraggingTodo {
@@ -25,6 +27,7 @@ const PlanContent = ({ paths }: PlanContentProps) => {
   const timeBlockRefs = useRef(new Map<number, HTMLElement>());
 
   const { mutate: updatePathTodo } = useUpdatePathTodoMutation();
+  const { toast } = useToast();
 
   const handleTouchStart = (e: TouchEvent<HTMLElement>, todo: PathTodo) => {
     const touch = e.touches[0];
@@ -64,11 +67,19 @@ const PlanContent = ({ paths }: PlanContentProps) => {
 
     const touch = e.changedTouches[0];
 
-    for (const [pathId, itemRef] of timeBlockRefs.current) {
-      const rect = itemRef.getBoundingClientRect();
+    for (const [pathId, timeBlockRef] of timeBlockRefs.current) {
+      const rect = timeBlockRef.getBoundingClientRect();
+      const isValidTargetBlock = touch.clientY >= rect.top && touch.clientY <= rect.bottom;
 
-      if (touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
-        updatePathTodo({ todoId: draggingTodo.todo.todoId, newPathId: pathId });
+      if (isValidTargetBlock) {
+        updatePathTodo(
+          { todoId: draggingTodo.todo.todoId, newPathId: pathId },
+          {
+            onError: () => {
+              toast({ message: ERROR_MESSAGE.updatePathTodo });
+            },
+          },
+        );
         break;
       }
     }
