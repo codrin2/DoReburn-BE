@@ -40,6 +40,8 @@ const TimeBlockItem = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const checkTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const isDragging = draggingTodo?.todo.todoId === todo.todoId;
+
   const handleUncheckTodo = async () => {
     await checkTodo({ todoId: todo.todoId, isCompleted: false });
     toggle();
@@ -68,9 +70,8 @@ const TimeBlockItem = ({
         onTouchStart={(e) => onTouchStart(e, todo)}
         onTouchMove={onTouchMove}
         ref={itemRef}
-        $isDragging={draggingTodo?.todo.todoId === todo.todoId}
-        $draggingX={draggingTodo?.x}
-        $draggingY={draggingTodo?.y}
+        $isDragging={isDragging}
+        style={isDragging ? { left: `${draggingTodo.x}px`, top: `${draggingTodo.y}px` } : {}}
       >
         <S.CheckIconWrapper
           onClick={isDone ? handleUncheckTodo : handleCheckTodo}

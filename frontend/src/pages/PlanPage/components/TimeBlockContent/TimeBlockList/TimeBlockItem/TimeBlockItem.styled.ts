@@ -1,21 +1,23 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const TimeBlockItemLayout = styled.div<{
   $isDragging: boolean;
-  $draggingX?: number;
-  $draggingY?: number;
 }>`
   position: relative;
   display: flex;
   align-items: center;
   gap: 1.2rem;
+  height: 4rem;
 
   touch-action: none;
-  z-index: ${({ $isDragging }) => ($isDragging ? 1 : 0)};
-  opacity: ${({ $isDragging }) => ($isDragging ? 0.6 : 1)};
-  position: ${({ $isDragging }) => ($isDragging ? 'absolute' : 'static')};
-  left: ${({ $draggingX }) => ($draggingX ? `${$draggingX}px` : '0')};
-  top: ${({ $draggingY }) => ($draggingY ? `${$draggingY}px` : '0')};
+
+  ${({ $isDragging }) =>
+    $isDragging &&
+    css`
+      position: absolute;
+      z-index: 1;
+      opacity: 0.6;
+    `}
 
   &::after {
     content: '';
