@@ -36,7 +36,8 @@ interface CreatePlanPath {
   endName: string;
 }
 
-interface CreatePlanRequest extends Record<string, number | CreatePlanPath[]> {
+export interface CreatePlanRequest {
+  totalTime: number;
   totalSectionTime: number;
   paths: CreatePlanPath[];
 }
@@ -51,8 +52,13 @@ export const cancelPlan = async (planId: number) => {
   return await fetchClient.delete(API_URL.plan(planId));
 };
 
-export const createPlan = async (request: CreatePlanRequest) => {
-  return await fetchClient.post(API_URL.plan(), { body: request });
+export const createPlan = async (
+  request: CreatePlanRequest,
+  coordinates: { startX: string; startY: string; endX: string; endY: string },
+) => {
+  const queryParams = new URLSearchParams(coordinates).toString();
+
+  return await fetchClient.post(`${API_URL.plan()}?${queryParams}`, { body: { ...request } });
 };
 
 export const checkTodo = async (todoId: number, isCompleted: boolean) => {

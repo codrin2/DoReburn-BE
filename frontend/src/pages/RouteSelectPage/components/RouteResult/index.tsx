@@ -12,7 +12,7 @@ import { RouteType } from '@/pages/RouteSelectPage/RouteSelectPage.types';
 const RouteResult = () => {
   const { startX, startY, endX, endY } = Object.fromEntries(useSearchParams()[0]);
   const { data: routes = [] } = useSearchRoutesQuery(startX, startY, endX, endY);
-  const { mutate: createPlan } = useCreatePlanMutation();
+  const { mutate: createPlan } = useCreatePlanMutation(startX, startY, endX, endY);
   const [selectedRoute, setSelectedRoute] = useState<RouteType | null>(null);
 
   const handleRouteSelect = (route: RouteType) => {
@@ -26,17 +26,16 @@ const RouteResult = () => {
   const handleStartButtonClick = () => {
     if (selectedRoute) {
       createPlan({
+        totalTime: selectedRoute.totalTime,
         totalSectionTime: selectedRoute.totalSectionTime,
-        paths: selectedRoute.paths
-          .filter((path) => path.trafficType !== 'WALK')
-          .map((path) => ({
-            trafficType: path.trafficType as 'SUBWAY' | 'BUS',
-            sectionTime: path.sectionTime,
-            subwayCode: path.subwayCode,
-            busNumber: path.busNumber,
-            startName: path.startName ?? '',
-            endName: path.endName ?? '',
-          })),
+        paths: selectedRoute.paths.map((path) => ({
+          trafficType: path.trafficType as 'SUBWAY' | 'BUS',
+          sectionTime: path.sectionTime,
+          subwayCode: path.subwayCode,
+          busNumber: path.busNumber,
+          startName: path.startName ?? '',
+          endName: path.endName ?? '',
+        })),
       });
     }
   };
