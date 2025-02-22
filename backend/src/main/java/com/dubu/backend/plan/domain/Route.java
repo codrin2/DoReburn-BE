@@ -31,4 +31,14 @@ public class Route extends BaseTimeEntity {
     private Double endX;
 
     private Double endY;
+
+    public static Route createRoute(Double startX, Double startY, Double endX, Double endY, Integer totalTime) {
+        return Route.builder()
+                .startX(startX)
+                .startY(startY)
+                .endX(endX)
+                .endY(endY)
+                .totalTime(totalTime)
+                .build();
+    }
 }
