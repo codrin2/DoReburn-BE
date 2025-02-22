@@ -41,3 +41,13 @@ export const getWeekDateRange = (weekDays: DayInfo[]) => {
 
   return `${start.month}월 ${start.day}일 (월) - ${end.month}월 ${end.day}일 (일)`;
 };
+
+export const isCreatedWeek = (weekStartDate: string, memberCreatedDate: string) => {
+  const startOfWeek = new Date(weekStartDate);
+  const createdDate = new Date(memberCreatedDate);
+
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+  return createdDate >= startOfWeek && createdDate <= endOfWeek;
+};

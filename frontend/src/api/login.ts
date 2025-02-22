@@ -19,3 +19,13 @@ export const kakaoLoginAuth = async (code: string): Promise<KakaoLogin> => {
 
   return result;
 };
+
+interface AuthReissueResponse {
+  accessToken: string;
+}
+
+export const authReissue = async (): Promise<AuthReissueResponse> => {
+  const result = await fetchClient.post<AuthReissueResponse>(API_URL.authReissue);
+
+  return result;
+};

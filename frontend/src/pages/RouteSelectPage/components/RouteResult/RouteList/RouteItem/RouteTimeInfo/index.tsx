@@ -24,7 +24,7 @@ const RouteTimeInfo = ({ totalTime, totalSectionTime }: RouteTimeInfoProps) => {
       <S.TotalTime>{formatTime(totalTime)}</S.TotalTime>
 
       <S.TotalSectionTimeBox>
-        <Icon icon="Fire" width={16} height={16} color={theme.colors.gray400} />
+        <Icon icon="Fire" width={16} height={16} color={theme.colors.green600} />
         <span>활용 가능 시간</span>
         <S.TotalSectionTime>{formatTime(totalSectionTime)}</S.TotalSectionTime>
       </S.TotalSectionTimeBox>

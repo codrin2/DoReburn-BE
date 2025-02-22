@@ -1,18 +1,15 @@
-import { useNavigate } from 'react-router';
-
 import * as S from './FeedbackStep2Header.styled';
 
 import Header from '@/components/Header';
 import { useFeedback } from '@/pages/FeedbackPage/hooks/useFeedback';
 
 const FeedbackStep2Header = () => {
-  const navigate = useNavigate();
   const { feedbackStep, setFeedbackStep } = useFeedback();
 
   const goToPrevStep = () => {
     const prevStep = feedbackStep - 1;
     setFeedbackStep(prevStep);
-    navigate(`/feedback?step=${prevStep}`);
+    window.history.replaceState({}, '', `/feedback?step=${prevStep}`);
   };
 
   return (

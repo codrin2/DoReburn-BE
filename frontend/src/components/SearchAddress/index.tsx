@@ -13,6 +13,7 @@ import { colors } from '@/styles/theme';
 
 interface AddressMainProps {
   title: string;
+  address?: string;
   coordinateX: number;
   coordinateY: number;
 }
@@ -52,7 +53,7 @@ const SearchAddress = ({
       });
     } else if (onSelectAddressMain) {
       onSelectAddressMain({
-        title: address.title,
+        title: address.title || address.roadAddress,
         coordinateX: address.x_coordinate,
         coordinateY: address.y_coordinate,
       });
