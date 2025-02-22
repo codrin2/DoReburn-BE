@@ -19,10 +19,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
+/**
+ * 같은 의미인 명칭 정리
+ * 두리번 사용 = ODsay 사용
+ * Route = Path
+ * Path = SubPath
+ */
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class RouteService {
     private final OdsayApiClient odsayApiClient;
@@ -32,37 +37,39 @@ public class RouteService {
     private final PathRepository pathRepository;
 
     /**
-     * 같은 의미인 명칭 정리
-     * 두리번 사용 = ODsay 사용
-     * Route = Path
-     * Path = SubPath
+     * 출발지, 도착지 좌표로 경로를 조회하여,
+     * DB 또는 ODsay API 결과에 따라 RouteSearchResponse DTO 목록을 반환합니다.
      */
+    @Transactional(readOnly = true)
     public List<RouteSearchResponse> getRoutesByStartAndDestination(Long memberId, Double startX, Double startY, Double endX, Double endY) {
         memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
+        // 사용자가 최근 이용한 경로 조회
         List<PathIdentifier> recentlyUsedRoute = loadRecentlyUsedRoute(memberId);
 
         OdsayRouteApiResponse odsayRouteApiResponse = odsayApiClient.searchPublicTransportRoute(startX, startY, endX, endY);
 
         List<RouteSearchResponse> response = new ArrayList<>();
         if (odsayRouteApiResponse == null || odsayRouteApiResponse.result() == null || odsayRouteApiResponse.result().path() == null) {
-            Optional<Route> optionalRoute = routeRepository.findRouteWithPathsByCoordinates(startX, startY, endX, endY);
-
-            if (optionalRoute.isPresent()) {
-                Route route = optionalRoute.get();
-                boolean isRecentlyUsed = false;
+            // API 결과가 없는 경우, DB에서 좌표에 해당하는 Route를 조회 (경로와 관련된 Path도 함께 로딩)
+            List<Route> routeList = routeRepository.findAllWithPathsByCoordinates(startX, startY, endX, endY);
+            routeList.forEach(route -> {
+                // DB에 저장된 경로와 최근 사용 경로가 동일한지 확인
+                boolean isRecentlyUsed = isSameAsSavedRoute(route, recentlyUsedRoute);
                 RouteSearchResponse dto = RouteSearchResponse.fromRoute(route, isRecentlyUsed);
                 response.add(dto);
-            }
+            });
         } else {
             for (OdsayRouteApiResponse.Path apiPath : odsayRouteApiResponse.result().path()) {
+                // API에서 받은 경로와 최근 사용 경로가 동일한지 확인
                 boolean isRecentlyUsed = isSameAsRecentlyUsedRoute(apiPath, recentlyUsedRoute);
                 RouteSearchResponse routeDto = convertApiPathToRoute(apiPath, isRecentlyUsed);
                 response.add(routeDto);
             }
         }
 
+        // 최근 사용 여부 내림차순, 그 다음 totalTime 오름차순 정렬
         response.sort(Comparator
                 .comparing(RouteSearchResponse::isRecentlyUsed, Comparator.reverseOrder())
                 .thenComparing(RouteSearchResponse::totalTime)
@@ -95,21 +102,51 @@ public class RouteService {
                 .toList();
     }
 
+    /**
+     * DB에서 조회한 Route와 최근 사용 Route가 동일한지 확인
+     */
+    private boolean isSameAsSavedRoute(Route route, List<PathIdentifier> recentlyUsedRoute) {
+        List<PathIdentifier> routePathIdentifiers = route.getPaths().stream()
+                .sorted(Comparator.comparing(Path::getPathOrder)) // pathOrder 기준 정렬
+                .map(p -> new PathIdentifier(
+                        p.getTrafficType().name(), // Enum -> String
+                        p.getStartName(),
+                        p.getEndName()
+                ))
+                .toList();
+
+        return isSameRoute(routePathIdentifiers, recentlyUsedRoute);
+    }
+
+    /**
+     * API 응답을 변환한 Route와 최근 사용 Route가 동일한지 확인
+     */
     private boolean isSameAsRecentlyUsedRoute(OdsayRouteApiResponse.Path apiPath,
                                               List<PathIdentifier> recentlyUsedRoute) {
         List<PathIdentifier> currentRouteKeys = extractRouteKeys(apiPath);
+        return isSameRoute(currentRouteKeys, recentlyUsedRoute);
+    }
 
-        if (currentRouteKeys.size() != recentlyUsedRoute.size()) {
+    /**
+     * 두 개의 PathIdentifier 리스트가 동일한지 비교
+     * (길이가 다르면 false, 순서대로 하나씩 비교)
+     */
+    private boolean isSameRoute(List<PathIdentifier> routePathIdentifiers, List<PathIdentifier> recentlyUsedRoute) {
+        if (routePathIdentifiers.size() != recentlyUsedRoute.size()) {
             return false;
         }
-        for (int i = 0; i < currentRouteKeys.size(); i++) {
-            if (!currentRouteKeys.get(i).equals(recentlyUsedRoute.get(i))) {
+        for (int i = 0; i < routePathIdentifiers.size(); i++) {
+            if (!routePathIdentifiers.get(i).equals(recentlyUsedRoute.get(i))) {
                 return false;
             }
         }
         return true;
     }
 
+    /**
+     * ODsay API 경로(apiPath)에서 각 SubPath의 (trafficType, startName, endName) 정보를 추출
+     * 지하철의 경우 "역"을 붙여서 반환(서울역 제외)
+     */
     private List<PathIdentifier> extractRouteKeys(OdsayRouteApiResponse.Path apiPath) {
         List<PathIdentifier> result = new ArrayList<>();
         for (OdsayRouteApiResponse.SubPath subPath : apiPath.subPath()) {
@@ -120,15 +157,14 @@ public class RouteService {
                 String startName = subPath.startName();
                 String endName = subPath.endName();
                 if (tType == 1) { // 지하철
-                    startName += "역";
-                    endName += "역";
+                    startName = Objects.equals(subPath.startName(), "서울역") ? subPath.startName() : subPath.startName() + "역";
+                    endName = Objects.equals(subPath.endName(), "서울역") ? subPath.endName() : subPath.endName() + "역";
                 }
                 result.add(new PathIdentifier(trafficType, startName, endName));
             }
         }
         return result;
     }
-
 
     private RouteSearchResponse convertApiPathToRoute(OdsayRouteApiResponse.Path apiPath, boolean isRecentlyUsed) {
         OdsayRouteApiResponse.Info info = apiPath.info();
@@ -170,8 +206,8 @@ public class RouteService {
             OdsayRouteApiResponse.Lane lane = subPath.lane().get(0);
             if ("SUBWAY".equals(trafficType)) {
                 subwayCode = lane.subwayCode();
-                startName = subPath.startName() + "역";
-                endName = subPath.endName() + "역";
+                startName = Objects.equals(subPath.startName(), "서울역") ? subPath.startName() : subPath.startName() + "역";
+                endName = Objects.equals(subPath.endName(), "서울역") ? subPath.endName() : subPath.endName() + "역";
             } else if ("BUS".equals(trafficType)) {
                 busNumber = lane.busNo();
                 busType = lane.type();
