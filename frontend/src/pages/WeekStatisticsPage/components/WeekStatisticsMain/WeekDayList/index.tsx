@@ -59,17 +59,20 @@ const WeekDayList = ({ weekStartDate, setWeekStartDate, dayAvailableTimes }: Wee
   return (
     <S.WeekDateContainer>
       <S.WeekDateInfoContainer>
-        <button onClick={() => handleWeekChange(-WEEK_DAYS)}>
+        <S.IconButton onClick={() => handleWeekChange(-WEEK_DAYS)}>
           <Icon icon="FilledArrow" rotate={90} />
-        </button>
+        </S.IconButton>
         <div>{getWeekDateRange(weekDays)}</div>
-        <button onClick={() => handleWeekChange(WEEK_DAYS)} disabled={isTodayInWeek(weekStartDate)}>
+        <S.IconButton
+          onClick={() => handleWeekChange(WEEK_DAYS)}
+          disabled={isTodayInWeek(weekStartDate)}
+        >
           <Icon
             icon="FilledArrow"
             rotate={-90}
             color={isTodayInWeek(weekStartDate) ? theme.colors.gray200 : ''}
           />
-        </button>
+        </S.IconButton>
       </S.WeekDateInfoContainer>
 
       <S.WeekDayList>

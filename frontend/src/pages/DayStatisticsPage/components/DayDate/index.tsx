@@ -20,13 +20,13 @@ const DayDate = ({ date, onDayChange }: DayDateProps) => {
 
   return (
     <S.DayDateContainer>
-      <button onClick={() => handleClickDay('prev')}>
+      <S.IconButton onClick={() => handleClickDay('prev')}>
         <Icon icon="FilledArrow" rotate={90} />
-      </button>
+      </S.IconButton>
       <S.DayDateText>{`${month}월 ${day}일 ${dayOfWeekString}요일`}</S.DayDateText>
-      <button onClick={() => handleClickDay('next')}>
+      <S.IconButton onClick={() => handleClickDay('next')}>
         <Icon icon="FilledArrow" rotate={270} />
-      </button>
+      </S.IconButton>
     </S.DayDateContainer>
   );
 };
