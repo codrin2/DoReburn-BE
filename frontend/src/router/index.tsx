@@ -91,7 +91,6 @@ export const router = createBrowserRouter([
   {
     path: '/login/kakao',
     element: <KakaoLoginPage />,
-    loader: memberStatusLoader,
   },
   {
     path: '/statistics/week',
