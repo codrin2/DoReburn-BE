@@ -101,7 +101,12 @@ const PlanContent = ({ paths }: PlanContentProps) => {
           }}
           onTouchEnd={handleTouchEnd}
         >
-          <TimeBlockHeader trafficType={path.trafficType} subwayCode={path.subwayCode} />
+          <TimeBlockHeader
+            trafficType={path.trafficType}
+            startStation={path.startName}
+            subwayCode={path.subwayCode}
+            busNumber={path.busNumber}
+          />
           <TimeBlockContent
             path={path}
             draggingTodo={draggingTodo}
