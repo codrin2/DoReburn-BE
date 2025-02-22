@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
@@ -77,7 +76,27 @@ public interface PlanApi {
             )
     })
     SuccessResponse<Map<String, Long>> createPlan(
-            @Parameter(hidden = true) @RequestAttribute("memberId") Long memberId,
+            Long memberId,
+            @Parameter(
+                    description = "출발지의 X 좌표(경도)",
+                    example = "127.0276009",
+                    required = true
+            ) Double startX,
+            @Parameter(
+                    description = "출발지의 Y 좌표(위도)",
+                    example = "37.4979421",
+                    required = true
+            ) Double startY,
+            @Parameter(
+                    description = "도착지의 X 좌표(경도)",
+                    example = "126.9783740",
+                    required = true
+            ) Double endX,
+            @Parameter(
+                    description = "도착지의 Y 좌표(위도)",
+                    example = "37.5666103",
+                    required = true
+            ) Double endY,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "계획 생성 요청 DTO",
                     required = true,
@@ -86,6 +105,7 @@ public interface PlanApi {
                             examples = {
                                     @ExampleObject(value = """
                                             {
+                                              "totalTime": 50,
                                               "totalSectionTime": 40,
                                               "paths": [
                                                 {
