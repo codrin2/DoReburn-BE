@@ -70,7 +70,6 @@ export const CheckIconWrapper = styled.div<{ $isDone: boolean; $isAnimating?: bo
 export const TimeBlockContent = styled.div`
   display: flex;
   flex-direction: column;
-  width: 23.1rem;
   cursor: pointer;
 `;
 
@@ -78,6 +77,10 @@ export const TodoTitle = styled.span<{ $isDone: boolean }>`
   ${({ theme }) => theme.fonts.body15};
   color: ${({ theme, $isDone }) => ($isDone ? theme.colors.gray400 : theme.colors.gray950)};
   text-decoration: ${({ $isDone }) => ($isDone ? 'line-through' : 'none')};
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const TodoMemo = styled.span`

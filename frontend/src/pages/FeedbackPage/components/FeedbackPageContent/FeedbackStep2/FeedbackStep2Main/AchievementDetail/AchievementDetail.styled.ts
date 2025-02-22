@@ -32,3 +32,9 @@ export const AchievementItem = styled.li`
   color: ${({ theme }) => theme.colors.gray950};
   ${({ theme }) => theme.fonts.body15};
 `;
+
+export const TodoTitle = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;

@@ -60,13 +60,24 @@ public class TodayTodoQueryService implements TargetTodoQueryService {
             if(categoryIds.isEmpty()){
                 throw new MemberCategoryNotFoundException(identifier.memberId());
             }
-            List<Todo> todos = todoRepository.findTodosWithCategoryByCategoryIdsAndType(categoryIds, TodoType.RECOMMEND);
+            List<Long> recommendTodoIds = todoRepository.findTodosWithCategoryByCategoryIdsAndType(categoryIds, TodoType.RECOMMEND);
 
-            Todo recommendTodo = todoRandomSelector.selectOne(todos);
+            Long recommendTodoId = todoRandomSelector.selectOne(recommendTodoIds);
+            Todo recommendTodo = todoRepository.findById(recommendTodoId).get();
 
             Schedule savedSchedule = scheduleRepository.save(newSchedule);
 
-            Todo newTodo = Todo.of(recommendTodo.getTitle(), TodoType.SCHEDULED, recommendTodo.getDifficulty(), null, member, recommendTodo.getCategory(), recommendTodo, newSchedule, null);
+            Todo newTodo = Todo.of(
+                    recommendTodo.getTitle(),
+                    TodoType.SCHEDULED,
+                    recommendTodo.getDifficulty(),
+                    null,
+                    member,
+                    recommendTodo.getCategory(),
+                    recommendTodo,
+                    newSchedule,
+                    null
+            );
             todoRepository.save(newTodo);
 
             return savedSchedule;
@@ -127,9 +138,11 @@ public class TodayTodoQueryService implements TargetTodoQueryService {
 
         // 회원의 카테고리 정보에 해당하는 추천 할 일을 가져온다.
         List<Long> categoryIds = memberCategoryRepository.findCategoryIdsByMember(member);
-        List<Todo> recommendTodos = todoRepository.findTodosWithCategoryByCategoryIdsAndType(categoryIds, TodoType.RECOMMEND);
+        List<Long> recommendTodoIds = todoRepository.findTodosWithCategoryByCategoryIdsAndType(categoryIds, TodoType.RECOMMEND);
 
-        List<Todo> personalizedTodos = todoRandomSelector.selectTodos(5, recommendTodos);
+        List<Long> personalizedTodoIds = todoRandomSelector.selectTodos(5, recommendTodoIds);
+        List<Todo> personalizedTodos = todoRepository.findAllById(personalizedTodoIds);
+
 
         // 오늘 할 일 의 부모 할 일이 추천 할 일이거나 즐겨찾기 할 일인데 즐겨찾기 할 일의 부모 할 일이 추천 할 일이라면 hasChild = true
         List<Long> todayParentTodoIds = todoRepository.findParentTodoIdsByScheduleAndParentTodoNotNull(schedule);

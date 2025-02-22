@@ -19,11 +19,11 @@ import org.springframework.data.domain.SliceImpl;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.dubu.backend.plan.domain.QPath.*;
-import static com.dubu.backend.plan.domain.QPlan.*;
-import static com.dubu.backend.todo.entity.QCategory.*;
-import static com.dubu.backend.todo.entity.QSchedule.*;
-import static com.dubu.backend.todo.entity.QTodo.*;
+import static com.dubu.backend.plan.domain.QPath.path;
+import static com.dubu.backend.plan.domain.QPlan.plan;
+import static com.dubu.backend.todo.entity.QCategory.category;
+import static com.dubu.backend.todo.entity.QSchedule.schedule;
+import static com.dubu.backend.todo.entity.QTodo.todo;
 
 @RequiredArgsConstructor
 public class CustomTodoRepositoryImpl implements CustomTodoRepository{
@@ -111,6 +111,17 @@ public class CustomTodoRepositoryImpl implements CustomTodoRepository{
                                                 ))
                                 ))
                 ))
+                .fetch();
+    }
+
+    @Override
+    public List<Long> findTodosWithCategoryByCategoryIdsAndType(List<Long> categoryIds, TodoType type) {
+        return jpaQueryFactory
+                .select(todo.id)
+                .from(todo)
+                .join(todo.category, category)
+                .where(category.id.in(categoryIds)
+                        .and(todo.type.eq(type)))
                 .fetch();
     }
 

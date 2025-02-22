@@ -5,7 +5,7 @@ import com.dubu.backend.share.dto.response.MemberCategoryInfo;
 import com.dubu.backend.todo.dto.common.Cursor;
 import com.dubu.backend.todo.dto.search.TodoSearchCond;
 import com.dubu.backend.todo.entity.Todo;
-
+import com.dubu.backend.todo.entity.TodoType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -17,4 +17,5 @@ public interface CustomTodoRepository {
     Slice<Todo> findTodosUsingCompositeCursor(Cursor cursor, TodoSearchCond cond, Pageable pageable);
     List<MemberCategoryInfo> findTodoCountGroupByCategoryForStopMembers(List<Member> members, LocalDate date);
     List<MemberCategoryInfo> findTodoCountGroupByCategoryForMoveOrFeedbackMembers(List<Member> members);
+    List<Long> findTodosWithCategoryByCategoryIdsAndType(List<Long> categoryIds, TodoType type);
 }

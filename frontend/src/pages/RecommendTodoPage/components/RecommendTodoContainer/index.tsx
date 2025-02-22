@@ -12,6 +12,7 @@ import Icon from '@/components/Icon';
 import IntersectionObserverScroll from '@/components/IntersectionObserverScroll/IntersectionObserverScroll';
 import { MAX_TODO_ITEM_LENGTH, TODO_TYPE } from '@/constants/config';
 import { TODO_TOAST_MESSAGE } from '@/constants/message';
+import useOverlay from '@/hooks/useOverlay';
 import useQueryParamsDate from '@/hooks/useQueryParamsDate';
 import useToast from '@/hooks/useToast';
 import useTodoListQuery from '@/hooks/useTodoListQuery';
@@ -49,6 +50,7 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
     difficultyList,
   );
   const { toast } = useToast();
+  const overlay = useOverlay();
 
   const isCategory = categoryList.length > 0;
   const isDifficulty = difficultyList.length > 0;
@@ -56,7 +58,7 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
   const handleFilter = (categoryList: CategoryType[], difficultyList: DifficultyType[]) => {
     setCategoryList(categoryList);
     setDifficultyList(difficultyList);
-    close();
+    overlay.close();
   };
 
   const handleAddTodoFromRecommendAll = (todoId: number) => {

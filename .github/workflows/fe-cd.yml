@@ -1,6 +1,11 @@
 name: FE Deploy
 
 on:
+  pull_request: # 테스트 후 삭제
+    branches: [develop]
+    paths:
+      - frontend/**
+
   push:
     branches: [main, develop]
     paths:
@@ -38,6 +43,7 @@ jobs:
           echo "VITE_KAKAO_APP_KEY=${{ secrets.KAKAO_APP_KEY }}" >> .env
           echo "VITE_KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
           echo "VITE_KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env
+          echo "VITE_PUSH_NOTIFICATION_PUBLIC_KEY=${{ secrets.PUSH_NOTIFICATION_PUBLIC_KEY }}" >> .env
 
       - name: Install dependencies (npm ci)
         run: pnpm install --frozen-lockfile

@@ -36,7 +36,14 @@ const PlanHeader = () => {
           <Header.MenuButton />
         </Header.Right>
       </Header>
-      {isOpen && <HomeModal close={close} onConfirm={handleConfirm} />}
+      {isOpen && (
+        <HomeModal
+          title="처음으로 가기"
+          content={['현재 경로 정보와 할 일이 모두 사라져요.', '그래도 이동할까요?']}
+          close={close}
+          onConfirm={handleConfirm}
+        />
+      )}
     </>
   );
 };

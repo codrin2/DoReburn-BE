@@ -2,27 +2,37 @@ import { createPortal } from 'react-dom';
 
 import * as S from './HomeModal.styled';
 
+const getContent = (content: string[]) => {
+  return content.map((text) => (
+    <span key={text}>
+      {text}
+      <br />
+    </span>
+  ));
+};
+
 interface HomeModalProps {
+  title: string;
+  content: string[];
   close: () => void;
   onConfirm: () => void;
+  confirmText?: string;
 }
 
-const HomeModal = ({ close, onConfirm }: HomeModalProps) => {
+const HomeModal = ({ title, content, close, onConfirm, confirmText }: HomeModalProps) => {
   return (
     <>
       {createPortal(
         <S.ModalContainer>
           <S.ModalDimmed onClick={close} />
           <S.Modal>
-            <S.ModalTitle>처음으로 가기</S.ModalTitle>
-            <S.ModalContent>
-              <span>현재 경로 정보와 할 일이 모두 사라져요.</span>
-              <br />
-              <span>그래도 이동할까요?</span>
-            </S.ModalContent>
+            <S.ModalTitle>{title}</S.ModalTitle>
+            <S.ModalContent>{getContent(content)}</S.ModalContent>
             <S.ModalFooter>
               <S.ModalCancelButton onClick={close}>취소하기</S.ModalCancelButton>
-              <S.ModalConfirmButton onClick={onConfirm}>홈으로 이동</S.ModalConfirmButton>
+              <S.ModalConfirmButton onClick={onConfirm}>
+                {confirmText || '홈으로 이동'}
+              </S.ModalConfirmButton>
             </S.ModalFooter>
           </S.Modal>
         </S.ModalContainer>,

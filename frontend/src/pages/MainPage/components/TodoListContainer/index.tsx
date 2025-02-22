@@ -43,7 +43,7 @@ const TodoListContainer = () => {
         {todoList?.map((todo) => (
           <S.TodoItem key={todo.todoId}>
             <Icon icon={ICON_MAPPER[todo.category]} />
-            <span>{todo.title}</span>
+            <S.TodoTitle>{todo.title}</S.TodoTitle>
           </S.TodoItem>
         ))}
       </S.TodoList>
