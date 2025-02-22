@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { LegacyRef, TouchEvent, useEffect, useReducer, useRef, useState } from 'react';
 
 import * as S from './TimeBlockItem.styled';
+import { DraggingTodo } from '../../PlanContent';
 
 import { checkTodo, PathTodo } from '@/api/plan';
 import Icon from '@/components/Icon';
@@ -20,16 +21,16 @@ const useCheckTodoMutation = () => {
 interface TimeBlockItemProps {
   todo: PathTodo;
   onTouchStart: (e: TouchEvent<HTMLDivElement>, todo: PathTodo) => void;
-  onTouchEnd: (e: TouchEvent<HTMLDivElement>) => void;
   onTouchMove: (e: TouchEvent<HTMLDivElement>) => void;
+  draggingTodo: DraggingTodo | null;
   itemRef?: LegacyRef<HTMLDivElement>;
 }
 
 const TimeBlockItem = ({
   todo,
   onTouchStart,
-  onTouchEnd,
   onTouchMove,
+  draggingTodo,
   itemRef,
 }: TimeBlockItemProps) => {
   const showTodoBottomSheet = useShowTodoBottomSheet();
@@ -65,9 +66,11 @@ const TimeBlockItem = ({
     <>
       <S.TimeBlockItemLayout
         onTouchStart={(e) => onTouchStart(e, todo)}
-        onTouchEnd={onTouchEnd}
         onTouchMove={onTouchMove}
         ref={itemRef}
+        $isDragging={draggingTodo?.todo.todoId === todo.todoId}
+        $draggingX={draggingTodo?.x}
+        $draggingY={draggingTodo?.y}
       >
         <S.CheckIconWrapper
           onClick={isDone ? handleUncheckTodo : handleCheckTodo}

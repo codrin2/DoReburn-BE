@@ -5,6 +5,7 @@ export const TimeBlockList = styled.div`
   flex-direction: column;
   gap: 2.4rem;
   overflow: hidden;
+  flex-grow: 1;
 `;
 
 export const EmptyTimeBlock = styled.div`

@@ -15,6 +15,7 @@ const useFinishPlanMutation = () => {
     mutationFn: finishPlan,
   });
 };
+
 const PlanPage = () => {
   useRedirectByMemberStatus();
   const { data } = usePlanInfoQuery();
@@ -39,26 +40,10 @@ const PlanPage = () => {
       <S.HorizontalLine />
 
       {/* 경로별 할 일 정보 */}
-      {/* <S.Plant>
-        {data?.paths.map((path) => (
-          <S.TimeBlockSection key={path.pathId}>
-            <TimeBlockHeader trafficType={path.trafficType} subwayCode={path.subwayCode} />
-            <TimeBlockContent
-              pathId={path.pathId}
-              sectionTime={path.sectionTime}
-              todos={path.todos}
-              trafficType={path.trafficType}
-              subwayCode={path.subwayCode}
-            />
-          </S.TimeBlockSection>
-        ))}
-      </S.PlanContent> */}
       <PlanContent paths={data?.paths} />
 
       {/* 이동 완료 버튼 영역 */}
-      <S.FinishButtonWrapper>
-        <S.FinishButton onClick={handleClickFinish}>이동 완료</S.FinishButton>
-      </S.FinishButtonWrapper>
+      <S.FinishButton onClick={handleClickFinish}>이동 완료</S.FinishButton>
     </S.PlanPageLayout>
   );
 };

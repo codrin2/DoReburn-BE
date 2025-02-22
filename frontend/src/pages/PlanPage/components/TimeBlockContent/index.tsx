@@ -67,6 +67,7 @@ const TimeBlockContent = ({
             />
           </S.TimeBlockHeader>
           <TimeBlockList
+            pathId={path.pathId}
             todos={path.todos}
             draggingTodo={draggingTodo}
             onTouchStart={onTouchStart}
