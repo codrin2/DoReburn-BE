@@ -22,17 +22,15 @@ interface PlanContentProps {
 }
 
 const PlanContent = ({ paths }: PlanContentProps) => {
-  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const [draggingTodo, setDraggingTodo] = useState<DraggingTodo | null>(null);
   const timeBlockRefs = useRef(new Map<number, HTMLElement>());
 
-  const { mutate: updatePathTodo } = useUpdatePathTodoMutation();
+  const { mutateAsync: updatePathTodo } = useUpdatePathTodoMutation();
   const { toast } = useToast();
 
   const handleTouchStart = (e: TouchEvent<HTMLElement>, todo: PathTodo) => {
     const touch = e.touches[0];
     const targetBlock = (e.target as HTMLElement).getBoundingClientRect();
-    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
 
     // 터치한 위치와 block의 위치 차이 계산하여 보정
     const offsetX = touch.clientX - targetBlock.left;
@@ -62,7 +60,7 @@ const PlanContent = ({ paths }: PlanContentProps) => {
     );
   };
 
-  const handleTouchEnd = (e: React.TouchEvent<HTMLElement>) => {
+  const handleTouchEnd = async (e: React.TouchEvent<HTMLElement>) => {
     if (!draggingTodo) return;
 
     const touch = e.changedTouches[0];
@@ -72,7 +70,7 @@ const PlanContent = ({ paths }: PlanContentProps) => {
       const isValidTargetBlock = touch.clientY >= rect.top && touch.clientY <= rect.bottom;
 
       if (isValidTargetBlock) {
-        updatePathTodo(
+        await updatePathTodo(
           { todoId: draggingTodo.todo.todoId, newPathId: pathId },
           {
             onError: () => {
@@ -80,6 +78,7 @@ const PlanContent = ({ paths }: PlanContentProps) => {
             },
           },
         );
+
         break;
       }
     }
