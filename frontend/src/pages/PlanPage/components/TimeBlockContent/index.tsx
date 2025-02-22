@@ -1,4 +1,4 @@
-import { LegacyRef, TouchEvent } from 'react';
+import { TouchEvent } from 'react';
 import { useNavigate } from 'react-router';
 
 import { DraggingTodo } from './PlanContent';
@@ -14,19 +14,10 @@ interface TimeBlockProps {
   path: Path;
   draggingTodo: DraggingTodo | null;
   onTouchStart: (e: TouchEvent<HTMLDivElement>, todo: PathTodo) => void;
-  onTouchEnd: (e: TouchEvent<HTMLDivElement>) => void;
   onTouchMove: (e: TouchEvent<HTMLDivElement>) => void;
-  itemRef?: LegacyRef<HTMLDivElement>;
 }
 
-const TimeBlockContent = ({
-  path,
-  draggingTodo,
-  onTouchStart,
-  onTouchEnd,
-  onTouchMove,
-  itemRef,
-}: TimeBlockProps) => {
+const TimeBlockContent = ({ path, draggingTodo, onTouchStart, onTouchMove }: TimeBlockProps) => {
   const navigate = useNavigate();
 
   const isEmptyTodo = path.todos.length === 0;
@@ -67,13 +58,10 @@ const TimeBlockContent = ({
             />
           </S.TimeBlockHeader>
           <TimeBlockList
-            pathId={path.pathId}
             todos={path.todos}
             draggingTodo={draggingTodo}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
-            itemRef={itemRef}
           />
         </S.TimeBlockWrapper>
       </S.TimeBlockContainer>

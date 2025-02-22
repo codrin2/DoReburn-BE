@@ -20,18 +20,18 @@ interface PlanContentProps {
 const PlanContent = ({ paths }: PlanContentProps) => {
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const [draggingTodo, setDraggingTodo] = useState<DraggingTodo | null>(null);
-  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const itemRefs = useRef<(HTMLElement | null)[]>([]);
 
   const { mutate: updatePathTodo } = useUpdatePathTodoMutation();
 
-  const handleTouchStart = (e: TouchEvent<HTMLDivElement>, todo: PathTodo) => {
+  const handleTouchStart = (e: TouchEvent<HTMLElement>, todo: PathTodo) => {
     const touch = e.touches[0];
     touchStartRef.current = { x: touch.clientX, y: touch.clientY };
 
     setDraggingTodo({ todo, x: touch.clientX, y: touch.clientY });
   };
 
-  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+  const handleTouchEnd = (e: React.TouchEvent<HTMLElement>) => {
     const touch = e.changedTouches[0];
 
     for (const itemRef of itemRefs.current) {
@@ -64,14 +64,17 @@ const PlanContent = ({ paths }: PlanContentProps) => {
   return (
     <S.PlanContent>
       {paths?.map((path, idx) => (
-        <S.TimeBlockSection key={path.pathId}>
+        <S.TimeBlockSection
+          key={path.pathId}
+          ref={(el) => (itemRefs.current[idx] = el)}
+          onTouchEnd={handleTouchEnd}
+          data-path-id={path.pathId}
+        >
           <TimeBlockHeader trafficType={path.trafficType} subwayCode={path.subwayCode} />
           <TimeBlockContent
             path={path}
-            itemRef={(el) => (itemRefs.current[idx] = el)}
             draggingTodo={draggingTodo}
             onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
             onTouchMove={handleTouchMove}
           />
         </S.TimeBlockSection>
