@@ -43,6 +43,7 @@ export const API_URL = {
   notification: `${BASE_URL}/api/v1/notification`,
   notificationSubscribe: `${BASE_URL}/api/v1/notification/subscribe`,
   updateCurrentLocation: `${BASE_URL}/api/v1/members/location`,
+  authReissue: `${BASE_URL}/api/v1/auth/reissue`,
 };
 
 export const MOCK_API_URL = {
