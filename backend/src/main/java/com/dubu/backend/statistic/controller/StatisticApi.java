@@ -76,10 +76,31 @@ public interface StatisticApi {
                                             """
                                     ),
                                     @ExampleObject(
+                                            name = "계획은 있으나 한 일이 없는 경우",
+                                            value = """
+                                            {
+                                              "data": {
+                                                "memberCreateDate": "2023-02-05",
+                                                "totalUsageTime": 70,
+                                                "totalTodoCount": 0,
+                                                "feedbacks": [
+                                                  {
+                                                    "mood": "SATISFIED",
+                                                    "memo": "feedback_990214\\r"
+                                                  }
+                                                ],
+                                                "categoryTodoCounts": []
+                                              }
+                                            }
+                                            """
+                                    ),
+                                    @ExampleObject(
                                             name = "일일 통계 데이터가 없는 경우",
                                             value = """
                                             {
-                                                "data": null
+                                                "data": {
+                                                    "memberCreateDate" :"2025-02-17"
+                                                }
                                             }
                                             """
                                     ),
@@ -124,91 +145,142 @@ public interface StatisticApi {
                                             name = "주간 통계 데이터가 있을 경우",
                                             value = """
                                             {
-                                              "data": {
-                                                "memberCreateDate": "2023-02-05",
-                                                "dayAvailableTimes": [
-                                                  {
-                                                    "date": "2025-01-27",
-                                                    "availableTime": 176
-                                                  },
-                                                  {
-                                                    "date": "2025-01-28",
-                                                    "availableTime": 46
-                                                  },
-                                                  {
-                                                    "date": "2025-01-29",
-                                                    "availableTime": 41
-                                                  },
-                                                  {
-                                                    "date": "2025-01-30",
-                                                    "availableTime": 124
-                                                  },
-                                                  {
-                                                    "date": "2025-01-31",
-                                                    "availableTime": 34
-                                                  },
-                                                  {
-                                                    "date": "2025-02-01",
-                                                    "availableTime": 0
-                                                  },
-                                                  {
-                                                    "date": "2025-02-02",
-                                                    "availableTime": 0
-                                                  }
-                                                ],
-                                                "totalTodoCount": 36,
-                                                "lastWeekDiff": -102,
-                                                "totalAvailableTime": 421,
-                                                "moodCounts": [
-                                                  {
-                                                    "mood": "MODERATE",
-                                                    "count": 5
-                                                  },
-                                                  {
-                                                    "mood": "SATISFIED",
-                                                    "count": 6
-                                                  }
-                                                ],
-                                                "categoryTodoCounts": [
-                                                  {
-                                                    "category": "NEWS",
-                                                    "usageTime": 37,
-                                                    "count": 8
-                                                  },
-                                                  {
-                                                    "category": "OTHERS",
-                                                    "usageTime": 35,
-                                                    "count": 5
-                                                  },
-                                                  {
-                                                    "category": "LANGUAGE",
-                                                    "usageTime": 34,
-                                                    "count": 6
-                                                  },
-                                                  {
-                                                    "category": "ENGLISH",
-                                                    "usageTime": 29,
-                                                    "count": 6
-                                                  },
-                                                  {
-                                                    "category": "HOBBY",
-                                                    "usageTime": 24,
-                                                    "count": 6
-                                                  },
-                                                  {
-                                                    "category": "READING",
-                                                    "usageTime": 16,
-                                                    "count": 5
-                                                  }
-                                                ]
-                                              }
-                                            }
+                                                       "data": {
+                                                         "memberCreateDate": "2023-02-05",
+                                                         "dayAvailableTimes": [
+                                                           {
+                                                             "date": "2025-01-27",
+                                                             "availableTime": 176
+                                                           },
+                                                           {
+                                                             "date": "2025-01-28",
+                                                             "availableTime": 46
+                                                           },
+                                                           {
+                                                             "date": "2025-01-29",
+                                                             "availableTime": 41
+                                                           },
+                                                           {
+                                                             "date": "2025-01-30",
+                                                             "availableTime": 98
+                                                           },
+                                                           {
+                                                             "date": "2025-01-31",
+                                                             "availableTime": 34
+                                                           },
+                                                           {
+                                                             "date": "2025-02-01",
+                                                             "availableTime": 0
+                                                           },
+                                                           {
+                                                             "date": "2025-02-02",
+                                                             "availableTime": 0
+                                                           }
+                                                         ],
+                                                         "totalTodoCount": 32,
+                                                         "lastWeekDiff": -128,
+                                                         "totalAvailableTime": 395,
+                                                         "moodCounts": [
+                                                           {
+                                                             "mood": "MODERATE",
+                                                             "count": 5
+                                                           },
+                                                           {
+                                                             "mood": "SATISFIED",
+                                                             "count": 5
+                                                           }
+                                                         ],
+                                                         "categoryTodoCounts": [
+                                                           {
+                                                             "category": "NEWS",
+                                                             "usageTime": 37,
+                                                             "count": 8
+                                                           },
+                                                           {
+                                                             "category": "OTHERS",
+                                                             "usageTime": 35,
+                                                             "count": 4
+                                                           },
+                                                           {
+                                                             "category": "ENGLISH",
+                                                             "usageTime": 29,
+                                                             "count": 6
+                                                           },
+                                                           {
+                                                             "category": "LANGUAGE",
+                                                             "usageTime": 28,
+                                                             "count": 4
+                                                           },
+                                                           {
+                                                             "category": "HOBBY",
+                                                             "usageTime": 24,
+                                                             "count": 6
+                                                           },
+                                                           {
+                                                             "category": "READING",
+                                                             "usageTime": 15,
+                                                             "count": 4
+                                                           }
+                                                         ]
+                                                       }
+                                                     }
+                                           """
+                                    ),
+                                    @ExampleObject(
+                                            name = "계획은 있으나 한 일이 없는 경우",
+                                            value = """
+                                                    {
+                                                      "data": {
+                                                        "memberCreateDate": "2023-02-05",
+                                                        "dayAvailableTimes": [
+                                                          {
+                                                            "date": "2025-01-31",
+                                                            "availableTime": 34
+                                                          },
+                                                          {
+                                                            "date": "2025-02-01",
+                                                            "availableTime": 0
+                                                          },
+                                                          {
+                                                            "date": "2025-02-02",
+                                                            "availableTime": 0
+                                                          },
+                                                          {
+                                                            "date": "2025-02-03",
+                                                            "availableTime": 0
+                                                          },
+                                                          {
+                                                            "date": "2025-02-04",
+                                                            "availableTime": 0
+                                                          },
+                                                          {
+                                                            "date": "2025-02-05",
+                                                            "availableTime": 0
+                                                          },
+                                                          {
+                                                            "date": "2025-02-06",
+                                                            "availableTime": 0
+                                                          }
+                                                        ],
+                                                        "totalTodoCount": 0,
+                                                        "lastWeekDiff": -470,
+                                                        "totalAvailableTime": 34,
+                                                        "moodCounts": [
+                                                          {
+                                                            "mood": "SATISFIED",
+                                                            "count": 1
+                                                          }
+                                                        ],
+                                                        "categoryTodoCounts": []
+                                                    }
+                                                }
                                             """
                                     ),
                                     @ExampleObject(
                                             name = "주간 통계 데이터가 없는 경우",
                                             value = """
                                             {
+                                                "memberCreateDate": "2023-02-05",
                                                 "data": null
                                             }
                                             """
