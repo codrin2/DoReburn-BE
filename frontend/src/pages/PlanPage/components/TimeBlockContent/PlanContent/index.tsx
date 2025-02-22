@@ -20,7 +20,7 @@ interface PlanContentProps {
 const PlanContent = ({ paths }: PlanContentProps) => {
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const [draggingTodo, setDraggingTodo] = useState<DraggingTodo | null>(null);
-  const itemRefs = useRef<(HTMLElement | null)[]>([]);
+  const timeBlockRefs = useRef(new Map<number, HTMLElement>());
 
   const { mutate: updatePathTodo } = useUpdatePathTodoMutation();
 
@@ -32,26 +32,20 @@ const PlanContent = ({ paths }: PlanContentProps) => {
   };
 
   const handleTouchEnd = (e: React.TouchEvent<HTMLElement>) => {
+    if (!draggingTodo) return;
+
     const touch = e.changedTouches[0];
 
-    for (const itemRef of itemRefs.current) {
-      if (itemRef) {
-        const rect = itemRef.getBoundingClientRect();
+    for (const [pathId, itemRef] of timeBlockRefs.current) {
+      const rect = itemRef.getBoundingClientRect();
 
-        const newPathId = Number(itemRef.dataset.pathId);
-
-        if (
-          touch.clientY >= rect.top &&
-          touch.clientY <= rect.bottom &&
-          draggingTodo &&
-          newPathId
-        ) {
-          updatePathTodo({ todoId: draggingTodo.todo.todoId, newPathId });
-        }
+      if (touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+        updatePathTodo({ todoId: draggingTodo.todo.todoId, newPathId: pathId });
+        break;
       }
     }
 
-    setDraggingTodo(null); // 드래그 종료
+    setDraggingTodo(null);
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
@@ -63,12 +57,17 @@ const PlanContent = ({ paths }: PlanContentProps) => {
 
   return (
     <S.PlanContent>
-      {paths?.map((path, idx) => (
+      {paths?.map((path) => (
         <S.TimeBlockSection
           key={path.pathId}
-          ref={(el) => (itemRefs.current[idx] = el)}
+          ref={(node) => {
+            if (node && timeBlockRefs.current.get(path.pathId) !== node) {
+              timeBlockRefs.current.set(path.pathId, node);
+            } else if (node === null) {
+              timeBlockRefs.current.delete(path.pathId);
+            }
+          }}
           onTouchEnd={handleTouchEnd}
-          data-path-id={path.pathId}
         >
           <TimeBlockHeader trafficType={path.trafficType} subwayCode={path.subwayCode} />
           <TimeBlockContent
