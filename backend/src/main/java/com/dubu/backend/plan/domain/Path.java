@@ -16,7 +16,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"plan_id", "pathOrder"})
+        @UniqueConstraint(columnNames = {"plan_id", "pathOrder"}),
+        @UniqueConstraint(columnNames = {"route_id", "pathOrder"})
 })
 public class Path extends BaseTimeEntity {
     @Id
@@ -25,8 +26,12 @@ public class Path extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "plan_id", nullable = false)
+    @JoinColumn(name = "plan_id")
     private Plan plan;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "route_id")
+    private Route route;
 
 //    @BatchSize(size = 100)
     @Builder.Default
