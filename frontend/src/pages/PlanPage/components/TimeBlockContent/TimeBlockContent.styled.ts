@@ -59,8 +59,9 @@ export const SectionTime = styled.span`
 export const EditButton = styled(IconButton)`
   color: ${({ theme }) => theme.colors.gray600};
   gap: 0.4rem;
+  padding-left: 2.4rem;
 
   span {
-    ${({ theme }) => theme.fonts.label13};
+    ${({ theme }) => theme.fonts.label14Semi};
   }
 `;

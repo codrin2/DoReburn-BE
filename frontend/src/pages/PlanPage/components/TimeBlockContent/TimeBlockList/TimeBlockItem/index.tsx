@@ -65,29 +65,27 @@ const TimeBlockItem = ({
   }, []);
 
   return (
-    <>
-      <S.TimeBlockItemLayout
-        onTouchStart={(e) => onTouchStart(e, todo)}
-        onTouchMove={onTouchMove}
-        ref={itemRef}
-        $isDragging={isDragging}
-        style={isDragging ? { left: `${draggingTodo.x}px`, top: `${draggingTodo.y}px` } : {}}
+    <S.TimeBlockItemLayout
+      onTouchStart={(e) => onTouchStart(e, todo)}
+      onTouchMove={onTouchMove}
+      ref={itemRef}
+      $isDragging={isDragging}
+      style={isDragging ? { left: `${draggingTodo.x}px`, top: `${draggingTodo.y}px` } : {}}
+    >
+      <S.CheckIconWrapper
+        onClick={isDone ? handleUncheckTodo : handleCheckTodo}
+        $isDone={isDone}
+        $isAnimating={isAnimating}
       >
-        <S.CheckIconWrapper
-          onClick={isDone ? handleUncheckTodo : handleCheckTodo}
-          $isDone={isDone}
-          $isAnimating={isAnimating}
-        >
-          <Icon icon="EmptyCheck" cursor="pointer" />
-          <Icon icon="FilledCheck" cursor="pointer" />
-          <Icon icon={ICON_MAPPER[todo.category]} cursor="pointer" />
-        </S.CheckIconWrapper>
-        <S.TimeBlockContent onClick={() => showTodoBottomSheet(todo)}>
-          <S.TodoTitle $isDone={isDone}>{todo.title}</S.TodoTitle>
-          <S.TodoMemo>{todo.memo}</S.TodoMemo>
-        </S.TimeBlockContent>
-      </S.TimeBlockItemLayout>
-    </>
+        <Icon icon="EmptyCheck" cursor="pointer" width={28} height={28} />
+        <Icon icon="FilledCheck" cursor="pointer" width={28} height={28} />
+        <Icon icon={ICON_MAPPER[todo.category]} cursor="pointer" width={28} height={28} />
+      </S.CheckIconWrapper>
+      <S.TimeBlockContent onClick={() => showTodoBottomSheet(todo)}>
+        <S.TodoTitle $isDone={isDone}>{todo.title}</S.TodoTitle>
+        <S.TodoMemo>{todo.memo}</S.TodoMemo>
+      </S.TimeBlockContent>
+    </S.TimeBlockItemLayout>
   );
 };
 
