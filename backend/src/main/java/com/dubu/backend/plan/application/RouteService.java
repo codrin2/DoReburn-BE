@@ -36,6 +36,15 @@ public class RouteService {
     private final RouteRepository routeRepository;
     private final PathRepository pathRepository;
 
+    @Transactional
+    public Route createNewRoute(Double startX, Double startY,
+                                Double endX, Double endY,
+                                Integer totalTime
+    ) {
+        Route newRoute = Route.createRoute(startX, startY, endX, endY, totalTime);
+        return routeRepository.save(newRoute);
+    }
+
     /**
      * 출발지, 도착지 좌표로 경로를 조회하여,
      * DB 또는 ODsay API 결과에 따라 RouteSearchResponse DTO 목록을 반환합니다.
@@ -76,6 +85,30 @@ public class RouteService {
         );
 
         return response;
+    }
+
+    @Transactional(readOnly = true)
+    public Route findReusableRoute(Double startX, Double startY, Double endX, Double endY,
+                                   List<PathIdentifier> newPathIdentifiers) {
+
+        // 좌표가 같은 Route들 모두 조회
+        List<Route> existingRoutes = routeRepository.findAllWithPathsByCoordinates(startX, startY, endX, endY);
+
+        // 각 Route의 PathIdentifier 목록 추출 후, newPathIdentifiers를 포함하는지 검사
+        return existingRoutes.stream()
+                .filter(routeCandidate -> {
+                    List<PathIdentifier> existingPathIdentifiers = routeCandidate.getPaths().stream()
+                            .map(p -> new PathIdentifier(
+                                    p.getTrafficType().name(),
+                                    p.getStartName(),
+                                    p.getEndName()
+                            ))
+                            .distinct()
+                            .toList();
+                    return existingPathIdentifiers.containsAll(newPathIdentifiers);
+                })
+                .findFirst()
+                .orElse(null);
     }
 
     private List<PathIdentifier> loadRecentlyUsedRoute(Long memberId) {
