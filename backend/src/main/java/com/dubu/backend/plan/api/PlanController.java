@@ -22,9 +22,13 @@ public class PlanController implements PlanApi {
     @PostMapping
     public SuccessResponse<Map<String, Long>> createPlan(
             @RequestAttribute("memberId") Long memberId,
+            @RequestParam("startX") Double startX,
+            @RequestParam("startY") Double startY,
+            @RequestParam("endX") Double endX,
+            @RequestParam("endY") Double endY,
             @RequestBody PlanCreateRequest planCreateRequest
     ) {
-        Long planId = planService.savePlan(memberId, planCreateRequest);
+        Long planId = planService.savePlan(memberId, startX, startY, endX, endY, planCreateRequest);
 
         return new SuccessResponse<>(Map.of("planId", planId));
     }
