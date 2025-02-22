@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import * as S from './FeedbackPageContent.styled';
 import FeedbackStep1 from './FeedbackStep1';
@@ -13,7 +12,6 @@ import useSaveFeedbackMutation from '@/pages/FeedbackPage/hooks/useSaveFeedbackM
 import theme from '@/styles/theme';
 
 const FeedbackPageContent = () => {
-  const navigate = useNavigate();
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const { feedbackStep, setFeedbackStep, feedbackData } = useFeedback();
   const { saveFeedbackMutate } = useSaveFeedbackMutation(() => setIsSuccessModalOpen(true));
@@ -22,7 +20,7 @@ const FeedbackPageContent = () => {
   const goToNextStep = () => {
     const nextStep = feedbackStep + 1;
     setFeedbackStep(nextStep);
-    navigate(`/feedback?step=${nextStep}`);
+    window.history.replaceState({}, '', `/feedback?step=${nextStep}`);
   };
 
   const handleCompleteButtonClick = () => {
