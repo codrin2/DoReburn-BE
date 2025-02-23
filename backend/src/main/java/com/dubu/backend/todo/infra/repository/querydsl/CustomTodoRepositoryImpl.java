@@ -73,6 +73,18 @@ public class CustomTodoRepositoryImpl implements CustomTodoRepository{
         return new SliceImpl<>(results, pageable, hasNext);
     }
 
+    @Override
+    public List<Long> findTodosWithCategoryByCategoryIdsAndType(List<Long> categoryIds, TodoType type) {
+        return jpaQueryFactory
+                .select(todo.id)
+                .from(todo)
+                .join(todo.category, category)
+                .where(category.id.in(categoryIds)
+                        .and(todo.type.eq(type)))
+                .fetch();
+    }
+
+
     private BooleanExpression cursor(Cursor cursor){
         Long categoryId = cursor.cursorCategoryId();
         String difficulty = cursor.cursorDifficulty();

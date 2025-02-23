@@ -46,9 +46,6 @@ public interface TodoRepository extends JpaRepository<Todo, Long>, CustomTodoRep
     @Query("SELECT t From Todo t WHERE t.member = :member AND t.parentTodo = :parentTodo AND t.type = :type")
     Optional<Todo> findByMemberAndParentTodoAndType(@Param("member") Member member, @Param("parentTodo") Todo parentTod, @Param("type") TodoType type);
 
-    @Query("SELECT t FROM Todo t JOIN FETCH t.category WHERE t.category.id in :categoryIds AND t.type = :type")
-    List<Todo> findTodosWithCategoryByCategoryIdsAndType(@Param("categoryIds")List<Long> categoryIds, @Param("type") TodoType type);
-
     // 경로로 조회
     @Query("SELECT t FROM Todo t WHERE t.path = :path")
     List<Todo> findTodosByPath(Path path);
