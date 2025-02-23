@@ -1,7 +1,7 @@
 package com.dubu.backend.plan.dto.response;
 
 import com.dubu.backend.plan.domain.Plan;
-import com.dubu.backend.todo.entity.Todo;
+import com.dubu.backend.todo.domain.Todo;
 
 import java.util.List;
 

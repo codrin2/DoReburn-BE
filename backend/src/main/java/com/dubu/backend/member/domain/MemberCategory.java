@@ -1,7 +1,7 @@
 package com.dubu.backend.member.domain;
 
 import com.dubu.backend.global.domain.BaseTimeEntity;
-import com.dubu.backend.todo.entity.Category;
+import com.dubu.backend.todo.domain.Category;
 import jakarta.persistence.*;
 import lombok.*;
 

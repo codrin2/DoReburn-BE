@@ -2,7 +2,6 @@ package com.dubu.backend.plan.infra.repository;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.plan.domain.Plan;
-import com.dubu.backend.todo.entity.TodoType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

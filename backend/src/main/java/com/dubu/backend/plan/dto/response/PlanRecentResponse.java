@@ -3,7 +3,7 @@ package com.dubu.backend.plan.dto.response;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.domain.enums.TrafficType;
-import com.dubu.backend.todo.entity.Todo;
+import com.dubu.backend.todo.domain.Todo;
 
 import java.time.LocalDateTime;
 import java.util.List;
