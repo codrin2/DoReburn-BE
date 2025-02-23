@@ -48,24 +48,13 @@ public class ShareTodoService {
             throw new InvalidMemberStatusException(surroundingMemberStatus.name());
         }
 
-        List<Todo> surroundMemberTodos = null;
+        Plan latestPlan = planRepository.findTopByMemberAndIsCompletedOrderByCreatedAtDesc(surroundingMember, true).orElseThrow(PlanNotFoundException::new);
 
-        // 회원의 상태가 STOP 이면 회원의 오늘 할 일을 가져온다.
-        if (surroundingMemberStatus.equals(Status.STOP)) {
-            Schedule surroundMemberTodaySchedule = scheduleRepository.findLatestSchedule(surroundingMember, LocalDate.now()).orElseThrow(ScheduleNotFoundException::new);
+        List<Path> pathsOfLatestPlan = pathRepository.findPathsByPlanAndIsCompleted(latestPlan, true);
 
-            surroundMemberTodos = todoRepository.findTodosWithCategoryBySchedule(surroundMemberTodaySchedule);
-        }
-        // 회원의 상태가 MOVE 나 FEEDBACK 이면 최근 계획의 할 일을 가져온다.
-        else {
-            Plan latestPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(surroundingMemberId).orElseThrow(PlanNotFoundException::new);
-
-            List<Path> pathsOfLatestPlan = pathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS);
-
-            surroundMemberTodos = pathsOfLatestPlan.stream()
-                    .flatMap(path -> path.getTodos().stream())
-                    .toList();
-        }
+        List<Todo> surroundMemberTodos = pathsOfLatestPlan.stream()
+                .flatMap(path -> path.getTodos().stream())
+                .toList();
 
         List<Long> surroundMemberParentTodoIds = todoRepository.findParentTodoIdsByParentTodoAndMemberAndType(surroundMemberTodos, selfMember, TodoType.SAVE);
          return SurroundingMemberInfo.of(surroundingMember.getNickname(),
