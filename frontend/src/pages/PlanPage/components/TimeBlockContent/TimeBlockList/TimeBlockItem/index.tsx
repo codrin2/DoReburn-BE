@@ -27,7 +27,7 @@ const TimeBlockItem = ({
   const { handleCheckTodo, handleUncheckTodo, isAnimatingCheck } = useCheckTodo(todo);
   const showTodoBottomSheet = useShowTodoBottomSheet();
 
-  const { todoId, isDone } = todo;
+  const { todoId, category, title, memo, isDone } = todo;
   const isDragging = draggingTodo?.todo.todoId === todoId;
 
   return (
@@ -45,11 +45,11 @@ const TimeBlockItem = ({
       >
         <Icon icon="EmptyCheck" cursor="pointer" width={28} height={28} />
         <Icon icon="FilledCheck" cursor="pointer" width={28} height={28} />
-        <Icon icon={ICON_MAPPER[todo.category]} cursor="pointer" width={28} height={28} />
+        <Icon icon={ICON_MAPPER[category]} cursor="pointer" width={28} height={28} />
       </S.CheckIconWrapper>
       <S.TimeBlockContent onClick={() => showTodoBottomSheet(todo)}>
-        <S.TodoTitle $isDone={isDone}>{todo.title}</S.TodoTitle>
-        <S.TodoMemo>{todo.memo}</S.TodoMemo>
+        <S.TodoTitle $isDone={isDone}>{title}</S.TodoTitle>
+        <S.TodoMemo>{memo}</S.TodoMemo>
       </S.TimeBlockContent>
     </S.TimeBlockItemLayout>
   );
