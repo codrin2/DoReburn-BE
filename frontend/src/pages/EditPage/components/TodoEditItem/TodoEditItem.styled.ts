@@ -16,11 +16,16 @@ export const TodoTextWrapper = styled.div`
   flex-grow: 1;
   flex-direction: column;
   gap: 0.8rem;
+
+  min-width: 0;
 `;
 
 export const TodoTitle = styled.h3<{ $disabled?: boolean }>`
   ${({ theme }) => theme.fonts.body16};
   color: ${({ theme, $disabled }) => ($disabled ? theme.colors.gray400 : theme.colors.gray950)};
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 export const TodoBadgeWrapper = styled.div`
