@@ -198,3 +198,22 @@ feat: [커밋 내용] #1
   ![Discord Badge](https://img.shields.io/badge/Discord-5865F2?style=flat-square&logo=discord&logoColor=white)
   ![Slack Badge](https://img.shields.io/badge/Slack-4A154B?style=flat-square&logo=slack&logoColor=white)
   ![FigJam Badge](https://img.shields.io/badge/FigJam-FF7262?style=flat-square&logo=figma&logoColor=white)
+
+
+## 회고
+### 일인 회고
+[박규한 개인회고](https://sulky-koala-70d.notion.site/3e30b0d1c111493c95249b1f37338246?pvs=73)
+
+[손영진 개인회고](https://sulky-koala-70d.notion.site/18994660e5978096888ee10a71819b9c)
+
+[문희상 개인회고](https://sulky-koala-70d.notion.site/18994660e59780819014df71918f1f35?pvs=73)
+
+[김현원 개인회고](https://sulky-koala-70d.notion.site/18994660e59780359cfbeec5f781f91b?pvs=73)
+
+### 주간 회고
+<img width="1025" alt="image" src="https://github.com/user-attachments/assets/812a038f-fcff-4028-bac6-8ce6883067b6" />
+<img width="1302" alt="image" src="https://github.com/user-attachments/assets/8beab4ac-bd38-4478-91ae-0c3886d7e0b7" />
+<img width="1032" alt="image" src="https://github.com/user-attachments/assets/b766adc3-c515-456f-93b1-0282b9c67050" />
+
+
+
