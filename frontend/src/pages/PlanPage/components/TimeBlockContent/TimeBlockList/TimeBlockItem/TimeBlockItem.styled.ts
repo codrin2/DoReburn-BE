@@ -70,10 +70,17 @@ export const CheckIconWrapper = styled.div<{ $isDone: boolean; $isAnimating?: bo
   }
 `;
 
-export const TimeBlockContent = styled.div`
+export const TimeBlockContent = styled.button`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   cursor: pointer;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  flex-basis: 85%;
 `;
 
 export const TodoTitle = styled.span<{ $isDone: boolean }>`
@@ -89,11 +96,6 @@ export const TodoTitle = styled.span<{ $isDone: boolean }>`
 export const TodoMemo = styled.span`
   ${({ theme }) => theme.fonts.caption12Reg};
   color: ${({ theme }) => theme.colors.gray300};
-
-  /* 말줄임표 처리 */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `;
 
 export const DraggingItem = styled.div`

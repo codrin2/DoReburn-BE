@@ -29,6 +29,9 @@ export const TransportBar = styled.div<{ $pathColor: string }>`
 export const TimeBlockContainer = styled.div`
   padding: 0.8rem 0;
   flex-grow: 1;
+
+  min-width: 0;
+  width: 100%;
 `;
 
 export const TimeBlockWrapper = styled.div`
@@ -38,7 +41,6 @@ export const TimeBlockWrapper = styled.div`
   gap: 1.6rem;
   min-height: 24.3rem;
   max-height: 69.1rem;
-
   padding: 1.6rem 1.2rem;
   border-radius: 1.2rem;
   border: 0.15rem solid ${({ theme }) => theme.colors.gray100};
