@@ -26,8 +26,7 @@ const useUpdatePathTodoMutation = () => {
 
         return { ...oldData, paths: finalPaths };
       });
-    },
-    onSettled: () => {
+
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendLimit] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendAll] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.routeTodoList] });
