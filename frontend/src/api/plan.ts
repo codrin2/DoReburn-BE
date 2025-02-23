@@ -3,7 +3,7 @@ import fetchClient from './fetchClient';
 import { API_URL } from '@/constants/url';
 import { Todo } from '@/types/todo';
 
-interface PlanInfoResponse {
+export interface PlanInfoResponse {
   data: {
     planId: number;
     totalSectionTime: number;
@@ -12,12 +12,13 @@ interface PlanInfoResponse {
   };
 }
 
-interface Path {
+export interface Path {
   pathId: number;
   trafficType: 'SUBWAY' | 'BUS';
   sectionTime: number;
   subwayCode: number | null;
   busNumber: string | null;
+  busType: number | null;
   startName: string;
   endName: string;
   todos: PathTodo[];
@@ -31,8 +32,8 @@ interface CreatePlanPath {
   trafficType: 'SUBWAY' | 'BUS';
   sectionTime: number;
   subwayCode: number | null;
-  busType: number | null;
   busNumber: string | null;
+  busType: number | null;
   startName: string;
   endName: string;
 }
