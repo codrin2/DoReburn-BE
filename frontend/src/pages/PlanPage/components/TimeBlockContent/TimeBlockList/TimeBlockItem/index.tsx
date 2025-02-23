@@ -1,4 +1,4 @@
-import { LegacyRef, TouchEvent, useEffect, useRef, useState } from 'react';
+import { LegacyRef, TouchEvent } from 'react';
 
 import * as S from './TimeBlockItem.styled';
 import { DraggingTodo } from '../../PlanContent';
@@ -6,12 +6,8 @@ import { DraggingTodo } from '../../PlanContent';
 import { PathTodo } from '@/api/plan';
 import Icon from '@/components/Icon';
 import { ICON_MAPPER } from '@/constants/config';
-import { ERROR_MESSAGE } from '@/constants/message';
-import useToast from '@/hooks/useToast';
-import useCheckTodoMutation from '@/pages/PlanPage/hooks/useCheckTodoMutation';
+import useCheckTodo from '@/pages/PlanPage/hooks/useCheckTodo';
 import useShowTodoBottomSheet from '@/pages/PlanPage/hooks/useShowTodoBottomSheet';
-
-const TODO_CHECK_DELAY = 500;
 
 interface TimeBlockItemProps {
   todo: PathTodo;
@@ -28,50 +24,11 @@ const TimeBlockItem = ({
   draggingTodo,
   itemRef,
 }: TimeBlockItemProps) => {
-  const { todoId, isDone } = todo;
-
+  const { handleCheckTodo, handleUncheckTodo, isAnimatingCheck } = useCheckTodo(todo);
   const showTodoBottomSheet = useShowTodoBottomSheet();
-  const { mutate: checkTodo } = useCheckTodoMutation();
-  const { toast } = useToast();
 
-  const [isAnimating, setIsAnimating] = useState(false);
-  const checkTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
+  const { todoId, isDone } = todo;
   const isDragging = draggingTodo?.todo.todoId === todoId;
-
-  const handleUncheckTodo = async () => {
-    checkTodo(
-      { todoId, isCompleted: !isDone },
-      {
-        onError: () => {
-          toast({ message: ERROR_MESSAGE.check });
-        },
-      },
-    );
-  };
-
-  const handleCheckTodo = async () => {
-    setIsAnimating(true);
-    checkTimeoutRef.current = setTimeout(() => {
-      setIsAnimating(false);
-      checkTodo(
-        { todoId, isCompleted: !isDone },
-        {
-          onError: () => {
-            toast({ message: ERROR_MESSAGE.check });
-          },
-        },
-      );
-    }, TODO_CHECK_DELAY);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (checkTimeoutRef.current) {
-        clearTimeout(checkTimeoutRef.current);
-      }
-    };
-  }, []);
 
   return (
     <S.TimeBlockItemLayout
@@ -84,7 +41,7 @@ const TimeBlockItem = ({
       <S.CheckIconWrapper
         onClick={isDone ? handleUncheckTodo : handleCheckTodo}
         $isDone={isDone}
-        $isAnimating={isAnimating}
+        $isAnimating={isAnimatingCheck}
       >
         <Icon icon="EmptyCheck" cursor="pointer" width={28} height={28} />
         <Icon icon="FilledCheck" cursor="pointer" width={28} height={28} />
