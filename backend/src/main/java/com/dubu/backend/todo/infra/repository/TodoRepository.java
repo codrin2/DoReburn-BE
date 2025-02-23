@@ -2,6 +2,7 @@ package com.dubu.backend.todo.infra.repository;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.todo.dto.response.MemberCategoryInfo;
 import com.dubu.backend.todo.domain.Schedule;
 import com.dubu.backend.todo.domain.Todo;
 import com.dubu.backend.todo.domain.enums.TodoType;
@@ -60,5 +61,20 @@ public interface TodoRepository extends JpaRepository<Todo, Long>, CustomTodoRep
 
     @Query("SELECT t FROM Todo t WHERE t.path.id IN :pathIds AND t.type = :type AND t.isCompleted = true")
     List<Todo> findByPathIdsAndTypeAndIsCompleted(List<Long> pathIds, TodoType type);
+
+    @Query(value = """
+        WITH ranked_plan AS (
+            SELECT plan_id, row_number() over (partition by member_id order by created_at desc) as rn
+            FROM plan
+            WHERE member_id IN :memberIds AND is_completed <> 0
+        )
+            SELECT DISTINCT t.member_id, c.name
+            FROM todo t
+                     JOIN category c ON c.category_id = t.category_id
+                     JOIN path p ON p.path_id = t.path_id
+                     JOIN ranked_plan rp ON rp.plan_id = p.plan_id AND rp.rn = 1
+            WHERE t.is_completed = true;
+    """, nativeQuery = true)
+    List<MemberCategoryInfo> findTodoCountGroupByCategory(List<Long> memberIds);
 }
 

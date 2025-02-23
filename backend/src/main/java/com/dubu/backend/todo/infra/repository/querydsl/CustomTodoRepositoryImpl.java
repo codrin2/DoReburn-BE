@@ -74,51 +74,6 @@ public class CustomTodoRepositoryImpl implements CustomTodoRepository{
     }
 
     @Override
-    public List<MemberCategoryInfo> findTodoCountGroupByCategoryForStopMembers(List<Member> members, LocalDate date){
-        QSchedule scheduleSub = new QSchedule("scheduleSub");
-
-        return jpaQueryFactory.select(Projections.constructor(MemberCategoryInfo.class, todo.member.id, todo.category.name))
-                .distinct()
-                .from(todo)
-                .where(todo.schedule.in(
-                        JPAExpressions.select(schedule)
-                                .from(schedule)
-                                .where(Expressions.list(schedule.member.id, schedule.date).in(
-                                        JPAExpressions.select(scheduleSub.member.id, scheduleSub.date.max())
-                                                .from(scheduleSub)
-                                                .where(scheduleSub.member.in(members)
-                                                        .and(scheduleSub.date.loe(date)))
-                                                .groupBy(scheduleSub.member)
-                                )))
-                )
-                .fetch();
-    }
-
-    @Override
-    public List<MemberCategoryInfo> findTodoCountGroupByCategoryForMoveOrFeedbackMembers(List<Member> members){
-        QPlan planSub = new QPlan("planSub");
-
-        return jpaQueryFactory.select(Projections.constructor(MemberCategoryInfo.class, todo.member.id, todo.category.name))
-                .distinct()
-                .from(todo)
-                .where(todo.path.in(
-                        JPAExpressions.select(path)
-                                .from(path)
-                                .where(path.plan.in(
-                                        JPAExpressions.select(plan)
-                                                .from(plan)
-                                                .where(Expressions.list(plan.member.id, plan.createdAt).in(
-                                                        JPAExpressions.select(planSub.member.id, planSub.createdAt.max())
-                                                                .from(planSub)
-                                                                .where(planSub.member.in(members))
-                                                                .groupBy(planSub.member)
-                                                ))
-                                ))
-                ))
-                .fetch();
-    }
-
-    @Override
     public List<Long> findTodosWithCategoryByCategoryIdsAndType(List<Long> categoryIds, TodoType type) {
         return jpaQueryFactory
                 .select(todo.id)
@@ -128,6 +83,7 @@ public class CustomTodoRepositoryImpl implements CustomTodoRepository{
                         .and(todo.type.eq(type)))
                 .fetch();
     }
+
 
     private BooleanExpression cursor(Cursor cursor){
         Long categoryId = cursor.cursorCategoryId();

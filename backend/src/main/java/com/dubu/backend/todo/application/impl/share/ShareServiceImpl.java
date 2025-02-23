@@ -1,7 +1,6 @@
 package com.dubu.backend.todo.application.impl.share;
 
 import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.dto.MemberLocationDto;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.infra.repository.LocationRedisRepository;
@@ -17,10 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -42,15 +38,9 @@ public class ShareServiceImpl implements ShareService {
             return null;
         }
 
-        List<Member> neighborhoodMembers = memberRepository.findMembersByMemberIds(extractMemberIds(memberLocationInfos));
+        List<MemberCategoryInfo> memberCategoryInfos = todoRepository.findTodoCountGroupByCategory(extractMemberIds(memberLocationInfos));
 
-        List<MemberCategoryInfo> memberCategoryInfosForStopMembers = todoRepository.findTodoCountGroupByCategoryForStopMembers(splitStopMember(neighborhoodMembers), LocalDate.now());
-        List<MemberCategoryInfo> memberCategoryInfosForMoveOrFeedbackMembers = todoRepository.findTodoCountGroupByCategoryForMoveOrFeedbackMembers(splitInMoveOrFeedbackMember(neighborhoodMembers));
-
-        MemberCategoryCollection memberCategoryCollection = new MemberCategoryCollection(Stream.concat(
-                memberCategoryInfosForStopMembers.stream(),
-                memberCategoryInfosForMoveOrFeedbackMembers.stream()
-        ).collect(Collectors.toList()));
+        MemberCategoryCollection memberCategoryCollection = new MemberCategoryCollection(memberCategoryInfos);
 
         locationRedisRepository.saveMemberLocation(memberId, new MemberLocationDto(request.x_coordinate(), request.y_coordinate()));
 
@@ -60,16 +50,6 @@ public class ShareServiceImpl implements ShareService {
     private List<Long> extractMemberIds(List<MemberLocationInfo> memberLocationInfos) {
         return memberLocationInfos.stream()
                 .map(MemberLocationInfo::memberId)
-                .toList();
-    }
-
-    private List<Member> splitStopMember(List<Member> members){
-        return members.stream().filter(m -> m.getStatus().equals(Status.STOP)).toList();
-    }
-
-    private List<Member> splitInMoveOrFeedbackMember(List<Member> members) {
-        return members.stream()
-                .filter(m -> m.getStatus().equals(Status.MOVE) || m.getStatus().equals(Status.FEEDBACK))
                 .toList();
     }
 }
