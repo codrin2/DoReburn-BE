@@ -1,9 +1,9 @@
 package com.dubu.backend.todo.dto.response;
 
 
-import com.dubu.backend.todo.entity.Category;
-import com.dubu.backend.todo.entity.Todo;
-import com.dubu.backend.todo.entity.TodoDifficulty;
+import com.dubu.backend.todo.domain.Category;
+import com.dubu.backend.todo.domain.Todo;
+import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
