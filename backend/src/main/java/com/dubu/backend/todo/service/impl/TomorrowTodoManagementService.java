@@ -52,8 +52,8 @@ public class TomorrowTodoManagementService implements TodoManagementService {
         List<Todo> tomorrowTodos = null;
 
         // 할 일 3개 이미 존재
-        if(todos.size() == 3){
-            throw new TodoLimitExceededException("내일", 3);
+        if(todos.size() >= 5){
+            throw new TodoLimitExceededException("내일", 5);
         }
 
         // 내일 스케줄이 없는 경우
@@ -87,8 +87,8 @@ public class TomorrowTodoManagementService implements TodoManagementService {
         List<Todo> tomorrowTodos = null;
 
         // 할 일 3개 이미 존재
-        if(todos.size() == 3){
-            throw new TodoLimitExceededException("내일", 3);
+        if(todos.size() >= 5){
+            throw new TodoLimitExceededException("내일", 5);
         }
 
         // 내일 스케줄이 없는 경우
