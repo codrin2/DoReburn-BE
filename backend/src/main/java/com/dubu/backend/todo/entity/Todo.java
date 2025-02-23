@@ -74,6 +74,19 @@ public class Todo extends BaseTimeEntity {
                 .build();
     }
 
+    public static Todo copyOf(Todo originalTodo, Member member, Schedule schedule){
+        return Todo.builder()
+                .member(member)
+                .title(originalTodo.getTitle())
+                .category(originalTodo.getCategory())
+                .difficulty(originalTodo.getDifficulty())
+                .memo(originalTodo.getMemo())
+                .type(TodoType.SCHEDULED)
+                .parentTodo(originalTodo)
+                .schedule(schedule)
+                .build();
+    }
+
     public static Todo copyOf(Todo originalTodo, Path assignedPath) {
         return Todo.builder()
                 .title(originalTodo.getTitle())
