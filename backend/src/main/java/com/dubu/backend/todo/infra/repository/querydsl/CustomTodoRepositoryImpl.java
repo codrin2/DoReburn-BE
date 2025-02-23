@@ -73,41 +73,6 @@ public class CustomTodoRepositoryImpl implements CustomTodoRepository{
         return new SliceImpl<>(results, pageable, hasNext);
     }
 
-    @Override
-    public List<MemberCategoryInfo> findTodoCountGroupByCategory(List<Member> members){
-        QPlan planSub = new QPlan("planSub");
-
-        return jpaQueryFactory.select(Projections.constructor(MemberCategoryInfo.class, todo.member.id, todo.category.name))
-                .distinct()
-                .from(todo)
-                .where(todo.path.in(
-                        JPAExpressions.select(path)
-                                .from(path)
-                                .where(path.plan.in(
-                                        JPAExpressions.select(plan)
-                                                .from(plan)
-                                                .where(Expressions.list(plan.member.id, plan.createdAt).in(
-                                                        JPAExpressions.select(planSub.member.id, planSub.createdAt.max())
-                                                                .from(planSub)
-                                                                .where(planSub.member.in(members), planSub.isCompleted)
-                                                                .groupBy(planSub.member)
-                                                ))
-                                ))
-                ))
-                .fetch();
-    }
-
-    @Override
-    public List<Long> findTodosWithCategoryByCategoryIdsAndType(List<Long> categoryIds, TodoType type) {
-        return jpaQueryFactory
-                .select(todo.id)
-                .from(todo)
-                .join(todo.category, category)
-                .where(category.id.in(categoryIds)
-                        .and(todo.type.eq(type)))
-                .fetch();
-    }
-
     private BooleanExpression cursor(Cursor cursor){
         Long categoryId = cursor.cursorCategoryId();
         String difficulty = cursor.cursorDifficulty();
