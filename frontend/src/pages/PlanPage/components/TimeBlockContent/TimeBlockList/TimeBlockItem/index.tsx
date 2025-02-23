@@ -1,22 +1,17 @@
-import { useMutation } from '@tanstack/react-query';
-import { LegacyRef, TouchEvent, useEffect, useReducer, useRef, useState } from 'react';
+import { LegacyRef, TouchEvent, useEffect, useRef, useState } from 'react';
 
 import * as S from './TimeBlockItem.styled';
 import { DraggingTodo } from '../../PlanContent';
 
-import { checkTodo, PathTodo } from '@/api/plan';
+import { PathTodo } from '@/api/plan';
 import Icon from '@/components/Icon';
 import { ICON_MAPPER } from '@/constants/config';
+import { ERROR_MESSAGE } from '@/constants/message';
+import useToast from '@/hooks/useToast';
+import useCheckTodoMutation from '@/pages/PlanPage/hooks/useCheckTodoMutation';
 import useShowTodoBottomSheet from '@/pages/PlanPage/hooks/useShowTodoBottomSheet';
 
 const TODO_CHECK_DELAY = 500;
-
-const useCheckTodoMutation = () => {
-  return useMutation({
-    mutationFn: ({ todoId, isCompleted }: { todoId: number; isCompleted: boolean }) =>
-      checkTodo(todoId, isCompleted),
-  });
-};
 
 interface TimeBlockItemProps {
   todo: PathTodo;
@@ -33,26 +28,40 @@ const TimeBlockItem = ({
   draggingTodo,
   itemRef,
 }: TimeBlockItemProps) => {
-  const showTodoBottomSheet = useShowTodoBottomSheet();
-  const { mutateAsync: checkTodo } = useCheckTodoMutation();
+  const { todoId, isDone } = todo;
 
-  const [isDone, toggle] = useReducer((prev) => !prev, todo.isDone);
+  const showTodoBottomSheet = useShowTodoBottomSheet();
+  const { mutate: checkTodo } = useCheckTodoMutation();
+  const { toast } = useToast();
+
   const [isAnimating, setIsAnimating] = useState(false);
   const checkTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const isDragging = draggingTodo?.todo.todoId === todo.todoId;
+  const isDragging = draggingTodo?.todo.todoId === todoId;
 
   const handleUncheckTodo = async () => {
-    await checkTodo({ todoId: todo.todoId, isCompleted: false });
-    toggle();
+    checkTodo(
+      { todoId, isCompleted: !isDone },
+      {
+        onError: () => {
+          toast({ message: ERROR_MESSAGE.check });
+        },
+      },
+    );
   };
 
   const handleCheckTodo = async () => {
-    await checkTodo({ todoId: todo.todoId, isCompleted: !isDone });
     setIsAnimating(true);
     checkTimeoutRef.current = setTimeout(() => {
-      toggle();
       setIsAnimating(false);
+      checkTodo(
+        { todoId, isCompleted: !isDone },
+        {
+          onError: () => {
+            toast({ message: ERROR_MESSAGE.check });
+          },
+        },
+      );
     }, TODO_CHECK_DELAY);
   };
 

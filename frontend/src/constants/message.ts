@@ -20,4 +20,5 @@ export const ERROR_MESSAGE = {
   location: '위치 정보를 가져오는데 실패했어요. 잠시 후 다시 시도해주세요',
   locationPermission: '위치 접근이 거부되었습니다. 설정에서 위치 서비스를 활성화해 주세요.',
   updatePathTodo: '할 일 이동이 실패했어요. 다시 시도해주세요!',
+  check: '체크 상태가 반영되지 않았어요. 다시 시도해주세요!',
 };
