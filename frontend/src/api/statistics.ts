@@ -3,14 +3,18 @@ import fetchClient from './fetchClient';
 import { API_URL } from '@/constants/url';
 
 interface WeekStatistics {
-  dayUsageTimes: {
+  memberCreateDate: string;
+  dayAvailableTimes: {
     date: string;
-    usageTime: number;
+    availableTime: number;
   }[];
   totalTodoCount: number;
   lastWeekDiff: number;
-  totalMoveTime: number;
-  totalUsageTime: number;
+  totalAvailableTime: number;
+  moodCounts: {
+    mood: string;
+    count: number;
+  }[];
   categoryTodoCounts: {
     category: string;
     count: number;
@@ -23,8 +27,9 @@ interface WeekStatisticsResponse {
 }
 
 interface DayStatistics {
-  totalMoveTime: number;
+  memberCreateDate: string;
   totalUsageTime: number;
+  totalTodoCount: number;
   feedbacks: {
     mood: string;
     memo: string;

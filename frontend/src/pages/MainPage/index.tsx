@@ -8,11 +8,13 @@ import * as S from './MainPage.styled';
 
 import Header from '@/components/Header';
 import SearchAddress from '@/components/SearchAddress';
+import useNotificationPermission from '@/hooks/useNotificationPermission';
 import useQueryParamsDate from '@/hooks/useQueryParamsDate';
 import useRedirectByMemberStatus from '@/hooks/useRedirectByMemberStatus';
 
 const MainPage = () => {
   useRedirectByMemberStatus();
+  useNotificationPermission();
 
   const { isToday } = useQueryParamsDate();
   const [isSwitchAddress, toggle] = useReducer((prev) => !prev, false);
@@ -33,24 +35,26 @@ const MainPage = () => {
 
   const updateAddress = ({
     title,
+    address = '',
     coordinateX,
     coordinateY,
   }: {
     title: string;
+    address?: string;
     coordinateX: number;
     coordinateY: number;
   }) => {
     if (selectedAddressType === 'home') {
       setStartAddress((prev) => ({
         ...prev,
-        startName: title,
+        startName: title || address,
         startX: coordinateX,
         startY: coordinateY,
       }));
     } else {
       setEndAddress((prev) => ({
         ...prev,
-        endName: title,
+        endName: title || address,
         endX: coordinateX,
         endY: coordinateY,
       }));

@@ -2,15 +2,14 @@ package com.dubu.backend.plan.application;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
-import com.dubu.backend.member.dto.MemberStatusChangeDto;
 import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infra.amqp.MemberStatusEventProducer;
 import com.dubu.backend.member.infra.repository.MemberRepository;
-import com.dubu.backend.notification.dto.PushMessageDto;
-import com.dubu.backend.notification.infra.amqp.PushMessageEventProducer;
+import com.dubu.backend.notification.application.NotificationService;
 import com.dubu.backend.plan.domain.Feedback;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
+import com.dubu.backend.plan.domain.Route;
+import com.dubu.backend.plan.domain.vo.PathIdentifier;
 import com.dubu.backend.plan.dto.request.PlanCreateRequest;
 import com.dubu.backend.plan.dto.request.PlanFeedbackCreateRequest;
 import com.dubu.backend.plan.dto.response.FeedbackWritePageInfoResponse;
@@ -21,12 +20,12 @@ import com.dubu.backend.plan.exception.UnauthorizedPlanDeletionException;
 import com.dubu.backend.plan.infra.repository.FeedbackRepository;
 import com.dubu.backend.plan.infra.repository.PathRepository;
 import com.dubu.backend.plan.infra.repository.PlanRepository;
-import com.dubu.backend.todo.entity.Schedule;
-import com.dubu.backend.todo.entity.Todo;
-import com.dubu.backend.todo.entity.TodoType;
+import com.dubu.backend.todo.domain.Schedule;
+import com.dubu.backend.todo.domain.Todo;
+import com.dubu.backend.todo.domain.enums.TodoType;
 import com.dubu.backend.todo.exception.ScheduleNotFoundException;
-import com.dubu.backend.todo.repository.ScheduleRepository;
-import com.dubu.backend.todo.repository.TodoRepository;
+import com.dubu.backend.todo.infra.repository.ScheduleRepository;
+import com.dubu.backend.todo.infra.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,62 +38,55 @@ import java.util.stream.IntStream;
 @Service
 @RequiredArgsConstructor
 public class PlanService {
+    private final RouteService routeService;
+    private final NotificationService notificationService;
     private final MemberRepository memberRepository;
     private final PlanRepository planRepository;
     private final PathRepository pathRepository;
     private final ScheduleRepository scheduleRepository;
     private final TodoRepository todoRepository;
     private final FeedbackRepository feedbackRepository;
-    private final PushMessageEventProducer pushMessageEventProducer;
-    private final MemberStatusEventProducer memberStatusEventProducer;
 
     @Transactional
-    public Long savePlan(Long memberId, PlanCreateRequest planCreateRequest) {
+    public Long savePlan(
+            Long memberId,
+            Double startX, Double startY,
+            Double endX, Double endY,
+            PlanCreateRequest request
+    ) {
         Member currentMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
+        // STOP인 상태의 유저만 사용 가능
         if (currentMember.getStatus() != Status.STOP) {
             throw new InvalidMemberStatusException(currentMember.getStatus().name());
         }
 
-        Plan newPlan = Plan.createPlan(currentMember, planCreateRequest.totalSectionTime());
-        Plan createdPlan = planRepository.save(newPlan);
-
-        List<Path> paths = IntStream.range(0, planCreateRequest.paths().size())
-                .mapToObj(index -> Path.createPath(newPlan, planCreateRequest.paths().get(index), index))
+        // 새로 만드는 경로가 기존에 저장된 경로인지 체크하기 위한 PathIdentifier 추출
+        List<PathIdentifier> newPathIdentifiers = request.paths().stream()
+                .map(path -> new PathIdentifier(path.trafficType(), path.startName(), path.endName()))
                 .toList();
-        pathRepository.saveAll(paths);
 
-        Schedule schedule = scheduleRepository.findLatestSchedule(currentMember, LocalDate.now())
-                .orElseThrow(() -> new ScheduleNotFoundException());
+        // Route 재사용 여부 확인
+        Route reusableRoute = routeService.findReusableRoute(startX, startY, endX, endY, newPathIdentifiers);
 
-        List<Todo> existingTodos = schedule.getTodos();
-        List<Todo> newTodos = new ArrayList<>();
+        Plan newPlan = Plan.createPlan(currentMember, request.totalSectionTime());
+        planRepository.save(newPlan);
 
-        for (int i = 0; i < existingTodos.size(); i++) {
-            Todo original = existingTodos.get(i);
-            // round-robin으로 Path 할당
-            Path assignedPath = paths.get(i % paths.size());
-            Todo clonedTodo = Todo.copyOf(original, assignedPath);
-
-            newTodos.add(clonedTodo);
+        Route finalRoute = null;
+        if (reusableRoute == null) {
+            finalRoute = routeService.createNewRoute(startX, startY, endX, endY, request.totalTime());
         }
-        todoRepository.saveAll(newTodos);
+
+        // Path 생성 → route는 기존꺼면 null, 새 route 있으면 연결
+        List<Path> paths = createAndSavePaths(newPlan, finalRoute, request);
+
+        // 오늘의 할 일(Todo) Path 할당 & Todo 내용 복제하여 저장
+        assignTodosToPaths(currentMember, paths);
+
         currentMember.updateStatus(Status.MOVE);
 
-        PushMessageDto pushMessageDto = new PushMessageDto(
-                memberId,
-                newPlan.getId(),
-                "잘 도착하셨나요? 30분 뒤면 오늘 한 일을 체크할 수 없어요😭",
-                "얼른 접속해서 오늘 한 일을 체크하고 피드백을 기록해 보세요~"
-        );
-        pushMessageEventProducer.sendDelayedPush(pushMessageDto);
-
-        MemberStatusChangeDto memberStatusChangeDto = new MemberStatusChangeDto(
-                memberId,
-                createdPlan.getId()
-        );
-        memberStatusEventProducer.send(memberStatusChangeDto);
+        notificationService.sendPushAndMemberStatusChange(memberId, newPlan);
 
         return newPlan.getId();
     }
@@ -128,7 +120,7 @@ public class PlanService {
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
         Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
-                .orElseThrow(() -> new PlanNotFoundException());
+                .orElseThrow(PlanNotFoundException::new);
 
         List<Path> paths = pathRepository.findByPlanWithTodosOrderByPathOrder(recentPlan);
 
@@ -145,7 +137,7 @@ public class PlanService {
         }
 
         Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
-                .orElseThrow(() -> new PlanNotFoundException());
+                .orElseThrow(PlanNotFoundException::new);
 
         return FeedbackWritePageInfoResponse.of(recentPlan);
     }
@@ -160,7 +152,7 @@ public class PlanService {
         }
 
         Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
-                .orElseThrow(() -> new PlanNotFoundException());
+                .orElseThrow(PlanNotFoundException::new);
 
         recentPlan.getPaths().forEach(path -> {
             List<Todo> todos = path.getTodos();
@@ -197,5 +189,42 @@ public class PlanService {
         currentMember.updateStatus(Status.STOP);
 
         planRepository.delete(planToDelete);
+    }
+
+    /**
+     * Path 생성 및 저장
+     */
+    private List<Path> createAndSavePaths(Plan plan, Route route, PlanCreateRequest request) {
+        // pathOrder = index
+        List<Path> paths = IntStream.range(0, request.paths().size())
+                .mapToObj(i -> Path.createPath(
+                        plan,
+                        route, // null or 새로 생성한 route
+                        request.paths().get(i),
+                        i
+                ))
+                .toList();
+
+        pathRepository.saveAll(paths);
+        return paths;
+    }
+
+    /**
+     * Schedule에서 Todo를 가져와 Round-Robin으로 새로 생성한 Paths에 할당
+     */
+    private void assignTodosToPaths(Member member, List<Path> paths) {
+        Schedule schedule = scheduleRepository.findLatestSchedule(member, LocalDate.now())
+                .orElseThrow(ScheduleNotFoundException::new);
+
+        List<Todo> existingTodos = schedule.getTodos();
+        List<Todo> newTodos = new ArrayList<>();
+
+        for (int i = 0; i < existingTodos.size(); i++) {
+            Todo original = existingTodos.get(i);
+            Path assignedPath = paths.get(i % paths.size());
+            Todo cloned = Todo.copyOf(original, assignedPath);
+            newTodos.add(cloned);
+        }
+        todoRepository.saveAll(newTodos);
     }
 }

@@ -2,7 +2,9 @@ package com.dubu.backend.notification.application;
 
 
 import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.dto.MemberStatusChangeDto;
 import com.dubu.backend.member.exception.MemberNotFoundException;
+import com.dubu.backend.member.infra.amqp.MemberStatusEventProducer;
 import com.dubu.backend.member.infra.repository.MemberRepository;
 import com.dubu.backend.notification.config.VapidKeyConfig;
 import com.dubu.backend.notification.domain.PushSubscription;
@@ -10,6 +12,7 @@ import com.dubu.backend.notification.dto.PushMessageDto;
 import com.dubu.backend.notification.dto.PushSubscriptionDto;
 import com.dubu.backend.notification.exception.DuplicateSubscriptionException;
 import com.dubu.backend.notification.exception.UnavailablePushServiceException;
+import com.dubu.backend.notification.infra.amqp.PushMessageEventProducer;
 import com.dubu.backend.notification.infra.repository.PushSubscriptionRepository;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.exception.PlanNotFoundException;
@@ -37,6 +40,8 @@ public class NotificationService {
     private final MemberRepository memberRepository;
     private final PlanRepository planRepository;
     private final PushSubscriptionRepository subscriptionRepository;
+    private final PushMessageEventProducer pushMessageEventProducer;
+    private final MemberStatusEventProducer memberStatusEventProducer;
     private final ObjectMapper objectMapper;
 
     @Value("${admin.email}")
@@ -103,5 +108,23 @@ public class NotificationService {
                 throw new UnavailablePushServiceException();
             }
         }
+    }
+
+    public void sendPushAndMemberStatusChange(Long memberId, Plan plan) {
+        // 푸시 메시지 이벤트 발행
+        PushMessageDto pushMessageDto = new PushMessageDto(
+                memberId,
+                plan.getId(),
+                "잘 도착하셨나요? 30분 뒤면 오늘 한 일을 체크할 수 없어요😭",
+                "얼른 접속해서 오늘 한 일을 체크하고 피드백을 기록해 보세요~"
+        );
+        pushMessageEventProducer.sendDelayedPush(pushMessageDto);
+
+        // 상태 변경 이벤트 발행
+        MemberStatusChangeDto memberStatusChangeDto = new MemberStatusChangeDto(
+                memberId,
+                plan.getId()
+        );
+        memberStatusEventProducer.send(memberStatusChangeDto);
     }
 }

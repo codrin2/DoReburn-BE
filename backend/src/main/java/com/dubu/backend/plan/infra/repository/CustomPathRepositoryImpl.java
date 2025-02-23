@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 import static com.dubu.backend.plan.domain.QPath.path;
-import static com.dubu.backend.todo.entity.QTodo.todo;
+import static com.dubu.backend.todo.domain.QTodo.*;
 
 @RequiredArgsConstructor
 public class CustomPathRepositoryImpl implements CustomPathRepository {

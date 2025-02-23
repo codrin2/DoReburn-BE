@@ -15,18 +15,18 @@ export const DayButton = styled.button`
   }
 `;
 
-export const Day = styled.div<{ $isToday: boolean; $isFutureDay: boolean }>`
+export const Day = styled.div<{ $isToday: boolean; $isDisabledDay: boolean }>`
   width: 3.6rem;
   height: 3.6rem;
   display: flex;
   align-items: center;
   justify-content: center;
   ${({ theme }) => theme.fonts.body15Med};
-  color: ${({ theme, $isToday, $isFutureDay }) => {
+  color: ${({ theme, $isToday, $isDisabledDay }) => {
     if ($isToday) {
       return theme.colors.green700;
-    } else if ($isFutureDay) {
-      return theme.colors.gray400;
+    } else if ($isDisabledDay) {
+      return theme.colors.gray300;
     } else {
       return theme.colors.gray800;
     }

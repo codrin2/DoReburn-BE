@@ -1,0 +1,33 @@
+package com.dubu.backend.todo.api;
+
+import com.dubu.backend.global.domain.SuccessResponse;
+import com.dubu.backend.todo.dto.response.DayStatisticInfo;
+import com.dubu.backend.todo.dto.response.WeekStatisticInfo;
+import com.dubu.backend.todo.application.StatisticService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+
+@RestController
+@RequestMapping("/statistics")
+@RequiredArgsConstructor
+public class StatisticController implements StatisticApi{
+    private final StatisticService statisticService;
+
+    @GetMapping("/day")
+    public SuccessResponse<DayStatisticInfo> getDayStatistic(
+            @RequestAttribute Long memberId,
+            @RequestParam LocalDate date
+    ) {
+        return new SuccessResponse<>(statisticService.collectDayStatistic(memberId, date));
+    }
+
+    @GetMapping("/week")
+    public SuccessResponse<WeekStatisticInfo> getWeekStatistic(
+            @RequestAttribute Long memberId,
+            @RequestParam LocalDate startDate
+    ) {
+        return new SuccessResponse<>(statisticService.collectWeekStatistic(memberId, startDate));
+    }
+}

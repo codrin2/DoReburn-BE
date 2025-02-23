@@ -1,7 +1,7 @@
 package com.dubu.backend.todo.exception;
 
 import com.dubu.backend.global.exception.BadRequestException;
-import com.dubu.backend.todo.entity.TodoType;
+import com.dubu.backend.todo.domain.enums.TodoType;
 
 import static com.dubu.backend.global.exception.ErrorCode.*;
 

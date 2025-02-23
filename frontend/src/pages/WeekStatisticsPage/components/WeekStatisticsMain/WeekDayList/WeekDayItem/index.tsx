@@ -13,13 +13,18 @@ interface WeekDayItemProps {
   };
   usageTime: number;
   isToday: boolean;
+  memberCreateDate: string;
 }
 
-const WeekDayItem = ({ date, usageTime, isToday }: WeekDayItemProps) => {
+const WeekDayItem = ({ date, usageTime, isToday, memberCreateDate }: WeekDayItemProps) => {
   const navigate = useNavigate();
   const today = new Date();
   const currentDate = new Date(date.year, date.month - 1, date.day);
+  const memberCreateDateObj = new Date(memberCreateDate);
+  currentDate.setHours(0, 0, 0, 0);
+  memberCreateDateObj.setHours(0, 0, 0, 0);
   const isFutureDate = currentDate > today;
+  const isBeforeCreated = currentDate < memberCreateDateObj;
 
   const handleClickDay = () => {
     navigate(
@@ -29,9 +34,9 @@ const WeekDayItem = ({ date, usageTime, isToday }: WeekDayItemProps) => {
 
   return (
     <S.WeekDayItemContainer>
-      <S.DayButton disabled={isFutureDate} onClick={handleClickDay}>
+      <S.DayButton disabled={isFutureDate || isBeforeCreated} onClick={handleClickDay}>
         {usageTime > 0 && <Icon icon="Fire" width={16} height={16} color={theme.colors.green200} />}
-        <S.Day $isToday={isToday} $isFutureDay={isFutureDate}>
+        <S.Day $isToday={isToday} $isDisabledDay={isFutureDate || isBeforeCreated}>
           {date.day}
         </S.Day>
         {usageTime > 0 && <S.DayUsageTime>{usageTime}</S.DayUsageTime>}

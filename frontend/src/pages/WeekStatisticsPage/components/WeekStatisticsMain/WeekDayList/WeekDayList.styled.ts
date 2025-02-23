@@ -18,6 +18,14 @@ export const WeekDateInfoContainer = styled.div`
   color: ${({ theme }) => theme.colors.gray600};
 `;
 
+export const IconButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 2.4rem;
+`;
+
 export const WeekDayList = styled.ul`
   height: 6.8rem;
   display: flex;

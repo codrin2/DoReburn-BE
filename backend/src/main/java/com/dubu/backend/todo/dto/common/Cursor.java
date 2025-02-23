@@ -1,6 +1,6 @@
 package com.dubu.backend.todo.dto.common;
 
-import com.dubu.backend.todo.entity.TodoDifficulty;
+import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "커서 dto")

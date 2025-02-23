@@ -45,6 +45,7 @@ export const API_URL = {
   updateCurrentLocation: `${BASE_URL}/api/v1/members/location`,
   updatePathTodo: (todoId: number, newPathId: number) =>
     `${BASE_URL}/api/v1/todos/path?todoId=${todoId}&newPathId=${newPathId}`,
+  authReissue: `${BASE_URL}/api/v1/auth/reissue`,
 };
 
 export const MOCK_API_URL = {

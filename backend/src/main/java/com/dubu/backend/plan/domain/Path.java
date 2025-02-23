@@ -3,7 +3,7 @@ package com.dubu.backend.plan.domain;
 import com.dubu.backend.global.domain.BaseTimeEntity;
 import com.dubu.backend.plan.domain.enums.TrafficType;
 import com.dubu.backend.plan.dto.request.PlanCreateRequest;
-import com.dubu.backend.todo.entity.Todo;
+import com.dubu.backend.todo.domain.Todo;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,7 +16,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"plan_id", "pathOrder"})
+        @UniqueConstraint(columnNames = {"plan_id", "pathOrder"}),
+        @UniqueConstraint(columnNames = {"route_id", "pathOrder"})
 })
 public class Path extends BaseTimeEntity {
     @Id
@@ -25,8 +26,12 @@ public class Path extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "plan_id", nullable = false)
+    @JoinColumn(name = "plan_id")
     private Plan plan;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "route_id")
+    private Route route;
 
 //    @BatchSize(size = 100)
     @Builder.Default
@@ -58,9 +63,10 @@ public class Path extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "SMALLINT")
     private Integer pathOrder;
 
-    public static Path createPath(Plan plan, PlanCreateRequest.Path pathRequest, int pathOrder) {
+    public static Path createPath(Plan plan, Route route, PlanCreateRequest.Path pathRequest, int pathOrder) {
         return Path.builder()
                 .plan(plan)
+                .route(route)
                 .trafficType(TrafficType.from(pathRequest.trafficType()))
                 .subwayCode(pathRequest.subwayCode())
                 .busNumber(pathRequest.busNumber())

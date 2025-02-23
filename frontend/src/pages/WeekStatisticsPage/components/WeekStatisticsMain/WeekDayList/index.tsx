@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import WeekDayItem from './WeekDayItem';
 import * as S from './WeekDayList.styled';
@@ -9,6 +8,7 @@ import { DayInfo } from '@/pages/WeekStatisticsPage/WeekStatisticsPage.types';
 import {
   getStartOfWeek,
   getWeekDateRange,
+  isCreatedWeek,
   isToday,
   isTodayInWeek,
 } from '@/pages/WeekStatisticsPage/WeekStatisticsPage.utils';
@@ -19,14 +19,19 @@ const WEEK_DAYS = 7;
 interface WeekDateProps {
   weekStartDate: string;
   setWeekStartDate: (date: string) => void;
-  dayUsageTime: {
+  dayAvailableTimes: {
     date: string;
-    usageTime: number;
+    availableTime: number;
   }[];
+  memberCreateDate: string;
 }
 
-const WeekDayList = ({ weekStartDate, setWeekStartDate, dayUsageTime }: WeekDateProps) => {
-  const navigate = useNavigate();
+const WeekDayList = ({
+  weekStartDate,
+  setWeekStartDate,
+  dayAvailableTimes,
+  memberCreateDate,
+}: WeekDateProps) => {
   const [weekDays, setWeekDays] = useState<DayInfo[]>([]);
 
   useEffect(() => {
@@ -45,9 +50,9 @@ const WeekDayList = ({ weekStartDate, setWeekStartDate, dayUsageTime }: WeekDate
 
   const getUsageTimeForDay = (day: DayInfo) => {
     const dateString = `${day.year}-${String(day.month).padStart(2, '0')}-${String(day.day).padStart(2, '0')}`;
-    const dayData = dayUsageTime.find((item) => item.date === dateString);
+    const dayData = dayAvailableTimes.find((item) => item.date === dateString);
 
-    return dayData ? dayData.usageTime : 0;
+    return dayData ? dayData.availableTime : 0;
   };
 
   const handleWeekChange = (offset: number) => {
@@ -55,23 +60,33 @@ const WeekDayList = ({ weekStartDate, setWeekStartDate, dayUsageTime }: WeekDate
     currentDate.setDate(currentDate.getDate() + offset);
     const newWeekStartDate = getStartOfWeek(currentDate.toISOString());
     setWeekStartDate(newWeekStartDate);
-    navigate(`/statistics/week?startDate=${newWeekStartDate}`);
+    window.history.replaceState({}, '', `/statistics/week?startDate=${newWeekStartDate}`);
   };
 
   return (
     <S.WeekDateContainer>
       <S.WeekDateInfoContainer>
-        <button onClick={() => handleWeekChange(-WEEK_DAYS)}>
-          <Icon icon="FilledArrow" rotate={90} />
-        </button>
+        <S.IconButton
+          onClick={() => handleWeekChange(-WEEK_DAYS)}
+          disabled={isCreatedWeek(weekStartDate, memberCreateDate)}
+        >
+          <Icon
+            icon="FilledArrow"
+            rotate={90}
+            color={isCreatedWeek(weekStartDate, memberCreateDate) ? theme.colors.gray200 : ''}
+          />
+        </S.IconButton>
         <div>{getWeekDateRange(weekDays)}</div>
-        <button onClick={() => handleWeekChange(WEEK_DAYS)} disabled={isTodayInWeek(weekStartDate)}>
+        <S.IconButton
+          onClick={() => handleWeekChange(WEEK_DAYS)}
+          disabled={isTodayInWeek(weekStartDate)}
+        >
           <Icon
             icon="FilledArrow"
             rotate={-90}
             color={isTodayInWeek(weekStartDate) ? theme.colors.gray200 : ''}
           />
-        </button>
+        </S.IconButton>
       </S.WeekDateInfoContainer>
 
       <S.WeekDayList>
@@ -84,6 +99,7 @@ const WeekDayList = ({ weekStartDate, setWeekStartDate, dayUsageTime }: WeekDate
               date={date}
               usageTime={usageTime}
               isToday={isToday(date)}
+              memberCreateDate={memberCreateDate}
             />
           );
         })}

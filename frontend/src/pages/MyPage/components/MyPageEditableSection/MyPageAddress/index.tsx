@@ -32,14 +32,14 @@ const MyPageAddress = ({ editMode }: { editMode: boolean }) => {
   }) => {
     if (selectedAddressType === 'home') {
       setHome({
-        homeTitle: title,
+        homeTitle: title || address,
         homeAddress: address,
         homeAddressX: coordinateX,
         homeAddressY: coordinateY,
       });
     } else if (selectedAddressType === 'school') {
       setSchool({
-        schoolTitle: title,
+        schoolTitle: title || address,
         schoolAddress: address,
         schoolAddressX: coordinateX,
         schoolAddressY: coordinateY,

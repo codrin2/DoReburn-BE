@@ -25,14 +25,14 @@ const WeekStatisticsMain = () => {
   }, []);
 
   useEffect(() => {
-    window.history.pushState({}, '', `/statistics/week?startDate=${weekStartDate}`);
+    window.history.replaceState({}, '', `/statistics/week?startDate=${weekStartDate}`);
   }, [weekStartDate]);
 
   const overviewProps = {
-    moveTime: weekStatistics?.totalMoveTime ?? 0,
-    usageTime: weekStatistics?.totalUsageTime ?? 0,
+    totalAvailableTime: weekStatistics?.totalAvailableTime ?? 0,
     lastWeekDiff: weekStatistics?.lastWeekDiff ?? 0,
-    todoCount: weekStatistics?.totalTodoCount ?? 0,
+    totalTodoCount: weekStatistics?.totalTodoCount ?? 0,
+    moodCounts: weekStatistics?.moodCounts ?? [],
   };
 
   return (
@@ -40,7 +40,8 @@ const WeekStatisticsMain = () => {
       <WeekDayList
         weekStartDate={weekStartDate}
         setWeekStartDate={setWeekStartDate}
-        dayUsageTime={weekStatistics?.dayUsageTimes ?? []}
+        dayAvailableTimes={weekStatistics?.dayAvailableTimes ?? []}
+        memberCreateDate={weekStatistics?.memberCreateDate ?? ''}
       />
       <S.WeekAchievementContainer>
         <WeekOverview {...overviewProps} />
