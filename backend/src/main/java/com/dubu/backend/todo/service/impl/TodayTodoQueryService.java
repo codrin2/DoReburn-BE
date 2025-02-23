@@ -61,24 +61,13 @@ public class TodayTodoQueryService implements TargetTodoQueryService {
                 throw new MemberCategoryNotFoundException(identifier.memberId());
             }
             List<Long> recommendTodoIds = todoRepository.findTodosWithCategoryByCategoryIdsAndType(categoryIds, TodoType.RECOMMEND);
-
-            Long recommendTodoId = todoRandomSelector.selectOne(recommendTodoIds);
-            Todo recommendTodo = todoRepository.findById(recommendTodoId).get();
+            List<Long> selectedTodoIds = todoRandomSelector.selectTodos(3, recommendTodoIds);
+            List<Todo> selectedTodos = todoRepository.findTodosWithCategoryByIds(selectedTodoIds);
 
             Schedule savedSchedule = scheduleRepository.save(newSchedule);
 
-            Todo newTodo = Todo.of(
-                    recommendTodo.getTitle(),
-                    TodoType.SCHEDULED,
-                    recommendTodo.getDifficulty(),
-                    null,
-                    member,
-                    recommendTodo.getCategory(),
-                    recommendTodo,
-                    newSchedule,
-                    null
-            );
-            todoRepository.save(newTodo);
+            selectedTodos
+                    .forEach(t -> todoRepository.save(Todo.copyOf(t, member, savedSchedule)));
 
             return savedSchedule;
         });

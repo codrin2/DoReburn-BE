@@ -44,8 +44,8 @@ public class TodayTodoManagementService implements TodoManagementService {
         Category category = categoryRepository.findByName(todoCreateRequest.category()).orElseThrow(() -> new CategoryNotFoundException(todoCreateRequest.category()));
         Schedule schedule = scheduleRepository.findLatestSchedule(member, LocalDate.now()).orElseThrow(ScheduleNotFoundException::new);
 
-        if(schedule.getTodos().size() == 3){
-            throw new TodoLimitExceededException("오늘", 3);
+        if(schedule.getTodos().size() >= 5){
+            throw new TodoLimitExceededException("오늘", 5);
         }
 
         Todo todo = todoCreateRequest.toEntity(member, category, schedule, null, TodoType.SCHEDULED);
@@ -64,8 +64,8 @@ public class TodayTodoManagementService implements TodoManagementService {
 
         Schedule schedule = scheduleRepository.findLatestSchedule(member, LocalDate.now()).orElseThrow(ScheduleNotFoundException::new);
 
-        if(schedule.getTodos().size() == 3){
-            throw new TodoLimitExceededException("오늘" , 3);
+        if(schedule.getTodos().size() >= 5){
+            throw new TodoLimitExceededException("오늘" , 5);
         }
         Todo parentTodo = todoRepository.findWithCategoryById(todoCreateRequest.todoId()).orElseThrow(() -> new TodoNotFoundException(identifier.todoId()));
 

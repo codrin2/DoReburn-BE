@@ -18,6 +18,9 @@ public interface TodoRepository extends JpaRepository<Todo, Long>, CustomTodoRep
     @Query("SELECT t FROM Todo t JOIN FETCH t.category c WHERE t.id = :todoId")
     Optional<Todo> findWithCategoryById(@Param("todoId") Long todoId);
 
+    @Query("SELECT t FROM Todo t JOIN FETCH t.category WHERE t.id IN :todoIds")
+    List<Todo> findTodosWithCategoryByIds(List<Long> todoIds);
+
     // 스케줄, 날짜로 조회
     @Query("SELECT t FROM Todo t JOIN FETCH t.category WHERE t.schedule = :schedule")
     List<Todo> findTodosWithCategoryBySchedule(@Param("schedule")Schedule schedule);
