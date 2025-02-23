@@ -32,7 +32,6 @@ interface CreatePlanPath {
   trafficType: 'SUBWAY' | 'BUS';
   sectionTime: number;
   subwayCode: number | null;
-  busType: number | null;
   busNumber: string | null;
   busType: number | null;
   startName: string;
