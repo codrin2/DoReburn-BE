@@ -199,9 +199,11 @@ feat: [커밋 내용] #1
   ![Slack Badge](https://img.shields.io/badge/Slack-4A154B?style=flat-square&logo=slack&logoColor=white)
   ![FigJam Badge](https://img.shields.io/badge/FigJam-FF7262?style=flat-square&logo=figma&logoColor=white)
 
+## 회의록
+[두부팀 회의록](https://sulky-koala-70d.notion.site/18394660e59780799826f7f454edb758?v=1a194660e59780d49217000cd680f7e5&pvs=74)
 
 ## 회고
-### 일인 회고
+### 일일 회고
 [박규한 개인회고](https://sulky-koala-70d.notion.site/3e30b0d1c111493c95249b1f37338246?pvs=73)
 
 [손영진 개인회고](https://sulky-koala-70d.notion.site/18994660e5978096888ee10a71819b9c)
