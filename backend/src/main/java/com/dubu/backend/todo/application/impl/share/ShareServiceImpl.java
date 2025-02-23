@@ -38,9 +38,7 @@ public class ShareServiceImpl implements ShareService {
             return null;
         }
 
-        List<Member> neighborhoodMembers = memberRepository.findMembersByMemberIds(extractMemberIds(memberLocationInfos));
-
-        List<MemberCategoryInfo> memberCategoryInfos = todoRepository.findTodoCountGroupByCategory(neighborhoodMembers);
+        List<MemberCategoryInfo> memberCategoryInfos = todoRepository.findTodoCountGroupByCategory(extractMemberIds(memberLocationInfos));
 
         MemberCategoryCollection memberCategoryCollection = new MemberCategoryCollection(memberCategoryInfos);
 
