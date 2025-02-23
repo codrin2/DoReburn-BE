@@ -1,27 +1,23 @@
 import * as S from './TimeBlockHeader.styled';
 import { TRAFFIC_ICON } from '../../PlanPage.constants';
 
+import { Path } from '@/api/plan';
 import Icon from '@/components/Icon';
 import { SUBWAY_LINES } from '@/constants/subwayLines';
 import { getPathColor } from '@/pages/RouteSelectPage/components/RouteResult/RouteList/RouteItem/RouteItem.utils';
 
 interface TimeBlockHeaderProps {
-  trafficType: 'SUBWAY' | 'BUS';
-  startStation: string;
-  subwayCode: number | null;
-  busNumber: string | null;
+  path: Path;
 }
 
-const TimeBlockHeader = ({
-  trafficType,
-  subwayCode,
-  startStation,
-  busNumber,
-}: TimeBlockHeaderProps) => {
+const TimeBlockHeader = ({ path }: TimeBlockHeaderProps) => {
+  const { trafficType, subwayCode, startName: startStation, busNumber, busType } = path;
+
   const subwayLine = SUBWAY_LINES[subwayCode as keyof typeof SUBWAY_LINES];
   const pathColor = getPathColor({
     trafficType,
     subwayCode,
+    busType,
   });
 
   return (
