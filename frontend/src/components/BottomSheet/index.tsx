@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import * as S from './BottomSheet.styled';
 import IconButton from '../Button/IconButton';
 import Icon from '../Icon';
+
+const CLOSE_THRESHOLD = 30;
 
 interface BottomSheetProps {
   isOpen: boolean;
@@ -34,12 +36,28 @@ const BottomSheet = ({
 }: BottomSheetProps) => {
   const [isAnimating, setIsAnimating] = useState(isOpen);
 
-  useEffect(() => {
-    if (isOpen) {
-      setIsAnimating(true);
-      document.body.style.setProperty('overflow', 'hidden');
+  const [translateY, setTranslateY] = useState(0);
+  const startYRef = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    startYRef.current = e.touches[0].clientY;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (startYRef.current === null) return;
+
+    const deltaY = e.touches[0].clientY - startYRef.current;
+
+    setTranslateY(deltaY);
+  };
+
+  const handleTouchEnd = () => {
+    if (translateY > CLOSE_THRESHOLD) {
+      onClose();
     }
-  }, [isOpen]);
+
+    startYRef.current = null;
+  };
 
   const handleAnimationEnd = () => {
     if (!isOpen) {
@@ -49,6 +67,15 @@ const BottomSheet = ({
     }
   };
 
+  useEffect(() => {
+    if (isOpen) {
+      setIsAnimating(true);
+      document.body.style.setProperty('overflow', 'hidden');
+    } else {
+      setTranslateY(0);
+    }
+  }, [isOpen]);
+
   if (!isAnimating) return null;
 
   return (
@@ -56,9 +83,17 @@ const BottomSheet = ({
       {createPortal(
         <S.SheetContainer>
           <S.Backdrop onClick={onClose} $isOpen={isOpen} />
-          <S.Sheet $isOpen={isOpen} $delay={delay} onAnimationEnd={handleAnimationEnd}>
+          <S.Sheet
+            $isOpen={isOpen}
+            $delay={delay}
+            onAnimationEnd={handleAnimationEnd}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
             {(title || subTitle) && (
               <S.Header>
+                <S.DragHandle />
                 {title && <S.Title>{title}</S.Title>}
                 {subTitle && <S.SubTitle>{subTitle}</S.SubTitle>}
                 <IconButton onClick={onClose} icon={<Icon icon="Close" cursor="pointer" />} />
