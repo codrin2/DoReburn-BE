@@ -26,7 +26,7 @@ const TodoEditForm = ({ todo, handleEditTodo }: TodoEditFormProps) => {
       title: title.trim(),
       category,
       difficulty,
-      memo: memo.trim() || null,
+      memo: memo.trim(),
     };
 
     handleEditTodo(editedTodo);
