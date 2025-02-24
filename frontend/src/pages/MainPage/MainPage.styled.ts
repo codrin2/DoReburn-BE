@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import backgroundMain from '/src/assets/images/backgroundMain.png';
+import backgroundMain from '/src/assets/images/backgroundMain.webp';
 
 export const MainPageLayout = styled.main`
   position: relative;
