@@ -89,8 +89,9 @@ public class Todo extends BaseTimeEntity {
                 .build();
     }
 
-    public static Todo copyOf(Todo originalTodo, Path assignedPath) {
+    public static Todo copyWithPlan(Member member, Todo originalTodo, Path assignedPath) {
         return Todo.builder()
+                .member(member)
                 .title(originalTodo.getTitle())
                 .type(TodoType.IN_PROGRESS)
                 .difficulty(originalTodo.getDifficulty())

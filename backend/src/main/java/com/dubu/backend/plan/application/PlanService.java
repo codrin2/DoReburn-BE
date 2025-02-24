@@ -9,6 +9,7 @@ import com.dubu.backend.plan.domain.Feedback;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.domain.Route;
+import com.dubu.backend.plan.domain.enums.TrafficType;
 import com.dubu.backend.plan.domain.vo.PathIdentifier;
 import com.dubu.backend.plan.dto.request.PlanCreateRequest;
 import com.dubu.backend.plan.dto.request.PlanFeedbackCreateRequest;
@@ -33,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -71,7 +72,7 @@ public class PlanService {
         Route reusableRoute = routeService.findReusableRoute(startX, startY, endX, endY, newPathIdentifiers);
 
         Plan newPlan = Plan.createPlan(currentMember, request.totalSectionTime());
-        planRepository.save(newPlan);
+        Plan savedPlan = planRepository.save(newPlan);
 
         Route finalRoute = null;
         if (reusableRoute == null) {
@@ -79,16 +80,16 @@ public class PlanService {
         }
 
         // Path 생성 → route는 기존꺼면 null, 새 route 있으면 연결
-        List<Path> paths = createAndSavePaths(newPlan, finalRoute, request);
+        List<Path> paths = createAndSavePaths(savedPlan, finalRoute, request);
 
         // 오늘의 할 일(Todo) Path 할당 & Todo 내용 복제하여 저장
         assignTodosToPaths(currentMember, paths);
 
         currentMember.updateStatus(Status.MOVE);
 
-        notificationService.sendPushAndMemberStatusChange(memberId, newPlan);
+        notificationService.sendPushAndMemberStatusChange(memberId, savedPlan);
 
-        return newPlan.getId();
+        return savedPlan.getId();
     }
 
     @Transactional
@@ -191,17 +192,14 @@ public class PlanService {
         planRepository.delete(planToDelete);
     }
 
-    /**
-     * Path 생성 및 저장
-     */
     private List<Path> createAndSavePaths(Plan plan, Route route, PlanCreateRequest request) {
-        // pathOrder = index
-        List<Path> paths = IntStream.range(0, request.paths().size())
-                .mapToObj(i -> Path.createPath(
+        List<Path> paths = request.paths().stream()
+                .filter(pathRequest -> route != null || !Objects.equals(pathRequest.trafficType(), "WALK")) // route가 null이면 WALK 제외
+                .map(pathRequest -> Path.createPath(
                         plan,
-                        route, // null or 새로 생성한 route
-                        request.paths().get(i),
-                        i
+                        route,
+                        pathRequest,
+                        request.paths().indexOf(pathRequest)
                 ))
                 .toList();
 
@@ -210,7 +208,7 @@ public class PlanService {
     }
 
     /**
-     * Schedule에서 Todo를 가져와 Round-Robin으로 새로 생성한 Paths에 할당
+     * Schedule에서 Todo를 가져와 첫번째 Paths에 모두 할당
      */
     private void assignTodosToPaths(Member member, List<Path> paths) {
         Schedule schedule = scheduleRepository.findLatestSchedule(member, LocalDate.now())
@@ -218,11 +216,13 @@ public class PlanService {
 
         List<Todo> existingTodos = schedule.getTodos();
         List<Todo> newTodos = new ArrayList<>();
+        Path assignedPath = paths.stream()
+                .filter(path -> path.getTrafficType()!= TrafficType.WALK)
+                .findFirst()
+                .orElse(null);
 
-        for (int i = 0; i < existingTodos.size(); i++) {
-            Todo original = existingTodos.get(i);
-            Path assignedPath = paths.get(i % paths.size());
-            Todo cloned = Todo.copyOf(original, assignedPath);
+        for (Todo original : existingTodos) {
+            Todo cloned = Todo.copyWithPlan(member, original, assignedPath);
             newTodos.add(cloned);
         }
         todoRepository.saveAll(newTodos);
