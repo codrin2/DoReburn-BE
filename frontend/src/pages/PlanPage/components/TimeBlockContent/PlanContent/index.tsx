@@ -33,17 +33,17 @@ const PlanContent = ({ paths }: PlanContentProps) => {
 
   const handleTouchStart = (e: TouchEvent<HTMLElement>, todo: PathTodo) => {
     const touch = e.touches[0];
-    const targetBlock = (e.target as HTMLElement).getBoundingClientRect();
+    const targetElement = e.currentTarget;
 
     // 터치한 위치와 block의 위치 차이 계산하여 보정
-    const offsetX = touch.clientX - targetBlock.left;
-    const offsetY = touch.clientY - targetBlock.top;
+    const offsetX = touch.pageX - targetElement.offsetLeft;
+    const offsetY = touch.pageY - targetElement.offsetTop;
 
     longPressTimeoutRef.current = setTimeout(() => {
       setDraggingTodo({
         todo,
-        x: touch.clientX - offsetX,
-        y: touch.clientY - offsetY,
+        x: touch.pageX - offsetX,
+        y: touch.pageY - offsetY,
         offsetX,
         offsetY,
       });
@@ -54,12 +54,13 @@ const PlanContent = ({ paths }: PlanContentProps) => {
     if (!draggingTodo) return;
 
     const touch = e.touches[0];
+
     setDraggingTodo((prev) =>
       prev
         ? {
             ...prev,
-            x: touch.clientX - prev.offsetX,
-            y: touch.clientY - prev.offsetY,
+            x: touch.pageX - prev.offsetX,
+            y: touch.pageY - prev.offsetY,
           }
         : null,
     );
