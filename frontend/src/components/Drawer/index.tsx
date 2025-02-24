@@ -17,9 +17,9 @@ const Drawer = () => {
         <S.DrawerLayout $isOpen={isOpen}>
           <S.Overlay onClick={closeDrawer} $isOpen={isOpen} />
           <S.Content $isOpen={isOpen}>
-            <Link to="/">
+            <S.MenuTitle to="/">
               <Icon icon="Doreburn" width={120} height={15} cursor="pointer" />
-            </Link>
+            </S.MenuTitle>
             <S.MenuList>
               {DRAWER_MENU.map((menu, idx) => (
                 <S.MenuItem key={idx}>
