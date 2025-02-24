@@ -35,6 +35,11 @@
 
 <br>
 
+# 🎥 시연영상
+
+
+<br>
+
 # 📋 API 명세서
 
 [두리번 Swagger 주소](https://api.do-reburn.site/api/v1/swagger-ui/index.html)
@@ -76,13 +81,13 @@
 <br>
 
 # 🕐 회의록
-[두부팀 회의록](https://sulky-koala-70d.notion.site/18394660e59780799826f7f454edb758?v=1a194660e59780d49217000cd680f7e5&pvs=74)
+[두부의 회의록 in Notion](https://sulky-koala-70d.notion.site/18394660e59780799826f7f454edb758?v=1a194660e59780d49217000cd680f7e5&pvs=74)
 
 <br>
 
 # 👀 회고
 ### 일일 회고
-[규한의 개인회고 in Notion](https://sulky-koala-70d.notion.site/3e30b0d1c111493c95249b1f37338246?pvs=73)
+[규한이의 개인회고 in Notion](https://sulky-koala-70d.notion.site/3e30b0d1c111493c95249b1f37338246?pvs=73)
 
 [영진이의 개인회고 in Notion](https://sulky-koala-70d.notion.site/18994660e5978096888ee10a71819b9c)
 
