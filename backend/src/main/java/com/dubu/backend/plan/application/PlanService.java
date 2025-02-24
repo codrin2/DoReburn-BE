@@ -222,7 +222,7 @@ public class PlanService {
                 .orElse(null);
 
         for (Todo original : existingTodos) {
-            Todo cloned = Todo.copyOf(original, assignedPath);
+            Todo cloned = Todo.copyWithPlan(member, original, assignedPath);
             newTodos.add(cloned);
         }
         todoRepository.saveAll(newTodos);
