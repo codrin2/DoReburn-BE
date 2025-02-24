@@ -11,6 +11,8 @@ const useFavoriteTodoListQuery = (todoType: TodoType, pathId?: number) => {
     queryKey: [QUERY_KEY.favorite, todoType, pathId || 0],
     queryFn: ({ pageParam }) =>
       getFavoriteTodoList({ modifyType: todoType, size: PAGE_SIZE, pathId, cursor: pageParam }),
+    staleTime: Infinity,
+    gcTime: Infinity,
     placeholderData: keepPreviousData,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
