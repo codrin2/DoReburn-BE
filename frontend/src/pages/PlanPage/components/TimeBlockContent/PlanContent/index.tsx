@@ -9,7 +9,7 @@ import { ERROR_MESSAGE } from '@/constants/message';
 import useToast from '@/hooks/useToast';
 import useUpdatePathTodoMutation from '@/pages/PlanPage/hooks/useUpdatePathTodoMutation';
 
-const LONG_PRESS_DURATION = 1000;
+const LONG_PRESS_DURATION = 500;
 
 export interface DraggingTodo {
   todo: PathTodo;
