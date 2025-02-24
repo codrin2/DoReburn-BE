@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router';
 import FlexPageLayout from './layout/FlexPageLayout';
 import memberStatusLoader from './memberStatusLoader';
 
+import CustomSuspense from '@/components/CustomSuspense/CustomSuspense';
 import {
   MainPage,
   EditPage,
@@ -24,20 +25,36 @@ import {
 export const router = createBrowserRouter([
   {
     path: '/landing',
-    element: <LandingPage />,
+    element: (
+      <CustomSuspense>
+        <LandingPage />
+      </CustomSuspense>
+    ),
   },
   {
     path: '/login/kakao',
-    element: <KakaoLoginPage />,
+    element: (
+      <CustomSuspense>
+        <KakaoLoginPage />
+      </CustomSuspense>
+    ),
   },
   {
     path: '/onboarding',
-    element: <OnboardingPage />,
+    element: (
+      <CustomSuspense>
+        <OnboardingPage />
+      </CustomSuspense>
+    ),
     loader: memberStatusLoader,
   },
   {
     path: '/',
-    element: <MainPage />,
+    element: (
+      <CustomSuspense>
+        <MainPage />
+      </CustomSuspense>
+    ),
     loader: memberStatusLoader,
   },
   {
@@ -46,13 +63,21 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <EditPage />,
+        element: (
+          <CustomSuspense>
+            <EditPage />
+          </CustomSuspense>
+        ),
       },
     ],
   },
   {
     path: '/route-select',
-    element: <RouteSelectPage />,
+    element: (
+      <CustomSuspense>
+        <RouteSelectPage />
+      </CustomSuspense>
+    ),
   },
   {
     path: '/plan',
@@ -60,7 +85,11 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <PlanPage />,
+        element: (
+          <CustomSuspense>
+            <PlanPage />
+          </CustomSuspense>
+        ),
         loader: memberStatusLoader,
       },
       {
@@ -69,7 +98,11 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <RouteTodoEditPage />,
+            element: (
+              <CustomSuspense>
+                <RouteTodoEditPage />
+              </CustomSuspense>
+            ),
           },
         ],
       },
@@ -81,35 +114,59 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <RecommendTodoPage />,
+        element: (
+          <CustomSuspense>
+            <RecommendTodoPage />
+          </CustomSuspense>
+        ),
       },
     ],
   },
   {
     path: '/feedback',
-    element: <FeedbackPage />,
+    element: (
+      <CustomSuspense>
+        <FeedbackPage />
+      </CustomSuspense>
+    ),
     loader: memberStatusLoader,
   },
   {
     path: '/map',
-    element: <MapPage />,
+    element: (
+      <CustomSuspense>
+        <MapPage />
+      </CustomSuspense>
+    ),
   },
   {
     path: '/statistics',
     children: [
       {
         path: 'day',
-        element: <DayStatisticsPage />,
+        element: (
+          <CustomSuspense>
+            <DayStatisticsPage />
+          </CustomSuspense>
+        ),
       },
       {
         path: 'week',
-        element: <WeekStatisticsPage />,
+        element: (
+          <CustomSuspense>
+            <WeekStatisticsPage />
+          </CustomSuspense>
+        ),
       },
     ],
   },
   {
     path: '/my-page',
-    element: <MyPage />,
+    element: (
+      <CustomSuspense>
+        <MyPage />
+      </CustomSuspense>
+    ),
   },
   {
     path: '/favorite',
@@ -117,7 +174,11 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <FavoritePage />,
+        element: (
+          <CustomSuspense>
+            <FavoritePage />
+          </CustomSuspense>
+        ),
       },
     ],
   },
