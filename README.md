@@ -2,6 +2,8 @@
 
 <img width="867" alt="image" src="https://github.com/user-attachments/assets/99773c75-5cfe-4207-92fb-6c57d611e6bc" />
 
+<br>
+
 # 👨‍👧‍👦 팀 소개
 
 ### **팀명 : 두부**
@@ -16,6 +18,37 @@
 | 개발 | 손영진 | 📱 프론트엔드 | 화면 UI 구현, API 연동 |
 | 개발 | 문희상 | 💻 개발 리드 | API 구현, ERD 설계, 서버 배포 |
 | 개발 | 김현원 | 💻 백엔드 | API 구현, ERD 설계 |
+
+<br>
+
+# ✏️ 서비스 기능
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/314c1a01-e5d1-43f1-9b81-07831545862e" />
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/03f30e3d-6a3e-43ba-90c7-4f02393c859b" />
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/1569f66a-1134-4838-97b5-00959b3902fa" />
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/16bbfb97-8853-4d0f-8d44-8849559d2922" />
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/9c0cc708-be1c-4c83-a8b4-73020b85d603" />
+
+<br>
+
+# 📑 ERD 설계도
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/6a212b24-e5b5-48fc-8eb3-77586ee9189c" />
+
+
+<br>
+
+# 💾 시스템 아키텍쳐
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/aec57a70-d9c9-4418-82fa-513064c0a0ba" />
+
+<br>
+
+# 🔥 Team.두부의 협업 이야기
+
+
+<br>
 
 # 🎨 기획&디자인 링크
 
@@ -114,7 +147,11 @@ feat: [커밋 내용] #1
 | test | 테스트코드"만" 추가, 수정했을 때 |
 
 
-## 개발 기술스택
+# 🛠️ 개발스택
+## FrontEnd
+
+
+## BackEnd
 - Language, Framework, Library
   
     ![IntelliJ IDEA Badge](https://img.shields.io/badge/IntelliJ%20IDEA-000000?style=flat-square&logo=intellij-idea&logoColor=white)
