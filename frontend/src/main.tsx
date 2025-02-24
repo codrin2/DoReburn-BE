@@ -5,6 +5,7 @@ import { RouterProvider } from 'react-router';
 import { ThemeProvider } from 'styled-components';
 
 import CustomSuspense from './components/CustomSuspense/CustomSuspense';
+import RootErrorBoundary from './components/ErrorBoundary/RootErrorBoundary';
 import ToastProvider from './components/Toast/ToastProvider';
 import Viewport from './components/Viewport/Viewport';
 import { OverlayProvider } from './providers/OverlayProvider';
@@ -19,7 +20,7 @@ const enableMocking = async () => {
 
   const { worker } = await import('./mocks/browser');
 
-  // return await worker.start({ onUnhandledRequest: 'bypass' });
+  return await worker.start({ onUnhandledRequest: 'bypass' });
 };
 
 const registerServiceWorker = () => {
@@ -38,15 +39,17 @@ enableMocking().then(() => {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <ToastProvider>
-          <OverlayProvider>
-            <Viewport>
-              <CustomSuspense>
-                <RouterProvider router={router} />
-              </CustomSuspense>
-            </Viewport>
-          </OverlayProvider>
-        </ToastProvider>
+        <RootErrorBoundary>
+          <ToastProvider>
+            <OverlayProvider>
+              <Viewport>
+                <CustomSuspense>
+                  <RouterProvider router={router} />
+                </CustomSuspense>
+              </Viewport>
+            </OverlayProvider>
+          </ToastProvider>
+        </RootErrorBoundary>
         <ReactQueryDevtools initialIsOpen={false} />
       </ThemeProvider>
     </QueryClientProvider>,
