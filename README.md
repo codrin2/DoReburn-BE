@@ -62,7 +62,7 @@
 
 # 🎨 기획&디자인 링크
 
-[기획&디자인 최종 산출물 링크 [figma]]([https://www.figma.com/design/4fCa8NJFAmSbPJSLnaJM4h/Handoff_Do-reburn?node-id=0-1&p=f&t=jFLkPtaI60o34zv5-0](https://www.figma.com/board/eqA3STNAS5glysxw1lPGsY/%EB%91%90%EB%B6%80?node-id=1-1996&t=IswPLk2lIphTR3vW-1))
+[기획&디자인 최종 산출물 링크 [figma]](https://www.figma.com/board/eqA3STNAS5glysxw1lPGsY/%EB%91%90%EB%B6%80?node-id=1-1996&t=IswPLk2lIphTR3vW-1)
 
 <br>
 
