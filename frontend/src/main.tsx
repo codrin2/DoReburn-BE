@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
@@ -9,6 +8,7 @@ import RootErrorBoundary from './components/ErrorBoundary/RootErrorBoundary';
 import ToastProvider from './components/Toast/ToastProvider';
 import Viewport from './components/Viewport/Viewport';
 import { OverlayProvider } from './providers/OverlayProvider';
+import QueryProvider from './QueryProvider';
 import { router } from './router';
 import GlobalStyle from './styles/GlobalStyle.js';
 import theme from './styles/theme';
@@ -31,16 +31,14 @@ const registerServiceWorker = () => {
   navigator.serviceWorker.register('/service-worker.js');
 };
 
-const queryClient = new QueryClient();
-
 registerServiceWorker();
 enableMocking().then(() => {
   createRoot(document.getElementById('root')!).render(
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <RootErrorBoundary>
-          <ToastProvider>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <RootErrorBoundary>
+        <ToastProvider>
+          <QueryProvider>
             <OverlayProvider>
               <Viewport>
                 <CustomSuspense>
@@ -48,10 +46,10 @@ enableMocking().then(() => {
                 </CustomSuspense>
               </Viewport>
             </OverlayProvider>
-          </ToastProvider>
-        </RootErrorBoundary>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </ThemeProvider>
-    </QueryClientProvider>,
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryProvider>
+        </ToastProvider>
+      </RootErrorBoundary>
+    </ThemeProvider>,
   );
 });
