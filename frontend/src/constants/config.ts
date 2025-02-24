@@ -1,5 +1,5 @@
 export const MAP_ID = 'map';
-export const MAX_TODO_ITEM_LENGTH = 3;
+export const MAX_TODO_ITEM_LENGTH = 5;
 
 export const ICON_MAPPER = {
   READING: 'Reading',

@@ -30,7 +30,6 @@ const useInitMap = () => {
 
   useEffect(() => {
     const locPosition = new kakao.maps.LatLng(center.lat, center.lng);
-    mapRef.current?.setCenter(locPosition);
 
     const currentLocationImage = createMarkerImage(CurrentLocationMarker, 28, 28, null);
 
