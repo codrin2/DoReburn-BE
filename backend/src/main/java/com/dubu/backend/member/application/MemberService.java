@@ -109,6 +109,50 @@ public class MemberService {
         currentMember.updateStatus(Status.STOP);
     }
 
+    @Transactional
+    public MemberInfoResponse updateMemberInfo(Long memberId, MemberInfoUpdateRequest request) {
+        Member currentMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
+
+        updateMemberCategories(currentMember, request.categories());
+
+        updateAddressInfo(currentMember, AddressType.HOME, request.homeTitle(),
+                request.homeAddress(), request.homeAddressX(), request.homeAddressY());
+        updateAddressInfo(currentMember, AddressType.SCHOOL, request.schoolTitle(),
+                request.schoolAddress(), request.schoolAddressX(), request.schoolAddressY());
+
+        List<Address> updatedAddresses = addressRepository.findByMemberId(memberId);
+        List<Category> updatedCategories = memberCategoryRepository.findByMemberId(memberId)
+                .stream()
+                .map(MemberCategory::getCategory)
+                .toList();
+
+        return MemberInfoResponse.of(currentMember, updatedCategories, updatedAddresses);
+    }
+
+    @Transactional
+    public void updateMemberStatus(Long memberId, String status) {
+        Member currentMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
+
+        currentMember.updateStatus(Status.fromString(status));
+    }
+
+    @Transactional
+    public void updateMemberStatusByPlanChange(MemberStatusChangeDto memberStatusChangeDto) {
+        Member currentMember = memberRepository.findById(memberStatusChangeDto.memberId())
+                .orElseThrow(() -> new MemberNotFoundException(memberStatusChangeDto.memberId()));
+
+        Plan currentPlan = planRepository.findById(memberStatusChangeDto.planId())
+                .orElseThrow(() -> new PlanNotFoundException(memberStatusChangeDto.planId()));
+
+        if (currentPlan.isCompleted()) {
+            return;
+        }
+
+        currentMember.updateStatus(Status.FEEDBACK);
+    }
+
     private void saveMemberCategories(Member member, List<String> categoryNames) {
         List<MemberCategory> memberCategories = categoryNames.stream()
                 .map(catName -> {
@@ -133,27 +177,6 @@ public class MemberService {
     ) {
         Address address = Address.createAddress(member, type, title, roadAddress, x, y);
         addressRepository.save(address);
-    }
-
-    @Transactional
-    public MemberInfoResponse updateMemberInfo(Long memberId, MemberInfoUpdateRequest request) {
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
-
-        updateMemberCategories(currentMember, request.categories());
-
-        updateAddressInfo(currentMember, AddressType.HOME, request.homeTitle(),
-                request.homeAddress(), request.homeAddressX(), request.homeAddressY());
-        updateAddressInfo(currentMember, AddressType.SCHOOL, request.schoolTitle(),
-                request.schoolAddress(), request.schoolAddressX(), request.schoolAddressY());
-
-        List<Address> updatedAddresses = addressRepository.findByMemberId(memberId);
-        List<Category> updatedCategories = memberCategoryRepository.findByMemberId(memberId)
-                .stream()
-                .map(MemberCategory::getCategory)
-                .toList();
-
-        return MemberInfoResponse.of(currentMember, updatedCategories, updatedAddresses);
     }
 
     private void updateMemberCategories(Member member, List<String> requestedCats) {
@@ -203,29 +226,6 @@ public class MemberService {
             Address newAddress = Address.createAddress(member, type, title, roadAddress, x, y);
             addressRepository.save(newAddress);
         }
-    }
-
-    @Transactional
-    public void updateMemberStatus(Long memberId, String status) {
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
-
-        currentMember.updateStatus(Status.fromString(status));
-    }
-
-    @Transactional
-    public void updateMemberStatusByPlanChange(MemberStatusChangeDto memberStatusChangeDto) {
-        Member currentMember = memberRepository.findById(memberStatusChangeDto.memberId())
-                .orElseThrow(() -> new MemberNotFoundException(memberStatusChangeDto.memberId()));
-
-        Plan currentPlan = planRepository.findById(memberStatusChangeDto.planId())
-                .orElseThrow(() -> new PlanNotFoundException(memberStatusChangeDto.planId()));
-
-        if (currentPlan.isCompleted()) {
-            return;
-        }
-
-        currentMember.updateStatus(Status.FEEDBACK);
     }
 
     public void updateMemberLocation(Long memberId, MemberLocationDto location) {

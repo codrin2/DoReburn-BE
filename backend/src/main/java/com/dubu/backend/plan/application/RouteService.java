@@ -142,7 +142,7 @@ public class RouteService {
         List<PathIdentifier> routePathIdentifiers = route.getPaths().stream()
                 .sorted(Comparator.comparing(Path::getPathOrder)) // pathOrder 기준 정렬
                 .map(p -> new PathIdentifier(
-                        p.getTrafficType().name(), // Enum -> String
+                        p.getTrafficType().name(),
                         p.getStartName(),
                         p.getEndName()
                 ))
