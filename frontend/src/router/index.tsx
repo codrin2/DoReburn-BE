@@ -21,13 +21,22 @@ import WeekStatisticsPage from '@/pages/WeekStatisticsPage';
 
 export const router = createBrowserRouter([
   {
-    path: '/',
-    element: <MainPage />,
+    path: '/landing',
+    element: <LandingPage />,
+  },
+  {
+    path: '/login/kakao',
+    element: <KakaoLoginPage />,
+  },
+  {
+    path: '/onboarding',
+    element: <OnboardingPage />,
     loader: memberStatusLoader,
   },
   {
-    path: '/landing',
-    element: <LandingPage />,
+    path: '/',
+    element: <MainPage />,
+    loader: memberStatusLoader,
   },
   {
     path: '/edit',
@@ -38,11 +47,6 @@ export const router = createBrowserRouter([
         element: <EditPage />,
       },
     ],
-  },
-  {
-    path: '/onboarding',
-    element: <OnboardingPage />,
-    loader: memberStatusLoader,
   },
   {
     path: '/route-select',
@@ -57,15 +61,15 @@ export const router = createBrowserRouter([
         element: <PlanPage />,
         loader: memberStatusLoader,
       },
-    ],
-  },
-  {
-    path: '/plan/:planId/todos/edit',
-    element: <FlexPageLayout />,
-    children: [
       {
-        index: true,
-        element: <RouteTodoEditPage />,
+        path: ':planId/todos/edit',
+        element: <FlexPageLayout />,
+        children: [
+          {
+            index: true,
+            element: <RouteTodoEditPage />,
+          },
+        ],
       },
     ],
   },
@@ -80,25 +84,26 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: '/map',
-    element: <MapPage />,
-  },
-  {
     path: '/feedback',
     element: <FeedbackPage />,
     loader: memberStatusLoader,
   },
   {
-    path: '/login/kakao',
-    element: <KakaoLoginPage />,
+    path: '/map',
+    element: <MapPage />,
   },
   {
-    path: '/statistics/week',
-    element: <WeekStatisticsPage />,
-  },
-  {
-    path: '/statistics/day',
-    element: <DayStatisticsPage />,
+    path: '/statistics',
+    children: [
+      {
+        path: 'day',
+        element: <DayStatisticsPage />,
+      },
+      {
+        path: 'week',
+        element: <WeekStatisticsPage />,
+      },
+    ],
   },
   {
     path: '/my-page',
