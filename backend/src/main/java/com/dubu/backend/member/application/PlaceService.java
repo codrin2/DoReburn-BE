@@ -3,8 +3,6 @@ package com.dubu.backend.member.application;
 import com.dubu.backend.member.dto.response.KakaoPlaceApiResponse;
 import com.dubu.backend.member.dto.response.NaverPlaceApiResponse;
 import com.dubu.backend.member.dto.response.PlaceSearchResponse;
-import com.dubu.backend.member.exception.KakaoApiServerException;
-import com.dubu.backend.member.exception.NaverApiServerException;
 import com.dubu.backend.member.infra.client.KakaoPlaceApiClient;
 import com.dubu.backend.member.infra.client.NaverPlaceApiClient;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +21,6 @@ public class PlaceService {
     public List<PlaceSearchResponse> searchPlaces(String query) {
         NaverPlaceApiResponse naverPlaceApiResponse = naverPlaceApiClient.searchPlaces(query);
         KakaoPlaceApiResponse kakaoPlaceApiResponse = kakaoPlaceApiClient.searchPlaces(query);
-
-        if (naverPlaceApiResponse == null) {
-            throw new NaverApiServerException();
-        }
-        if (kakaoPlaceApiResponse == null) {
-            throw new KakaoApiServerException();
-        }
 
         List<NaverPlaceApiResponse.NaverPlace> naverPlaces = naverPlaceApiResponse.places();
         List<KakaoPlaceApiResponse.DocumentsResponse> kakaoPlaces = kakaoPlaceApiResponse.documents();
