@@ -5,8 +5,7 @@ import { useNavigate } from 'react-router';
 import HomeModal from './components/HomeModal';
 import PlanHeader from './components/PlanHeader';
 import PlanInfoHeader from './components/PlanInfoHeader';
-import TimeBlockContent from './components/TimeBlockContent';
-import TimeBlockHeader from './components/TimeBlockHeader';
+import PlanContent from './components/TimeBlockContent/PlanContent';
 import usePlanInfoQuery from './hooks/usePlanInfoQuery';
 import * as S from './PlanPage.styled';
 
@@ -48,25 +47,7 @@ const PlanPage = () => {
       <S.HorizontalLine />
 
       {/* 경로별 할 일 정보 */}
-      <S.PlanContent>
-        {data?.paths.map((path) => (
-          <S.TimeBlockSection key={path.pathId}>
-            <TimeBlockHeader
-              trafficType={path.trafficType}
-              subwayCode={path.subwayCode}
-              startStation={path.startName}
-              busNumber={path.busNumber}
-            />
-            <TimeBlockContent
-              pathId={path.pathId}
-              sectionTime={path.sectionTime}
-              todos={path.todos}
-              trafficType={path.trafficType}
-              subwayCode={path.subwayCode}
-            />
-          </S.TimeBlockSection>
-        ))}
-      </S.PlanContent>
+      <PlanContent paths={data?.paths} />
 
       {/* 이동 완료 버튼 영역 */}
       <S.FinishButton onClick={open}>이동 완료</S.FinishButton>

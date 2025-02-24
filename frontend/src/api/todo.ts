@@ -67,6 +67,11 @@ interface RecommendAllTodoParams {
   cursorTodoId?: number;
 }
 
+export interface PathTodoUpdateParams {
+  todoId: number;
+  newPathId: number;
+}
+
 export const getTodayTodoList = async () => {
   const result = await fetchClient.get<TodoResponse>(API_URL.todayTodo);
 
@@ -180,4 +185,8 @@ export const getRouteTodoList = async (planId: number) => {
   const result = await fetchClient.get<TodoResponse>(API_URL.routeTodo(planId));
 
   return result.data;
+};
+
+export const updatePathTodo = async ({ todoId, newPathId }: PathTodoUpdateParams) => {
+  return await fetchClient.patch(API_URL.updatePathTodo(todoId, newPathId));
 };

@@ -43,6 +43,8 @@ export const API_URL = {
   notification: `${BASE_URL}/api/v1/notification`,
   notificationSubscribe: `${BASE_URL}/api/v1/notification/subscribe`,
   updateCurrentLocation: `${BASE_URL}/api/v1/members/location`,
+  updatePathTodo: (todoId: number, newPathId: number) =>
+    `${BASE_URL}/api/v1/todos/path?todoId=${todoId}&newPathId=${newPathId}`,
   authReissue: `${BASE_URL}/api/v1/auth/reissue`,
 };
 

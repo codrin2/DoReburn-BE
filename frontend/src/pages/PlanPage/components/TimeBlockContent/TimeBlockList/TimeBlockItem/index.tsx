@@ -1,7 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { useEffect, useReducer, useRef, useState } from 'react';
+import { LegacyRef, TouchEvent, useEffect, useReducer, useRef, useState } from 'react';
 
 import * as S from './TimeBlockItem.styled';
+import { DraggingTodo } from '../../PlanContent';
 
 import { checkTodo, PathTodo } from '@/api/plan';
 import Icon from '@/components/Icon';
@@ -19,15 +20,27 @@ const useCheckTodoMutation = () => {
 
 interface TimeBlockItemProps {
   todo: PathTodo;
+  onTouchStart: (e: TouchEvent<HTMLDivElement>, todo: PathTodo) => void;
+  onTouchMove: (e: TouchEvent<HTMLDivElement>) => void;
+  draggingTodo: DraggingTodo | null;
+  itemRef?: LegacyRef<HTMLDivElement>;
 }
 
-const TimeBlockItem = ({ todo }: TimeBlockItemProps) => {
+const TimeBlockItem = ({
+  todo,
+  onTouchStart,
+  onTouchMove,
+  draggingTodo,
+  itemRef,
+}: TimeBlockItemProps) => {
   const showTodoBottomSheet = useShowTodoBottomSheet();
   const { mutateAsync: checkTodo } = useCheckTodoMutation();
 
   const [isDone, toggle] = useReducer((prev) => !prev, todo.isDone);
   const [isAnimating, setIsAnimating] = useState(false);
   const checkTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const isDragging = draggingTodo?.todo.todoId === todo.todoId;
 
   const handleUncheckTodo = async () => {
     await checkTodo({ todoId: todo.todoId, isCompleted: false });
@@ -53,7 +66,13 @@ const TimeBlockItem = ({ todo }: TimeBlockItemProps) => {
 
   return (
     <>
-      <S.TimeBlockItem>
+      <S.TimeBlockItemLayout
+        onTouchStart={(e) => onTouchStart(e, todo)}
+        onTouchMove={onTouchMove}
+        ref={itemRef}
+        $isDragging={isDragging}
+        style={isDragging ? { left: `${draggingTodo.x}px`, top: `${draggingTodo.y}px` } : {}}
+      >
         <S.CheckIconWrapper
           onClick={isDone ? handleUncheckTodo : handleCheckTodo}
           $isDone={isDone}
@@ -67,7 +86,7 @@ const TimeBlockItem = ({ todo }: TimeBlockItemProps) => {
           <S.TodoTitle $isDone={isDone}>{todo.title}</S.TodoTitle>
           <S.TodoMemo>{todo.memo}</S.TodoMemo>
         </S.TimeBlockContent>
-      </S.TimeBlockItem>
+      </S.TimeBlockItemLayout>
     </>
   );
 };

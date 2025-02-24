@@ -2,7 +2,9 @@ package com.dubu.backend.todo.dto.request;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.plan.domain.Path;
-import com.dubu.backend.todo.entity.*;
+import com.dubu.backend.todo.domain.*;
+import com.dubu.backend.todo.domain.enums.TodoDifficulty;
+import com.dubu.backend.todo.domain.enums.TodoType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "할 일 직접 생성 요청")
