@@ -48,7 +48,7 @@ const TodoTab = ({ todoType, planId }: TodoTabProps) => {
   const handleDeleteTodo = (todoId: number) => {
     deleteTodo(
       { todoId },
-      { onSuccess: () => toast({ message: TODO_TOAST_MESSAGE.delete(dateType) }) },
+      { onSuccess: () => toast({ message: TODO_TOAST_MESSAGE.delete(todoType) }) },
     );
   };
 
