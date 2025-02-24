@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 
-export const TimeBlockList = styled.div`
+export const TimeBlockList = styled.div<{ $isDragging: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
   overflow: hidden;
   flex-grow: 1;
+
+  touch-action: ${({ $isDragging }) => ($isDragging ? 'none' : 'pan-y')};
 `;
 
 export const EmptyTimeBlock = styled.div`
