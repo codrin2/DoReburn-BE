@@ -62,6 +62,7 @@ const PlanContent = ({ paths }: PlanContentProps) => {
 
     if (!draggingTodo) return;
 
+    document.body.style.setProperty('overflow', 'hidden');
     const touch = e.touches[0];
 
     setDraggingTodo((prev) =>
@@ -83,6 +84,7 @@ const PlanContent = ({ paths }: PlanContentProps) => {
     if (!draggingTodo) return;
 
     e.preventDefault();
+    document.body.style.setProperty('overflow', '');
 
     const touch = e.changedTouches[0];
 

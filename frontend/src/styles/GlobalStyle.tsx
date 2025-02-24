@@ -165,10 +165,6 @@ table {
   height: auto;
   resize: none;
 }
-
-.dragging {
-  touch-action: none;
-}
   
 `;
 
