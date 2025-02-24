@@ -22,6 +22,11 @@
 
 <br>
 
+# 📖 서비스 용어 정리
+[용어 정리 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%A3%BC%EC%9A%94-%EC%9A%A9%EC%96%B4-%EC%A0%95%EB%A6%AC)
+
+<br>
+
 # ✏️ 서비스 기능
 <img width="970" alt="image" src="https://github.com/user-attachments/assets/314c1a01-e5d1-43f1-9b81-07831545862e" />
 
