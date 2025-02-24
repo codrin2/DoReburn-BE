@@ -26,7 +26,7 @@ const TimeBlockList = ({ todos, draggingTodo, onTouchStart, onTouchMove }: TimeB
   }
 
   return (
-    <S.TimeBlockList $isDragging={Boolean(draggingTodo)}>
+    <S.TimeBlockList>
       {todos.map((todo) => (
         <TimeBlockItem
           key={todo.todoId}
