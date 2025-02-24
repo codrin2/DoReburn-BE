@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import { getTodayTodoList, getTomorrowTodoList } from '@/api/todo';
 import { DATE_TYPE } from '@/constants/config';
@@ -10,6 +10,8 @@ const useTodoListQuery = (dateType: DateType, planId?: number) => {
     queryKey: [QUERY_KEY.todoList, dateType, planId || 0],
     queryFn: () => (dateType === DATE_TYPE.TODAY ? getTodayTodoList() : getTomorrowTodoList()),
     staleTime: Infinity,
+    gcTime: Infinity,
+    placeholderData: keepPreviousData,
     enabled: !planId,
   });
 };

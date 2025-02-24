@@ -24,6 +24,9 @@ export const TodoList = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 0.8rem;
+
+  max-height: 16.8rem;
+  overflow-y: scroll;
 `;
 
 export const TodoItem = styled.div`

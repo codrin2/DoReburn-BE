@@ -63,4 +63,8 @@ export const HomeButton = styled(Button)`
   height: 3.4rem;
   ${({ theme }) => theme.fonts.label13Med};
   font-weight: 400;
+
+  span {
+    white-space: nowrap;
+  }
 `;

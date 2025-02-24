@@ -26,6 +26,8 @@ const useRecommendTodoFilterQuery = (
         cursorDifficulty: pageParam.cursorDifficulty,
         cursorTodoId: pageParam.cursorTodoId,
       }),
+    staleTime: Infinity,
+    gcTime: Infinity,
     placeholderData: keepPreviousData,
     initialPageParam: {
       cursorCategoryId: 0,

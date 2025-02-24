@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import BackgroundFeedback from '@/assets/images/backgroundFeedback.png';
+import BackgroundFeedback from '@/assets/images/backgroundFeedback.webp';
 
 export const FeedbackPageLayout = styled.div`
   position: relative;

@@ -5,9 +5,9 @@ import * as S from './MyPageEditableSection.styled';
 import MyPageGoal from './MyPageGoal';
 
 import Icon from '@/components/Icon';
+import useMemberInfoQuery from '@/hooks/useMemberInfoQuery';
 import { useMember } from '@/pages/MyPage/hooks/useMember';
 import useMemberInfoMutation from '@/pages/MyPage/hooks/useMemberInfoMutation';
-import { useMemberInfoQuery } from '@/pages/MyPage/hooks/useMemberInfoQuery';
 import theme from '@/styles/theme';
 
 const MyPageEditableSection = () => {

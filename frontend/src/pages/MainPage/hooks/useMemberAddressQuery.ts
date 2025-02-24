@@ -7,6 +7,8 @@ const useMemberAddressQuery = () => {
   return useQuery({
     queryKey: [QUERY_KEY.memberAddress],
     queryFn: getMemberAddress,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 };
 

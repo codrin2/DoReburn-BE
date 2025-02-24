@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
 import { ThemeProvider } from 'styled-components';
 
+import CustomSuspense from './components/CustomSuspense/CustomSuspense';
 import ToastProvider from './components/Toast/ToastProvider';
 import Viewport from './components/Viewport/Viewport';
 import { OverlayProvider } from './providers/OverlayProvider';
@@ -40,7 +41,9 @@ enableMocking().then(() => {
         <ToastProvider>
           <OverlayProvider>
             <Viewport>
-              <RouterProvider router={router} />
+              <CustomSuspense>
+                <RouterProvider router={router} />
+              </CustomSuspense>
             </Viewport>
           </OverlayProvider>
         </ToastProvider>

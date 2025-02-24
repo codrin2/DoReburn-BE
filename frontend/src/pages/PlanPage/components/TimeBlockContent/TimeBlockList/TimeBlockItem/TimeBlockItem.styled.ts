@@ -75,6 +75,7 @@ export const TimeBlockContent = styled.button`
   flex-direction: column;
   flex-grow: 1;
   cursor: pointer;
+  text-align: left;
 
   overflow: hidden;
   text-overflow: ellipsis;

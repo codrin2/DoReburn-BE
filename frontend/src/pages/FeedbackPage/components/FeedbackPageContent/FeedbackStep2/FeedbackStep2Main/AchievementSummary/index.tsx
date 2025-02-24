@@ -1,6 +1,6 @@
 import * as S from './AchievementSummary.styled';
 
-import { useMemberInfoQuery } from '@/pages/MyPage/hooks/useMemberInfoQuery';
+import useMemberInfoQuery from '@/hooks/useMemberInfoQuery';
 
 interface AchievementSummaryProps {
   time: number;

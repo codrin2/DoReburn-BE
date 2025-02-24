@@ -7,6 +7,7 @@
     "dev": "vite",
     "dev:host": "vite --host",
     "build": "tsc -b && vite build",
+    "build:dev": "tsc -b && vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "cd .. && husky frontend/.husky",
@@ -44,11 +45,12 @@
     "lint-staged": "^15.4.2",
     "msw": "^2.7.0",
     "prettier": "^3.4.2",
+    "rollup-plugin-visualizer": "^5.14.0",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.5",
-    "vitest": "^3.0.5",
-    "vite-plugin-pwa": "^0.21.1"
+    "vite-plugin-pwa": "^0.21.1",
+    "vitest": "^3.0.5"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [

@@ -32,14 +32,12 @@ const RouteSection = ({
   const { data: memberAddress } = useMemberAddressQuery();
   const { isToday } = useQueryParamsDate();
 
-  if (!memberAddress) return null;
-
   return (
     <S.RouteSectionLayout $isSwitch={isSwitchAddress}>
       <RouteItem
         icon="AddressHome"
         location="집"
-        value={startAddress.startName || memberAddress.homeTitle}
+        value={startAddress.startName || memberAddress?.homeTitle || ''}
         handleClick={() => handleClickSearchAddress('home')}
         disabled={!isToday}
       />
@@ -56,7 +54,7 @@ const RouteSection = ({
       <RouteItem
         icon="AddressUniv"
         location="학교"
-        value={endAddress.endName || memberAddress.schoolTitle}
+        value={endAddress.endName || memberAddress?.schoolTitle || ''}
         handleClick={() => handleClickSearchAddress('school')}
         disabled={!isToday}
       />

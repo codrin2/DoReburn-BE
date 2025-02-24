@@ -1,8 +1,8 @@
-import backgroundEnglish from '@/assets/images/backgroundEnglish.png';
-import backgroundHobby from '@/assets/images/backgroundHobby.png';
-import backgroundLanguage from '@/assets/images/backgroundLanguage.png';
-import backgroundNews from '@/assets/images/backgroundNews.png';
-import backgroundReading from '@/assets/images/backgroundReading.png';
+import backgroundEnglish from '@/assets/images/backgroundEnglish.webp';
+import backgroundHobby from '@/assets/images/backgroundHobby.webp';
+import backgroundLanguage from '@/assets/images/backgroundLanguage.webp';
+import backgroundNews from '@/assets/images/backgroundNews.webp';
+import backgroundReading from '@/assets/images/backgroundReading.webp';
 
 export const CAGETORY_BACKGROUNDS_IMG = {
   READING: backgroundReading,

@@ -37,7 +37,7 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
 
   const { toast } = useToast();
   const openAddBottomSheet = useAddTodoBottomSheet({ todoType, planId });
-  const openEditBottomSheet = useEditTodoBottomSheet({ todoType, planId });
+  const openEditBottomSheet = useEditTodoBottomSheet({ todoType });
 
   const isFavoritePage = todoType === TODO_TYPE.SAVE;
 
@@ -62,7 +62,7 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
 
   const handleDeleteTodo = (todoId: number) => {
     deleteTodo(
-      { todoId, planId },
+      { todoId },
       { onSuccess: () => toast({ message: TODO_TOAST_MESSAGE.deleteFavorite }) },
     );
   };

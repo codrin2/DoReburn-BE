@@ -3,31 +3,42 @@ import { createBrowserRouter } from 'react-router';
 import FlexPageLayout from './layout/FlexPageLayout';
 import memberStatusLoader from './memberStatusLoader';
 
-import DayStatisticsPage from '@/pages/DayStatisticsPage';
-import EditPage from '@/pages/EditPage';
-import FavoritePage from '@/pages/FavoritePage';
-import FeedbackPage from '@/pages/FeedbackPage';
-import KakaoLoginPage from '@/pages/KakaoLoginPage';
-import LandingPage from '@/pages/LandingPage';
-import MainPage from '@/pages/MainPage';
-import MapPage from '@/pages/MapPage';
-import MyPage from '@/pages/MyPage';
-import OnboardingPage from '@/pages/OnboardingPage';
-import PlanPage from '@/pages/PlanPage';
-import RecommendTodoPage from '@/pages/RecommendTodoPage';
-import RouteSelectPage from '@/pages/RouteSelectPage';
-import RouteTodoEditPage from '@/pages/RouteTodoEditPage';
-import WeekStatisticsPage from '@/pages/WeekStatisticsPage';
+import {
+  MainPage,
+  EditPage,
+  FavoritePage,
+  MapPage,
+  MyPage,
+  OnboardingPage,
+  PlanPage,
+  RecommendTodoPage,
+  FeedbackPage,
+  RouteTodoEditPage,
+  DayStatisticsPage,
+  WeekStatisticsPage,
+  RouteSelectPage,
+  KakaoLoginPage,
+  LandingPage,
+} from '@/pages/LazyPage';
 
 export const router = createBrowserRouter([
+  {
+    path: '/landing',
+    element: <LandingPage />,
+  },
+  {
+    path: '/login/kakao',
+    element: <KakaoLoginPage />,
+  },
+  {
+    path: '/onboarding',
+    element: <OnboardingPage />,
+    loader: memberStatusLoader,
+  },
   {
     path: '/',
     element: <MainPage />,
     loader: memberStatusLoader,
-  },
-  {
-    path: '/landing',
-    element: <LandingPage />,
   },
   {
     path: '/edit',
@@ -38,11 +49,6 @@ export const router = createBrowserRouter([
         element: <EditPage />,
       },
     ],
-  },
-  {
-    path: '/onboarding',
-    element: <OnboardingPage />,
-    loader: memberStatusLoader,
   },
   {
     path: '/route-select',
@@ -57,15 +63,15 @@ export const router = createBrowserRouter([
         element: <PlanPage />,
         loader: memberStatusLoader,
       },
-    ],
-  },
-  {
-    path: '/plan/:planId/todos/edit',
-    element: <FlexPageLayout />,
-    children: [
       {
-        index: true,
-        element: <RouteTodoEditPage />,
+        path: ':planId/todos/edit',
+        element: <FlexPageLayout />,
+        children: [
+          {
+            index: true,
+            element: <RouteTodoEditPage />,
+          },
+        ],
       },
     ],
   },
@@ -80,25 +86,26 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: '/map',
-    element: <MapPage />,
-  },
-  {
     path: '/feedback',
     element: <FeedbackPage />,
     loader: memberStatusLoader,
   },
   {
-    path: '/login/kakao',
-    element: <KakaoLoginPage />,
+    path: '/map',
+    element: <MapPage />,
   },
   {
-    path: '/statistics/week',
-    element: <WeekStatisticsPage />,
-  },
-  {
-    path: '/statistics/day',
-    element: <DayStatisticsPage />,
+    path: '/statistics',
+    children: [
+      {
+        path: 'day',
+        element: <DayStatisticsPage />,
+      },
+      {
+        path: 'week',
+        element: <WeekStatisticsPage />,
+      },
+    ],
   },
   {
     path: '/my-page',

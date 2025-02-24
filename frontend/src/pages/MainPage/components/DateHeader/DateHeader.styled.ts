@@ -11,6 +11,6 @@ export const DateHeaderLayout = styled.header`
 `;
 
 export const EmptyDateHeader = styled.header`
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2.8rem;
+  height: 2.8rem;
 `;
