@@ -3,21 +3,23 @@ import { createBrowserRouter } from 'react-router';
 import FlexPageLayout from './layout/FlexPageLayout';
 import memberStatusLoader from './memberStatusLoader';
 
-import DayStatisticsPage from '@/pages/DayStatisticsPage';
-import EditPage from '@/pages/EditPage';
-import FavoritePage from '@/pages/FavoritePage';
-import FeedbackPage from '@/pages/FeedbackPage';
-import KakaoLoginPage from '@/pages/KakaoLoginPage';
-import LandingPage from '@/pages/LandingPage';
-import MainPage from '@/pages/MainPage';
-import MapPage from '@/pages/MapPage';
-import MyPage from '@/pages/MyPage';
-import OnboardingPage from '@/pages/OnboardingPage';
-import PlanPage from '@/pages/PlanPage';
-import RecommendTodoPage from '@/pages/RecommendTodoPage';
-import RouteSelectPage from '@/pages/RouteSelectPage';
-import RouteTodoEditPage from '@/pages/RouteTodoEditPage';
-import WeekStatisticsPage from '@/pages/WeekStatisticsPage';
+import {
+  MainPage,
+  EditPage,
+  FavoritePage,
+  MapPage,
+  MyPage,
+  OnboardingPage,
+  PlanPage,
+  RecommendTodoPage,
+  FeedbackPage,
+  RouteTodoEditPage,
+  DayStatisticsPage,
+  WeekStatisticsPage,
+  RouteSelectPage,
+  KakaoLoginPage,
+  LandingPage,
+} from '@/pages/LazyPage';
 
 export const router = createBrowserRouter([
   {
