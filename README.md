@@ -34,13 +34,22 @@
 
 <br>
 
+# 📋 API 명세서
+
+[두리번 Swagger 주소](https://api.do-reburn.site/api/v1/swagger-ui/index.html)
+
+<br>
+
 # 📑 ERD 설계도
-<img width="970" alt="image" src="https://github.com/user-attachments/assets/6a212b24-e5b5-48fc-8eb3-77586ee9189c" />
+[두리번 ERD 주소](https://www.erdcloud.com/d/AKBGHdQuoQzhZBvFY)
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/8130f555-fe06-401b-8150-47f23ee803a1" />
 
 
 <br>
 
-# 💾 시스템 아키텍쳐
+# 🗺️ 시스템 아키텍쳐
+
 <img width="970" alt="image" src="https://github.com/user-attachments/assets/aec57a70-d9c9-4418-82fa-513064c0a0ba" />
 
 <br>
