@@ -1,8 +1,8 @@
 import * as S from './WeekOverview.styled';
 
-import MOOD_DISSATISFIED from '@/assets/images/moodDissatisfied.png';
-import MOOD_MODERATE from '@/assets/images/moodModerate.png';
-import MOOD_SATISFIED from '@/assets/images/moodSatisfied.png';
+import MOOD_DISSATISFIED from '@/assets/images/moodDissatisfied.webp';
+import MOOD_MODERATE from '@/assets/images/moodModerate.webp';
+import MOOD_SATISFIED from '@/assets/images/moodSatisfied.webp';
 
 const MOOD_IMAGES: Record<string, string> = {
   DISSATISFIED: MOOD_DISSATISFIED,
