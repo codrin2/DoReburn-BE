@@ -2,7 +2,7 @@ package com.dubu.backend.member.infra.repository;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.MemberCategory;
-import com.dubu.backend.todo.entity.Category;
+import com.dubu.backend.todo.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

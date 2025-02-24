@@ -1,6 +1,9 @@
-# 🕐 통학 시간을 지키고 싶다면, Do → Reburn
+# 🕐 통학 시간을 지키고 싶다면, 두리번
+[클릭해서 두리번을 이용해보세요!(배포 주소)](https://do-reburn.site/)
 
 <img width="867" alt="image" src="https://github.com/user-attachments/assets/99773c75-5cfe-4207-92fb-6c57d611e6bc" />
+
+<br>
 
 # 👨‍👧‍👦 팀 소개
 
@@ -17,98 +20,84 @@
 | 개발 | 문희상 | 💻 개발 리드 | API 구현, ERD 설계, 서버 배포 |
 | 개발 | 김현원 | 💻 백엔드 | API 구현, ERD 설계 |
 
+<br>
+
+# ✏️ 서비스 기능
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/314c1a01-e5d1-43f1-9b81-07831545862e" />
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/03f30e3d-6a3e-43ba-90c7-4f02393c859b" />
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/1569f66a-1134-4838-97b5-00959b3902fa" />
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/16bbfb97-8853-4d0f-8d44-8849559d2922" />
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/9c0cc708-be1c-4c83-a8b4-73020b85d603" />
+
+<br>
+
+# 🎥 시연영상
+
+
+<br>
+
+# 📋 API 명세서
+
+[두리번 Swagger 주소](https://api.do-reburn.site/api/v1/swagger-ui/index.html)
+
+<br>
+
+# 📑 ERD 설계도
+[두리번 ERD 주소](https://www.erdcloud.com/d/AKBGHdQuoQzhZBvFY)
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/8130f555-fe06-401b-8150-47f23ee803a1" />
+
+
+<br>
+
+# 🗺️ 시스템 아키텍쳐
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/aec57a70-d9c9-4418-82fa-513064c0a0ba" />
+
+<br>
+
 # 🎨 기획&디자인 링크
 
-[기획&디자인 최종 산출물 링크 [figma]](https://www.figma.com/design/4fCa8NJFAmSbPJSLnaJM4h/Handoff_Do-reburn?node-id=0-1&p=f&t=jFLkPtaI60o34zv5-0)
+[기획&디자인 최종 산출물 링크 [figma]](https://www.figma.com/board/eqA3STNAS5glysxw1lPGsY/%EB%91%90%EB%B6%80?node-id=1-1996&t=IswPLk2lIphTR3vW-1)
 
-# 🤝 그라운드 룰
+<br>
 
-## 회의
+# 🤝 그라운드 룰 & 컨벤션
+- [두부의 그라운드룰 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/%EB%91%90%EB%B6%80%EC%9D%98-%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C-%EB%A3%B0)
+- [두부의 브랜치 전략 및 커밋 컨벤션 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/%EB%B8%8C%EB%9E%9C%EC%B9%98-%EC%A0%84%EB%9E%B5-%EB%B0%8F-%EC%BB%A4%EB%B0%8B-%EC%BB%A8%EB%B2%A4%EC%85%98)
+- [[FE] 코드 컨벤션 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/[FE]-코드-컨벤션)
+- [[BE] 코드 컨벤션 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/%5BBE%5D-%EC%BD%94%EB%93%9C-%EC%BB%A8%EB%B2%A4%EC%85%98)
 
-- 데일리스크럼: 10:00 ~ 최대 10:30분까지 진행
-    - 진행했던 작업 공유
-    - 할 예정인 작업 공유
-- 주간 회고
-    - 매주 금요일 18:30 - 19:00
-    - 목표했던 작업을 잘 지켰는지, 잘 못 지켰는지, 왜 잘 못지키게 되었는지 회고
-    - 주말에 작업할 내용 공유
-    - 주간 목표 세우기
+<br>
 
-## 소통
+# 🛠️ 개발스택
+- [[FE] 기술 스택 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/[FE]-기술-스택)
+- [[BE] 기술 스택 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/[BE]-기술-스택)
 
-- **시간 약속 잘 지키기**
-    - 작업 일정이 밀릴 것 같으면 미리 이야기해서 조율하기
-    - 지각하지 말기(10시 까지) → 지각한 사람이 지각 안한 사람 커피 사기
+<br>
 
-- **자유롭게 질문하는 분위기 형성**
-    - 이름표를 올려놓으면 집중 시간으로 판단하고 배려해서 최대 30분 이후에 질문하기
-    - 해결 여부와 상관없이 이야기가 끝나면 문서화하기
+# 🕐 회의록
+[두부의 회의록 in Notion](https://sulky-koala-70d.notion.site/18394660e59780799826f7f454edb758?v=1a194660e59780d49217000cd680f7e5&pvs=74)
 
-- 비대면 소통
-    - 카톡: 일상 또는 긴급한 일일 때 사용
-    - Discord: 프로젝트 관련 소통에만 사용
-    - 연락 받은 후 반응 남기기
-        - 👀: 질문은 확인했고, 개인 사정으로 자정 전에 답변한다는 의미
-        - ✅: 질문자가 질문이 해결되었다면 체크 표시
-- 식사는 기/디/개 같이
-    - 부족한 의사소통 시간은 식사 시간 알아서 해결!
+<br>
 
-## 문서화
+# 👀 회고
+### 일일 회고
+[규한이의 개인회고 in Notion](https://sulky-koala-70d.notion.site/3e30b0d1c111493c95249b1f37338246?pvs=73)
 
-- 회의록
-    - 데일리 스크럼 + 긴급 회의
-    - 안건 / 논의 / 결론
-- 일일 회고 - 최대한 간단히 부담없이 적기
-    - 오늘의 기분 점수 10점 중 몇 점? 이유?
-    - 오늘 작업하면서 고민한 내용
-    - 질문을 통해 해결한 내용
-        - ex) [고민] 인증
-    - 논의 사항
-- 트러블 슈팅
-    - 문제 상황
-        - 문제가 된 코드
-        - 에러 상황
-    - 문제 원인
-        - 에러가 발생한 이유
-    - 해결
-        - 해결 된 코드
+[영진이의 개인회고 in Notion](https://sulky-koala-70d.notion.site/18994660e5978096888ee10a71819b9c)
 
-# 깃 컨벤션 (git convention)
+[희상이의 개인회고 in Notion](https://sulky-koala-70d.notion.site/18994660e59780819014df71918f1f35?pvs=73)
 
-## 브랜치 전략
+[현원이의 개인회고 in Notion](https://sulky-koala-70d.notion.site/18994660e59780359cfbeec5f781f91b?pvs=73)
 
-git-flow + feat & refactor & fix 브랜치 사용
+### 주간 회고
+[두부의 주간 회고[피그잼]](https://www.figma.com/board/eqA3STNAS5glysxw1lPGsY/Untitled)
 
-develop: default branch로 설정. 개발할 땐 feat/refactor/fix → develop 머지
-
-main: 기능 구현 완료 후 안정적인 버전일 때 develop → main 머지
-
-## 브랜치 종류
-
-```tsx
-feat/#1
-```
-
-- **`main`** → 운영(prod) 환경
-- **`develop`** → 개발(dev) 환경
-- **`feat/#{이슈번호}`** → 기능 개발 브랜치
-- **`fix/#{이슈번호}`** → 버그 수정 브랜치
-- **`refactor/#{이슈번호}`** → 리팩토링 브랜치
-
-## 커밋 컨벤션
-
-```
-feat: [커밋 내용] #1
-```
-
-| **타입** | **설명** |
-| --- | --- |
-| feat | 새로운 기능 구현 |
-| fix | 버그 수정 (기능을 잘못 구현한 경우) |
-| refactor | 코드 리팩토링 (기능은 그대로인데, 코드 개선, 폴더 변경, 변수명/함수명 수정) |
-| docs | 문서 작업 |
-| chore | .gitignore, yml, eslint, prettier, package.json와 같은 설정 파일 |
-| design | css와 같은 스타일링 |
-| init | 프로젝트 첫 세팅 |
-| merge | local에서 conflict 해결 또는 PR merge |
-| test | 테스트코드"만" 추가, 수정했을 때 |
+<img width="1025" alt="image" src="https://github.com/user-attachments/assets/812a038f-fcff-4028-bac6-8ce6883067b6" />
+<img width="1302" alt="image" src="https://github.com/user-attachments/assets/8beab4ac-bd38-4478-91ae-0c3886d7e0b7" />
+<img width="1032" alt="image" src="https://github.com/user-attachments/assets/b766adc3-c515-456f-93b1-0282b9c67050" />

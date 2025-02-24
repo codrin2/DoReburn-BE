@@ -1,8 +1,8 @@
 package com.dubu.backend.member.infra.repository;
 
 import com.dubu.backend.member.dto.MemberLocationDto;
-import com.dubu.backend.share.dto.request.SurroundingMemberQueryRequest;
-import com.dubu.backend.share.dto.response.MemberLocationInfo;
+import com.dubu.backend.todo.dto.request.SurroundingMemberQueryRequest;
+import com.dubu.backend.todo.dto.response.MemberLocationInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.geo.*;
 import org.springframework.data.redis.connection.RedisGeoCommands;

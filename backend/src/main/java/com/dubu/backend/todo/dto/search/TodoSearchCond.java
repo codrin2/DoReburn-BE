@@ -1,9 +1,9 @@
 package com.dubu.backend.todo.dto.search;
 
 import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.todo.entity.Category;
-import com.dubu.backend.todo.entity.TodoDifficulty;
-import com.dubu.backend.todo.entity.TodoType;
+import com.dubu.backend.todo.domain.Category;
+import com.dubu.backend.todo.domain.enums.TodoDifficulty;
+import com.dubu.backend.todo.domain.enums.TodoType;
 import lombok.Builder;
 
 import java.util.List;
