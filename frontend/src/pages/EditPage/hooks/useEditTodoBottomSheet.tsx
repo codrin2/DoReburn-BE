@@ -6,16 +6,15 @@ import { Todo, TodoType } from '@/types/todo';
 
 interface UseAddBottomSheetProps {
   todoType: TodoType;
-  planId?: number;
 }
 
-const useEditBottomSheet = ({ todoType, planId }: UseAddBottomSheetProps) => {
+const useEditBottomSheet = ({ todoType }: UseAddBottomSheetProps) => {
   const { mutate: editTodo } = useEditTodoMutation(todoType);
   const overlay = useOverlay();
 
   const handleEditTodo = (todo: Todo) => {
     editTodo(
-      { todo, planId },
+      { todo },
       {
         onSuccess: () => {
           overlay.close();
