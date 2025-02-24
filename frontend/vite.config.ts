@@ -48,10 +48,15 @@ export default defineConfig(({ mode }) => ({
       },
       registerType: 'autoUpdate',
     }),
-    visualizer({
-      emitFile: true,
-      filename: 'stats.html',
-    }) as PluginOption,
+    ...(mode === 'development'
+      ? [
+          visualizer({
+            emitFile: true,
+            filename: 'stats.html',
+            open: true,
+          }) as PluginOption,
+        ]
+      : []),
   ],
   resolve: {
     alias: [{ find: '@', replacement: '/src' }],
