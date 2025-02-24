@@ -1,4 +1,5 @@
-# 🕐 통학 시간을 지키고 싶다면, Do → Reburn
+# 🕐 통학 시간을 지키고 싶다면, 두리번
+[클릭해서 두리번을 이용해보세요!(배포 주소)](https://do-reburn.site/)
 
 <img width="867" alt="image" src="https://github.com/user-attachments/assets/99773c75-5cfe-4207-92fb-6c57d611e6bc" />
 
@@ -54,14 +55,11 @@
 
 <br>
 
-# 🔥 Team.두부의 협업 이야기
-
-
-<br>
-
 # 🎨 기획&디자인 링크
 
 [기획&디자인 최종 산출물 링크 [figma]](https://www.figma.com/design/4fCa8NJFAmSbPJSLnaJM4h/Handoff_Do-reburn?node-id=0-1&p=f&t=jFLkPtaI60o34zv5-0)
+
+<br>
 
 # 🤝 그라운드 룰 & 컨벤션
 - [두부의 그라운드룰 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/%EB%91%90%EB%B6%80%EC%9D%98-%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C-%EB%A3%B0)
@@ -69,29 +67,30 @@
 - [[FE] 코드 컨벤션 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/[FE]-코드-컨벤션)
 - [[BE] 코드 컨벤션 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/%5BBE%5D-%EC%BD%94%EB%93%9C-%EC%BB%A8%EB%B2%A4%EC%85%98)
 
+<br>
+
 # 🛠️ 개발스택
 - [[FE] 기술 스택 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/[FE]-기술-스택)
 - [[BE] 기술 스택 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/[BE]-기술-스택)
 
+<br>
 
-
-## 회의록
+# 🕐 회의록
 [두부팀 회의록](https://sulky-koala-70d.notion.site/18394660e59780799826f7f454edb758?v=1a194660e59780d49217000cd680f7e5&pvs=74)
 
-## 회고
+<br>
+
+# 👀 회고
 ### 일일 회고
-[박규한 개인회고](https://sulky-koala-70d.notion.site/3e30b0d1c111493c95249b1f37338246?pvs=73)
+[규한의 개인회고 in Notion](https://sulky-koala-70d.notion.site/3e30b0d1c111493c95249b1f37338246?pvs=73)
 
-[손영진 개인회고](https://sulky-koala-70d.notion.site/18994660e5978096888ee10a71819b9c)
+[영진이의 개인회고 in Notion](https://sulky-koala-70d.notion.site/18994660e5978096888ee10a71819b9c)
 
-[문희상 개인회고](https://sulky-koala-70d.notion.site/18994660e59780819014df71918f1f35?pvs=73)
+[희상이의 개인회고 in Notion](https://sulky-koala-70d.notion.site/18994660e59780819014df71918f1f35?pvs=73)
 
-[김현원 개인회고](https://sulky-koala-70d.notion.site/18994660e59780359cfbeec5f781f91b?pvs=73)
+[현원이의 개인회고 in Notion](https://sulky-koala-70d.notion.site/18994660e59780359cfbeec5f781f91b?pvs=73)
 
 ### 주간 회고
 <img width="1025" alt="image" src="https://github.com/user-attachments/assets/812a038f-fcff-4028-bac6-8ce6883067b6" />
 <img width="1302" alt="image" src="https://github.com/user-attachments/assets/8beab4ac-bd38-4478-91ae-0c3886d7e0b7" />
 <img width="1032" alt="image" src="https://github.com/user-attachments/assets/b766adc3-c515-456f-93b1-0282b9c67050" />
-
-
-
