@@ -16,13 +16,13 @@ const DateHeader = () => {
           <S.EmptyDateHeader />
           <span>{koreanTime}</span>
           <button onClick={handleNextDate}>
-            <Icon icon="FilledArrow" rotate={-90} cursor="pointer" />
+            <Icon icon="FilledArrow" rotate={-90} cursor="pointer" width={28} height={28} />
           </button>
         </>
       ) : (
         <>
           <button onClick={handlePrevDate}>
-            <Icon icon="FilledArrow" rotate={90} cursor="pointer" />
+            <Icon icon="FilledArrow" rotate={90} cursor="pointer" width={28} height={28} />
           </button>
           <span>{koreanTime}</span>
           <S.EmptyDateHeader />
