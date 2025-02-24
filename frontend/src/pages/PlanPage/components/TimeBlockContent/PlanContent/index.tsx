@@ -1,4 +1,4 @@
-import { TouchEvent, useRef, useState } from 'react';
+import { TouchEvent, useEffect, useRef, useState } from 'react';
 
 import TimeBlockContent from '..';
 import * as S from './PlanContent.styled';
@@ -106,6 +106,14 @@ const PlanContent = ({ paths }: PlanContentProps) => {
 
     setDraggingTodo(null);
   };
+
+  useEffect(() => {
+    if (isDraggingRef.current) {
+      document.body.classList.add('dragging');
+    } else {
+      document.body.classList.remove('dragging');
+    }
+  }, [isDraggingRef.current]);
 
   return (
     <S.PlanContent>
