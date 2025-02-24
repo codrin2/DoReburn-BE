@@ -8,11 +8,25 @@ import * as S from './MainPage.styled';
 
 import Header from '@/components/Header';
 import SearchAddress from '@/components/SearchAddress';
+import useNotificationPermission from '@/hooks/useNotificationPermission';
 import useQueryParamsDate from '@/hooks/useQueryParamsDate';
 import useRedirectByMemberStatus from '@/hooks/useRedirectByMemberStatus';
+import HomeModal from '@/pages/PlanPage/components/HomeModal';
 
 const MainPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    // 여기서 알림 설정띄움
+    setIsModalOpen(false);
+  };
+
   useRedirectByMemberStatus();
+  useNotificationPermission(handleOpenModal);
 
   const { isToday } = useQueryParamsDate();
   const [isSwitchAddress, toggle] = useReducer((prev) => !prev, false);
@@ -72,6 +86,18 @@ const MainPage = () => {
 
   return (
     <S.MainPageLayout>
+      {isModalOpen && (
+        <HomeModal
+          title="알림 설정"
+          content={[
+            '이동 시간이 끝나기 전에',
+            '알림으로 리마인드를 받아보세요! 🚀',
+            '놓치지 않게 도와드려요.',
+          ]}
+          close={handleCloseModal}
+          onConfirm={handleCloseModal}
+        />
+      )}
       <Header>
         <Header.Right>
           <Header.MenuButton />
