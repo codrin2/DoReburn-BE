@@ -45,6 +45,8 @@ const useInitMap = () => {
           position: locPosition,
           zIndex: 1,
         });
+
+        mapRef.current.setCenter(locPosition);
       }
     }
   }, [center]);
