@@ -1,4 +1,4 @@
-import { TouchEvent, useEffect, useRef, useState } from 'react';
+import { TouchEvent, useRef, useState } from 'react';
 
 import TimeBlockContent from '..';
 import * as S from './PlanContent.styled';
@@ -106,23 +106,6 @@ const PlanContent = ({ paths }: PlanContentProps) => {
 
     setDraggingTodo(null);
   };
-
-  // 🔹 이벤트 리스너를 동적으로 교체하는 useEffect
-  useEffect(() => {
-    const preventScroll = (e: Event) => {
-      e.preventDefault();
-    };
-
-    if (isDraggingRef.current) {
-      document.addEventListener('touchmove', preventScroll, { passive: false });
-    } else {
-      document.removeEventListener('touchmove', preventScroll);
-    }
-
-    return () => {
-      document.removeEventListener('touchmove', preventScroll);
-    };
-  }, [isDraggingRef]);
 
   return (
     <S.PlanContent>
