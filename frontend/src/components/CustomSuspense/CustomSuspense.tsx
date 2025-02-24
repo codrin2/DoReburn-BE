@@ -1,9 +1,13 @@
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, Suspense, useEffect, useState } from 'react';
 
 const LOADING_DELAY = 300;
 
+interface CustomSuspenseProps {
+  fallback?: React.ReactNode;
+}
+
 // loading fallback 을 지연시키는 wrapper 컴포넌트
-const CustomSuspense = ({ children }: PropsWithChildren) => {
+const CustomSuspense = ({ fallback, children }: PropsWithChildren<CustomSuspenseProps>) => {
   const [isDeferred, setIsDeferred] = useState(false);
 
   useEffect(() => {
@@ -18,7 +22,7 @@ const CustomSuspense = ({ children }: PropsWithChildren) => {
     return null;
   }
 
-  return <>{children}</>;
+  return <Suspense fallback={fallback}>{children}</Suspense>;
 };
 
 export default CustomSuspense;
