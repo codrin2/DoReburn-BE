@@ -76,6 +76,8 @@ const PlanContent = ({ paths }: PlanContentProps) => {
   };
 
   const handleTouchEnd = async (e: React.TouchEvent<HTMLElement>) => {
+    e.preventDefault();
+
     if (longPressTimeoutRef.current) {
       clearTimeout(longPressTimeoutRef.current);
     }
