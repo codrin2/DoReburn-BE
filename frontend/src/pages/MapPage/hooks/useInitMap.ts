@@ -76,7 +76,7 @@ const useInitMap = () => {
 
             if (error.code === error.PERMISSION_DENIED) {
               // 권한이 없는 경우 홈으로 라우팅
-              const isConfirm = confirm(ERROR_MESSAGE.locationPermission);
+              const isConfirm = confirm(ERROR_MESSAGE.LOCATION_PERMISSION);
 
               if (isConfirm) {
                 window.location.href = '/';
@@ -84,13 +84,13 @@ const useInitMap = () => {
             } else if (error.code === error.TIMEOUT) {
               // 한번이라도 값을 받아온 경우 토스트 띄우고 화면 유지
               if (isChangedCenter) {
-                toast({ message: ERROR_MESSAGE.location });
+                toast({ message: ERROR_MESSAGE.LOCATION });
 
                 return;
               }
 
               // 값을 아예 못 불러오는 경우 홈으로 라우팅
-              const isConfirm = confirm(ERROR_MESSAGE.locationPermission);
+              const isConfirm = confirm(ERROR_MESSAGE.LOCATION_PERMISSION);
 
               if (isConfirm) {
                 window.location.href = '/';
