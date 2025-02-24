@@ -9,7 +9,6 @@ export const TimeBlockItemLayout = styled.div<{
   gap: 1.2rem;
   height: 4rem;
 
-  touch-action: pan-y;
   user-select: none;
 
   ${({ $isDragging }) =>
@@ -18,7 +17,6 @@ export const TimeBlockItemLayout = styled.div<{
       position: absolute;
       z-index: 1;
       opacity: 0.6;
-      touch-action: none;
     `}
 
   &::after {
