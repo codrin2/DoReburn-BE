@@ -72,7 +72,7 @@ public class PlanService {
         Route reusableRoute = routeService.findReusableRoute(startX, startY, endX, endY, newPathIdentifiers);
 
         Plan newPlan = Plan.createPlan(currentMember, request.totalSectionTime());
-        planRepository.save(newPlan);
+        Plan savedPlan = planRepository.save(newPlan);
 
         Route finalRoute = null;
         if (reusableRoute == null) {
@@ -80,16 +80,16 @@ public class PlanService {
         }
 
         // Path 생성 → route는 기존꺼면 null, 새 route 있으면 연결
-        List<Path> paths = createAndSavePaths(newPlan, finalRoute, request);
+        List<Path> paths = createAndSavePaths(savedPlan, finalRoute, request);
 
         // 오늘의 할 일(Todo) Path 할당 & Todo 내용 복제하여 저장
         assignTodosToPaths(currentMember, paths);
 
         currentMember.updateStatus(Status.MOVE);
 
-        notificationService.sendPushAndMemberStatusChange(memberId, newPlan);
+        notificationService.sendPushAndMemberStatusChange(memberId, savedPlan);
 
-        return newPlan.getId();
+        return savedPlan.getId();
     }
 
     @Transactional

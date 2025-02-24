@@ -6,7 +6,7 @@ import static com.dubu.backend.global.exception.ErrorCode.NOT_FOUND_PLAN;
 
 public class PlanNotFoundException extends NotFoundException {
     public PlanNotFoundException() {
-        super(NOT_FOUND_PLAN.getMessage().formatted(""));
+        super(NOT_FOUND_PLAN.getMessage().formatted(0));
     }
 
     public PlanNotFoundException(Long planId) {
