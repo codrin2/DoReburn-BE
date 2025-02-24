@@ -35,6 +35,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -193,13 +194,14 @@ public class PlanService {
     }
 
     private List<Path> createAndSavePaths(Plan plan, Route route, PlanCreateRequest request) {
+        AtomicInteger index = new AtomicInteger(0);
         List<Path> paths = request.paths().stream()
                 .filter(pathRequest -> route != null || !Objects.equals(pathRequest.trafficType(), "WALK")) // route가 null이면 WALK 제외
                 .map(pathRequest -> Path.createPath(
                         plan,
                         route,
                         pathRequest,
-                        request.paths().indexOf(pathRequest)
+                        index.getAndIncrement()
                 ))
                 .toList();
 
