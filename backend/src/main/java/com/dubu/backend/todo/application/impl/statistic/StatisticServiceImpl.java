@@ -6,6 +6,7 @@ import com.dubu.backend.member.infra.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Feedback;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
+import com.dubu.backend.plan.domain.enums.TrafficType;
 import com.dubu.backend.plan.infra.repository.PathRepository;
 import com.dubu.backend.plan.infra.repository.PlanRepository;
 import com.dubu.backend.todo.dto.response.DayStatisticInfo;
@@ -77,23 +78,26 @@ public class StatisticServiceImpl implements StatisticService {
 
 
     private DayStatisticInfo buildDailyStatisticInfo(LocalDate memberCreateDate, List<Category> categories, List<Plan> plans, List<Path> paths) {
-        int totalUsageTime = 0;
+        int totalAvailableTime = 0;
         int totalTodoCount = 0;
         List<Feedback> feedbacks = new ArrayList<>();
         CategoryTodoStatistics categoryTodoStatistics = new CategoryTodoStatistics(categories);
 
         for(Plan plan: plans){
-            totalUsageTime += plan.getTotalTime();
+            totalAvailableTime += plan.getTotalTime();
             feedbacks.add(plan.getFeedback());
         }
+
         for(Path path: paths){
-            for(Todo todo: path.getTodos()){
-                categoryTodoStatistics.countDoneTodo(todo);
-                totalTodoCount++;
+            if(path.getTrafficType() != TrafficType.WALK){
+                for(Todo todo: path.getTodos()){
+                    categoryTodoStatistics.countDoneTodo(todo);
+                    totalTodoCount++;
+                }
             }
         }
 
-        return DayStatisticInfo.of(memberCreateDate, totalUsageTime, totalTodoCount, feedbacks, categoryTodoStatistics.getCategoryTodoTimeCount());
+        return DayStatisticInfo.of(memberCreateDate, totalAvailableTime, totalTodoCount, feedbacks, categoryTodoStatistics.getCategoryTodoTimeCount());
     }
 
     private WeekStatisticInfo buildWeekStatisticInfo(LocalDate memberCreateDate, LocalDate startDate, List<Category> categories, List<Plan> thisWeekPlans, List<Plan> lastWeekPlans){
@@ -132,13 +136,8 @@ public class StatisticServiceImpl implements StatisticService {
         for(Plan plan: thisWeekPlans){
             LocalDate date = plan.getCreatedAt().toLocalDate();
             moodCountCollection.addMood(plan.getFeedback().getMood());
-            // 날짜별 통계
-            for (Path path : plan.getPaths()) {
-                if(path.getId() != null){
-                    dateAvailableTimeStatistics.addUsageTimeAtDate(date, path.getSectionTime());
-                    totalAvailableTime += path.getSectionTime();
-                }
-            }
+            totalAvailableTime += plan.getTotalTime();
+            dateAvailableTimeStatistics.addUsageTimeAtDate(date, plan.getTotalTime());
         }
 
         // 이번 주 카테고리별 통계 집계
@@ -156,8 +155,7 @@ public class StatisticServiceImpl implements StatisticService {
     // 활용 가능한 시간 계산
     private int calculateWeeklyUsageTime(List<Plan> plans){
         return plans.stream()
-                .flatMap(plan -> plan.getPaths().stream())
-                .mapToInt(Path::getSectionTime)
+                .mapToInt(Plan::getTotalTime)
                 .sum();
     }
 }
