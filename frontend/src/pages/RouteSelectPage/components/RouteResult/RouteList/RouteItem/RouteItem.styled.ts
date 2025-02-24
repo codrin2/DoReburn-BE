@@ -10,9 +10,9 @@ export const RouteResultItem = styled.div<{ $isSelected: boolean }>`
   background-color: ${({ $isSelected, theme }) =>
     $isSelected ? theme.colors.gray100 : theme.colors.white};
   transition: background-color 0.2s ease;
-  border: 0.3rem solid transparent;
+  border: 0.15rem solid transparent;
   border-bottom: 0.15rem solid ${({ theme }) => theme.colors.gray100};
-  border: ${({ $isSelected, theme }) => $isSelected && `0.3rem solid ${theme.colors.gray300}`};
+  border: ${({ $isSelected, theme }) => $isSelected && `0.15rem solid ${theme.colors.gray300}`};
   cursor: pointer;
 `;
 
