@@ -62,7 +62,7 @@
 
 # 🎨 기획&디자인 링크
 
-[기획&디자인 최종 산출물 링크 [figma]](https://www.figma.com/design/4fCa8NJFAmSbPJSLnaJM4h/Handoff_Do-reburn?node-id=0-1&p=f&t=jFLkPtaI60o34zv5-0)
+[기획&디자인 최종 산출물 링크 [figma]]([https://www.figma.com/design/4fCa8NJFAmSbPJSLnaJM4h/Handoff_Do-reburn?node-id=0-1&p=f&t=jFLkPtaI60o34zv5-0](https://www.figma.com/board/eqA3STNAS5glysxw1lPGsY/%EB%91%90%EB%B6%80?node-id=1-1996&t=IswPLk2lIphTR3vW-1))
 
 <br>
 
@@ -96,7 +96,7 @@
 [현원이의 개인회고 in Notion](https://sulky-koala-70d.notion.site/18994660e59780359cfbeec5f781f91b?pvs=73)
 
 ### 주간 회고
-[두부 주간 회고[피그잼]](https://www.figma.com/board/eqA3STNAS5glysxw1lPGsY/Untitled)
+[두부의 주간 회고[피그잼]](https://www.figma.com/board/eqA3STNAS5glysxw1lPGsY/Untitled)
 
 <img width="1025" alt="image" src="https://github.com/user-attachments/assets/812a038f-fcff-4028-bac6-8ce6883067b6" />
 <img width="1302" alt="image" src="https://github.com/user-attachments/assets/8beab4ac-bd38-4478-91ae-0c3886d7e0b7" />
