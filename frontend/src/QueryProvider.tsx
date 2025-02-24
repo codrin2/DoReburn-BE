@@ -12,9 +12,12 @@ const QueryProvider = ({ children }: PropsWithChildren) => {
         defaultOptions: {
           queries: { throwOnError: true },
         },
+
         mutationCache: new MutationCache({
-          onError: (error) => {
-            toast({ message: error.message });
+          onError: (error, _variables, _context, mutation) => {
+            if (!mutation.options.onError) {
+              toast({ message: error.message });
+            }
           },
         }),
       }),
