@@ -49,6 +49,7 @@ export default defineConfig(({ mode }) => ({
       },
       devOptions: {
         enabled: mode !== 'development', // 개발 환경에서는 PWA 서비스 워커 비활성화
+        type: 'module',
       },
       registerType: 'autoUpdate',
     }),

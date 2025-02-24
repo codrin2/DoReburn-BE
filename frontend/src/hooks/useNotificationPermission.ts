@@ -20,9 +20,8 @@ const useNotificationPermission = (openModal: () => void) => {
   const requestPermission = () => {
     if (typeof Notification !== 'undefined' && permission === 'default') {
       const isPWA = window.matchMedia('(display-mode: standalone)').matches;
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-      if ('Notification' in window && (!isIOS || isPWA)) {
+      if ('Notification' in window || isPWA) {
         Notification.requestPermission().then((newPermission) => {
           setPermission(newPermission);
 
@@ -34,7 +33,7 @@ const useNotificationPermission = (openModal: () => void) => {
     }
   };
 
-  return { permission, requestPermission };
+  return { permission, requestPermission, setPermission };
 };
 
 export default useNotificationPermission;
