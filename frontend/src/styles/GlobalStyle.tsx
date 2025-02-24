@@ -108,6 +108,11 @@ body,
     font-family: Pretendard, system-ui, -apple-system, BlinkMacSystemFont, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
+  div, span, button {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
 ol, ul {
 	list-style: none;
 }

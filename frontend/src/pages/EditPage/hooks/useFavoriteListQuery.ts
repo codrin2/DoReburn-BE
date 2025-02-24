@@ -6,11 +6,11 @@ import { TodoType } from '@/types/todo';
 
 const PAGE_SIZE = 10;
 
-const useFavoriteTodoListQuery = (todoType: TodoType, planId?: number) => {
+const useFavoriteTodoListQuery = (todoType: TodoType, pathId?: number) => {
   return useInfiniteQuery({
-    queryKey: [QUERY_KEY.favorite, todoType, planId || 0],
+    queryKey: [QUERY_KEY.favorite, todoType, pathId || 0],
     queryFn: ({ pageParam }) =>
-      getFavoriteTodoList({ modifyType: todoType, size: PAGE_SIZE, planId, cursor: pageParam }),
+      getFavoriteTodoList({ modifyType: todoType, size: PAGE_SIZE, pathId, cursor: pageParam }),
     placeholderData: keepPreviousData,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {

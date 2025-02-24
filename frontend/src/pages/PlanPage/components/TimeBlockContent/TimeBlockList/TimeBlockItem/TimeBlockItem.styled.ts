@@ -37,8 +37,8 @@ export const TimeBlockItemLayout = styled.div<{
 
 export const CheckIconWrapper = styled.div<{ $isDone: boolean; $isAnimating?: boolean }>`
   position: relative;
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2.8rem;
+  height: 2.8rem;
 
   & > div {
     position: absolute;
@@ -70,14 +70,21 @@ export const CheckIconWrapper = styled.div<{ $isDone: boolean; $isAnimating?: bo
   }
 `;
 
-export const TimeBlockContent = styled.div`
+export const TimeBlockContent = styled.button`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   cursor: pointer;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  flex-basis: 85%;
 `;
 
 export const TodoTitle = styled.span<{ $isDone: boolean }>`
-  ${({ theme }) => theme.fonts.body15};
+  ${({ theme }) => theme.fonts.body16};
   color: ${({ theme, $isDone }) => ($isDone ? theme.colors.gray400 : theme.colors.gray950)};
   text-decoration: ${({ $isDone }) => ($isDone ? 'line-through' : 'none')};
 
@@ -89,16 +96,11 @@ export const TodoTitle = styled.span<{ $isDone: boolean }>`
 export const TodoMemo = styled.span`
   ${({ theme }) => theme.fonts.caption12Reg};
   color: ${({ theme }) => theme.colors.gray300};
-
-  /* 말줄임표 처리 */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `;
 
 export const DraggingItem = styled.div`
   position: fixed;
-  pointer-events: none; // ✅ 터치 이벤트 방지
+  pointer-events: none;
   opacity: 0.8;
   background-color: ${({ theme }) => theme.colors.white};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);

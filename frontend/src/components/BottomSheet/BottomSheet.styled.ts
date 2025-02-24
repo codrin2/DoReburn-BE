@@ -34,7 +34,19 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 2.4rem;
+  padding-top: 2.4rem;
+`;
+
+export const DragHandle = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  width: 4rem;
+  height: 0.6rem;
+  background-color: ${({ theme }) => theme.colors.gray300};
+  border-radius: 1.2rem;
+  margin: 0.8rem;
 `;
 
 export const Title = styled.h2`

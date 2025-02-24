@@ -41,6 +41,7 @@ const RouteSection = ({
         location="집"
         value={startAddress.startName || memberAddress.homeTitle}
         handleClick={() => handleClickSearchAddress('home')}
+        disabled={!isToday}
       />
       {isToday ? (
         <S.IconWrapper>
@@ -57,6 +58,7 @@ const RouteSection = ({
         location="학교"
         value={endAddress.endName || memberAddress.schoolTitle}
         handleClick={() => handleClickSearchAddress('school')}
+        disabled={!isToday}
       />
     </S.RouteSectionLayout>
   );
