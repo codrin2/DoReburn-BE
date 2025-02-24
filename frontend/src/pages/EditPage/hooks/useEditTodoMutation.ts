@@ -13,9 +13,9 @@ const useEditTodoMutation = (todoType: TodoType) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.routeTodoList, todoType] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.todoList, todoType] });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.favorite, todoType],
-      });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.favorite, todoType] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendLimit, todoType] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendAll, todoType] });
     },
   });
 };
