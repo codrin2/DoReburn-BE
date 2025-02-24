@@ -11,7 +11,11 @@ public class MoodCountCollection {
     private final Map<Mood, Integer> moodCount;
 
     public MoodCountCollection() {
-        this.moodCount = new HashMap<>();
+        moodCount = new HashMap<>();
+
+        for (Mood mood : Mood.values()) {
+            moodCount.put(mood, 0);
+        }
     }
 
     public void addMood(Mood mood){
