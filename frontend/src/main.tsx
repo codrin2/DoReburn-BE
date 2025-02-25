@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
 import { ThemeProvider } from 'styled-components';
@@ -22,12 +22,12 @@ const enableMocking = async () => {
   // return await worker.start({ onUnhandledRequest: 'bypass' });
 };
 
-const registerServiceWorker = () => {
-  if (!('serviceWorker' in navigator && 'PushManager' in window)) {
+const registerServiceWorker = async () => {
+  if (!('serviceWorker' in navigator)) {
     return;
   }
 
-  navigator.serviceWorker.register('./service-worker.js', { type: 'module' });
+  await navigator.serviceWorker.register('/service-worker.js');
 };
 
 const queryClient = new QueryClient();
@@ -47,7 +47,7 @@ enableMocking().then(() => {
             </Viewport>
           </OverlayProvider>
         </ToastProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </ThemeProvider>
     </QueryClientProvider>,
   );
