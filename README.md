@@ -108,6 +108,9 @@
 ### 주간 회고
 [두부의 주간 회고[피그잼]](https://www.figma.com/board/eqA3STNAS5glysxw1lPGsY/Untitled)
 
+
+<img width="1198" alt="image" src="https://github.com/user-attachments/assets/960cf459-af41-4b15-8039-e1e8acd0b6a9" />
+
 <br>
 
 # 🌟 두부의 더 많은 이야기는?
