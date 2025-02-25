@@ -8,6 +8,7 @@ const useMemberInfoQuery = () => {
     queryKey: [QUERY_KEY.memberInfo],
     queryFn: getMemberInfo,
     staleTime: Infinity,
+    gcTime: Infinity,
   });
 };
 

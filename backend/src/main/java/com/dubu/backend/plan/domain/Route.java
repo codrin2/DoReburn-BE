@@ -22,14 +22,19 @@ public class Route extends BaseTimeEntity {
     @OneToMany(mappedBy = "route", cascade = CascadeType.REMOVE)
     private List<Path> paths = new ArrayList<>();
 
+    @Column(nullable = false)
     private Integer totalTime;
 
+    @Column(nullable = false)
     private Double startX;
 
+    @Column(nullable = false)
     private Double startY;
 
+    @Column(nullable = false)
     private Double endX;
 
+    @Column(nullable = false)
     private Double endY;
 
     public static Route createRoute(Double startX, Double startY, Double endX, Double endY, Integer totalTime) {

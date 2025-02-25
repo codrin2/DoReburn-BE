@@ -8,8 +8,7 @@ const useDeleteTodoMutation = (todoType: TodoType) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ todoId, planId }: { todoId: number; planId?: number }) =>
-      deleteTodo(todoId, todoType),
+    mutationFn: ({ todoId }: { todoId: number }) => deleteTodo(todoId, todoType),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.todoList, todoType] });

@@ -21,7 +21,7 @@ const MapPage = () => {
 
   const { mapRef, center, isDragged, handleDragEnd } = useInitMap();
   const { putMarkerList } = useMarker();
-  const { isOpen, close } = useMapBottomSheet();
+  const { isOpen, open, close } = useMapBottomSheet();
 
   const openMarkerBottomSheet = useMarkerBottomSheet();
 
@@ -92,6 +92,12 @@ const MapPage = () => {
         <S.ReloadButton
           icon={<Icon icon="Reload" width={28} height={28} cursor="pointer" />}
           onClick={handleReload}
+        />
+
+        {/* 카테고리 랭킹 */}
+        <S.ReloadButton
+          icon={<Icon icon="Chart" width={28} height={28} cursor="pointer" />}
+          onClick={open}
         />
 
         {/* 현재 위치로 이동 버튼 */}

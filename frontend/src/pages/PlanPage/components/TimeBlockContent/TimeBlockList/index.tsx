@@ -27,9 +27,9 @@ const TimeBlockList = ({ todos, draggingTodo, onTouchStart, onTouchMove }: TimeB
 
   return (
     <S.TimeBlockList>
-      {todos.map((todo, idx) => (
+      {todos.map((todo) => (
         <TimeBlockItem
-          key={idx}
+          key={todo.todoId}
           todo={todo}
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}

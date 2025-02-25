@@ -11,18 +11,18 @@ export const RouteSectionLayout = styled.section<{ $isSwitch: boolean }>`
   ${({ $isSwitch }) =>
     $isSwitch
       ? `
-          & > div:first-child {
+          & > button:first-child {
             transform: translateY(58px);
           }
-          & > div:last-child {
+          & > button:last-child {
             transform: translateY(-58px);
           }
         `
       : `
-          & > div:first-child {
+          & > button:first-child {
             transform: translateY(0px);
           }
-          & > div:last-child {
+          & > button:last-child {
             transform: translateY(0px);
           }
         `}

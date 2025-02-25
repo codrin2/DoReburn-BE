@@ -1,4 +1,6 @@
 import react from '@vitejs/plugin-react';
+import { visualizer } from 'rollup-plugin-visualizer';
+import type { PluginOption } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { defineConfig } from 'vitest/config';
 
@@ -53,6 +55,15 @@ export default defineConfig(({ mode }) => ({
       },
       registerType: 'autoUpdate',
     }),
+    ...(mode === 'development'
+      ? [
+          visualizer({
+            emitFile: true,
+            filename: 'stats.html',
+            open: true,
+          }) as PluginOption,
+        ]
+      : []),
   ],
   resolve: {
     alias: [{ find: '@', replacement: '/src' }],

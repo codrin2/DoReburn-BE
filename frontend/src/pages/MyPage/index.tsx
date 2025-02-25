@@ -5,8 +5,9 @@ import MyPageEditableSection from './components/MyPageEditableSection';
 import MyPageHeader from './components/MyPageHeader';
 import MemberProvider from './contexts/MemberProvider';
 import { useMember } from './hooks/useMember';
-import { useMemberInfoQuery } from './hooks/useMemberInfoQuery';
 import * as S from './MyPage.styled';
+
+import useMemberInfoQuery from '@/hooks/useMemberInfoQuery';
 
 const MyPageContent = () => {
   const { data: member, isLoading } = useMemberInfoQuery();

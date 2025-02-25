@@ -14,6 +14,11 @@ const TODO_CONTENT_MESSAGE = {
   EMPTY: '오늘 할 일이 아직 없어요',
 };
 
+const BUTTON_TEXT = {
+  edit: '수정하기',
+  add: '추가하기',
+};
+
 const TodoListContainer = () => {
   const navigate = useNavigate();
   const { dateType } = useQueryParamsDate();
@@ -32,10 +37,11 @@ const TodoListContainer = () => {
         <S.ContentTitle>
           {isEmptyTodo ? TODO_CONTENT_MESSAGE.EMPTY : TODO_CONTENT_MESSAGE[dateType]}
         </S.ContentTitle>
-        <S.EditButton onClick={handleClickEdit}>
-          <Icon icon={isEmptyTodo ? 'Plus' : 'Edit'} width={16} height={16} />
-          <S.EditLabel>{isEmptyTodo ? '추가하기' : '수정하기'}</S.EditLabel>
-        </S.EditButton>
+        <S.EditButton
+          icon={<Icon icon={isEmptyTodo ? 'Plus' : 'Edit'} width={16} height={16} />}
+          text={isEmptyTodo ? BUTTON_TEXT.add : BUTTON_TEXT.edit}
+          onClick={handleClickEdit}
+        />
       </S.ContentHeader>
 
       <S.TodoList>

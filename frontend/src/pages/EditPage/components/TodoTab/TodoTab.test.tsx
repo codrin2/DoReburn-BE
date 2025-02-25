@@ -1,15 +1,17 @@
+// eslint-disable-next-line import/named
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 
 import TodoTab from '.';
 
+import { MAX_TODO_ITEM_LENGTH } from '@/constants/config';
 import { customRender } from '@/tests/test-utils';
 
 describe('TodoTab 컴포넌트 테스트', () => {
   describe('todoType(TODAY, TOMORROW, PATH)에 따른 텍스트', () => {
     it('오늘에 대한 텍스트가 출력된다.', async () => {
-      const EXPECTED_TEXT = '오늘 할 일, 작은 목표로 시작해봐요 최대 3개까지 고를 수 있어요';
+      const EXPECTED_TEXT = `오늘 할 일, 작은 목표로 시작해봐요 최대 ${MAX_TODO_ITEM_LENGTH}개까지 고를 수 있어요`;
       customRender(<TodoTab todoType="TODAY" />);
 
       await waitFor(() => {
@@ -18,7 +20,7 @@ describe('TodoTab 컴포넌트 테스트', () => {
     });
 
     it('내일에 대한 텍스트가 출력된다.', async () => {
-      const EXPECTED_TEXT = '내일 할 일, 작은 목표로 시작해봐요 최대 3개까지 고를 수 있어요';
+      const EXPECTED_TEXT = `내일 할 일, 작은 목표로 시작해봐요 최대 ${MAX_TODO_ITEM_LENGTH}개까지 고를 수 있어요`;
       customRender(<TodoTab todoType="TOMORROW" />);
 
       await waitFor(() => {

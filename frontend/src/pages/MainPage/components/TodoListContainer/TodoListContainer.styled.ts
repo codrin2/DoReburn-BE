@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import IconButton from '@/components/Button/IconButton';
+
 export const TodoListContainerLayout = styled.div`
   display: flex;
   flex-direction: column;
@@ -22,6 +24,9 @@ export const TodoList = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 0.8rem;
+
+  max-height: 16.8rem;
+  overflow-y: scroll;
 `;
 
 export const TodoItem = styled.div`
@@ -56,10 +61,16 @@ export const ContentTitle = styled.span`
   color: ${({ theme }) => theme.colors.gray600};
 `;
 
-export const EditButton = styled.button`
+export const EditButton = styled(IconButton)`
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  padding: 0.4rem 0 0.4rem 2.4rem;
+
+  span {
+    ${({ theme }) => theme.fonts.body15};
+    color: ${({ theme }) => theme.colors.gray600};
+  }
 `;
 
 export const EditLabel = styled.span`

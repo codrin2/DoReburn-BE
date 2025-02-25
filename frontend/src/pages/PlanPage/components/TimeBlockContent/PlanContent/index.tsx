@@ -9,7 +9,7 @@ import { ERROR_MESSAGE } from '@/constants/message';
 import useToast from '@/hooks/useToast';
 import useUpdatePathTodoMutation from '@/pages/PlanPage/hooks/useUpdatePathTodoMutation';
 
-const LONG_PRESS_DURATION = 300;
+const LONG_PRESS_DURATION = 500;
 
 export interface DraggingTodo {
   todo: PathTodo;
@@ -27,23 +27,26 @@ const PlanContent = ({ paths }: PlanContentProps) => {
   const [draggingTodo, setDraggingTodo] = useState<DraggingTodo | null>(null);
   const timeBlockRefs = useRef(new Map<number, HTMLElement>());
   const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isDraggingRef = useRef(false);
 
   const { mutateAsync: updatePathTodo } = useUpdatePathTodoMutation();
   const { toast } = useToast();
 
   const handleTouchStart = (e: TouchEvent<HTMLElement>, todo: PathTodo) => {
+    isDraggingRef.current = false;
     const touch = e.touches[0];
-    const targetBlock = (e.target as HTMLElement).getBoundingClientRect();
+    const targetElement = e.currentTarget;
 
     // 터치한 위치와 block의 위치 차이 계산하여 보정
-    const offsetX = touch.clientX - targetBlock.left;
-    const offsetY = touch.clientY - targetBlock.top;
+    const offsetX = touch.pageX - targetElement.offsetLeft;
+    const offsetY = touch.pageY - targetElement.offsetTop;
 
     longPressTimeoutRef.current = setTimeout(() => {
+      isDraggingRef.current = true;
       setDraggingTodo({
         todo,
-        x: touch.clientX - offsetX,
-        y: touch.clientY - offsetY,
+        x: touch.pageX - offsetX,
+        y: touch.pageY - offsetY,
         offsetX,
         offsetY,
       });
@@ -51,15 +54,22 @@ const PlanContent = ({ paths }: PlanContentProps) => {
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) {
+      clearTimeout(longPressTimeoutRef.current!); // 스크롤 시 터치 취소
+
+      return;
+    }
+
     if (!draggingTodo) return;
 
     const touch = e.touches[0];
+
     setDraggingTodo((prev) =>
       prev
         ? {
             ...prev,
-            x: touch.clientX - prev.offsetX,
-            y: touch.clientY - prev.offsetY,
+            x: touch.pageX - prev.offsetX,
+            y: touch.pageY - prev.offsetY,
           }
         : null,
     );
@@ -71,6 +81,8 @@ const PlanContent = ({ paths }: PlanContentProps) => {
     }
 
     if (!draggingTodo) return;
+
+    e.preventDefault();
 
     const touch = e.changedTouches[0];
 
@@ -108,13 +120,9 @@ const PlanContent = ({ paths }: PlanContentProps) => {
             }
           }}
           onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
         >
-          <TimeBlockHeader
-            trafficType={path.trafficType}
-            startStation={path.startName}
-            subwayCode={path.subwayCode}
-            busNumber={path.busNumber}
-          />
+          <TimeBlockHeader path={path} />
           <TimeBlockContent
             path={path}
             draggingTodo={draggingTodo}

@@ -3,7 +3,6 @@ import { useParams } from 'react-router';
 
 import * as S from './RecommendTodoContainer.styled';
 import useFilterBottomSheet from '../../hooks/useFilterBottomSheet';
-import useMemberInfoQuery from '../../hooks/useMemberInfoQuery';
 import useRecommendTodoFilterQuery from '../../hooks/useRecommendTodoFilterQuery';
 import { getTodoType } from '../../RecommendTodoPage.utils';
 
@@ -12,6 +11,7 @@ import Icon from '@/components/Icon';
 import IntersectionObserverScroll from '@/components/IntersectionObserverScroll/IntersectionObserverScroll';
 import { MAX_TODO_ITEM_LENGTH, TODO_TYPE } from '@/constants/config';
 import { TODO_TOAST_MESSAGE } from '@/constants/message';
+import useMemberInfoQuery from '@/hooks/useMemberInfoQuery';
 import useOverlay from '@/hooks/useOverlay';
 import useQueryParamsDate from '@/hooks/useQueryParamsDate';
 import useToast from '@/hooks/useToast';

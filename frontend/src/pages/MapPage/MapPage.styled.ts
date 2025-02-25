@@ -56,7 +56,7 @@ export const FilterBadge = styled.button<{ $isSelected: boolean; $category: Cate
 
 export const FloatingButtonContainer = styled.div`
   position: absolute;
-  bottom: 1rem;
+  bottom: 2.4rem;
   right: 1rem;
   z-index: 2;
 

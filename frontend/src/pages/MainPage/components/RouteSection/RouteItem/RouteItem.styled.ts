@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const RouteItemLayout = styled.div<{ $isToday: boolean }>`
+export const RouteItemLayout = styled.button<{ $isToday: boolean }>`
   ${({ theme }) => theme.fonts.body15Med};
   color: ${({ theme }) => theme.colors.gray400};
   background-color: ${({ theme, $isToday }) =>
@@ -8,7 +8,8 @@ export const RouteItemLayout = styled.div<{ $isToday: boolean }>`
 
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 1.2rem;
+
   padding: 1.3rem 1.25rem;
   border-radius: 1.2rem;
 
@@ -32,6 +33,8 @@ export const Location = styled.span<{ $isToday: boolean }>`
 
 export const AddressTextWrapper = styled.div`
   width: 60%;
+  text-align: start;
+
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

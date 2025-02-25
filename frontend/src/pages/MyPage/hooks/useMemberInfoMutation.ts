@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { updateMemberInfo } from '@/api/member';
+import { QUERY_KEY } from '@/constants/queryKey';
 
 const useMemberInfoMutation = () => {
   const queryClient = useQueryClient();
@@ -8,7 +9,8 @@ const useMemberInfoMutation = () => {
   return useMutation({
     mutationFn: updateMemberInfo,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['memberInfo'] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.memberInfo] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.memberAddress] });
     },
   });
 };

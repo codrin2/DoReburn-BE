@@ -31,7 +31,7 @@ const TodoTab = ({ todoType, planId }: TodoTabProps) => {
 
   const { toast } = useToast();
   const openAddTodoBottomSheet = useAddTodoBottomSheet({ todoType, planId });
-  const openEditBottomSheet = useEditTodoBottomSheet({ todoType, planId });
+  const openEditBottomSheet = useEditTodoBottomSheet({ todoType });
 
   const handleClickAddTodo = () => {
     const isLimitType = todoType === TODO_TYPE.TODAY || todoType === TODO_TYPE.TOMORROW;
@@ -47,7 +47,7 @@ const TodoTab = ({ todoType, planId }: TodoTabProps) => {
 
   const handleDeleteTodo = (todoId: number) => {
     deleteTodo(
-      { todoId, planId },
+      { todoId },
       { onSuccess: () => toast({ message: TODO_TOAST_MESSAGE.delete(dateType) }) },
     );
   };

@@ -4,7 +4,6 @@ export const PlanContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
-  overflow-y: scroll;
   padding-bottom: 8rem;
 `;
 
