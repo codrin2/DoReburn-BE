@@ -4,6 +4,8 @@ import FlexPageLayout from './layout/FlexPageLayout';
 import memberStatusLoader from './memberStatusLoader';
 
 import CustomSuspense from '@/components/CustomSuspense/CustomSuspense';
+import ErrorPage from '@/pages/ErrorPage';
+import RouteErrorPage from '@/pages/ErrorPage/RouteErrorPage';
 import {
   MainPage,
   EditPage,
@@ -24,161 +26,171 @@ import {
 
 export const router = createBrowserRouter([
   {
-    path: '/landing',
-    element: (
-      <CustomSuspense>
-        <LandingPage />
-      </CustomSuspense>
-    ),
-  },
-  {
-    path: '/login/kakao',
-    element: (
-      <CustomSuspense>
-        <KakaoLoginPage />
-      </CustomSuspense>
-    ),
-  },
-  {
-    path: '/onboarding',
-    element: (
-      <CustomSuspense>
-        <OnboardingPage />
-      </CustomSuspense>
-    ),
-    loader: memberStatusLoader,
-  },
-  {
     path: '/',
-    element: (
-      <CustomSuspense>
-        <MainPage />
-      </CustomSuspense>
-    ),
-    loader: memberStatusLoader,
-  },
-  {
-    path: '/edit',
-    element: <FlexPageLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
-        index: true,
+        path: '/landing',
         element: (
           <CustomSuspense>
-            <EditPage />
+            <LandingPage />
           </CustomSuspense>
         ),
       },
-    ],
-  },
-  {
-    path: '/route-select',
-    element: (
-      <CustomSuspense>
-        <RouteSelectPage />
-      </CustomSuspense>
-    ),
-  },
-  {
-    path: '/plan',
-    element: <FlexPageLayout />,
-    children: [
       {
-        index: true,
+        path: '/login/kakao',
         element: (
           <CustomSuspense>
-            <PlanPage />
+            <KakaoLoginPage />
+          </CustomSuspense>
+        ),
+      },
+      {
+        path: '/onboarding',
+        element: (
+          <CustomSuspense>
+            <OnboardingPage />
           </CustomSuspense>
         ),
         loader: memberStatusLoader,
       },
       {
-        path: ':planId/todos/edit',
+        path: '/',
+        element: (
+          <CustomSuspense>
+            <MainPage />
+          </CustomSuspense>
+        ),
+        loader: memberStatusLoader,
+      },
+      {
+        path: '/edit',
         element: <FlexPageLayout />,
         children: [
           {
             index: true,
             element: (
               <CustomSuspense>
-                <RouteTodoEditPage />
+                <EditPage />
               </CustomSuspense>
             ),
           },
         ],
       },
-    ],
-  },
-  {
-    path: '/recommend/:planId?',
-    element: <FlexPageLayout />,
-    children: [
       {
-        index: true,
+        path: '/route-select',
         element: (
           <CustomSuspense>
-            <RecommendTodoPage />
-          </CustomSuspense>
-        ),
-      },
-    ],
-  },
-  {
-    path: '/feedback',
-    element: (
-      <CustomSuspense>
-        <FeedbackPage />
-      </CustomSuspense>
-    ),
-    loader: memberStatusLoader,
-  },
-  {
-    path: '/map',
-    element: (
-      <CustomSuspense>
-        <MapPage />
-      </CustomSuspense>
-    ),
-  },
-  {
-    path: '/statistics',
-    children: [
-      {
-        path: 'day',
-        element: (
-          <CustomSuspense>
-            <DayStatisticsPage />
+            <RouteSelectPage />
           </CustomSuspense>
         ),
       },
       {
-        path: 'week',
+        path: '/plan',
+        element: <FlexPageLayout />,
+        children: [
+          {
+            index: true,
+            element: (
+              <CustomSuspense>
+                <PlanPage />
+              </CustomSuspense>
+            ),
+            loader: memberStatusLoader,
+          },
+          {
+            path: ':planId/todos/edit',
+            element: <FlexPageLayout />,
+            children: [
+              {
+                index: true,
+                element: (
+                  <CustomSuspense>
+                    <RouteTodoEditPage />
+                  </CustomSuspense>
+                ),
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: '/recommend/:planId?',
+        element: <FlexPageLayout />,
+        children: [
+          {
+            index: true,
+            element: (
+              <CustomSuspense>
+                <RecommendTodoPage />
+              </CustomSuspense>
+            ),
+          },
+        ],
+      },
+      {
+        path: '/feedback',
         element: (
           <CustomSuspense>
-            <WeekStatisticsPage />
+            <FeedbackPage />
+          </CustomSuspense>
+        ),
+        loader: memberStatusLoader,
+      },
+      {
+        path: '/map',
+        element: (
+          <CustomSuspense>
+            <MapPage />
           </CustomSuspense>
         ),
       },
-    ],
-  },
-  {
-    path: '/my-page',
-    element: (
-      <CustomSuspense>
-        <MyPage />
-      </CustomSuspense>
-    ),
-  },
-  {
-    path: '/favorite',
-    element: <FlexPageLayout />,
-    children: [
       {
-        index: true,
+        path: '/statistics',
+        children: [
+          {
+            path: 'day',
+            element: (
+              <CustomSuspense>
+                <DayStatisticsPage />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: 'week',
+            element: (
+              <CustomSuspense>
+                <WeekStatisticsPage />
+              </CustomSuspense>
+            ),
+          },
+        ],
+      },
+      {
+        path: '/my-page',
         element: (
           <CustomSuspense>
-            <FavoritePage />
+            <MyPage />
           </CustomSuspense>
         ),
+      },
+      {
+        path: '/favorite',
+        element: <FlexPageLayout />,
+        children: [
+          {
+            index: true,
+            element: (
+              <CustomSuspense>
+                <FavoritePage />
+              </CustomSuspense>
+            ),
+          },
+        ],
+      },
+      {
+        path: '*',
+        element: <RouteErrorPage />,
       },
     ],
   },

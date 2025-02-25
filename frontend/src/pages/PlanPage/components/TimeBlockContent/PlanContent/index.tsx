@@ -95,7 +95,7 @@ const PlanContent = ({ paths }: PlanContentProps) => {
           { todoId: draggingTodo.todo.todoId, newPathId: pathId },
           {
             onError: () => {
-              toast({ message: ERROR_MESSAGE.updatePathTodo });
+              toast({ message: ERROR_MESSAGE.UPDATE_PATH_TODO });
             },
           },
         );

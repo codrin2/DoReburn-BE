@@ -24,7 +24,7 @@ const useCheckTodo = (todo: PathTodo, isDragging: boolean) => {
       { todoId, isCompleted: !isDone },
       {
         onError: () => {
-          toast({ message: ERROR_MESSAGE.check });
+          toast({ message: ERROR_MESSAGE.CHECK });
         },
       },
     );
@@ -40,7 +40,7 @@ const useCheckTodo = (todo: PathTodo, isDragging: boolean) => {
         { todoId, isCompleted: !isDone },
         {
           onError: () => {
-            toast({ message: ERROR_MESSAGE.check });
+            toast({ message: ERROR_MESSAGE.CHECK });
           },
         },
       );

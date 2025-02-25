@@ -1,3 +1,5 @@
+import { CustomError, NetworkError, UnhandledError } from './error';
+
 interface RequestProps {
   method: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
   body?: Record<
@@ -24,17 +26,26 @@ const fetchClient = {
         },
       });
 
-      if (!response.ok) {
-        throw new Error('API ERROR 발생');
-      }
-
       if (response.status === 204) {
         return undefined as T;
       }
 
+      if (!response.ok) {
+        const apiError = await response.json();
+        throw new CustomError({ ...apiError, status: response.status });
+      }
+
       return await response.json();
     } catch (error) {
-      throw new Error((error as Error).message);
+      if (!navigator.onLine) {
+        throw new NetworkError();
+      }
+
+      if (error instanceof CustomError) {
+        throw error;
+      }
+
+      throw new UnhandledError();
     }
   },
 

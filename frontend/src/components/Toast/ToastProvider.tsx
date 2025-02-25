@@ -1,4 +1,4 @@
-import { PropsWithChildren, useRef, useState } from 'react';
+import { PropsWithChildren, useCallback, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import IconButton from '../Button/IconButton';
@@ -17,16 +17,19 @@ const ToastProvider = ({ children }: PropsWithChildren) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const toastTimers = useRef(new Map<number, NodeJS.Timeout>());
 
-  const toast = ({ message, duration = 2000 }: { message: string; duration?: number }) => {
-    const id = Date.now();
-    setToasts((prev) => [...prev, { id, message, isOpen: true }]);
+  const toast = useCallback(
+    ({ message, duration = 2000 }: { message: string; duration?: number }) => {
+      const id = Date.now();
+      setToasts((prev) => [...prev, { id, message, isOpen: true }]);
 
-    const timer = setTimeout(() => {
-      removeToast(id);
-    }, duration);
+      const timer = setTimeout(() => {
+        removeToast(id);
+      }, duration);
 
-    toastTimers.current.set(id, timer);
-  };
+      toastTimers.current.set(id, timer);
+    },
+    [],
+  );
 
   const removeToast = (id: number) => {
     setToasts((prevToasts) =>
