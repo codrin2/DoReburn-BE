@@ -31,7 +31,8 @@ export default defineConfig(({ mode }) => ({
         ],
       },
       devOptions: {
-        enabled: mode !== 'development',
+        enabled: true,
+        type: 'module',
       },
       registerType: 'autoUpdate',
     }),
