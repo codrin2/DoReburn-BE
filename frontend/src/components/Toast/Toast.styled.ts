@@ -9,6 +9,8 @@ export const ToastContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 1.6rem;
+
+  z-index: 1;
 `;
 
 export const ToastItem = styled.div<{ $isOpen: boolean }>`

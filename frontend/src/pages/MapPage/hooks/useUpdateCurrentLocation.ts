@@ -5,7 +5,7 @@ import useUpdateCurrentLocationMutation from '@/hooks/useUpdateCurrentLocationMu
 const UPDATE_CURRENT_LOCATION_INTERVAL = 5 * 60 * 1000;
 
 const useUpdateCurrentLocation = () => {
-  const { mutateAsync: updateCurrentLocation } = useUpdateCurrentLocationMutation();
+  const { mutate: updateCurrentLocation } = useUpdateCurrentLocationMutation();
 
   useEffect(() => {
     const intervalId = setInterval(() => {

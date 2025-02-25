@@ -17,6 +17,7 @@ export const TODO_TOAST_MESSAGE = {
     `${DATE_TEXT[dateType]} 할 일은 최대 ${MAX_TODO_ITEM_LENGTH}개까지 추가할 수 있어요`,
   addFavorite: '즐겨찾기에 추가되었어요',
   deleteFavorite: '즐겨찾기에서 삭제되었어요',
+  location: '현재 위치를 성공적으로 불러왔습니다!',
 };
 
 type clientErrorType = 'LOCATION' | 'LOCATION_PERMISSION' | 'UPDATE_PATH_TODO' | 'CHECK';

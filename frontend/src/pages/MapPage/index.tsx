@@ -14,6 +14,8 @@ import Header from '@/components/Header';
 import Icon from '@/components/Icon';
 import RadioGroup from '@/components/RadioGroup';
 import { MAP_ID } from '@/constants/config';
+import { TODO_TOAST_MESSAGE } from '@/constants/message';
+import useToast from '@/hooks/useToast';
 import { colors } from '@/styles/theme';
 
 const MapPage = () => {
@@ -24,6 +26,7 @@ const MapPage = () => {
   const { isOpen, open, close } = useMapBottomSheet();
 
   const openMarkerBottomSheet = useMarkerBottomSheet();
+  const { toast } = useToast();
 
   const { data: nearbyUsersData } = useNearbyUsersQuery({
     lng: center.lng,
@@ -41,10 +44,17 @@ const MapPage = () => {
   };
 
   const handleReload = async () => {
-    await updateCurrentLocation({
-      x_coordinate: center.lng,
-      y_coordinate: center.lat,
-    });
+    updateCurrentLocation(
+      {
+        x_coordinate: center.lng,
+        y_coordinate: center.lat,
+      },
+      {
+        onSuccess: () => {
+          toast({ message: TODO_TOAST_MESSAGE.location });
+        },
+      },
+    );
   };
 
   putMarkerList({

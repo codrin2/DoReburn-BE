@@ -58,7 +58,7 @@ const useInitMap = () => {
       const container = document.getElementById(MAP_ID) as HTMLElement;
       const options = {
         center: new kakao.maps.LatLng(INIT_CENTER.lat, INIT_CENTER.lng),
-        level: 5,
+        level: 2,
         draggable: true,
         scrollwheel: true,
       };
