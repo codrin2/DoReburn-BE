@@ -70,6 +70,7 @@ export default tseslint.config(
           'newlines-between': 'always',
         },
       ],
+      'import/named': 'off',
     },
   },
 );
