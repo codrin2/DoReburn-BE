@@ -1,7 +1,7 @@
 # 🕐 통학 시간을 지키고 싶다면, 두리번
 [클릭해서 두리번을 이용해보세요!(배포 주소)](https://do-reburn.site/)
 
-<img width="867" alt="image" src="https://github.com/user-attachments/assets/99773c75-5cfe-4207-92fb-6c57d611e6bc" />
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/99773c75-5cfe-4207-92fb-6c57d611e6bc" />
 
 <br>
 
@@ -22,16 +22,23 @@
 
 <br>
 
-# ✏️ 서비스 기능
-<img width="970" alt="image" src="https://github.com/user-attachments/assets/314c1a01-e5d1-43f1-9b81-07831545862e" />
+# ✏️ 서비스 개요 및 기능
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/c61e7a50-43ee-435a-b894-af99fc6c2102" />
 
-<img width="970" alt="image" src="https://github.com/user-attachments/assets/03f30e3d-6a3e-43ba-90c7-4f02393c859b" />
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/a9c83485-7f8c-4732-9a0b-c4c39ad4b806" />
 
-<img width="970" alt="image" src="https://github.com/user-attachments/assets/1569f66a-1134-4838-97b5-00959b3902fa" />
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/b4072b99-3328-4922-8332-7562710600a9" />
 
-<img width="970" alt="image" src="https://github.com/user-attachments/assets/16bbfb97-8853-4d0f-8d44-8849559d2922" />
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/26b6776e-a393-49d2-8134-58752c8c88d1" />
 
-<img width="970" alt="image" src="https://github.com/user-attachments/assets/9c0cc708-be1c-4c83-a8b4-73020b85d603" />
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/24ba4ae1-4d22-4d39-b45b-e6e99a90d58b" />
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/50dec468-94af-49cb-b761-10df37094028" />
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/5584b46b-34d3-412e-b399-c53bd9c8347e" />
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/a1c9b138-7c0b-44b4-a760-df941f8dd6aa" />
+
 
 <br>
 
