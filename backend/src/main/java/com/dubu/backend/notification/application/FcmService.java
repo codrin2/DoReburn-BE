@@ -59,7 +59,6 @@ public class FcmService {
                         .build())
                 .setToken(currentFcmToken.getDeviceToken())
                 .build());
-
-        System.out.println("Sent message: " + response);
+        log.info("[FCM 전송 결과] response: {}", response);
     }
 }

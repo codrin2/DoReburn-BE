@@ -30,8 +30,4 @@ public class FcmToken {
                 .deviceToken(deviceToken)
                 .build();
     }
-
-    public void updateFcmToken(String deviceToken) {
-        this.deviceToken = deviceToken;
-    }
 }

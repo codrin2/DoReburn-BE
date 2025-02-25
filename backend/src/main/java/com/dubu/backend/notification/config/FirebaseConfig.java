@@ -13,7 +13,6 @@ import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class FirebaseConfig {
-
     @Value("${firebase.service-account-json}")
     private String firebaseConfigJson;
 
@@ -26,7 +25,7 @@ public class FirebaseConfig {
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
 
-            if (FirebaseApp.getApps().isEmpty()) { // FirebaseApp이 이미 초기화되어 있지 않은 경우에만 초기화 실행
+            if (FirebaseApp.getApps().isEmpty()) {
                 FirebaseApp.initializeApp(options);
             }
         } catch (Exception e){
