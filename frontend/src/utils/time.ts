@@ -6,3 +6,13 @@ export const formatDateHeader = (targetDate: Date) => {
 
   return `${month}월 ${date}일 ${day}`;
 };
+
+export const minutesToHours = (time: number) => {
+  const sign = time < 0 ? '-' : '';
+  const absTime = Math.abs(time);
+
+  const hour = Math.floor(absTime / 60);
+  const minute = absTime % 60;
+
+  return `${sign}${hour > 0 ? `${hour}시간` : ''} ${minute > 0 ? `${minute}분` : ''}`;
+};

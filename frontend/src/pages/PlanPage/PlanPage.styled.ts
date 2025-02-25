@@ -18,7 +18,7 @@ export const HorizontalLine = styled.div`
 
 export const FinishButton = styled.button`
   position: fixed;
-  bottom: 1.6rem;
+  bottom: 4rem;
   left: 50%;
   transform: translateX(-50%);
 

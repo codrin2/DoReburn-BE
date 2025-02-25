@@ -3,6 +3,7 @@ import * as S from './WeekOverview.styled';
 import MOOD_DISSATISFIED from '@/assets/images/moodDissatisfied.webp';
 import MOOD_MODERATE from '@/assets/images/moodModerate.webp';
 import MOOD_SATISFIED from '@/assets/images/moodSatisfied.webp';
+import { minutesToHours } from '@/utils/time';
 
 const MOOD_IMAGES: Record<string, string> = {
   DISSATISFIED: MOOD_DISSATISFIED,
@@ -38,7 +39,7 @@ const WeekOverview = ({
 
       <S.WeekOverviewContent>
         <S.WeekAchievement>
-          <span>{totalAvailableTime}분 동안</span>
+          <span>{minutesToHours(totalAvailableTime)} 동안</span>
           <span>{totalTodoCount}개의 할 일을 했어요</span>
         </S.WeekAchievement>
 
@@ -46,7 +47,7 @@ const WeekOverview = ({
           <S.CompareTitle>지난 주와의 비교</S.CompareTitle>
           <S.CompareValue>
             {lastWeekDiff > 0 && '+'}
-            {lastWeekDiff}분
+            {minutesToHours(lastWeekDiff)}
           </S.CompareValue>
         </S.CompareLastWeek>
 

@@ -18,11 +18,7 @@ const CustomSuspense = ({ fallback, children }: PropsWithChildren<CustomSuspense
     return () => clearTimeout(timeoutId);
   }, []);
 
-  if (!isDeferred) {
-    return null;
-  }
-
-  return <Suspense fallback={fallback}>{children}</Suspense>;
+  return <Suspense fallback={isDeferred ? fallback : null}>{children}</Suspense>;
 };
 
 export default CustomSuspense;
