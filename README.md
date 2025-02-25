@@ -1,5 +1,5 @@
 # 🕐 통학 시간을 지키고 싶다면, 두리번
-[클릭해서 두리번을 이용해보세요!(배포 주소)](https://do-reburn.site/)
+[클릭해서 두리번을 이용해보세요! (https://do-reburn.site/)](https://do-reburn.site/)
 
 <img width="970" alt="image" src="https://github.com/user-attachments/assets/99773c75-5cfe-4207-92fb-6c57d611e6bc" />
 
@@ -91,7 +91,7 @@
 
 <br>
 
-# 🛠️ 개발스택
+# 🛠️ 기술 스택
 - [[FE] 기술 스택 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/[FE]-기술-스택)
 - [[BE] 기술 스택 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/[BE]-기술-스택)
 
