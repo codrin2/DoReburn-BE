@@ -12,17 +12,18 @@ export const RouteResultContainer = styled.div`
 
 export const StartButton = styled.button`
   position: fixed;
-  bottom: 2.5rem;
+  bottom: 4rem;
   left: 50%;
   transform: translateX(-50%);
   width: calc(100% - 3.2rem);
   max-width: 32.7rem;
-  ${({ theme }) => theme.fonts.body15Med};
+  ${({ theme }) => theme.fonts.headline17};
   color: ${({ theme }) => theme.colors.white};
   border-radius: 0.8rem;
-  padding: 1.6rem;
+  padding: 2rem;
   background-color: ${({ theme }) => theme.colors.green600};
   box-shadow: 0 0.4rem 0.8rem 0 rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s;
 
   &:disabled {
     background-color: ${({ theme }) => theme.colors.gray200};

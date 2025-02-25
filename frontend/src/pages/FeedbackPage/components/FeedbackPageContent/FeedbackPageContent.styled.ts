@@ -25,12 +25,12 @@ export const ButtonBox = styled.button`
   align-items: center;
 
   position: absolute;
-  bottom: 1.6rem;
+  bottom: 3.2rem;
 
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme }) => theme.colors.green600};
-  padding: 1.6rem 3rem;
+  padding: 2rem 4rem;
   border-radius: 3.2rem;
-  ${({ theme }) => theme.fonts.body16};
+  ${({ theme }) => theme.fonts.headline18};
   gap: 1rem;
 `;
