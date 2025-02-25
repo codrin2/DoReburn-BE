@@ -47,6 +47,12 @@ jobs:
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
+          
+      - name: Prepare Firebase JSON
+        id: prepare_firebase_json
+        run: |
+          FIREBASE_JSON=$(echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}" | tr -d '\n')
+          echo "FIREBASE_JSON=${FIREBASE_JSON}" >> $GITHUB_ENV
 
       - name: Deploy to prod
         uses: appleboy/ssh-action@v0.1.5
@@ -91,7 +97,7 @@ jobs:
               -e VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }} \
               -e ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }} \
               -e NOTIFICATION_URL=${{ secrets.NOTIFICATION_URL }} \
-              -e "FIREBASE_SERVICE_ACCOUNT_JSON=${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}" \
+              -e FIREBASE_SERVICE_ACCOUNT_JSON=${FIREBASE_JSON}} \
               -e PROD_SERVER_URL=${{ secrets.PROD_SERVER_URL }} \
               --name ${{ secrets.DOCKER_REPOSITORY }} \
               ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
