@@ -41,7 +41,17 @@
 <br>
 
 # 🎥 시연영상
+1️⃣ 온보딩을 통한 맞춤형 할 일 제공하기 | 2️⃣ 할 일 관리 + 카테고리 기반 추천 및 필터링
+-|-
+<video src="https://github.com/user-attachments/assets/5d5cb1f7-10ec-4fb2-b4f9-8438c68e3baa" /> | <video  src="https://github.com/user-attachments/assets/ff1c9c4d-6c96-4b57-bef2-6393e888955f" /> 
 
+3️⃣ 이동 경로 선택하기 | 4️⃣ 경로별 할 일 관리하기
+-|-
+<video src="https://github.com/user-attachments/assets/8241ad2a-9bc6-4d39-9399-aa0e1084a7b9" /> | <video src="https://github.com/user-attachments/assets/d8cd71ff-7635-4ea2-a3b2-884d81de3c3e" />
+
+5️⃣ 작성한 피드백을 시각적 통계로 제공하기 | 6️⃣ 주변 통학생을 둘러보며 할 일 탐색하기
+-|-
+<video src="https://github.com/user-attachments/assets/c5ff2e12-d5c0-41e8-8bef-7686c0e7614f" /> | <video src="https://github.com/user-attachments/assets/30d3a848-0006-4539-95a7-d4dc375aa4cc" />
 
 <br>
 
