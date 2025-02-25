@@ -1,4 +1,3 @@
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
 import { ThemeProvider } from 'styled-components';
@@ -18,9 +17,9 @@ const enableMocking = async () => {
     return;
   }
 
-  const { worker } = await import('./mocks/browser');
+  // const { worker } = await import('./mocks/browser');
 
-  return await worker.start({ onUnhandledRequest: 'bypass' });
+  // return await worker.start({ onUnhandledRequest: 'bypass' });
 };
 
 const registerServiceWorker = async () => {
@@ -28,7 +27,7 @@ const registerServiceWorker = async () => {
     return;
   }
 
-  await navigator.serviceWorker.register('/service-worker.js');
+  await navigator.serviceWorker.register('/firebase-messaging-sw.js');
 };
 
 registerServiceWorker();
@@ -46,10 +45,9 @@ enableMocking().then(() => {
                 </CustomSuspense>
               </Viewport>
             </OverlayProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
           </QueryProvider>
         </ToastProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </RootErrorBoundary>
     </ThemeProvider>,
   );
