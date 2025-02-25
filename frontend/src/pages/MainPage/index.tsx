@@ -11,10 +11,31 @@ import SearchAddress from '@/components/SearchAddress';
 import useNotificationPermission from '@/hooks/useNotificationPermission';
 import useQueryParamsDate from '@/hooks/useQueryParamsDate';
 import useRedirectByMemberStatus from '@/hooks/useRedirectByMemberStatus';
+import HomeModal from '@/pages/PlanPage/components/HomeModal';
 
 const MainPage = () => {
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const { requestPermission, permission, setPermission } =
+    useNotificationPermission(handleOpenModal);
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    if (permission === 'default') {
+      setPermission('denied');
+    }
+  };
+
+  const handleConfirmModal = () => {
+    requestPermission();
+    handleCloseModal();
+  };
+
   useRedirectByMemberStatus();
-  useNotificationPermission();
 
   const { isToday } = useQueryParamsDate();
   const [isSwitchAddress, toggle] = useReducer((prev) => !prev, false);
@@ -73,37 +94,52 @@ const MainPage = () => {
   }
 
   return (
-    <S.MainPageLayout>
-      <Header>
-        <Header.Right>
-          <Header.MenuButton />
-        </Header.Right>
-      </Header>
-      <S.MainContentContainer>
-        <S.HeaderContainer>
-          <DateHeader />
-          <RouteSection
-            isSwitchAddress={isSwitchAddress}
-            toggle={toggle}
-            handleClickSearchAddress={handleClickSearchAddress}
-            startAddress={startAddress}
-            endAddress={endAddress}
-          />
-        </S.HeaderContainer>
-
-        <TodoListContainer />
-
-        {isToday && (
-          <S.StartButtonWrapper>
-            <StartButton
-              isSwitched={isSwitchAddress}
+    <>
+      {isModalOpen && (
+        <HomeModal
+          title="알림 설정"
+          content={[
+            '이동 시간이 끝나기 전에',
+            '알림으로 리마인드를 받아보세요! 🚀',
+            '놓치지 않게 도와드려요.',
+          ]}
+          close={handleCloseModal}
+          onConfirm={handleConfirmModal}
+          confirmText="알림 설정"
+        />
+      )}
+      <S.MainPageLayout>
+        <Header>
+          <Header.Right>
+            <Header.MenuButton />
+          </Header.Right>
+        </Header>
+        <S.MainContentContainer>
+          <S.HeaderContainer>
+            <DateHeader />
+            <RouteSection
+              isSwitchAddress={isSwitchAddress}
+              toggle={toggle}
+              handleClickSearchAddress={handleClickSearchAddress}
               startAddress={startAddress}
               endAddress={endAddress}
             />
-          </S.StartButtonWrapper>
-        )}
-      </S.MainContentContainer>
-    </S.MainPageLayout>
+          </S.HeaderContainer>
+
+          <TodoListContainer />
+
+          {isToday && (
+            <S.StartButtonWrapper>
+              <StartButton
+                isSwitched={isSwitchAddress}
+                startAddress={startAddress}
+                endAddress={endAddress}
+              />
+            </S.StartButtonWrapper>
+          )}
+        </S.MainContentContainer>
+      </S.MainPageLayout>
+    </>
   );
 };
 

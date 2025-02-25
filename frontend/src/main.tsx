@@ -17,7 +17,7 @@ const enableMocking = async () => {
     return;
   }
 
-  const { worker } = await import('./mocks/browser');
+  // const { worker } = await import('./mocks/browser');
 
   // return await worker.start({ onUnhandledRequest: 'bypass' });
 };
@@ -27,7 +27,7 @@ const registerServiceWorker = () => {
     return;
   }
 
-  navigator.serviceWorker.register('/service-worker.js');
+  navigator.serviceWorker.register('./service-worker.js', { type: 'module' });
 };
 
 const queryClient = new QueryClient();
