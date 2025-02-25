@@ -28,7 +28,7 @@ public class FcmService {
     private final FcmTokenRepository fcmTokenRepository;
 
     @Transactional
-    public void saveOrUpdateToken(Long memberId, FcmTokenDto fcmTokenDto) {
+    public void saveToken(Long memberId, FcmTokenDto fcmTokenDto) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 

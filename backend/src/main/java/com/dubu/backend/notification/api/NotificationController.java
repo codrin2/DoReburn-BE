@@ -32,7 +32,7 @@ public class NotificationController {
             @RequestAttribute("memberId") Long memberId,
             @RequestBody FcmTokenDto fcmTokenDto
             ) {
-        fcmService.saveOrUpdateToken(memberId, fcmTokenDto);
+        fcmService.saveToken(memberId, fcmTokenDto);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
