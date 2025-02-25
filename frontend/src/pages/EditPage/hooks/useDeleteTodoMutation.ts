@@ -11,11 +11,11 @@ const useDeleteTodoMutation = (todoType: TodoType) => {
     mutationFn: ({ todoId }: { todoId: number }) => deleteTodo(todoId, todoType),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.todoList, todoType] });
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.routeTodoList, todoType] });
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendLimit, todoType] });
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendAll, todoType] });
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.favorite, todoType] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.todoList] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.routeTodoList] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendLimit] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendAll] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.favorite] });
     },
   });
 };

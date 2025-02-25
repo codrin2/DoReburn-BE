@@ -19,17 +19,13 @@ const useAddTodoMutation = () => {
 
     onSuccess: (_, params) => {
       if (params.planId) {
-        queryClient.invalidateQueries({
-          queryKey: [QUERY_KEY.routeTodoList, params.todoType, params.planId],
-        });
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEY.routeTodoList] });
       } else {
-        queryClient.invalidateQueries({
-          queryKey: [QUERY_KEY.todoList, params.todoType],
-        });
-
-        queryClient.invalidateQueries({
-          queryKey: [QUERY_KEY.favorite, params.todoType],
-        });
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEY.todoList] });
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEY.routeTodoList] });
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendLimit] });
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendAll] });
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEY.favorite] });
       }
     },
   });
