@@ -9,6 +9,12 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     VitePWA({
+      strategies: 'injectManifest',
+      filename: 'service-worker.js',
+      injectManifest: {
+        swSrc: 'public/service-worker.js',
+        maximumFileSizeToCacheInBytes: 20 * 1024 * 1024,
+      },
       includeAssets: ['favicon.ico', 'apple-touch-icon'],
       manifest: {
         name: '통학생을 위한 이동 시간 할일 관리 서비스, 두리번',
@@ -45,6 +51,7 @@ export default defineConfig(({ mode }) => ({
       },
       devOptions: {
         enabled: mode !== 'development', // 개발 환경에서는 PWA 서비스 워커 비활성화
+        type: 'module',
       },
       registerType: 'autoUpdate',
     }),

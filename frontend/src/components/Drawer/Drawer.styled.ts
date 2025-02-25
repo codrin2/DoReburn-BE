@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import styled from 'styled-components';
 
 export const DrawerLayout = styled.div<{ $isOpen: boolean }>`
@@ -33,18 +34,22 @@ export const Content = styled.div<{ $isOpen: boolean }>`
 
   width: 50%;
   height: 100%;
-  padding: 2rem 2.8rem;
+  padding: 2rem 0;
 
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 0 0 0 3.2rem;
 
   display: flex;
   flex-direction: column;
-  gap: 3.2rem;
+  gap: 1rem;
 
   transform: translateX(${({ $isOpen }) => ($isOpen ? '0' : '100%')});
   transition: transform 0.3s ease-in-out;
   will-change: transform;
+`;
+
+export const MenuTitle = styled(Link)`
+  padding: 1.6rem 1.8rem;
 `;
 
 export const MenuList = styled.ul`
@@ -55,12 +60,13 @@ export const MenuList = styled.ul`
   gap: 1rem;
 `;
 
-export const MenuItem = styled.li`
+export const MenuItem = styled.button`
   width: 100%;
   text-align: left;
   ${({ theme }) => theme.fonts.body16};
   font-weight: 500;
   color: ${({ theme }) => theme.colors.gray950};
+  padding: 0.4rem 1.8rem;
 
   position: relative;
   padding-bottom: 1rem;
@@ -68,13 +74,14 @@ export const MenuItem = styled.li`
   &:not(:last-child)::after {
     content: '';
     display: block;
-    width: 100%;
+    width: 85%;
     height: 0.15rem;
     background-color: ${({ theme }) => theme.colors.gray100};
 
     position: absolute;
     bottom: 0;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   a {

@@ -38,3 +38,11 @@ export const TodoTitle = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
+
+export const EmptyAchievement = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+`;
