@@ -17,13 +17,8 @@
 | 디자인 | 최예지 | 🎨 디자인 | UI/UX디자인, GUI 디자인 |
 | 개발 | 박규한 | 📱  프론트엔드 | 화면 UI 구현, API 연동 |
 | 개발 | 손영진 | 📱 프론트엔드 | 화면 UI 구현, API 연동 |
-| 개발 | 문희상 | 💻 개발 리드 | API 구현, ERD 설계, 서버 배포 |
+| 개발 | 문희상 | 💻 개발 리드 | 로그인 및 인증, 회원, 알림, 경로 및 계획, 서버 배포 |
 | 개발 | 김현원 | 💻 백엔드 | API 구현, ERD 설계 |
-
-<br>
-
-# 📖 서비스 용어 정리
-[용어 정리 in Wiki](https://github.com/softeer5th/Team6-DuBu/wiki/%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%A3%BC%EC%9A%94-%EC%9A%A9%EC%96%B4-%EC%A0%95%EB%A6%AC)
 
 <br>
 
@@ -95,8 +90,8 @@
 
 <br>
 
-# 🕐 회의록
-[두부의 회의록 in Notion](https://sulky-koala-70d.notion.site/18394660e59780799826f7f454edb758?v=1a194660e59780d49217000cd680f7e5&pvs=74)
+# 🕐 데일리 스크럼
+[두부의 데일리 스크럼 in Notion](https://sulky-koala-70d.notion.site/18394660e59780799826f7f454edb758?v=1a194660e59780d49217000cd680f7e5&pvs=74)
 
 <br>
 
@@ -113,6 +108,7 @@
 ### 주간 회고
 [두부의 주간 회고[피그잼]](https://www.figma.com/board/eqA3STNAS5glysxw1lPGsY/Untitled)
 
-<img width="1025" alt="image" src="https://github.com/user-attachments/assets/812a038f-fcff-4028-bac6-8ce6883067b6" />
-<img width="1302" alt="image" src="https://github.com/user-attachments/assets/8beab4ac-bd38-4478-91ae-0c3886d7e0b7" />
-<img width="1032" alt="image" src="https://github.com/user-attachments/assets/b766adc3-c515-456f-93b1-0282b9c67050" />
+<br>
+
+# 🌟 두부의 더 많은 이야기는?
+[[클릭] 두부의 Wiki에서 둘러볼 수 있어요!](https://github.com/softeer5th/Team6-DuBu/wiki)
