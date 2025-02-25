@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/notification")
-public class NotificationController {
+public class NotificationController implements NotificationApi {
 
     private final NotificationService notificationService;
     private final FcmService fcmService;
@@ -31,7 +31,7 @@ public class NotificationController {
     public void registerFcmToken(
             @RequestAttribute("memberId") Long memberId,
             @RequestBody FcmTokenDto fcmTokenDto
-            ) {
+    ) {
         fcmService.saveToken(memberId, fcmTokenDto);
     }
 
