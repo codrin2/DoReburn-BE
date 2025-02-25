@@ -1,5 +1,6 @@
 package com.dubu.backend.notification.api;
 
+import com.dubu.backend.notification.dto.FcmTokenDto;
 import com.dubu.backend.notification.dto.PushMessageDto;
 import com.dubu.backend.notification.dto.PushSubscriptionDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -89,6 +90,62 @@ public interface NotificationApi {
                     )
             )
             PushSubscriptionDto subscription
+    );
+
+    @Operation(
+            summary = "FCM 토큰 등록",
+            description = """
+                    FCM을 이용해 알림을 받기 위해서는 디바이스/브라우저에서 발급된 
+                    토큰(deviceToken)을 서버에 등록해야 합니다. 
+                    <p>이 API 호출 시 서버가 memberId와 FCM 토큰을 매핑하여 저장합니다.</p>
+                    """
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "FCM 토큰 등록 성공 (응답 본문 없음)"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "회원이 존재하지 않는 경우 (MEMBER_NOT_FOUND)",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseExample.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "회원 미존재 에러 예시",
+                                            value = """
+                                                    {
+                                                      "errorCode": "MEMBER_NOT_FOUND",
+                                                      "message": "회원을 찾을 수 없습니다. memberId : 9999"
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            )
+    })
+    void registerFcmToken(
+            Long memberId,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "FCM 토큰 등록 요청 DTO",
+                    required = true,
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = FcmTokenDto.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "FCM 토큰 등록 예시",
+                                            value = """
+                                                    {
+                                                      "deviceToken": "fcmTokenExample12345"
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            )
+            FcmTokenDto fcmTokenDto
     );
 
     @Operation(

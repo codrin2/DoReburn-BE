@@ -75,6 +75,10 @@ public enum ErrorCode {
     // Schedule
     SCHEDULE_NOT_FOUND(NOT_FOUND, "스케줄을 찾을 수 없습니다."),
 
+    // FCM
+    DUPLICATE_FCM_TOKEN(BAD_REQUEST, "이미 저장된 FCM Token 입니다. memberId : %d"),
+    NOT_FOUND_FCM_TOKEN(NOT_FOUND, "해당 멤버의 FCM TOKEN이 존재하지 않습니다. memberId : %d"),
+
     // External
     NAVER_SERVICE_UNAVAILABLE(SERVICE_UNAVAILABLE, "네이버 API 서버가 장애 상태입니다."),
     KAKAO_SERVICE_UNAVAILABLE(SERVICE_UNAVAILABLE, "카카오 API 서버가 장애 상태입니다."),

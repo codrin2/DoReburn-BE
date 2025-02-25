@@ -1,6 +1,8 @@
 package com.dubu.backend.notification.api;
 
+import com.dubu.backend.notification.application.FcmService;
 import com.dubu.backend.notification.application.NotificationService;
+import com.dubu.backend.notification.dto.FcmTokenDto;
 import com.dubu.backend.notification.dto.PushMessageDto;
 import com.dubu.backend.notification.dto.PushSubscriptionDto;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +12,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/notification")
-public class NotificationController {
+public class NotificationController implements NotificationApi {
 
     private final NotificationService notificationService;
+    private final FcmService fcmService;
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/subscribe")
@@ -21,6 +24,15 @@ public class NotificationController {
             @RequestBody PushSubscriptionDto subscription
     ) {
         notificationService.saveSubscription(memberId, subscription);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/fcm/token")
+    public void registerFcmToken(
+            @RequestAttribute("memberId") Long memberId,
+            @RequestBody FcmTokenDto fcmTokenDto
+    ) {
+        fcmService.saveToken(memberId, fcmTokenDto);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

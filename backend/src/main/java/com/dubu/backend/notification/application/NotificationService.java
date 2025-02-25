@@ -1,6 +1,5 @@
 package com.dubu.backend.notification.application;
 
-
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.dto.MemberStatusChangeDto;
 import com.dubu.backend.member.exception.MemberNotFoundException;
