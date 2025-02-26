@@ -109,8 +109,8 @@ const PlanContent = ({ paths }: PlanContentProps) => {
 
   useEffect(() => {
     const handleGlobalTouchEnd = (e: globalThis.TouchEvent) => {
-      alert('외부면 그냥 드래그앤드롭으로 인한 클릭 다막아');
-      // if (!draggingTodo) return;
+      alert('외부면 draggingTodo 없으면 클릭 막아');
+      if (!draggingTodo) return;
 
       e.preventDefault();
       // handleTouchEnd(e as unknown as React.TouchEvent<HTMLElement>);
@@ -119,7 +119,7 @@ const PlanContent = ({ paths }: PlanContentProps) => {
     document.addEventListener('touchend', handleGlobalTouchEnd);
 
     return () => document.removeEventListener('touchend', handleGlobalTouchEnd);
-  }, []);
+  }, [draggingTodo]);
 
   return (
     <S.PlanContent>
