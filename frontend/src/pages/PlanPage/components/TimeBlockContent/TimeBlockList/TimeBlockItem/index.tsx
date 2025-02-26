@@ -37,7 +37,7 @@ const TimeBlockItem = ({
 
   const handleViewTodo = () => {
     if (isDraggingTodo) return;
-
+    alert(`dragging: ${draggingTodo?.todo.title}`);
     showTodoBottomSheet(todo);
   };
 
@@ -59,6 +59,9 @@ const TimeBlockItem = ({
         <Icon icon={ICON_MAPPER[category]} cursor="pointer" width={28} height={28} />
       </S.CheckIconWrapper>
       <S.TimeBlockContent onClick={handleViewTodo}>
+        <span>
+          {isDraggingTodo.toString()} {isDragging.toString()}
+        </span>
         <S.TodoTitle $isDone={isDone}>{title}</S.TodoTitle>
         <S.TodoMemo>{memo}</S.TodoMemo>
       </S.TimeBlockContent>
