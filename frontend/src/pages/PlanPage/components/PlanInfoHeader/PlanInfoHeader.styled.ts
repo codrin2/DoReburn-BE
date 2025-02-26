@@ -83,9 +83,3 @@ export const MapLink = styled(Link)`
   padding: 1.2rem 0.8rem;
   border-radius: 1.2rem;
 `;
-
-export const HorizontalLine = styled.div`
-  width: 100%;
-  height: 1.2rem;
-  background-color: ${({ theme }) => theme.colors.gray50};
-`;
