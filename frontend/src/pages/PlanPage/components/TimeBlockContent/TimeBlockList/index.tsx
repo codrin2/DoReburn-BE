@@ -16,6 +16,8 @@ interface TimeBlockListProps {
 }
 
 const TimeBlockList = ({ todos, draggingTodo, onTouchStart, onTouchMove }: TimeBlockListProps) => {
+  const isDraggingTodo = todos.some((todo) => todo.todoId === draggingTodo?.todo.todoId);
+
   if (todos.length === 0) {
     return (
       <S.EmptyTimeBlock>
@@ -31,6 +33,7 @@ const TimeBlockList = ({ todos, draggingTodo, onTouchStart, onTouchMove }: TimeB
         <TimeBlockItem
           key={todo.todoId}
           todo={todo}
+          isDraggingTodo={isDraggingTodo}
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
           draggingTodo={draggingTodo}

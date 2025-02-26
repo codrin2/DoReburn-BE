@@ -14,6 +14,7 @@ interface TimeBlockItemProps {
   onTouchStart: (e: TouchEvent<HTMLDivElement>, todo: PathTodo) => void;
   onTouchMove: (e: TouchEvent<HTMLDivElement>) => void;
   draggingTodo: DraggingTodo | null;
+  isDraggingTodo: boolean;
   itemRef?: LegacyRef<HTMLDivElement>;
 }
 
@@ -22,16 +23,20 @@ const TimeBlockItem = ({
   onTouchStart,
   onTouchMove,
   draggingTodo,
+  isDraggingTodo,
   itemRef,
 }: TimeBlockItemProps) => {
   const { todoId, category, title, memo, isDone } = todo;
   const isDragging = draggingTodo?.todo.todoId === todoId;
 
-  const { handleCheckTodo, handleUncheckTodo, isAnimatingCheck } = useCheckTodo(todo, isDragging);
+  const { handleCheckTodo, handleUncheckTodo, isAnimatingCheck } = useCheckTodo(
+    todo,
+    isDraggingTodo,
+  );
   const showTodoBottomSheet = useShowTodoBottomSheet();
 
   const handleViewTodo = () => {
-    if (isDragging) return;
+    if (isDraggingTodo) return;
 
     showTodoBottomSheet(todo);
   };
