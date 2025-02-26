@@ -27,13 +27,11 @@ const PlanContent = ({ paths }: PlanContentProps) => {
   const [draggingTodo, setDraggingTodo] = useState<DraggingTodo | null>(null);
   const timeBlockRefs = useRef(new Map<number, HTMLElement>());
   const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isDraggingRef = useRef(false);
 
   const { mutateAsync: updatePathTodo } = useUpdatePathTodoMutation();
   const { toast } = useToast();
 
   const handleTouchStart = (e: TouchEvent<HTMLElement>, todo: PathTodo) => {
-    isDraggingRef.current = false;
     const touch = e.touches[0];
     const targetElement = e.currentTarget;
 
@@ -42,7 +40,6 @@ const PlanContent = ({ paths }: PlanContentProps) => {
     const offsetY = touch.pageY - targetElement.offsetTop;
 
     longPressTimeoutRef.current = setTimeout(() => {
-      isDraggingRef.current = true;
       setDraggingTodo({
         todo,
         x: touch.pageX - offsetX,
@@ -54,10 +51,9 @@ const PlanContent = ({ paths }: PlanContentProps) => {
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (!isDraggingRef.current) {
-      clearTimeout(longPressTimeoutRef.current!); // 스크롤 시 터치 취소
-
-      return;
+    if (longPressTimeoutRef.current) {
+      clearTimeout(longPressTimeoutRef.current); // 스크롤 시 터치 취소
+      longPressTimeoutRef.current = null;
     }
 
     if (!draggingTodo) return;
@@ -78,6 +74,7 @@ const PlanContent = ({ paths }: PlanContentProps) => {
   const handleTouchEnd = async (e: React.TouchEvent<HTMLElement>) => {
     if (longPressTimeoutRef.current) {
       clearTimeout(longPressTimeoutRef.current);
+      longPressTimeoutRef.current = null;
     }
 
     if (!draggingTodo) return;
