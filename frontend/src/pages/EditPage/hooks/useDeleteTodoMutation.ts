@@ -13,7 +13,6 @@ const useDeleteTodoMutation = (todoType: TodoType) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.todoList] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.routeTodoList] });
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendLimit] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendAll] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.favorite] });
     },

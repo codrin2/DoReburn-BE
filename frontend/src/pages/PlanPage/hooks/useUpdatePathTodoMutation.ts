@@ -28,7 +28,6 @@ const useUpdatePathTodoMutation = () => {
       });
 
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.favorite] });
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendLimit] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.recommendAll] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.routeTodoList] });
     },

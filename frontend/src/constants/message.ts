@@ -18,6 +18,7 @@ export const TODO_TOAST_MESSAGE = {
   addFavorite: '즐겨찾기에 추가되었어요',
   deleteFavorite: '즐겨찾기에서 삭제되었어요',
   location: '현재 위치를 성공적으로 불러왔습니다!',
+  move: '페이지가 이동되었어요.',
 };
 
 type clientErrorType = 'LOCATION' | 'LOCATION_PERMISSION' | 'UPDATE_PATH_TODO' | 'CHECK';
@@ -29,7 +30,7 @@ export const ERROR_MESSAGE: Record<ErrorCode | clientErrorType, string> = {
   TOKEN_EXPIRED: '로그인 세션이 만료되었어요. 다시 로그인해 주세요.',
 
   INVALID_MEMBER_STATUS: '현재 상태에서는 이 작업을 수행할 수 없어요.',
-  TODO_LIMIT_EXCEEDED: '할 일 개수를 초과했어요. 더 이상 추가할 수 없어요.',
+  TODO_LIMIT_EXCEEDED: '계획한 할 일의 개수가 너무 많아요!',
   METHOD_ARGUMENT_TYPE_MISMATCH: '잘못된 요청입니다. 입력 값을 확인해 주세요.',
   PATH_ID_NOT_PROVIDED: '경로 정보가 누락되었어요. 다시 시도해 주세요.',
 
