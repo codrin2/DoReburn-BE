@@ -7,10 +7,7 @@ import com.dubu.backend.notification.domain.FcmToken;
 import com.dubu.backend.notification.dto.FcmTokenDto;
 import com.dubu.backend.notification.dto.PushMessageDto;
 import com.dubu.backend.notification.infra.repository.FcmTokenRepository;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
-import com.google.firebase.messaging.Notification;
+import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,21 +38,32 @@ public class FcmService {
         }
     }
 
-    public void sendMessage(PushMessageDto message) throws FirebaseMessagingException {
+    public void sendMessage(PushMessageDto message) {
         List<FcmToken> fcmTokens = fcmTokenRepository.findByMemberId(message.memberId());
 
         for (FcmToken fcmToken : fcmTokens) {
-            String response = FirebaseMessaging.getInstance().send(
-                    Message.builder()
-                            .setNotification(Notification.builder()
-                                    .setTitle(message.title())
-                                    .setBody(message.body())
-                                    .build())
-                            .setToken(fcmToken.getDeviceToken())
-                            .build()
-            );
-            log.info("[FCM 전송 결과] memberId={}, deviceToken={}, response={}",
-                    message.memberId(), fcmToken.getDeviceToken(), response);
+            try {
+                String response = FirebaseMessaging.getInstance().send(
+                        Message.builder()
+                                .setNotification(Notification.builder()
+                                        .setTitle(message.title())
+                                        .setBody(message.body())
+                                        .build())
+                                .setToken(fcmToken.getDeviceToken())
+                                .build()
+                );
+
+                log.info("[FCM 전송 결과] memberId={}, deviceToken={}, response={}",
+                        message.memberId(), fcmToken.getDeviceToken(), response);
+
+            } catch (FirebaseMessagingException e) {
+                if (e.getMessagingErrorCode() == MessagingErrorCode.UNREGISTERED) {
+                    log.error("등록 해제된 토큰입니다. token={}", fcmToken.getDeviceToken());
+                    fcmTokenRepository.delete(fcmToken);
+                } else {
+                    log.error("FCM 메시지 전송 실패: {}", e.getMessage());
+                }
+            }
         }
     }
 }
