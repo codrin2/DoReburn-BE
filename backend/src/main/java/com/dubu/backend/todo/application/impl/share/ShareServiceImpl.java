@@ -1,6 +1,5 @@
 package com.dubu.backend.todo.application.impl.share;
 
-import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.dto.MemberLocationDto;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.infra.repository.LocationRedisRepository;
