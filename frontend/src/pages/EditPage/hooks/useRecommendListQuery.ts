@@ -8,7 +8,7 @@ const useRecommendTodoListQuery = (todoType: TodoType, planId?: number) => {
   return useQuery({
     queryKey: [QUERY_KEY.recommendLimit, todoType, planId || 0],
     queryFn: () => getRecommendLimitTodoList(todoType, planId),
-    staleTime: Infinity,
+    gcTime: 0,
   });
 };
 
