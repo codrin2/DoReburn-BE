@@ -1,4 +1,4 @@
-import { TouchEvent, useRef, useState } from 'react';
+import { TouchEvent, useEffect, useRef, useState } from 'react';
 
 import TimeBlockContent from '..';
 import * as S from './PlanContent.styled';
@@ -79,6 +79,7 @@ const PlanContent = ({ paths }: PlanContentProps) => {
 
     if (!draggingTodo) return;
 
+    alert('내부도 실행');
     e.preventDefault();
 
     const touch = e.changedTouches[0];
@@ -103,6 +104,17 @@ const PlanContent = ({ paths }: PlanContentProps) => {
 
     setDraggingTodo(null);
   };
+
+  useEffect(() => {
+    const handleGlobalTouchEnd = (e: globalThis.TouchEvent) => {
+      alert('외부여도 클릭 이벤트 막아!');
+      handleTouchEnd(e as unknown as React.TouchEvent<HTMLElement>);
+    };
+
+    document.addEventListener('touchend', handleGlobalTouchEnd);
+
+    return () => document.removeEventListener('touchend', handleGlobalTouchEnd);
+  }, []);
 
   return (
     <S.PlanContent>
