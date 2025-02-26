@@ -48,3 +48,6 @@ src/main/resources/application.yaml
 ### 개발 DB용 docker-compose 제외 ###
 /docker-compose.yaml
 /prometheus.yml
+
+### FCM 파일 제외
+/do-reburn-firebase.json
