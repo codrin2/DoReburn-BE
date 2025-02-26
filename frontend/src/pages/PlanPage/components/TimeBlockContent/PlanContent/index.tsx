@@ -81,7 +81,6 @@ const PlanContent = ({ paths }: PlanContentProps) => {
 
     if (!draggingTodo) return;
 
-    alert('내부도 실행');
     e.preventDefault();
 
     const touch = e.changedTouches[0];
@@ -109,11 +108,9 @@ const PlanContent = ({ paths }: PlanContentProps) => {
 
   useEffect(() => {
     const handleGlobalTouchEnd = (e: globalThis.TouchEvent) => {
-      alert('외부면 draggingTodo 없으면 클릭 막아');
       if (!draggingTodo) return;
 
       e.preventDefault();
-      // handleTouchEnd(e as unknown as React.TouchEvent<HTMLElement>);
     };
 
     document.addEventListener('touchend', handleGlobalTouchEnd);

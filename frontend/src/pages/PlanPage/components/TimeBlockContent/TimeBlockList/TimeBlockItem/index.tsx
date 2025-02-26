@@ -14,7 +14,7 @@ interface TimeBlockItemProps {
   onTouchStart: (e: TouchEvent<HTMLDivElement>, todo: PathTodo) => void;
   onTouchMove: (e: TouchEvent<HTMLDivElement>) => void;
   draggingTodo: DraggingTodo | null;
-  isDraggingTodo: boolean;
+  hasDraggingItem: boolean;
   itemRef?: LegacyRef<HTMLDivElement>;
 }
 
@@ -23,7 +23,7 @@ const TimeBlockItem = ({
   onTouchStart,
   onTouchMove,
   draggingTodo,
-  isDraggingTodo,
+  hasDraggingItem,
   itemRef,
 }: TimeBlockItemProps) => {
   const { todoId, category, title, memo, isDone } = todo;
@@ -31,13 +31,13 @@ const TimeBlockItem = ({
 
   const { handleCheckTodo, handleUncheckTodo, isAnimatingCheck } = useCheckTodo(
     todo,
-    isDraggingTodo,
+    hasDraggingItem,
   );
   const showTodoBottomSheet = useShowTodoBottomSheet();
 
   const handleViewTodo = () => {
-    if (isDraggingTodo) return;
-    alert(`dragging: ${draggingTodo?.todo.title}`);
+    if (hasDraggingItem) return;
+
     showTodoBottomSheet(todo);
   };
 
@@ -59,9 +59,6 @@ const TimeBlockItem = ({
         <Icon icon={ICON_MAPPER[category]} cursor="pointer" width={28} height={28} />
       </S.CheckIconWrapper>
       <S.TimeBlockContent onClick={handleViewTodo}>
-        <span>
-          {isDraggingTodo.toString()} {isDragging.toString()}
-        </span>
         <S.TodoTitle $isDone={isDone}>{title}</S.TodoTitle>
         <S.TodoMemo>{memo}</S.TodoMemo>
       </S.TimeBlockContent>
