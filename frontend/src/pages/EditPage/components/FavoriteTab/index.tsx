@@ -9,11 +9,9 @@ import TodoEditItem from '../TodoEditItem';
 
 import IconButton from '@/components/Button/IconButton';
 import Icon from '@/components/Icon';
-import { MAX_TODO_ITEM_LENGTH, TODO_TYPE } from '@/constants/config';
+import { TODO_TYPE } from '@/constants/config';
 import { TODO_TOAST_MESSAGE } from '@/constants/message';
-import useQueryParamsDate from '@/hooks/useQueryParamsDate';
 import useToast from '@/hooks/useToast';
-import useTodoListQuery from '@/hooks/useTodoListQuery';
 import { TodoType } from '@/types/todo';
 
 interface FavoriteTabProps {
@@ -22,9 +20,6 @@ interface FavoriteTabProps {
 }
 
 const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
-  const { dateType } = useQueryParamsDate();
-
-  const { data: todoList } = useTodoListQuery(dateType, Number(planId));
   const {
     data: favoriteTodoList,
     hasNextPage,
@@ -42,14 +37,6 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
   const isFavoritePage = todoType === TODO_TYPE.SAVE;
 
   const handleAddTodoFromFavorite = (todoId: number) => {
-    const isLimitType = todoType === TODO_TYPE.TODAY || todoType === TODO_TYPE.TOMORROW;
-
-    if (isLimitType && todoList && todoList.length >= MAX_TODO_ITEM_LENGTH) {
-      toast({ message: TODO_TOAST_MESSAGE.limit(dateType) });
-
-      return;
-    }
-
     addTodoFromArchived(
       { todoType, todoId, planId: Number(planId) },
       {

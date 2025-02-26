@@ -9,13 +9,11 @@ import { getTodoType } from '../../RecommendTodoPage.utils';
 import IconButton from '@/components/Button/IconButton';
 import Icon from '@/components/Icon';
 import IntersectionObserverScroll from '@/components/IntersectionObserverScroll/IntersectionObserverScroll';
-import { MAX_TODO_ITEM_LENGTH, TODO_TYPE } from '@/constants/config';
 import { TODO_TOAST_MESSAGE } from '@/constants/message';
 import useMemberInfoQuery from '@/hooks/useMemberInfoQuery';
 import useOverlay from '@/hooks/useOverlay';
 import useQueryParamsDate from '@/hooks/useQueryParamsDate';
 import useToast from '@/hooks/useToast';
-import useTodoListQuery from '@/hooks/useTodoListQuery';
 import TodoEditItem from '@/pages/EditPage/components/TodoEditItem';
 import useAddTodoFromArchivedMutation from '@/pages/EditPage/hooks/useAddTodoFromArchivedMutation';
 import { CategoryType, DifficultyType } from '@/types/filter';
@@ -34,13 +32,11 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
   const [isInitialized, setIsInitialized] = useState(false);
 
   const { data: memberInfo } = useMemberInfoQuery();
-  const { data: todoList } = useTodoListQuery(dateType, Number(planId));
 
   const todoType = getTodoType({ dateType, isFavoritePage, planId });
 
   const {
     data: recommendList,
-    isLoading,
     isFetching,
     hasNextPage,
     fetchNextPage,
@@ -62,14 +58,6 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
   };
 
   const handleAddTodoFromRecommendAll = (todoId: number) => {
-    const isLimitType = todoType === TODO_TYPE.TODAY || todoType === TODO_TYPE.TOMORROW;
-
-    if (isLimitType && todoList && todoList.length >= MAX_TODO_ITEM_LENGTH) {
-      toast({ message: TODO_TOAST_MESSAGE.limit(todoType) });
-
-      return;
-    }
-
     addTodoFromArchived(
       { todoType, todoId, planId: Number(planId) },
       {
@@ -90,9 +78,6 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
       setIsInitialized(true);
     }
   }, [isInitialized, memberInfo]);
-
-  // 로딩중
-  if (isLoading) return <div>로딩중...</div>;
 
   // 데이터가 없을 경우
   if (!recommendList) return <div>추천 할 일 데이터가 없습니다.</div>;
