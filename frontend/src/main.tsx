@@ -50,7 +50,7 @@ async function getDeviceToken() {
       }
     })
     .catch((err) => {
-      alert(err);
+      console.error('토큰을 가져오는 중 에러가 발생했습니다.');
     });
 }
 
