@@ -39,22 +39,18 @@ async function handleAllowNotification() {
 }
 
 async function getDeviceToken() {
-  // 권한이 허용된 후에 토큰을 가져옴
   await getToken(messaging, {
     vapidKey: import.meta.env.VITE_PUSH_NOTIFICATION_PUBLIC_KEY,
   })
     .then((currentToken) => {
       if (currentToken) {
-        // 토큰을 서버로 전송하거나 UI 업데이트
         console.log('토큰: ', currentToken);
-        alert('토큰: ' + currentToken);
       } else {
         console.log('토큰을 가져오지 못했습니다. 권한을 다시 요청하세요.');
       }
     })
     .catch((err) => {
       alert(err);
-      console.log('토큰을 가져오는 중 에러 발생: ', err);
     });
 }
 
