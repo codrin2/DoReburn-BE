@@ -8,6 +8,10 @@ export const formatDateHeader = (targetDate: Date) => {
 };
 
 export const minutesToHours = (time: number) => {
+  if (time === 0) {
+    return `${time}분`;
+  }
+
   const sign = time < 0 ? '-' : '';
   const absTime = Math.abs(time);
 
