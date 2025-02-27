@@ -1,12 +1,21 @@
-import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 
-cleanupOutdatedCaches();
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js');
 
-precacheAndRoute(self.__WB_MANIFEST);
+if (workbox) {
+  workbox.precaching.cleanupOutdatedCaches();
+  workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
+}
+
+self.addEventListener('install', (event) => {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(clients.claim());
+});
 
 self.addEventListener('push', async (event) => {
   const data = event.data?.json();
-
   const title = data.notification?.title || 'Push Message';
   const body = data.notification?.body || 'This is a push notification';
   const url = data.data?.url || '/';
@@ -25,7 +34,6 @@ self.addEventListener('push', async (event) => {
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-
   const url = event.notification.data?.url || '/';
 
   event.waitUntil(

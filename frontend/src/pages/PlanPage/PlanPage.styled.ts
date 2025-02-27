@@ -13,6 +13,7 @@ export const PlanPageLayout = styled.section`
 export const HorizontalLine = styled.div`
   width: 100%;
   height: 1.2rem;
+  padding: 0.2rem 0;
   background-color: ${({ theme }) => theme.colors.gray50};
 `;
 

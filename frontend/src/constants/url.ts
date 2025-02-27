@@ -46,6 +46,7 @@ export const API_URL = {
   authReissue: `${BASE_URL}/api/v1/auth/reissue`,
   updatePathTodo: (todoId: number, newPathId: number) =>
     `${BASE_URL}/api/v1/todos/path?todoId=${todoId}&newPathId=${newPathId}`,
+  notificationFCM: `${BASE_URL}/api/v1/notification/fcm/token`,
 };
 
 export const MOCK_API_URL = {
