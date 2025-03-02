@@ -1,6 +1,6 @@
-import { precacheAndRoute } from 'workbox-precaching';
+// import { precacheAndRoute } from 'workbox-precaching';
 
-precacheAndRoute(self.__WB_MANIFEST);
+// precacheAndRoute(self.__WB_MANIFEST);
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -29,20 +29,20 @@ self.addEventListener('push', async (event) => {
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
-self.addEventListener("notificationclick", (event) => {
+self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   const url = event.notification.data?.url || '/';
 
   event.waitUntil(
-    clients.matchAll({ type: "window" }).then((clientList) => {
+    clients.matchAll({ type: 'window' }).then((clientList) => {
       for (const client of clientList) {
-        if (client.url === url && "focus" in client) {
+        if (client.url === url && 'focus' in client) {
           return client.focus();
         }
       }
       if (clients.openWindow) {
         return clients.openWindow(url);
       }
-    })
+    }),
   );
 });
