@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     VitePWA({
+      strategies: 'injectManifest',
       filename: 'firebase-messaging-sw.js',
       registerType: 'autoUpdate',
       devOptions: {
