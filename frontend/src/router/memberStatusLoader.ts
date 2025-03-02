@@ -1,5 +1,6 @@
 import { redirect } from 'react-router';
 
+import { CustomError } from '@/api/error';
 import { getMemberStatus } from '@/api/member';
 import { DATE_TYPE } from '@/constants/config';
 import { queryClient } from '@/constants/queryClient';
@@ -18,6 +19,7 @@ const memberStatusLoader = async ({ request }: { request: Request }) => {
     const memberStatus = await queryClient.fetchQuery({
       queryKey: [QUERY_KEY.memberStatus],
       queryFn: getMemberStatus,
+      staleTime: 5 * 1000,
     });
 
     const url = new URL(request.url);
@@ -36,9 +38,18 @@ const memberStatusLoader = async ({ request }: { request: Request }) => {
     }
 
     return memberStatus;
-  } catch (error) {
-    // TODO: 로그인 만료 시 재로그인 로직 추가
-    return redirect('/landing');
+  } catch (err) {
+    const error = err as CustomError;
+
+    const isExpired =
+      error.errorCode === 'TOKEN_INVALID' ||
+      error.errorCode === 'TOKEN_BLACKLISTED' ||
+      error.errorCode === 'MISSING_TOKEN_IN_COOKIE' ||
+      error.errorCode === 'REFRESH_TOKEN_EXPIRED';
+
+    if (isExpired) {
+      return redirect('/landing');
+    }
   }
 };
 
