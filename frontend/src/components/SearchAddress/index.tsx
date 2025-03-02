@@ -24,19 +24,21 @@ const SearchAddress = ({ onSelectAddressMain, onSelectAddress, onClose }: Search
     setAddressInput(e.target.value);
   };
 
-  const handleSelectAddress = (address: SearchAddressType) => {
+  const handleSelectAddress = (searchAddress: SearchAddressType) => {
+    const { title, roadAddress, x_coordinate, y_coordinate } = searchAddress;
+
     if (onSelectAddress) {
       onSelectAddress({
-        title: address.title,
-        address: address.roadAddress,
-        coordinateX: address.x_coordinate,
-        coordinateY: address.y_coordinate,
+        title,
+        address: roadAddress,
+        coordinateX: x_coordinate,
+        coordinateY: y_coordinate,
       });
     } else if (onSelectAddressMain) {
       onSelectAddressMain({
-        title: address.title || address.roadAddress,
-        coordinateX: address.x_coordinate,
-        coordinateY: address.y_coordinate,
+        title: title || roadAddress,
+        coordinateX: x_coordinate,
+        coordinateY: y_coordinate,
       });
     }
 
