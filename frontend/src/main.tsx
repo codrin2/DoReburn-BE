@@ -22,33 +22,23 @@ const enableMocking = async () => {
   return await worker.start({ onUnhandledRequest: 'bypass' });
 };
 
-const registerServiceWorker = async () => {
-  if (!('serviceWorker' in navigator)) {
-    return;
-  }
-
-  await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-};
-
-registerServiceWorker().then(() => {
-  enableMocking().then(() => {
-    createRoot(document.getElementById('root')!).render(
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <RootErrorBoundary>
-          <ToastProvider>
-            <QueryProvider>
-              <OverlayProvider>
-                <Viewport>
-                  <CustomSuspense>
-                    <RouterProvider router={router} />
-                  </CustomSuspense>
-                </Viewport>
-              </OverlayProvider>
-            </QueryProvider>
-          </ToastProvider>
-        </RootErrorBoundary>
-      </ThemeProvider>,
-    );
-  });
+enableMocking().then(() => {
+  createRoot(document.getElementById('root')!).render(
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <RootErrorBoundary>
+        <ToastProvider>
+          <QueryProvider>
+            <OverlayProvider>
+              <Viewport>
+                <CustomSuspense>
+                  <RouterProvider router={router} />
+                </CustomSuspense>
+              </Viewport>
+            </OverlayProvider>
+          </QueryProvider>
+        </ToastProvider>
+      </RootErrorBoundary>
+    </ThemeProvider>,
+  );
 });

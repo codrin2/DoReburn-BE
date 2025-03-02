@@ -14,6 +14,7 @@ import useRedirectByMemberStatus from '@/hooks/useRedirectByMemberStatus';
 import HomeModal from '@/pages/PlanPage/components/HomeModal';
 
 const MainPage = () => {
+  // 알림 설정
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -37,6 +38,7 @@ const MainPage = () => {
 
   useRedirectByMemberStatus();
 
+  // 주소 검색
   const { isToday } = useQueryParamsDate();
   const [isSwitchAddress, toggle] = useReducer((prev) => !prev, false);
 

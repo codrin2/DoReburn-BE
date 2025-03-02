@@ -2,34 +2,8 @@ import { getToken } from 'firebase/messaging';
 
 import fetchClient from './fetchClient';
 
-import { messaging } from '@/config/settingFCM';
+import { getFirebaseMessaging } from '@/config/settingFCM';
 import { API_URL } from '@/constants/url';
-
-export const subscribePushNotification = async () => {
-  if (!('serviceWorker' in navigator)) {
-    return;
-  }
-
-  await Notification.requestPermission();
-
-  try {
-    const deviceToken = await getToken(messaging, {
-      vapidKey: import.meta.env.VITE_PUSH_NOTIFICATION_PUBLIC_KEY,
-    });
-
-    if (!deviceToken) {
-      return;
-    }
-
-    return fetchClient.post(API_URL.notificationFCM, {
-      body: {
-        deviceToken,
-      },
-    });
-  } catch (error) {
-    console.error('FCM 토큰 요청 중 오류 발생:', error);
-  }
-};
 
 interface SendNotificationProps {
   memberId: number;
@@ -38,8 +12,31 @@ interface SendNotificationProps {
   body: string;
 }
 
-export const sendNotification = ({ memberId, planId, title, body }: SendNotificationProps) => {
-  return fetchClient.post(API_URL.notification, {
+export const subscribePushNotification = async () => {
+  const messaging = await getFirebaseMessaging();
+
+  if (!messaging) {
+    return;
+  }
+
+  const deviceToken = await getToken(messaging, {
+    vapidKey: import.meta.env.VITE_PUSH_NOTIFICATION_PUBLIC_KEY,
+  });
+
+  return await fetchClient.post(API_URL.notificationFCM, {
+    body: {
+      deviceToken,
+    },
+  });
+};
+
+export const sendNotification = async ({
+  memberId,
+  planId,
+  title,
+  body,
+}: SendNotificationProps) => {
+  return await fetchClient.post(API_URL.notification, {
     body: { memberId, planId, title, body },
   });
 };
