@@ -30,8 +30,8 @@ const registerServiceWorker = async () => {
   await navigator.serviceWorker.register('/firebase-messaging-sw.js');
 };
 
-enableMocking().then(() => {
-  registerServiceWorker().then(() => {
+registerServiceWorker().then(() => {
+  enableMocking().then(() => {
     createRoot(document.getElementById('root')!).render(
       <ThemeProvider theme={theme}>
         <GlobalStyle />
