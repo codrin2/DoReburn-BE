@@ -19,7 +19,6 @@ const memberStatusLoader = async ({ request }: { request: Request }) => {
     const memberStatus = await queryClient.fetchQuery({
       queryKey: [QUERY_KEY.memberStatus],
       queryFn: getMemberStatus,
-      staleTime: 5 * 1000,
     });
 
     const url = new URL(request.url);
