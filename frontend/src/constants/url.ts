@@ -99,6 +99,7 @@ export const MOCK_API_URL = {
   planInfo: `${BASE_URL}/api/v1/plans/recent`,
   plan: `${BASE_URL}/api/v1/plans`,
   routeTodo: `${BASE_URL}/api/v1/routes/:planId/todos`,
+  finishPlan: `${BASE_URL}/api/v1/plans/move-complete`,
 
   // 피드백
   todayAchievement: `${BASE_URL}/api/v1/plans/feedbacks`,
