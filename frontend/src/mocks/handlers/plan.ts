@@ -38,6 +38,8 @@ const checkTodoHandler = async ({ request }: { request: Request }) => {
       }
     });
   });
+
+  return new HttpResponse(null, { status: 204 });
 };
 
 export const handlers = [
