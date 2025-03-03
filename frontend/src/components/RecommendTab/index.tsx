@@ -1,12 +1,12 @@
 import * as S from './RecommendTab.styled';
-import useAddTodoFromArchivedMutation from '../../hooks/useAddTodoFromArchivedMutation';
 import TodoEditItem from '../TodoEditItem';
+import useRecommendTodoListQuery from './hooks/useRecommendListQuery';
 
 import IconButton from '@/components/Button/IconButton';
 import Icon from '@/components/Icon';
 import { TODO_TOAST_MESSAGE } from '@/constants/message';
+import useAddTodoFromArchivedMutation from '@/hooks/todo/useAddTodoFromArchivedMutation';
 import useToast from '@/hooks/useToast';
-import useRecommendTodoListQuery from '@/pages/EditPage/hooks/useRecommendListQuery';
 import { TodoType } from '@/types/todo';
 
 interface RecommendTabProps {

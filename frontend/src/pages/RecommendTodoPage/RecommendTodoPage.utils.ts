@@ -1,6 +1,4 @@
-import { CATEGORY_OPTIONS, DIFFICULTY_OPTIONS } from '../EditPage/EditPage.constants';
-
-import { TODO_TYPE } from '@/constants/config';
+import { CATEGORY_OPTIONS, DIFFICULTY_OPTIONS, TODO_TYPE } from '@/constants/config';
 import { CategoryType, DifficultyType } from '@/types/filter';
 import { DateType } from '@/types/todo';
 

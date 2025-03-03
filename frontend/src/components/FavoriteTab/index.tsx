@@ -1,16 +1,16 @@
 import * as S from './FavoriteTab.styled';
-import IntersectionObserverScroll from '../../../../components/IntersectionObserverScroll/IntersectionObserverScroll';
-import useAddTodoBottomSheet from '../../hooks/useAddTodoBottomSheet';
-import useAddTodoFromArchivedMutation from '../../hooks/useAddTodoFromArchivedMutation';
-import useDeleteTodoMutation from '../../hooks/useDeleteTodoMutation';
-import useEditTodoBottomSheet from '../../hooks/useEditTodoBottomSheet';
-import useFavoriteTodoListQuery from '../../hooks/useFavoriteListQuery';
 import TodoEditItem from '../TodoEditItem';
+import useFavoriteTodoListQuery from './hooks/useFavoriteListQuery';
 
 import IconButton from '@/components/Button/IconButton';
 import Icon from '@/components/Icon';
+import IntersectionObserverScroll from '@/components/IntersectionObserverScroll';
 import { TODO_TYPE } from '@/constants/config';
 import { TODO_TOAST_MESSAGE } from '@/constants/message';
+import useAddTodoBottomSheet from '@/hooks/todo/useAddTodoBottomSheet';
+import useAddTodoFromArchivedMutation from '@/hooks/todo/useAddTodoFromArchivedMutation';
+import useDeleteTodoMutation from '@/hooks/todo/useDeleteTodoMutation';
+import useEditTodoBottomSheet from '@/hooks/todo/useEditTodoBottomSheet';
 import useToast from '@/hooks/useToast';
 import { TodoType } from '@/types/todo';
 

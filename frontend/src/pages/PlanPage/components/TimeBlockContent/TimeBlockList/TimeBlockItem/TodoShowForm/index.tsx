@@ -1,7 +1,7 @@
 import * as S from './TodoShowForm.styled';
 
 import RadioGroup from '@/components/RadioGroup';
-import { CATEGORY_OPTIONS, DIFFICULTY_OPTIONS } from '@/pages/EditPage/EditPage.constants';
+import { CATEGORY_OPTIONS, DIFFICULTY_OPTIONS } from '@/constants/config';
 import { Todo } from '@/types/todo';
 
 interface TodoShowFormProps {

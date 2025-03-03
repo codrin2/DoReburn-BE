@@ -2,17 +2,16 @@ import { useParams } from 'react-router';
 
 import * as S from './RouteTodoEditPage.styled';
 import { getPathDifficulty } from './RouteTodoEditPage.utils';
-import FavoriteTab from '../EditPage/components/FavoriteTab';
-import RecommendTab from '../EditPage/components/RecommendTab';
-import TodoTab from '../EditPage/components/TodoTab';
-import { TABS } from '../EditPage/EditPage.constants';
 import usePlanInfoQuery from '../PlanPage/hooks/usePlanInfoQuery';
 import { TRAFFIC_ICON } from '../PlanPage/PlanPage.constants';
 
+import FavoriteTab from '@/components/FavoriteTab';
 import Header from '@/components/Header';
 import Icon from '@/components/Icon';
+import RecommendTab from '@/components/RecommendTab';
 import { Tab } from '@/components/Tab';
-import { TODO_TYPE } from '@/constants/config';
+import TodoTab from '@/components/TodoTab';
+import { TABS, TODO_TYPE } from '@/constants/config';
 
 const RouteTodoEditPage = () => {
   const { planId } = useParams();

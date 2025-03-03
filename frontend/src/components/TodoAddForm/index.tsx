@@ -4,7 +4,7 @@ import * as S from './TodoAddForm.styled';
 
 import { TodoCreateParams } from '@/api/todo';
 import RadioGroup from '@/components/RadioGroup';
-import { CATEGORY_OPTIONS, DIFFICULTY_OPTIONS } from '@/pages/EditPage/EditPage.constants';
+import { CATEGORY_OPTIONS, DIFFICULTY_OPTIONS } from '@/constants/config';
 import { CategoryType, DifficultyType } from '@/types/filter';
 
 interface TodoAddFormProps {

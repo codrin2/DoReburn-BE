@@ -1,7 +1,7 @@
 import * as S from './CategoryRankItem.styled';
 
 import { CategoryRank } from '@/api/map';
-import { CATEGORY_MAPPER } from '@/pages/EditPage/EditPage.constants';
+import { CATEGORY_MAPPER } from '@/constants/config';
 
 interface CategoryRankItemProps {
   rankItem: CategoryRank;

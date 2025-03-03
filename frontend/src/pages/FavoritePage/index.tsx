@@ -1,8 +1,8 @@
-import FavoriteTab from '../EditPage/components/FavoriteTab';
 import RecommendTodoContainer from '../RecommendTodoPage/components/RecommendTodoContainer';
 import FavoriteHeader from './components/FavoriteHeader/FavoriteHeader';
 import * as S from './FavoritePage.styled';
 
+import FavoriteTab from '@/components/FavoriteTab';
 import { Tab } from '@/components/Tab';
 import { TODO_TYPE } from '@/constants/config';
 
