@@ -2,51 +2,329 @@
   "data": [
     {
       "isRecentlyUsed": true,
-      "totalTime": 70,
-      "totalSectionTime": 56,
+      "totalTime": 42,
+      "totalSectionTime": 39,
       "paths": [
         {
           "trafficType": "WALK",
-          "sectionTime": 8,
+          "sectionTime": 1,
           "subwayCode": null,
           "busNumber": null,
-          "busId": null,
+          "busType": null,
           "startName": null,
           "endName": null
         },
         {
           "trafficType": "SUBWAY",
-          "sectionTime": 20,
+          "sectionTime": 31,
           "subwayCode": 3,
           "busNumber": null,
-          "busId": null,
-          "startName": "학동",
-          "endName": "청구"
+          "busType": null,
+          "startName": "구파발역",
+          "endName": "압구정역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 8,
+          "subwayCode": null,
+          "busNumber": "147",
+          "busType": 11,
+          "startName": "압구정역4번출구",
+          "endName": "학동역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 2,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 42,
+      "totalSectionTime": 39,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "SUBWAY",
+          "sectionTime": 31,
+          "subwayCode": 3,
+          "busNumber": null,
+          "busType": null,
+          "startName": "구파발역",
+          "endName": "압구정역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 8,
+          "subwayCode": null,
+          "busNumber": "4211",
+          "busType": 12,
+          "startName": "압구정역4번출구",
+          "endName": "학동역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 2,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 42,
+      "totalSectionTime": 41,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "SUBWAY",
+          "sectionTime": 34,
+          "subwayCode": 3,
+          "busNumber": null,
+          "busType": null,
+          "startName": "구파발역",
+          "endName": "신사역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 0,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "SUBWAY",
+          "sectionTime": 3,
+          "subwayCode": 109,
+          "busNumber": null,
+          "busType": null,
+          "startName": "신사역",
+          "endName": "논현역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 0,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "SUBWAY",
+          "sectionTime": 4,
+          "subwayCode": 7,
+          "busNumber": null,
+          "busType": null,
+          "startName": "논현역",
+          "endName": "학동역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 44,
+      "totalSectionTime": 40,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "SUBWAY",
+          "sectionTime": 31,
+          "subwayCode": 3,
+          "busNumber": null,
+          "busType": null,
+          "startName": "구파발역",
+          "endName": "압구정역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 9,
+          "subwayCode": null,
+          "busNumber": "240",
+          "busType": 11,
+          "startName": "압구정역4번출구",
+          "endName": "학동역6번출구"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 3,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 47,
+      "totalSectionTime": 47,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "SUBWAY",
+          "sectionTime": 38,
+          "subwayCode": 3,
+          "busNumber": null,
+          "busType": null,
+          "startName": "구파발역",
+          "endName": "고속터미널역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 0,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "SUBWAY",
+          "sectionTime": 9,
+          "subwayCode": 7,
+          "busNumber": null,
+          "busType": null,
+          "startName": "고속터미널역",
+          "endName": "학동역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 47,
+      "totalSectionTime": 41,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "SUBWAY",
+          "sectionTime": 31,
+          "subwayCode": 3,
+          "busNumber": null,
+          "busType": null,
+          "startName": "구파발역",
+          "endName": "압구정역"
         },
         {
           "trafficType": "WALK",
           "sectionTime": 4,
           "subwayCode": null,
           "busNumber": null,
-          "busId": null,
+          "busType": null,
           "startName": null,
           "endName": null
         },
         {
           "trafficType": "BUS",
-          "sectionTime": 30,
+          "sectionTime": 10,
           "subwayCode": null,
-          "busNumber": 142,
-          "busId": null,
-          "startName": "학동",
-          "endName": "청구"
+          "busNumber": "463",
+          "busType": 11,
+          "startName": "현대아파트",
+          "endName": "학동역"
         },
         {
           "trafficType": "WALK",
-          "sectionTime": 8,
+          "sectionTime": 2,
           "subwayCode": null,
           "busNumber": null,
-          "busId": null,
+          "busType": null,
           "startName": null,
           "endName": null
         }
@@ -54,33 +332,643 @@
     },
     {
       "isRecentlyUsed": false,
-      "totalTime": 40,
-      "totalSectionTime": 35,
+      "totalTime": 48,
+      "totalSectionTime": 42,
       "paths": [
         {
-          "trafficType": "SUBWAY",
-          "sectionTime": 15,
-          "subwayCode": 2,
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
           "busNumber": null,
-          "busId": null,
-          "startName": "신도림",
-          "endName": "서울대입구"
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "SUBWAY",
+          "sectionTime": 34,
+          "subwayCode": 3,
+          "busNumber": null,
+          "busType": null,
+          "startName": "구파발역",
+          "endName": "신사역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 4,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
         },
         {
           "trafficType": "BUS",
-          "sectionTime": 20,
+          "sectionTime": 8,
           "subwayCode": null,
-          "busNumber": 5511,
-          "busId": null,
-          "startName": "서울대입구",
-          "endName": "중앙대학교 후문"
+          "busNumber": "241",
+          "busType": 11,
+          "startName": "신사역.푸른저축은행",
+          "endName": "학동역5번출구"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 2,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 56,
+      "totalSectionTime": 44,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "SUBWAY",
+          "sectionTime": 34,
+          "subwayCode": 3,
+          "busNumber": null,
+          "busType": null,
+          "startName": "구파발역",
+          "endName": "신사역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 0,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "SUBWAY",
+          "sectionTime": 5,
+          "subwayCode": 109,
+          "busNumber": null,
+          "busType": null,
+          "startName": "신사역",
+          "endName": "신논현역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 0,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "SUBWAY",
+          "sectionTime": 5,
+          "subwayCode": 9,
+          "busNumber": null,
+          "busType": null,
+          "startName": "신논현역",
+          "endName": "언주역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 12,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 60,
+      "totalSectionTime": 48,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "SUBWAY",
+          "sectionTime": 38,
+          "subwayCode": 3,
+          "busNumber": null,
+          "busType": null,
+          "startName": "구파발역",
+          "endName": "고속터미널역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 0,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "SUBWAY",
+          "sectionTime": 10,
+          "subwayCode": 9,
+          "busNumber": null,
+          "busType": null,
+          "startName": "고속터미널역",
+          "endName": "언주역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 12,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 66,
+      "totalSectionTime": 61,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 3,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 53,
+          "subwayCode": null,
+          "busNumber": "741",
+          "busType": 11,
+          "startName": "구파발역입구",
+          "endName": "신사역.푸른저축은행"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 0,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 8,
+          "subwayCode": null,
+          "busNumber": "241",
+          "busType": 11,
+          "startName": "신사역.푸른저축은행",
+          "endName": "학동역5번출구"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 2,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 66,
+      "totalSectionTime": 60,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 3,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 29,
+          "subwayCode": null,
+          "busNumber": "703",
+          "busType": 11,
+          "startName": "구파발역입구",
+          "endName": "숭례문"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 31,
+          "subwayCode": null,
+          "busNumber": "401",
+          "busType": 11,
+          "startName": "숭례문",
+          "endName": "학동역5번출구"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 2,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 70,
+      "totalSectionTime": 67,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 36,
+          "subwayCode": null,
+          "busNumber": "704",
+          "busType": 11,
+          "startName": "구파발역.롯데몰",
+          "endName": "숭례문"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 0,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 31,
+          "subwayCode": null,
+          "busNumber": "401",
+          "busType": 11,
+          "startName": "숭례문",
+          "endName": "학동역5번출구"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 2,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 70,
+      "totalSectionTime": 65,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 3,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 47,
+          "subwayCode": null,
+          "busNumber": "741",
+          "busType": 11,
+          "startName": "구파발역입구",
+          "endName": "순천향대학병원.한남오거리"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 0,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 10,
+          "subwayCode": null,
+          "busNumber": "140",
+          "busType": 11,
+          "startName": "순천향대학병원.한남오거리",
+          "endName": "신사역.푸른저축은행"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 0,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 8,
+          "subwayCode": null,
+          "busNumber": "241",
+          "busType": 11,
+          "startName": "신사역.푸른저축은행",
+          "endName": "학동역5번출구"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 2,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 71,
+      "totalSectionTime": 66,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 3,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 39,
+          "subwayCode": null,
+          "busNumber": "741",
+          "busType": 11,
+          "startName": "구파발역입구",
+          "endName": "남대문세무서"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 0,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 19,
+          "subwayCode": null,
+          "busNumber": "470",
+          "busType": 11,
+          "startName": "남대문세무서",
+          "endName": "신사역.푸른저축은행"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 0,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 8,
+          "subwayCode": null,
+          "busNumber": "241",
+          "busType": 11,
+          "startName": "신사역.푸른저축은행",
+          "endName": "학동역5번출구"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 2,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 72,
+      "totalSectionTime": 68,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 35,
+          "subwayCode": null,
+          "busNumber": "708",
+          "busType": 11,
+          "startName": "구파발역.롯데몰",
+          "endName": "서울역버스환승센터"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 33,
+          "subwayCode": null,
+          "busNumber": "401",
+          "busType": 11,
+          "startName": "서울역버스환승센터",
+          "endName": "학동역5번출구"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 2,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 73,
+      "totalSectionTime": 67,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 3,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 57,
+          "subwayCode": null,
+          "busNumber": "741",
+          "busType": 11,
+          "startName": "구파발역입구",
+          "endName": "지하철2호선강남역"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 1,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 10,
+          "subwayCode": null,
+          "busNumber": "3412",
+          "busType": 12,
+          "startName": "신논현역6번출구",
+          "endName": "학동역5번출구"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 2,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        }
+      ]
+    },
+    {
+      "isRecentlyUsed": false,
+      "totalTime": 73,
+      "totalSectionTime": 63,
+      "paths": [
+        {
+          "trafficType": "WALK",
+          "sectionTime": 3,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 47,
+          "subwayCode": null,
+          "busNumber": "741",
+          "busType": 11,
+          "startName": "구파발역입구",
+          "endName": "순천향대학병원.한남오거리"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 0,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 10,
+          "subwayCode": null,
+          "busNumber": "140",
+          "busType": 11,
+          "startName": "순천향대학병원.한남오거리",
+          "endName": "신사역.푸른저축은행"
         },
         {
           "trafficType": "WALK",
           "sectionTime": 5,
           "subwayCode": null,
           "busNumber": null,
-          "busId": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 6,
+          "subwayCode": null,
+          "busNumber": "401",
+          "busType": 11,
+          "startName": "영동시장.논현역1번출구",
+          "endName": "학동역5번출구"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 2,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
           "startName": null,
           "endName": null
         }
@@ -88,42 +976,51 @@
     },
     {
       "isRecentlyUsed": false,
-      "totalTime": 45,
-      "totalSectionTime": 40,
+      "totalTime": 75,
+      "totalSectionTime": 60,
       "paths": [
         {
           "trafficType": "WALK",
           "sectionTime": 3,
           "subwayCode": null,
           "busNumber": null,
-          "busId": null,
+          "busType": null,
           "startName": null,
           "endName": null
         },
         {
-          "trafficType": "SUBWAY",
-          "sectionTime": 15,
-          "subwayCode": 1,
-          "busNumber": null,
-          "busId": null,
-          "startName": "시청",
-          "endName": "노량진"
-        },
-        {
-          "trafficType": "SUBWAY",
-          "sectionTime": 25,
-          "subwayCode": 9,
-          "busNumber": null,
-          "busId": null,
-          "startName": "노량진",
-          "endName": "흑석"
+          "trafficType": "BUS",
+          "sectionTime": 53,
+          "subwayCode": null,
+          "busNumber": "741",
+          "busType": 11,
+          "startName": "구파발역입구",
+          "endName": "신사역.푸른저축은행"
         },
         {
           "trafficType": "WALK",
           "sectionTime": 2,
           "subwayCode": null,
           "busNumber": null,
-          "busId": null,
+          "busType": null,
+          "startName": null,
+          "endName": null
+        },
+        {
+          "trafficType": "BUS",
+          "sectionTime": 7,
+          "subwayCode": null,
+          "busNumber": "148",
+          "busType": 11,
+          "startName": "신사역3번출구",
+          "endName": "신사동고개"
+        },
+        {
+          "trafficType": "WALK",
+          "sectionTime": 10,
+          "subwayCode": null,
+          "busNumber": null,
+          "busType": null,
           "startName": null,
           "endName": null
         }
@@ -131,85 +1028,51 @@
     },
     {
       "isRecentlyUsed": false,
-      "totalTime": 45,
-      "totalSectionTime": 40,
+      "totalTime": 75,
+      "totalSectionTime": 68,
       "paths": [
         {
           "trafficType": "WALK",
           "sectionTime": 3,
           "subwayCode": null,
           "busNumber": null,
-          "busId": null,
+          "busType": null,
           "startName": null,
           "endName": null
         },
         {
-          "trafficType": "SUBWAY",
-          "sectionTime": 15,
-          "subwayCode": 1,
-          "busNumber": null,
-          "busId": null,
-          "startName": "시청",
-          "endName": "노량진"
-        },
-        {
-          "trafficType": "SUBWAY",
-          "sectionTime": 25,
-          "subwayCode": 9,
-          "busNumber": null,
-          "busId": null,
-          "startName": "노량진",
-          "endName": "흑석"
+          "trafficType": "BUS",
+          "sectionTime": 39,
+          "subwayCode": null,
+          "busNumber": "705",
+          "busType": 11,
+          "startName": "구파발역입구",
+          "endName": "신세계백화점"
         },
         {
           "trafficType": "WALK",
           "sectionTime": 2,
           "subwayCode": null,
           "busNumber": null,
-          "busId": null,
+          "busType": null,
           "startName": null,
           "endName": null
-        }
-      ]
-    },
-    {
-      "isRecentlyUsed": false,
-      "totalTime": 45,
-      "totalSectionTime": 40,
-      "paths": [
+        },
         {
-          "trafficType": "WALK",
-          "sectionTime": 3,
+          "trafficType": "BUS",
+          "sectionTime": 29,
           "subwayCode": null,
-          "busNumber": null,
-          "busId": null,
-          "startName": null,
-          "endName": null
-        },
-        {
-          "trafficType": "SUBWAY",
-          "sectionTime": 15,
-          "subwayCode": 1,
-          "busNumber": null,
-          "busId": null,
-          "startName": "시청",
-          "endName": "노량진"
-        },
-        {
-          "trafficType": "SUBWAY",
-          "sectionTime": 25,
-          "subwayCode": 9,
-          "busNumber": null,
-          "busId": null,
-          "startName": "노량진",
-          "endName": "흑석"
+          "busNumber": "401",
+          "busType": 11,
+          "startName": "남대문시장",
+          "endName": "학동역5번출구"
         },
         {
           "trafficType": "WALK",
           "sectionTime": 2,
           "subwayCode": null,
           "busNumber": null,
-          "busId": null,
+          "busType": null,
           "startName": null,
           "endName": null
         }
