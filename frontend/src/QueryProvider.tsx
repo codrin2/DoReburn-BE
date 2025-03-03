@@ -22,7 +22,7 @@ const QueryProvider = ({ children }: PropsWithChildren) => {
     () =>
       new QueryClient({
         defaultOptions: {
-          queries: { throwOnError: true },
+          queries: { throwOnError: true, retry: process.env.NODE_ENV === 'test' ? false : 3 },
           mutations: {
             throwOnError: (err) => {
               const error = err as CustomError;

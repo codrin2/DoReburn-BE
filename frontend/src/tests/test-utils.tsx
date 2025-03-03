@@ -1,34 +1,36 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { ThemeProvider } from 'styled-components';
 
 import theme from '../styles/theme';
 
+import CustomSuspense from '@/components/CustomSuspense/CustomSuspense';
+import RootErrorBoundary from '@/components/ErrorBoundary/RootErrorBoundary';
 import ToastProvider from '@/components/Toast/ToastProvider';
+import Viewport from '@/components/Viewport/Viewport';
 import { OverlayProvider } from '@/providers/OverlayProvider';
 import GlobalStyle from '@/styles/GlobalStyle';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 0,
-    },
-  },
-});
+import QueryProvider from '@/QueryProvider';
 
 const wrapper = ({ children }: { children: React.ReactNode }) => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <RootErrorBoundary>
         <ToastProvider>
-          <OverlayProvider>
-            <MemoryRouter initialEntries={['/']}>{children}</MemoryRouter>
-          </OverlayProvider>
+          <QueryProvider>
+            <OverlayProvider>
+              <Viewport>
+                <CustomSuspense>
+                  <MemoryRouter initialEntries={['/']}>{children}</MemoryRouter>
+                </CustomSuspense>
+              </Viewport>
+            </OverlayProvider>
+          </QueryProvider>
         </ToastProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+      </RootErrorBoundary>
+    </ThemeProvider>
   );
 };
 
