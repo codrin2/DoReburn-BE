@@ -50,6 +50,8 @@ const memberStatusLoader = async ({ request }: { request: Request }) => {
     if (isExpired) {
       return redirect('/landing');
     }
+
+    throw error;
   }
 };
 
