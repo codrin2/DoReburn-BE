@@ -39,6 +39,13 @@ const applyCheckStatus = (newTodo: RecommendTodo) => {
   );
 };
 
+const getNewTodo = (todoId: number) => {
+  const favoriteTodo = FAVORITE_TODO.data.find((todo) => todo.todoId === todoId) as RecommendTodo;
+  const recommendTodo = RECOMMEND_TODO.data.find((todo) => todo.todoId === todoId) as RecommendTodo;
+
+  return favoriteTodo ? favoriteTodo : recommendTodo;
+};
+
 const getTodayTodoHandler = () => {
   return HttpResponse.json(TODAY_TODO);
 };
@@ -217,10 +224,14 @@ const addTodoFromArchivedHandler = async ({
   request: Request;
 }) => {
   const requestParams = params;
-  const newTodo = await request.json();
+  const { todoId } = await request.json();
 
   if (requestParams.todoType === 'PATH') {
     /** 경로별 할 일 */
+    const newTodo = getNewTodo(todoId);
+
+    if (!newTodo) return;
+
     ROUTE_TODO_DATA.data.push({
       ...newTodo,
       todoId: ROUTE_TODO_DATA.data.length + 1,
@@ -231,6 +242,10 @@ const addTodoFromArchivedHandler = async ({
     return HttpResponse.json(newTodo);
   } else if (requestParams.todoType === 'TODAY') {
     /** 오늘 할 일 */
+    const newTodo = getNewTodo(todoId);
+
+    if (!newTodo) return;
+
     TODAY_TODO.data.push({
       ...newTodo,
       todoId: TODAY_TODO.data.length + 1,
@@ -241,6 +256,10 @@ const addTodoFromArchivedHandler = async ({
     return HttpResponse.json(newTodo);
   } else if (requestParams.todoType === 'TOMORROW') {
     /** 내일 할 일 */
+    const newTodo = getNewTodo(todoId);
+
+    if (!newTodo) return;
+
     TOMORROW_TODO.data.push({
       ...newTodo,
       todoId: TOMORROW_TODO.data.length + 1,
@@ -251,6 +270,10 @@ const addTodoFromArchivedHandler = async ({
     return HttpResponse.json(newTodo);
   } else if (requestParams.todoType === 'SAVE') {
     /** 즐겨찾기 */
+    const newTodo = getNewTodo(todoId);
+
+    if (!newTodo) return;
+
     FAVORITE_TODO.data.push({
       ...newTodo,
       todoId: FAVORITE_TODO.data.length + 1,
