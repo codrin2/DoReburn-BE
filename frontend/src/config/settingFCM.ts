@@ -14,7 +14,7 @@ const app = initializeApp(firebaseConfig);
 
 export const isPushSupported = () =>
   'Notification' in window &&
-  typeof Notification === 'undefined' &&
+  typeof Notification !== 'undefined' &&
   'serviceWorker' in navigator &&
   'PushManager' in window;
 
