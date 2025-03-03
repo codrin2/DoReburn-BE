@@ -47,8 +47,7 @@ const getNewTodo = (todoId: number) => {
 };
 
 const getTodayTodoHandler = () => {
-  return new HttpResponse(JSON.stringify({ errorCode: 'TODO_NOT_FOUND' }), { status: 404 });
-  // return HttpResponse.json(TODAY_TODO);
+  return HttpResponse.json(TODAY_TODO);
 };
 
 const getTomorrowTodoHandler = () => {
