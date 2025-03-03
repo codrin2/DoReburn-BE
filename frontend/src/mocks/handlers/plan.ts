@@ -25,9 +25,25 @@ const cancelPlanHandler = () => {
   return new HttpResponse(null, { status: 204 });
 };
 
+const checkTodoHandler = async ({ request }: { request: Request }) => {
+  const { isCompleted } = await request.json();
+
+  const url = new URL(request.url);
+  const todoId = url.searchParams.get('todoId');
+
+  PLAN_DATA.data.paths.forEach((path) => {
+    path.todos.forEach((todo) => {
+      if (todo.todoId === Number(todoId)) {
+        todo.isDone = isCompleted;
+      }
+    });
+  });
+};
+
 export const handlers = [
   http.get(MOCK_API_URL.planInfo, getPlanInfoHandler),
   http.post(MOCK_API_URL.plan, createPlanHandler),
   http.delete(MOCK_API_URL.plan, cancelPlanHandler),
   http.patch(MOCK_API_URL.finishPlan, finishPlanHandler),
+  http.patch(MOCK_API_URL.checkTodo, checkTodoHandler),
 ];

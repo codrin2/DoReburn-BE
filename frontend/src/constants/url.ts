@@ -98,7 +98,8 @@ export const MOCK_API_URL = {
   // 경로별 할 일
   planInfo: `${BASE_URL}/api/v1/plans/recent`,
   plan: `${BASE_URL}/api/v1/plans`,
-  routeTodo: `${BASE_URL}/api/v1/routes/:planId/todos`,
+  routeTodo: `${BASE_URL}/api/v1/todos/path`,
+  checkTodo: `${BASE_URL}/api/v1/todos/check`,
   finishPlan: `${BASE_URL}/api/v1/plans/move-complete`,
 
   // 피드백

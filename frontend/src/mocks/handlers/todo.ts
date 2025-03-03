@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
+import PLAN_DATA from '../data/planInfo.json';
 import FAVORITE_TODO from '../data/todo/favorite.json';
 import PERSONALIZED_TODO from '../data/todo/personalized.json';
 import RECOMMEND_TODO from '../data/todo/recommend.json';
@@ -13,7 +14,6 @@ import { TodoType } from '@/types/todo';
 
 interface TodoCreateParams {
   todoType: TodoType;
-  pathId?: string;
 }
 
 interface TodoDeleteParams {
@@ -226,15 +226,19 @@ const addTodoFromArchivedHandler = async ({
   const requestParams = params;
   const { todoId } = await request.json();
 
-  if (requestParams.todoType === 'PATH') {
+  const url = new URL(request.url);
+  const pathId = url.searchParams.get('pathId');
+
+  if (requestParams.todoType === 'PATH' && pathId) {
     /** 경로별 할 일 */
     const newTodo = getNewTodo(todoId);
 
     if (!newTodo) return;
 
-    ROUTE_TODO_DATA.data.push({
-      ...newTodo,
-      todoId: ROUTE_TODO_DATA.data.length + 1,
+    PLAN_DATA.data.paths.forEach((path) => {
+      if (path.pathId === Number(pathId)) {
+        (path.todos as RecommendTodo[]).push(newTodo);
+      }
     });
 
     applyCheckStatus(newTodo);
@@ -285,8 +289,19 @@ const addTodoFromArchivedHandler = async ({
   }
 };
 
-const getRouteTodoListHandler = () => {
-  return HttpResponse.json(ROUTE_TODO_DATA);
+const getRouteTodoListHandler = ({ request }: { request: Request }) => {
+  const url = new URL(request.url);
+  const pathId = url.searchParams.get('pathId');
+
+  const routeTodo = {
+    data: PLAN_DATA.data.paths.find((path) => path.pathId === Number(pathId))?.todos,
+  };
+
+  if (!routeTodo.data) {
+    return HttpResponse.json({ error: 'pathId not found' }, { status: 404 });
+  }
+
+  return HttpResponse.json(routeTodo);
 };
 
 export const handlers = [
