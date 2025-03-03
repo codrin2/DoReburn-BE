@@ -4,10 +4,6 @@ import { subscribePushNotification } from '@/api/notification';
 import { isPushSupported } from '@/config/settingFCM';
 
 const registerServiceWorker = async () => {
-  if (!('serviceWorker' in navigator)) {
-    return;
-  }
-
   await navigator.serviceWorker.register('/firebase-messaging-sw.js');
 };
 
