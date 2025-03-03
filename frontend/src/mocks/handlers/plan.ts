@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import MEMBER_STATUS from '../data/memberStatus.json';
+import MEMBER_STATUS from '../data/member/memberStatus.json';
 import PLAN_DATA from '../data/planInfo.json';
 
 import { MOCK_API_URL } from '@/constants/url';

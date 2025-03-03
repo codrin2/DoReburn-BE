@@ -1,8 +1,8 @@
 import { http, HttpResponse } from 'msw';
 
-import MEMBER_ADDRESS from '../data/memberAddress.json';
-import MEMBER_INFO from '../data/memberInfo.json';
-import MEMBER_STATUS from '../data/memberStatus.json';
+import MEMBER_ADDRESS from '../data/member/memberAddress.json';
+import MEMBER_INFO from '../data/member/memberInfo.json';
+import MEMBER_STATUS from '../data/member/memberStatus.json';
 
 import { MOCK_API_URL } from '@/constants/url';
 

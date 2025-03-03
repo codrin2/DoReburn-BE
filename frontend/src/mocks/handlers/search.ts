@@ -1,5 +1,3 @@
-// src/mocks/handlers/search.ts
-
 import { http, HttpResponse } from 'msw';
 
 import ADDRESS_DATA from '../data/address.json';
