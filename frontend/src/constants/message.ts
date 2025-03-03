@@ -27,7 +27,6 @@ export const ERROR_MESSAGE: Record<ErrorCode | clientErrorType, string> = {
   MEMBER_NOT_FOUND: '회원 정보를 찾을 수 없어요. 다시 로그인해 주세요.',
   TODO_NOT_FOUND: '주변 사용자의 할 일을 찾을 수 없어요.',
   SAVE_TODO_NOT_FOUND_FROM_TARGET_PARENT: '해당 할 일이 즐겨찾기에 없습니다.',
-  TOKEN_EXPIRED: '로그인 세션이 만료되었어요. 다시 로그인해 주세요.',
 
   INVALID_MEMBER_STATUS: '현재 상태에서는 이 작업을 수행할 수 없어요.',
   TODO_LIMIT_EXCEEDED: '계획한 할 일의 개수가 너무 많아요!',
@@ -46,8 +45,9 @@ export const ERROR_MESSAGE: Record<ErrorCode | clientErrorType, string> = {
   NOT_FOUND_PLAN: '계획 정보를 찾을 수 없어요.',
   INVALID_MOOD: '잘못된 기분 형식입니다.',
 
+  TOKEN_EXPIRED: '로그인 세션이 만료되었어요. 다시 로그인해 주세요.',
   TOKEN_INVALID: '유효하지 않은 인증 정보입니다. 다시 로그인해 주세요.',
-  TOKEN_BLACKLISTED: '해당 인증 정보는 차단되었어요. 다시 로그인해 주세요.',
+  TOKEN_BLACKLISTED: '차단된 인증 정보입니다. 관리자에게 문의해주세요.',
   MISSING_TOKEN_IN_COOKIE: '인증 정보가 없어요. 다시 로그인해 주세요.',
   REFRESH_TOKEN_EXPIRED: '로그인 세션이 만료되었어요. 다시 로그인해 주세요.',
 

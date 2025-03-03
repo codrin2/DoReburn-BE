@@ -41,6 +41,7 @@ const memberStatusLoader = async ({ request }: { request: Request }) => {
     const error = err as CustomError;
 
     const isExpired =
+      error.errorCode === 'TOKEN_EXPIRED' ||
       error.errorCode === 'TOKEN_INVALID' ||
       error.errorCode === 'TOKEN_BLACKLISTED' ||
       error.errorCode === 'MISSING_TOKEN_IN_COOKIE' ||
