@@ -6,7 +6,7 @@ import { AddressMainProps, AddressOnboardingProps } from './SearchAddress.types'
 import SearchAddressHeader from './SearchAddressHeader';
 import SearchAddressResult from './SearchAddressResult';
 import SearchAddressSearchBar from './SearchAddressSearchBar';
-import ShortcutAddress from './ShortcutAddress/ShortcutAddress';
+import ShortcutAddress from './ShortcutAddress';
 
 import { SearchAddress as SearchAddressType } from '@/api/search';
 
