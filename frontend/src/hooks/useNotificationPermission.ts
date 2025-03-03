@@ -4,7 +4,9 @@ import { subscribePushNotification } from '@/api/notification';
 import { isPushSupported } from '@/config/settingFCM';
 
 const registerServiceWorker = async () => {
-  await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+  const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+
+  await registration.update(); // service-worker 갱신
 };
 
 const useNotificationPermission = (openModal: () => void) => {
