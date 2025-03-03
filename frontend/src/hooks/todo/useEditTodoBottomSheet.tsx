@@ -1,6 +1,6 @@
 import useEditTodoMutation from './useEditTodoMutation';
-import TodoEditForm from '../components/TodoEditForm';
 
+import TodoEditForm from '@/components/TodoEditForm';
 import useOverlay from '@/hooks/useOverlay';
 import { Todo, TodoType } from '@/types/todo';
 

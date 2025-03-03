@@ -8,14 +8,14 @@ import { getTodoType } from '../../RecommendTodoPage.utils';
 
 import IconButton from '@/components/Button/IconButton';
 import Icon from '@/components/Icon';
-import IntersectionObserverScroll from '@/components/IntersectionObserverScroll/IntersectionObserverScroll';
+import IntersectionObserverScroll from '@/components/IntersectionObserverScroll';
+import TodoEditItem from '@/components/TodoEditItem';
 import { TODO_TOAST_MESSAGE } from '@/constants/message';
+import useAddTodoFromArchivedMutation from '@/hooks/todo/useAddTodoFromArchivedMutation';
 import useMemberInfoQuery from '@/hooks/useMemberInfoQuery';
 import useOverlay from '@/hooks/useOverlay';
 import useQueryParamsDate from '@/hooks/useQueryParamsDate';
 import useToast from '@/hooks/useToast';
-import TodoEditItem from '@/pages/EditPage/components/TodoEditItem';
-import useAddTodoFromArchivedMutation from '@/pages/EditPage/hooks/useAddTodoFromArchivedMutation';
 import { CategoryType, DifficultyType } from '@/types/filter';
 
 interface RecommendTodoContainerProps {

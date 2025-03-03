@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
-import NEARBY_USERS_DATA from '../data/nearbyUser.json';
-import TODO_DETAIL_DATA from '../data/todoDetail.json';
+import NEARBY_USERS_DATA from '../data/map/nearbyUser.json';
+import TODO_DETAIL_DATA from '../data/map/todoDetail.json';
 
 import { MOCK_API_URL } from '@/constants/url';
 

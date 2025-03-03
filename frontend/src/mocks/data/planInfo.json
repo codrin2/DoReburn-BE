@@ -1,156 +1,71 @@
 {
   "data": {
-    "planId": 12,
-    "totalSectionTime": 83,
-    "createdAt": "2025-01-11T07:38:34.543205",
+    "planId": 1085,
+    "totalSectionTime": 39,
+    "createdAt": "2025-03-03T12:45:11.015055",
     "paths": [
       {
-        "pathId": 27,
+        "pathId": 2738,
         "trafficType": "SUBWAY",
-        "sectionTime": 20,
-        "subwayCode": 7,
+        "sectionTime": 31,
+        "subwayCode": 3,
         "busNumber": null,
-        "startName": "상현역",
-        "endName": "강남역",
+        "busType": null,
+        "startName": "구파발역",
+        "endName": "압구정역",
         "todos": [
           {
+            "todoId": 3926,
             "isDone": false,
-            "title": "영단어 듣기",
-            "memo": "https://www.youtube.com/watch?v=XYYys4QTvE8",
+            "title": "영어 유튜브 보기",
             "category": "ENGLISH",
-            "difficulty": "EASY"
+            "difficulty": "NORMAL",
+            "memo": "어쩌구누"
           },
           {
+            "todoId": 3927,
             "isDone": false,
-            "title": "노래 듣기",
-            "memo": "팝송 노래 가사 외우기",
-            "category": "ENGLISH",
-            "difficulty": "NORMAL"
-          },
-          {
-            "isDone": false,
-            "title": "오디오북 듣기",
-            "memo": null,
+            "title": "TED 강연 보기",
             "category": "LANGUAGE",
-            "difficulty": "HARD"
+            "difficulty": "NORMAL",
+            "memo": ""
+          },
+          {
+            "todoId": 3928,
+            "isDone": false,
+            "title": "새로 읽을 책 찾아보기r",
+            "category": "READING",
+            "difficulty": "EASY",
+            "memo": ""
+          },
+          {
+            "todoId": 3929,
+            "isDone": false,
+            "title": "새로 읽을 책 찾아보기",
+            "category": "READING",
+            "difficulty": "EASY",
+            "memo": null
+          },
+          {
+            "todoId": 3930,
+            "isDone": false,
+            "title": "새로 분야의 책 도전하기",
+            "category": "READING",
+            "difficulty": "HARD",
+            "memo": null
           }
         ]
       },
       {
-        "pathId": 28,
+        "pathId": 2739,
         "trafficType": "BUS",
-        "sectionTime": 63,
+        "sectionTime": 8,
         "subwayCode": null,
-        "busNumber": "강남",
-        "startName": "강남",
-        "endName": "논현",
+        "busNumber": "147",
+        "busType": 11,
+        "startName": "압구정역4번출구",
+        "endName": "학동역",
         "todos": []
-      },
-      {
-        "pathId": 29,
-        "trafficType": "BUS",
-        "sectionTime": 32,
-        "subwayCode": null,
-        "busNumber": "강남",
-        "startName": "강남",
-        "endName": "논현",
-        "todos": [
-          {
-            "isDone": false,
-            "title": "영단어 말하기",
-            "memo": "hello let me introduce myself",
-            "category": "ENGLISH",
-            "difficulty": "EASY"
-          },
-          {
-            "isDone": false,
-            "title": "영단어 말하기",
-            "memo": "hello let me introduce myself",
-            "category": "ENGLISH",
-            "difficulty": "EASY"
-          }
-        ]
-      },
-      {
-        "pathId": 30,
-        "trafficType": "SUBWAY",
-        "sectionTime": 20,
-        "subwayCode": 7,
-        "busNumber": null,
-        "startName": "상현역",
-        "endName": "강남역",
-        "todos": [
-          {
-            "isDone": false,
-            "title": "영단어 말하기",
-            "memo": "hello let me introduce myself",
-            "category": "ENGLISH",
-            "difficulty": "EASY"
-          },
-          {
-            "isDone": false,
-            "title": "영단어 말하기",
-            "memo": "hello let me introduce myself",
-            "category": "ENGLISH",
-            "difficulty": "EASY"
-          },
-          {
-            "isDone": false,
-            "title": "영단어 말하기",
-            "memo": "hello let me introduce myself",
-            "category": "ENGLISH",
-            "difficulty": "EASY"
-          },
-          {
-            "isDone": false,
-            "title": "영단어 말하기",
-            "memo": "hello let me introduce myself",
-            "category": "ENGLISH",
-            "difficulty": "EASY"
-          },
-          {
-            "isDone": false,
-            "title": "영단어 말하기",
-            "memo": "hello let me introduce myself",
-            "category": "ENGLISH",
-            "difficulty": "EASY"
-          },
-          {
-            "isDone": false,
-            "title": "영단어 말하기",
-            "memo": "hello let me introduce myself",
-            "category": "ENGLISH",
-            "difficulty": "EASY"
-          },
-          {
-            "isDone": false,
-            "title": "영단어 말하기",
-            "memo": "hello let me introduce myself",
-            "category": "ENGLISH",
-            "difficulty": "EASY"
-          },
-          {
-            "isDone": false,
-            "title": "영단어 말하기",
-            "memo": "hello let me introduce myself",
-            "category": "ENGLISH",
-            "difficulty": "EASY"
-          },
-          {
-            "isDone": false,
-            "title": "영단어 말하기",
-            "memo": "hello let me introduce myself",
-            "category": "ENGLISH",
-            "difficulty": "EASY"
-          },
-          {
-            "isDone": false,
-            "title": "영단어 말하기",
-            "memo": "hello let me introduce myself",
-            "category": "ENGLISH",
-            "difficulty": "EASY"
-          }
-        ]
       }
     ]
   }

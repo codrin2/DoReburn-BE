@@ -1,7 +1,13 @@
 import * as S from './TodoEditItem.styled';
 
-import { CATEGORY_MAPPER, DIFFICULTY_MAPPER } from '@/pages/EditPage/EditPage.constants';
+import { CATEGORY_MAPPER } from '@/constants/config';
 import { Todo } from '@/types/todo';
+
+const DIFFICULTY_MAPPER = {
+  EASY: '쉬움',
+  NORMAL: '보통',
+  HARD: '어려움',
+} as const;
 
 interface TodoEditItemProps {
   todo: Todo;

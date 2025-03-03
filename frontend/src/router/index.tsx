@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 
 import FlexPageLayout from './layout/FlexPageLayout';
+import MainLayout from './layout/MainLayout';
 import memberStatusLoader from './memberStatusLoader';
 
 import CustomSuspense from '@/components/CustomSuspense/CustomSuspense';
@@ -27,7 +28,7 @@ import {
 export const router = createBrowserRouter([
   {
     path: '/',
-    errorElement: <ErrorPage />,
+    element: <MainLayout />,
     children: [
       {
         path: '/landing',
@@ -53,6 +54,7 @@ export const router = createBrowserRouter([
           </CustomSuspense>
         ),
         loader: memberStatusLoader,
+        errorElement: <ErrorPage />,
       },
       {
         path: '/',
@@ -62,6 +64,7 @@ export const router = createBrowserRouter([
           </CustomSuspense>
         ),
         loader: memberStatusLoader,
+        errorElement: <ErrorPage />,
       },
       {
         path: '/edit',
@@ -97,6 +100,7 @@ export const router = createBrowserRouter([
               </CustomSuspense>
             ),
             loader: memberStatusLoader,
+            errorElement: <ErrorPage />,
           },
           {
             path: ':planId/todos/edit',
@@ -111,6 +115,8 @@ export const router = createBrowserRouter([
                 ),
               },
             ],
+            loader: memberStatusLoader,
+            errorElement: <ErrorPage />,
           },
         ],
       },
@@ -136,6 +142,7 @@ export const router = createBrowserRouter([
           </CustomSuspense>
         ),
         loader: memberStatusLoader,
+        errorElement: <ErrorPage />,
       },
       {
         path: '/map',

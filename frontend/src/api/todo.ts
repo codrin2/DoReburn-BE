@@ -144,12 +144,7 @@ export const getRecommendAllTodoList = async (params: RecommendAllTodoParams) =>
 
 export const addTodo = async ({ todoType, todo, planId }: TodoAddParams) => {
   const result = await fetchClient.post<TodoCreateResponse>(API_URL.addTodo(todoType, planId), {
-    body: {
-      title: todo.title,
-      category: todo.category,
-      difficulty: todo.difficulty,
-      memo: todo.memo,
-    },
+    body: { ...todo },
   });
 
   return result.data;

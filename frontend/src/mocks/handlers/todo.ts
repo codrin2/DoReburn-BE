@@ -1,57 +1,65 @@
 import { http, HttpResponse } from 'msw';
 
-import ARCHIVED_TODO_DATA from '../data/archivedTodo.json';
-import RECOMMEND_TODO_DATA from '../data/recommendTodo.json';
-import ROUTE_TODO_DATA from '../data/routeTodo.json';
-import TODO_DATA from '../data/todoData.json';
+import PLAN_DATA from '../data/planInfo.json';
+import FAVORITE_TODO from '../data/todo/favorite.json';
+import PERSONALIZED_TODO from '../data/todo/personalized.json';
+import RECOMMEND_TODO from '../data/todo/recommend.json';
+import ROUTE_TODO_DATA from '../data/todo/routeTodo.json';
+import TODAY_TODO from '../data/todo/today.json';
+import TOMORROW_TODO from '../data/todo/tomorrow.json';
 
+import { RecommendTodo } from '@/api/todo';
 import { MOCK_API_URL } from '@/constants/url';
+import { TodoType } from '@/types/todo';
 
 interface TodoCreateParams {
-  todoType: string;
-  planId?: string;
+  todoType: TodoType;
 }
 
 interface TodoDeleteParams {
   todoId: string;
-  planId?: string;
 }
 
 interface TodoEditParams {
   todoId: string;
-  planId?: string;
+  pathId?: string;
 }
 
-const getTodayTodoHandler = () => {
-  const todayTodo = { ...TODO_DATA, data: TODO_DATA.data.filter((todo) => todo.type === 'TODAY') };
+const applyCheckStatus = (newTodo: RecommendTodo) => {
+  FAVORITE_TODO.data = FAVORITE_TODO.data.map((todo) =>
+    todo.todoId === newTodo.todoId ? { ...todo, hasChild: true } : todo,
+  );
 
-  return HttpResponse.json(todayTodo);
+  PERSONALIZED_TODO.data = PERSONALIZED_TODO.data.map((todo) =>
+    todo.todoId === newTodo.todoId ? { ...todo, hasChild: true } : todo,
+  );
+
+  RECOMMEND_TODO.data = RECOMMEND_TODO.data.map((todo) =>
+    todo.todoId === newTodo.todoId ? { ...todo, hasChild: true } : todo,
+  );
+};
+
+const getNewTodo = (todoId: number) => {
+  const favoriteTodo = FAVORITE_TODO.data.find((todo) => todo.todoId === todoId) as RecommendTodo;
+  const recommendTodo = RECOMMEND_TODO.data.find((todo) => todo.todoId === todoId) as RecommendTodo;
+
+  return favoriteTodo ? favoriteTodo : recommendTodo;
+};
+
+const getTodayTodoHandler = () => {
+  return HttpResponse.json(TODAY_TODO);
 };
 
 const getTomorrowTodoHandler = () => {
-  const tomorrowTodo = {
-    ...TODO_DATA,
-    data: TODO_DATA.data.filter((todo) => todo.type === 'TOMORROW'),
-  };
-
-  return HttpResponse.json(tomorrowTodo);
+  return HttpResponse.json(TOMORROW_TODO);
 };
 
 const getFavoriteTodoHandler = () => {
-  const favoriteTodo = {
-    ...ARCHIVED_TODO_DATA,
-    data: ARCHIVED_TODO_DATA.data.filter((todo) => todo.type === 'favorite'),
-  };
-
-  return HttpResponse.json(favoriteTodo);
+  return HttpResponse.json(FAVORITE_TODO);
 };
 
 const getRecommendLimitTodoHandler = () => {
-  const recommendTodo = {
-    data: ARCHIVED_TODO_DATA.data.filter((todo) => todo.type === 'recommend').slice(0, 5),
-  };
-
-  return HttpResponse.json(recommendTodo);
+  return HttpResponse.json(PERSONALIZED_TODO);
 };
 
 const getRecommendAllTodoHandler = async ({ request }: { request: Request }) => {
@@ -66,13 +74,10 @@ const getRecommendAllTodoHandler = async ({ request }: { request: Request }) => 
     const difficultyList = difficulty.split(',');
 
     const filteredTodo = {
-      ...RECOMMEND_TODO_DATA,
-      data: {
-        categoryList: [...RECOMMEND_TODO_DATA.data.categoryList],
-        todoList: RECOMMEND_TODO_DATA.data.todoList.filter((todo) => {
-          return categoryList.includes(todo.category) && difficultyList.includes(todo.difficulty);
-        }),
-      },
+      ...RECOMMEND_TODO,
+      data: RECOMMEND_TODO.data.filter(
+        (todo) => categoryList.includes(todo.category) && difficultyList.includes(todo.difficulty),
+      ),
     };
 
     return HttpResponse.json(filteredTodo);
@@ -81,13 +86,8 @@ const getRecommendAllTodoHandler = async ({ request }: { request: Request }) => 
     const categoryList = category.split(',');
 
     const filteredTodo = {
-      ...RECOMMEND_TODO_DATA,
-      data: {
-        categoryList: [...RECOMMEND_TODO_DATA.data.categoryList],
-        todoList: RECOMMEND_TODO_DATA.data.todoList.filter((todo) => {
-          return categoryList.includes(todo.category);
-        }),
-      },
+      ...RECOMMEND_TODO,
+      data: RECOMMEND_TODO.data.filter((todo) => categoryList.includes(todo.category)),
     };
 
     return HttpResponse.json(filteredTodo);
@@ -96,22 +96,18 @@ const getRecommendAllTodoHandler = async ({ request }: { request: Request }) => 
     const difficultyList = difficulty.split(',');
 
     const filteredTodo = {
-      ...RECOMMEND_TODO_DATA,
-      data: {
-        categoryList: [...RECOMMEND_TODO_DATA.data.categoryList],
-        todoList: RECOMMEND_TODO_DATA.data.todoList.filter((todo) => {
-          return difficultyList.includes(todo.difficulty);
-        }),
-      },
+      ...RECOMMEND_TODO,
+      data: RECOMMEND_TODO.data.filter((todo) => difficultyList.includes(todo.difficulty)),
     };
 
     return HttpResponse.json(filteredTodo);
   }
 
   // 둘 다 없는 경우
-  return HttpResponse.json(RECOMMEND_TODO_DATA);
+  return HttpResponse.json(RECOMMEND_TODO);
 };
 
+/** 할 일 추가(바텀시트) */
 const addTodoHandler = async ({
   params,
   request,
@@ -122,37 +118,66 @@ const addTodoHandler = async ({
   const requestParams = params;
   const newTodo = await request.json();
 
-  if (requestParams.planId) {
+  if (requestParams.todoType === 'PATH') {
+    /** 경로별 할 일 */
     ROUTE_TODO_DATA.data.push({
       ...newTodo,
-      type: requestParams.todoType,
       todoId: ROUTE_TODO_DATA.data.length + 1,
     });
 
     return HttpResponse.json(newTodo);
+  } else if (requestParams.todoType === 'TODAY') {
+    /** 오늘 할 일 */
+    TODAY_TODO.data.push({
+      ...newTodo,
+      todoId: TODAY_TODO.data.length + 1,
+    });
+
+    return HttpResponse.json(newTodo);
+  } else if (requestParams.todoType === 'TOMORROW') {
+    /** 내일 할 일 */
+    TOMORROW_TODO.data.push({
+      ...newTodo,
+      todoId: TOMORROW_TODO.data.length + 1,
+    });
+
+    return HttpResponse.json(newTodo);
+  } else if (requestParams.todoType === 'SAVE') {
+    /** 즐겨찾기 */
+    FAVORITE_TODO.data.push({
+      ...newTodo,
+      todoId: FAVORITE_TODO.data.length + 1,
+    });
+
+    return HttpResponse.json(newTodo);
   }
-
-  TODO_DATA.data.push({
-    ...newTodo,
-    type: requestParams.todoType,
-    todoId: TODO_DATA.data.length + 1,
-  });
-
-  return HttpResponse.json(newTodo);
 };
 
-const deleteTodoHandler = ({ params }: { params: TodoDeleteParams }) => {
-  const { todoId, planId } = params;
+/** 할 일 삭제 */
+const deleteTodoHandler = ({ params, request }: { params: TodoDeleteParams; request: Request }) => {
+  const { todoId } = params;
 
-  if (planId) {
+  const url = new URL(request.url);
+  const todoType = url.searchParams.get('type');
+
+  if (todoType === 'PATH') {
+    /** 경로별 할 일 */
     ROUTE_TODO_DATA.data = ROUTE_TODO_DATA.data.filter((todo) => todo.todoId !== Number(todoId));
-  } else {
-    TODO_DATA.data = TODO_DATA.data.filter((todo) => todo.todoId !== Number(todoId));
+  } else if (todoType === 'TODAY') {
+    /** 오늘 할 일 */
+    TODAY_TODO.data = TODAY_TODO.data.filter((todo) => todo.todoId !== Number(todoId));
+  } else if (todoType === 'TOMORROW') {
+    /** 내일 할 일 */
+    TOMORROW_TODO.data = TOMORROW_TODO.data.filter((todo) => todo.todoId !== Number(todoId));
+  } else if (todoType === 'SAVE') {
+    /** 즐겨찾기 */
+    FAVORITE_TODO.data = FAVORITE_TODO.data.filter((todo) => todo.todoId !== Number(todoId));
   }
 
   return new HttpResponse(null, { status: 204 });
 };
 
+/** 할 일 수정 */
 const editTodoHandler = async ({
   params,
   request,
@@ -160,16 +185,31 @@ const editTodoHandler = async ({
   params: TodoEditParams;
   request: Request;
 }) => {
-  const { todoId, planId } = params;
+  const { todoId } = params;
   const newTodo = await request.json();
 
-  if (planId) {
+  const url = new URL(request.url);
+  const todoType = url.searchParams.get('type');
+
+  if (todoType === 'PATH') {
+    /** 경로별 할 일 */
     ROUTE_TODO_DATA.data = ROUTE_TODO_DATA.data.map((todo) =>
-      todo.todoId === Number(todoId) ? { ...newTodo, type: todo.type } : todo,
+      todo.todoId === Number(todoId) ? { ...newTodo } : todo,
     );
-  } else {
-    TODO_DATA.data = TODO_DATA.data.map((todo) =>
-      todo.todoId === Number(todoId) ? { ...newTodo, type: todo.type } : todo,
+  } else if (todoType === 'TODAY') {
+    /** 오늘 할 일 */
+    TODAY_TODO.data = TODAY_TODO.data.map((todo) =>
+      todo.todoId === Number(todoId) ? { ...newTodo } : todo,
+    );
+  } else if (todoType === 'TOMORROW') {
+    /** 내일 할 일 */
+    TOMORROW_TODO.data = TOMORROW_TODO.data.map((todo) =>
+      todo.todoId === Number(todoId) ? { ...newTodo } : todo,
+    );
+  } else if (todoType === 'SAVE') {
+    /** 즐겨찾기 */
+    FAVORITE_TODO.data = FAVORITE_TODO.data.map((todo) =>
+      todo.todoId === Number(todoId) ? { ...newTodo } : todo,
     );
   }
 
@@ -183,37 +223,85 @@ const addTodoFromArchivedHandler = async ({
   params: TodoCreateParams;
   request: Request;
 }) => {
-  const { todoType, planId } = params;
+  const requestParams = params;
   const { todoId } = await request.json();
 
-  const newTodo = ARCHIVED_TODO_DATA.data.find((todo) => todo.todoId === Number(todoId));
+  const url = new URL(request.url);
+  const pathId = url.searchParams.get('pathId');
 
-  if (newTodo === undefined) {
-    return new HttpResponse(
-      JSON.stringify({ message: '즐겨찾기 또는 추천에 해당하는 todo가 없습니다.' }),
-      {
-        status: 404,
-      },
-    );
-  }
+  if (requestParams.todoType === 'PATH' && pathId) {
+    /** 경로별 할 일 */
+    const newTodo = getNewTodo(todoId);
 
-  if (planId) {
-    ROUTE_TODO_DATA.data.push({
-      ...newTodo,
-      type: todoType,
-      todoId: ROUTE_TODO_DATA.data.length + 1,
+    if (!newTodo) return;
+
+    PLAN_DATA.data.paths.forEach((path) => {
+      if (path.pathId === Number(pathId)) {
+        (path.todos as RecommendTodo[]).push(newTodo);
+      }
     });
+
+    applyCheckStatus(newTodo);
+
+    return HttpResponse.json(newTodo);
+  } else if (requestParams.todoType === 'TODAY') {
+    /** 오늘 할 일 */
+    const newTodo = getNewTodo(todoId);
+
+    if (!newTodo) return;
+
+    TODAY_TODO.data.push({
+      ...newTodo,
+      todoId: TODAY_TODO.data.length + 1,
+    });
+
+    applyCheckStatus(newTodo);
+
+    return HttpResponse.json(newTodo);
+  } else if (requestParams.todoType === 'TOMORROW') {
+    /** 내일 할 일 */
+    const newTodo = getNewTodo(todoId);
+
+    if (!newTodo) return;
+
+    TOMORROW_TODO.data.push({
+      ...newTodo,
+      todoId: TOMORROW_TODO.data.length + 1,
+    });
+
+    applyCheckStatus(newTodo);
+
+    return HttpResponse.json(newTodo);
+  } else if (requestParams.todoType === 'SAVE') {
+    /** 즐겨찾기 */
+    const newTodo = getNewTodo(todoId);
+
+    if (!newTodo) return;
+
+    FAVORITE_TODO.data.push({
+      ...newTodo,
+      todoId: FAVORITE_TODO.data.length + 1,
+    });
+
+    applyCheckStatus(newTodo);
 
     return HttpResponse.json(newTodo);
   }
-
-  TODO_DATA.data.push({ ...newTodo, type: todoType, todoId: TODO_DATA.data.length + 1 });
-
-  return HttpResponse.json(newTodo);
 };
 
-const getRouteTodoListHandler = () => {
-  return HttpResponse.json(ROUTE_TODO_DATA);
+const getRouteTodoListHandler = ({ request }: { request: Request }) => {
+  const url = new URL(request.url);
+  const pathId = url.searchParams.get('pathId');
+
+  const routeTodo = {
+    data: PLAN_DATA.data.paths.find((path) => path.pathId === Number(pathId))?.todos,
+  };
+
+  if (!routeTodo.data) {
+    return HttpResponse.json({ error: 'pathId not found' }, { status: 404 });
+  }
+
+  return HttpResponse.json(routeTodo);
 };
 
 export const handlers = [
@@ -223,7 +311,7 @@ export const handlers = [
   http.get(MOCK_API_URL.recommendLimitTodo, getRecommendLimitTodoHandler),
   http.get(MOCK_API_URL.recommendAllTodo, getRecommendAllTodoHandler),
   http.post<TodoCreateParams>(MOCK_API_URL.addTodo, addTodoHandler),
-  http.delete(MOCK_API_URL.deleteTodo, deleteTodoHandler),
+  http.delete<TodoDeleteParams>(MOCK_API_URL.deleteTodo, deleteTodoHandler),
   http.patch<TodoEditParams>(MOCK_API_URL.editTodo, editTodoHandler),
   http.post<TodoCreateParams>(MOCK_API_URL.addTodoFromArchived, addTodoFromArchivedHandler),
   http.get(MOCK_API_URL.routeTodo, getRouteTodoListHandler),

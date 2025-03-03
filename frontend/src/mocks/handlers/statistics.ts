@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
-import DAY_STATISTICS_DATA from '../data/dayStatistics.json';
-import WEEK_STATISTICS_DATA from '../data/weekStatistics.json';
+import DAY_STATISTICS_DATA from '../data/statistics/dayStatistics.json';
+import WEEK_STATISTICS_DATA from '../data/statistics/weekStatistics.json';
 
 import { MOCK_API_URL } from '@/constants/url';
 

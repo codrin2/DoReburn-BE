@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getMessaging } from 'firebase/messaging';
+import { getMessaging, isSupported } from 'firebase/messaging';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -10,5 +10,16 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-export const app = initializeApp(firebaseConfig);
-export const messaging = getMessaging(app);
+const app = initializeApp(firebaseConfig);
+
+export const isPushSupported = () =>
+  'Notification' in window &&
+  typeof Notification !== 'undefined' &&
+  'serviceWorker' in navigator &&
+  'PushManager' in window;
+
+export const getFirebaseMessaging = async () => {
+  const supported = await isSupported();
+
+  return supported ? getMessaging(app) : null;
+};

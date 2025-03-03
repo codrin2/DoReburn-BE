@@ -23,6 +23,9 @@ export const ErrorTitle = styled.h1`
 
 export const ErrorSubTitle = styled.h2`
   ${({ theme }) => theme.fonts.headline17}
+  word-break: keep-all;
+  max-width: 36rem;
+  text-align: center;
 `;
 
 export const ErrorButton = styled.button`

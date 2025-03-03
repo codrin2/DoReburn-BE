@@ -4,7 +4,7 @@ import * as S from './FilterForm.styled';
 import { getFilterCategories, getFilterDifficulties } from '../../RecommendTodoPage.utils';
 
 import Icon from '@/components/Icon';
-import { CATEGORY_OPTIONS, DIFFICULTY_OPTIONS } from '@/pages/EditPage/EditPage.constants';
+import { CATEGORY_OPTIONS, DIFFICULTY_OPTIONS } from '@/constants/config';
 import { CategoryType, DifficultyType } from '@/types/filter';
 
 interface FilterFormProps {

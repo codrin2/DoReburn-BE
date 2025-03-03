@@ -1,4 +1,3 @@
-import { CATEGORY_OPTIONS } from '../EditPage/EditPage.constants';
 import CategoryRank from './components/CategoryRank';
 import useCategoryFilter from './hooks/useCategoryFilter';
 import useInitMap from './hooks/useInitMap';
@@ -13,7 +12,7 @@ import BottomSheet from '@/components/BottomSheet';
 import Header from '@/components/Header';
 import Icon from '@/components/Icon';
 import RadioGroup from '@/components/RadioGroup';
-import { MAP_ID } from '@/constants/config';
+import { CATEGORY_OPTIONS, MAP_ID } from '@/constants/config';
 import { TODO_TOAST_MESSAGE } from '@/constants/message';
 import useToast from '@/hooks/useToast';
 import { colors } from '@/styles/theme';

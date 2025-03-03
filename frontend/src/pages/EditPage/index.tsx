@@ -1,11 +1,11 @@
-import FavoriteTab from './components/FavoriteTab';
-import RecommendTab from './components/RecommendTab';
-import TodoTab from './components/TodoTab';
-import { TABS } from './EditPage.constants';
 import * as S from './EditPage.styled';
 
+import FavoriteTab from '@/components/FavoriteTab';
 import Header from '@/components/Header';
+import RecommendTab from '@/components/RecommendTab';
 import { Tab } from '@/components/Tab';
+import TodoTab from '@/components/TodoTab';
+import { TABS } from '@/constants/config';
 import useQueryParamsDate from '@/hooks/useQueryParamsDate';
 
 const EditPage = () => {

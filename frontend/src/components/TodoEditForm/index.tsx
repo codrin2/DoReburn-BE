@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 import * as S from './TodoEditForm.styled';
-import { CATEGORY_OPTIONS, DIFFICULTY_OPTIONS } from '../../EditPage.constants';
 
 import RadioGroup from '@/components/RadioGroup';
+import { CATEGORY_OPTIONS, DIFFICULTY_OPTIONS } from '@/constants/config';
 import { CategoryType, DifficultyType } from '@/types/filter';
 import { Todo } from '@/types/todo';
 
