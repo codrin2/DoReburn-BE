@@ -5,6 +5,7 @@ import MainLayout from './layout/MainLayout';
 import memberStatusLoader from './memberStatusLoader';
 
 import CustomSuspense from '@/components/CustomSuspense/CustomSuspense';
+import ErrorPage from '@/pages/ErrorPage';
 import RouteErrorPage from '@/pages/ErrorPage/RouteErrorPage';
 import {
   MainPage,
@@ -53,6 +54,7 @@ export const router = createBrowserRouter([
           </CustomSuspense>
         ),
         loader: memberStatusLoader,
+        errorElement: <ErrorPage />,
       },
       {
         path: '/',
@@ -62,6 +64,7 @@ export const router = createBrowserRouter([
           </CustomSuspense>
         ),
         loader: memberStatusLoader,
+        errorElement: <ErrorPage />,
       },
       {
         path: '/edit',
@@ -97,6 +100,7 @@ export const router = createBrowserRouter([
               </CustomSuspense>
             ),
             loader: memberStatusLoader,
+            errorElement: <ErrorPage />,
           },
           {
             path: ':planId/todos/edit',
@@ -111,6 +115,8 @@ export const router = createBrowserRouter([
                 ),
               },
             ],
+            loader: memberStatusLoader,
+            errorElement: <ErrorPage />,
           },
         ],
       },
@@ -136,6 +142,7 @@ export const router = createBrowserRouter([
           </CustomSuspense>
         ),
         loader: memberStatusLoader,
+        errorElement: <ErrorPage />,
       },
       {
         path: '/map',
