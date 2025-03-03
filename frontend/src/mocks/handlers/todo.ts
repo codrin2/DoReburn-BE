@@ -1,9 +1,13 @@
 import { http, HttpResponse } from 'msw';
 
 import ARCHIVED_TODO_DATA from '../data/archivedTodo.json';
-import RECOMMEND_TODO_DATA from '../data/recommendTodo.json';
+import FAVORITE_TODO from '../data/favorite.json';
+import PERSONALIZED_TODO from '../data/personalized.json';
+import RECOMMEND_TODO from '../data/recommend.json';
 import ROUTE_TODO_DATA from '../data/routeTodo.json';
+import TODAY_TODO from '../data/today.json';
 import TODO_DATA from '../data/todoData.json';
+import TOMORROW_TODO from '../data/tomorrow.json';
 
 import { MOCK_API_URL } from '@/constants/url';
 
@@ -23,35 +27,19 @@ interface TodoEditParams {
 }
 
 const getTodayTodoHandler = () => {
-  const todayTodo = { ...TODO_DATA, data: TODO_DATA.data.filter((todo) => todo.type === 'TODAY') };
-
-  return HttpResponse.json(todayTodo);
+  return HttpResponse.json(TODAY_TODO);
 };
 
 const getTomorrowTodoHandler = () => {
-  const tomorrowTodo = {
-    ...TODO_DATA,
-    data: TODO_DATA.data.filter((todo) => todo.type === 'TOMORROW'),
-  };
-
-  return HttpResponse.json(tomorrowTodo);
+  return HttpResponse.json(TOMORROW_TODO);
 };
 
 const getFavoriteTodoHandler = () => {
-  const favoriteTodo = {
-    ...ARCHIVED_TODO_DATA,
-    data: ARCHIVED_TODO_DATA.data.filter((todo) => todo.type === 'favorite'),
-  };
-
-  return HttpResponse.json(favoriteTodo);
+  return HttpResponse.json(FAVORITE_TODO);
 };
 
 const getRecommendLimitTodoHandler = () => {
-  const recommendTodo = {
-    data: ARCHIVED_TODO_DATA.data.filter((todo) => todo.type === 'recommend').slice(0, 5),
-  };
-
-  return HttpResponse.json(recommendTodo);
+  return HttpResponse.json(PERSONALIZED_TODO);
 };
 
 const getRecommendAllTodoHandler = async ({ request }: { request: Request }) => {
@@ -66,13 +54,10 @@ const getRecommendAllTodoHandler = async ({ request }: { request: Request }) => 
     const difficultyList = difficulty.split(',');
 
     const filteredTodo = {
-      ...RECOMMEND_TODO_DATA,
-      data: {
-        categoryList: [...RECOMMEND_TODO_DATA.data.categoryList],
-        todoList: RECOMMEND_TODO_DATA.data.todoList.filter((todo) => {
-          return categoryList.includes(todo.category) && difficultyList.includes(todo.difficulty);
-        }),
-      },
+      ...RECOMMEND_TODO,
+      data: RECOMMEND_TODO.data.filter(
+        (todo) => categoryList.includes(todo.category) && difficultyList.includes(todo.difficulty),
+      ),
     };
 
     return HttpResponse.json(filteredTodo);
@@ -81,13 +66,8 @@ const getRecommendAllTodoHandler = async ({ request }: { request: Request }) => 
     const categoryList = category.split(',');
 
     const filteredTodo = {
-      ...RECOMMEND_TODO_DATA,
-      data: {
-        categoryList: [...RECOMMEND_TODO_DATA.data.categoryList],
-        todoList: RECOMMEND_TODO_DATA.data.todoList.filter((todo) => {
-          return categoryList.includes(todo.category);
-        }),
-      },
+      ...RECOMMEND_TODO,
+      data: RECOMMEND_TODO.data.filter((todo) => categoryList.includes(todo.category)),
     };
 
     return HttpResponse.json(filteredTodo);
@@ -96,20 +76,15 @@ const getRecommendAllTodoHandler = async ({ request }: { request: Request }) => 
     const difficultyList = difficulty.split(',');
 
     const filteredTodo = {
-      ...RECOMMEND_TODO_DATA,
-      data: {
-        categoryList: [...RECOMMEND_TODO_DATA.data.categoryList],
-        todoList: RECOMMEND_TODO_DATA.data.todoList.filter((todo) => {
-          return difficultyList.includes(todo.difficulty);
-        }),
-      },
+      ...RECOMMEND_TODO,
+      data: RECOMMEND_TODO.data.filter((todo) => difficultyList.includes(todo.difficulty)),
     };
 
     return HttpResponse.json(filteredTodo);
   }
 
   // 둘 다 없는 경우
-  return HttpResponse.json(RECOMMEND_TODO_DATA);
+  return HttpResponse.json(RECOMMEND_TODO);
 };
 
 const addTodoHandler = async ({
