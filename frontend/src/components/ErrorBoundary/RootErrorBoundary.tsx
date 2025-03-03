@@ -2,6 +2,7 @@ import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { PropsWithChildren } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
+import { CustomError } from '@/api/error';
 import ErrorPage from '@/pages/ErrorPage';
 
 const RootErrorBoundary = ({ children }: PropsWithChildren) => {
@@ -10,7 +11,14 @@ const RootErrorBoundary = ({ children }: PropsWithChildren) => {
   return (
     <ErrorBoundary
       onReset={reset}
-      FallbackComponent={({ resetErrorBoundary }) => <ErrorPage onClick={resetErrorBoundary} />}
+      FallbackComponent={({ error, resetErrorBoundary }) => {
+        return (
+          <ErrorPage
+            message={error instanceof CustomError ? error.message : ''}
+            onClick={resetErrorBoundary}
+          />
+        );
+      }}
     >
       {children}
     </ErrorBoundary>

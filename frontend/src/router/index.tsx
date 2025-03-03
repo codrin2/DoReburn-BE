@@ -1,10 +1,10 @@
 import { createBrowserRouter } from 'react-router';
 
 import FlexPageLayout from './layout/FlexPageLayout';
+import MainLayout from './layout/MainLayout';
 import memberStatusLoader from './memberStatusLoader';
 
 import CustomSuspense from '@/components/CustomSuspense/CustomSuspense';
-import ErrorPage from '@/pages/ErrorPage';
 import RouteErrorPage from '@/pages/ErrorPage/RouteErrorPage';
 import {
   MainPage,
@@ -27,7 +27,7 @@ import {
 export const router = createBrowserRouter([
   {
     path: '/',
-    errorElement: <ErrorPage />,
+    element: <MainLayout />,
     children: [
       {
         path: '/landing',
