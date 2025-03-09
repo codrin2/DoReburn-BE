@@ -45,7 +45,8 @@ const memberStatusLoader = async ({ request }: { request: Request }) => {
       error.errorCode === 'TOKEN_INVALID' ||
       error.errorCode === 'TOKEN_BLACKLISTED' ||
       error.errorCode === 'MISSING_TOKEN_IN_COOKIE' ||
-      error.errorCode === 'REFRESH_TOKEN_EXPIRED';
+      error.errorCode === 'REFRESH_TOKEN_EXPIRED' ||
+      error.errorCode === 'TOKEN_MISSING';
 
     if (isExpired) {
       return redirect('/landing');
