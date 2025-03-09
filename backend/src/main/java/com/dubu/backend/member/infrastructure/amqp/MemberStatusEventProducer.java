@@ -1,6 +1,6 @@
-package com.dubu.backend.member.infra.amqp;
+package com.dubu.backend.member.infrastructure.amqp;
 
-import com.dubu.backend.member.config.MemberRabbitMQConfig;
+import com.dubu.backend.member.core.MemberRabbitMQConfig;
 import com.dubu.backend.member.dto.MemberStatusChangeDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

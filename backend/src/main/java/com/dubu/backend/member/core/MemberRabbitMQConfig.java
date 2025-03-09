@@ -1,4 +1,4 @@
-package com.dubu.backend.member.config;
+package com.dubu.backend.member.core;
 
 import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Value;

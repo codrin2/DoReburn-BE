@@ -15,10 +15,10 @@ import com.dubu.backend.member.dto.response.MemberStatusResponse;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.exception.MemberSavedAddressNotFoundException;
 import com.dubu.backend.member.exception.RedisUnavailableException;
-import com.dubu.backend.member.infra.repository.AddressRepository;
-import com.dubu.backend.member.infra.repository.LocationRedisRepository;
-import com.dubu.backend.member.infra.repository.MemberCategoryRepository;
-import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.member.infrastructure.repository.AddressRepository;
+import com.dubu.backend.member.infrastructure.repository.LocationRedisRepository;
+import com.dubu.backend.member.infrastructure.repository.MemberCategoryRepository;
+import com.dubu.backend.member.infrastructure.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.exception.PlanNotFoundException;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberFacade {
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
     private final MemberCategoryRepository memberCategoryRepository;

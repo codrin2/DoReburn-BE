@@ -1,9 +1,9 @@
-package com.dubu.backend.member.infra.client;
+package com.dubu.backend.member.infrastructure.client;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "naver.client")
-public record NaverApiConfig(
+public record NaverApiProperties(
         String clientId,
         String clientSecret
 ) {

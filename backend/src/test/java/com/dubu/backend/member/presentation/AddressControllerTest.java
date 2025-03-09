@@ -1,9 +1,9 @@
-package com.dubu.backend.member.api;
+package com.dubu.backend.member.presentation;
 
 import com.dubu.backend.global.config.WebConfig;
 import com.dubu.backend.global.interceptor.TokenInterceptor;
-import com.dubu.backend.member.application.PlaceService;
-import com.dubu.backend.member.dto.response.PlaceSearchResponse;
+import com.dubu.backend.member.application.AddressFacade;
+import com.dubu.backend.member.dto.response.AddressSearchResponse;
 import com.dubu.backend.member.exception.KakaoApiServerException;
 import com.dubu.backend.member.exception.NaverApiServerException;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(
-        controllers = PlaceController.class,
+        controllers = AddressController.class,
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
                         WebConfig.class,
@@ -34,13 +34,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 })
         })
 @DisplayName("PlaceController 테스트")
-class PlaceControllerTest {
+class AddressControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private PlaceService placeService;
+    private AddressFacade addressFacade;
 
     @Nested
     @DisplayName("[GET /places/search?query=XXX] 장소 검색")
@@ -51,12 +51,12 @@ class PlaceControllerTest {
         void it_returns_places() throws Exception {
             // given
             String query = "카페";
-            List<PlaceSearchResponse> mockResponse = List.of(
-                    new PlaceSearchResponse("카페 홍길동", "서울 강남구 테헤란로 427", 127.0453733, 37.5048676),
-                    new PlaceSearchResponse("카페 이순신", "서울 강남구 봉은사로 109", 127.0594931, 37.5057432)
+            List<AddressSearchResponse> mockResponse = List.of(
+                    new AddressSearchResponse("카페 홍길동", "서울 강남구 테헤란로 427", 127.0453733, 37.5048676),
+                    new AddressSearchResponse("카페 이순신", "서울 강남구 봉은사로 109", 127.0594931, 37.5057432)
             );
 
-            BDDMockito.given(placeService.searchPlaces(query)).willReturn(mockResponse);
+            BDDMockito.given(addressFacade.searchPlaces(query)).willReturn(mockResponse);
 
             // when & then
             mockMvc.perform(get("/places/search")
@@ -73,7 +73,7 @@ class PlaceControllerTest {
             // given
             String query = "카페";
             Mockito.doThrow(new NaverApiServerException())
-                    .when(placeService).searchPlaces(eq(query));
+                    .when(addressFacade).searchPlaces(eq(query));
 
             // when & then
             mockMvc.perform(get("/places/search")
@@ -89,7 +89,7 @@ class PlaceControllerTest {
             // given
             String query = "카페";
             Mockito.doThrow(new KakaoApiServerException())
-                    .when(placeService).searchPlaces(eq(query));
+                    .when(addressFacade).searchPlaces(eq(query));
 
             // when & then
             mockMvc.perform(get("/places/search")

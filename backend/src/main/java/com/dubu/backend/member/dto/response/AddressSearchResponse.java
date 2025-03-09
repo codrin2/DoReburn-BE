@@ -1,6 +1,6 @@
 package com.dubu.backend.member.dto.response;
 
-public record PlaceSearchResponse(
+public record AddressSearchResponse(
         String title,
         String roadAddress,
         Double x_coordinate,

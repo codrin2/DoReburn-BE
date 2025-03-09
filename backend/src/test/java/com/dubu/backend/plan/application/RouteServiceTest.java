@@ -2,7 +2,7 @@ package com.dubu.backend.plan.application;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.member.infrastructure.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Route;
 import com.dubu.backend.plan.domain.enums.TrafficType;

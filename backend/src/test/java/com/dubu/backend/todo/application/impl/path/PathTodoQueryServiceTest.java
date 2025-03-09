@@ -4,8 +4,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,8 +11,8 @@ import com.dubu.backend.global.domain.PageResponse;
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infra.repository.MemberCategoryRepository;
-import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.member.infrastructure.repository.MemberCategoryRepository;
+import com.dubu.backend.member.infrastructure.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.exception.PathNotFoundException;

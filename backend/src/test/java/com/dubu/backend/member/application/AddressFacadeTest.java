@@ -5,9 +5,9 @@ import com.dubu.backend.member.dto.response.KakaoPlaceApiResponse.DocumentsRespo
 import com.dubu.backend.member.dto.response.KakaoPlaceApiResponse.DocumentsResponse.RoadAddressResponse;
 import com.dubu.backend.member.dto.response.NaverPlaceApiResponse;
 import com.dubu.backend.member.dto.response.NaverPlaceApiResponse.NaverPlace;
-import com.dubu.backend.member.dto.response.PlaceSearchResponse;
-import com.dubu.backend.member.infra.client.KakaoPlaceApiClient;
-import com.dubu.backend.member.infra.client.NaverPlaceApiClient;
+import com.dubu.backend.member.dto.response.AddressSearchResponse;
+import com.dubu.backend.member.infrastructure.client.KakaoRoadAddressApi;
+import com.dubu.backend.member.infrastructure.client.NaverPlaceApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,15 +22,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @DisplayName("PlaceService 단위 테스트")
-class PlaceServiceTest {
+class AddressFacadeTest {
 
     @Mock
-    private NaverPlaceApiClient naverPlaceApiClient;
+    private NaverPlaceApi naverPlaceApi;
     @Mock
-    private KakaoPlaceApiClient kakaoPlaceApiClient;
+    private KakaoRoadAddressApi kakaoRoadAddressApi;
 
     @InjectMocks
-    private PlaceService placeService;
+    private AddressFacade addressFacade;
 
     @BeforeEach
     void setUp() {
@@ -62,11 +62,11 @@ class PlaceServiceTest {
 
             KakaoPlaceApiResponse kakaoMockResponse = new KakaoPlaceApiResponse(List.of(kakaoDoc1, kakaoDoc2));
 
-            given(naverPlaceApiClient.searchPlaces(query)).willReturn(naverMockResponse);
-            given(kakaoPlaceApiClient.searchPlaces(query)).willReturn(kakaoMockResponse);
+            given(naverPlaceApi.searchPlaces(query)).willReturn(naverMockResponse);
+            given(kakaoRoadAddressApi.searchPlaces(query)).willReturn(kakaoMockResponse);
 
             // when
-            List<PlaceSearchResponse> result = placeService.searchPlaces(query);
+            List<AddressSearchResponse> result = addressFacade.searchPlaces(query);
 
             // then
             assertThat(result).hasSize(4);

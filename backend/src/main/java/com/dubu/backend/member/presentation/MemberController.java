@@ -1,8 +1,8 @@
-package com.dubu.backend.member.api;
+package com.dubu.backend.member.presentation;
 
 import com.dubu.backend.global.anotation.Polling;
 import com.dubu.backend.global.domain.SuccessResponse;
-import com.dubu.backend.member.application.MemberService;
+import com.dubu.backend.member.application.MemberFacade;
 import com.dubu.backend.member.dto.MemberLocationDto;
 import com.dubu.backend.member.dto.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.dto.request.MemberOnboardingRequest;
@@ -22,13 +22,13 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RequiredArgsConstructor
 @RequestMapping("/members")
 public class MemberController implements MemberApi {
-    private final MemberService memberService;
+    private final MemberFacade memberFacade;
 
     @GetMapping
     public SuccessResponse<MemberInfoResponse> getMemberInfo(
             @RequestAttribute("memberId") Long memberId
     ) {
-        MemberInfoResponse response = memberService.findMemberInfo(memberId);
+        MemberInfoResponse response = memberFacade.findMemberInfo(memberId);
 
         return new SuccessResponse<>(response);
     }
@@ -37,7 +37,7 @@ public class MemberController implements MemberApi {
     public SuccessResponse<MemberStatusResponse> getMemberStatus(
             @RequestAttribute("memberId") Long memberId
     ) {
-        MemberStatusResponse response = memberService.findMemberStatus(memberId);
+        MemberStatusResponse response = memberFacade.findMemberStatus(memberId);
 
         return new SuccessResponse<>(response);
     }
@@ -46,7 +46,7 @@ public class MemberController implements MemberApi {
     public SuccessResponse<MemberSavedAddressResponse> getMemberSavedAddress(
             @RequestAttribute("memberId") Long memberId
     ) {
-        MemberSavedAddressResponse response = memberService.findMemberSavedAddress(memberId);
+        MemberSavedAddressResponse response = memberFacade.findMemberSavedAddress(memberId);
 
         return new SuccessResponse<>(response);
     }
@@ -55,7 +55,7 @@ public class MemberController implements MemberApi {
     public SuccessResponse<List<String>> getMemberCategory(
             @RequestAttribute("memberId") Long memberId
     ) {
-        return new SuccessResponse<>(memberService.findMemberCategory(memberId));
+        return new SuccessResponse<>(memberFacade.findMemberCategory(memberId));
     }
 
     @ResponseStatus(NO_CONTENT)
@@ -64,7 +64,7 @@ public class MemberController implements MemberApi {
             @RequestAttribute("memberId") Long memberId,
             @RequestBody MemberOnboardingRequest request
     ) {
-        memberService.completeOnboarding(memberId, request);
+        memberFacade.completeOnboarding(memberId, request);
     }
 
     @PatchMapping
@@ -72,7 +72,7 @@ public class MemberController implements MemberApi {
             @RequestAttribute("memberId") Long memberId,
             @RequestBody MemberInfoUpdateRequest request
     ) {
-        MemberInfoResponse response = memberService.updateMemberInfo(memberId, request);
+        MemberInfoResponse response = memberFacade.updateMemberInfo(memberId, request);
 
         return new SuccessResponse<>(response);
     }
@@ -83,7 +83,7 @@ public class MemberController implements MemberApi {
             @RequestAttribute("memberId") Long memberId,
             @RequestBody MemberStatusUpdateRequest request
     ) {
-        memberService.updateMemberStatus(memberId, request.status());
+        memberFacade.updateMemberStatus(memberId, request.status());
     }
 
     @Polling
@@ -93,6 +93,6 @@ public class MemberController implements MemberApi {
             @RequestAttribute("memberId") Long memberId,
             @Valid @RequestBody MemberLocationDto memberLocationDto
     ) {
-        memberService.updateMemberLocation(memberId, memberLocationDto);
+        memberFacade.updateMemberLocation(memberId, memberLocationDto);
     }
 }

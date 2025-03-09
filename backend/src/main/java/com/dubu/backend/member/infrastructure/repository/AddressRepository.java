@@ -1,4 +1,4 @@
-package com.dubu.backend.member.infra.repository;
+package com.dubu.backend.member.infrastructure.repository;
 
 import com.dubu.backend.member.domain.Address;
 import org.springframework.data.jpa.repository.JpaRepository;

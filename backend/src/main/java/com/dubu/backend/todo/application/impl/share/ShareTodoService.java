@@ -3,7 +3,7 @@ package com.dubu.backend.todo.application.impl.share;
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.member.infrastructure.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.exception.InvalidMemberStatusException;
@@ -12,11 +12,9 @@ import com.dubu.backend.plan.infra.repository.PathRepository;
 import com.dubu.backend.plan.infra.repository.PlanRepository;
 import com.dubu.backend.todo.dto.response.ShareTodoInfo;
 import com.dubu.backend.todo.dto.response.SurroundingMemberInfo;
-import com.dubu.backend.todo.domain.Schedule;
 import com.dubu.backend.todo.domain.Todo;
 import com.dubu.backend.todo.domain.enums.TodoType;
 import com.dubu.backend.todo.exception.SaveTodoNotFoundFromTargetParentException;
-import com.dubu.backend.todo.exception.ScheduleNotFoundException;
 import com.dubu.backend.todo.exception.TodoNotFoundException;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
@@ -24,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service

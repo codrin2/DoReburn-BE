@@ -7,7 +7,7 @@ import com.dubu.backend.auth.dto.TokenResponse;
 import com.dubu.backend.auth.infra.oauth.kakao.port.KakaoTokenPort;
 import com.dubu.backend.auth.infra.oauth.kakao.port.KakaoUserPort;
 import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.member.infrastructure.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

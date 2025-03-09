@@ -1,7 +1,7 @@
-package com.dubu.backend.member.api;
+package com.dubu.backend.member.presentation;
 
 import com.dubu.backend.global.domain.SuccessResponse;
-import com.dubu.backend.member.dto.response.PlaceSearchResponse;
+import com.dubu.backend.member.dto.response.AddressSearchResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-public interface PlaceApi {
+public interface AddressApi {
     @Operation(
             summary = "장소 검색",
             description = """
@@ -76,14 +76,14 @@ public interface PlaceApi {
                     )
             )
     })
-    SuccessResponse<List<PlaceSearchResponse>> searchPlaces(
+    SuccessResponse<List<AddressSearchResponse>> searchPlaces(
             @Parameter(description = "검색 키워드", required = true, example = "카페")
             @RequestParam("query") String query
     );
 
     @Schema(name = "PlaceSearchResponseListExample", description = "장소 검색 응답 예시")
     class PlaceSearchResponseListExample {
-        public List<PlaceSearchResponse> data;
+        public List<AddressSearchResponse> data;
     }
 
     @Schema(name = "ErrorResponseExample", description = "에러 응답 예시")

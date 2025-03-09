@@ -1,8 +1,8 @@
-package com.dubu.backend.member.api;
+package com.dubu.backend.member.presentation;
 
 import com.dubu.backend.global.domain.SuccessResponse;
-import com.dubu.backend.member.application.PlaceService;
-import com.dubu.backend.member.dto.response.PlaceSearchResponse;
+import com.dubu.backend.member.application.AddressFacade;
+import com.dubu.backend.member.dto.response.AddressSearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,15 +14,14 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/places")
-public class PlaceController implements PlaceApi {
-
-    private final PlaceService placeService;
+public class AddressController implements AddressApi {
+    private final AddressFacade addressFacade;
 
     @GetMapping("/search")
-    public SuccessResponse<List<PlaceSearchResponse>> searchPlaces(
+    public SuccessResponse<List<AddressSearchResponse>> searchPlaces(
             @RequestParam("query") String query
     ) {
-        List<PlaceSearchResponse> searchPlaces = placeService.searchPlaces(query);
+        List<AddressSearchResponse> searchPlaces = addressFacade.searchPlaces(query);
 
         return new SuccessResponse<>(searchPlaces);
     }

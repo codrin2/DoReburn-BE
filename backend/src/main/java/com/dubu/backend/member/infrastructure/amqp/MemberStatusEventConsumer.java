@@ -1,7 +1,7 @@
-package com.dubu.backend.member.infra.amqp;
+package com.dubu.backend.member.infrastructure.amqp;
 
-import com.dubu.backend.member.application.MemberService;
-import com.dubu.backend.member.config.MemberRabbitMQConfig;
+import com.dubu.backend.member.application.MemberFacade;
+import com.dubu.backend.member.core.MemberRabbitMQConfig;
 import com.dubu.backend.member.dto.MemberStatusChangeDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class MemberStatusEventConsumer {
-    private final MemberService memberService;
+    private final MemberFacade memberFacade;
     private final ObjectMapper objectMapper;
 
     @RabbitListener(queues = MemberRabbitMQConfig.DLX_QUEUE_NAME)
@@ -21,7 +21,7 @@ public class MemberStatusEventConsumer {
         try {
             MemberStatusChangeDto message = objectMapper.readValue(jsonMessage, MemberStatusChangeDto.class);
             log.info("[멤버 상태 전환 이벤트 실행] message : {}", message);
-            memberService.updateMemberStatusByPlanChange(message);
+            memberFacade.updateMemberStatusByPlanChange(message);
         } catch (Exception e) {
             log.error("메시지 변환 중 오류 발생: {}", e.getMessage(), e);
         }

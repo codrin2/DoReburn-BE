@@ -5,16 +5,13 @@ import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
-import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infra.repository.MemberCategoryRepository;
-import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.member.infrastructure.repository.MemberCategoryRepository;
+import com.dubu.backend.member.infrastructure.repository.MemberRepository;
 import com.dubu.backend.todo.domain.Schedule;
 import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.domain.Todo;
@@ -25,9 +22,7 @@ import com.dubu.backend.todo.dto.common.TodoIdentifier;
 import com.dubu.backend.todo.dto.request.RecommendTodoQueryRequest;
 import com.dubu.backend.todo.dto.request.SaveTodoQueryRequest;
 import com.dubu.backend.todo.dto.response.TodoInfo;
-import com.dubu.backend.todo.dto.response.TodoManageResult;
 import com.dubu.backend.todo.dto.search.TodoSearchCond;
-import com.dubu.backend.todo.exception.ScheduleNotFoundException;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;

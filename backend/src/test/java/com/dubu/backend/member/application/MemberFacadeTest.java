@@ -15,10 +15,10 @@ import com.dubu.backend.member.dto.response.MemberStatusResponse;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.exception.MemberSavedAddressNotFoundException;
 import com.dubu.backend.member.exception.RedisUnavailableException;
-import com.dubu.backend.member.infra.repository.AddressRepository;
-import com.dubu.backend.member.infra.repository.LocationRedisRepository;
-import com.dubu.backend.member.infra.repository.MemberCategoryRepository;
-import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.member.infrastructure.repository.AddressRepository;
+import com.dubu.backend.member.infrastructure.repository.LocationRedisRepository;
+import com.dubu.backend.member.infrastructure.repository.MemberCategoryRepository;
+import com.dubu.backend.member.infrastructure.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.exception.PlanNotFoundException;
@@ -41,7 +41,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @DisplayName("MemberService 단위 테스트")
-class MemberServiceTest {
+class MemberFacadeTest {
 
     @Mock
     private MemberRepository memberRepository;
@@ -57,7 +57,7 @@ class MemberServiceTest {
     private LocationRedisRepository locationRedisRepository;
 
     @InjectMocks
-    private MemberService memberService;
+    private MemberFacade memberFacade;
 
     private Long memberId;
     private Member defaultMember;
@@ -112,7 +112,7 @@ class MemberServiceTest {
             when(addressRepository.findByMemberId(memberId)).thenReturn(List.of(homeAddress, schoolAddress));
 
             // when
-            MemberInfoResponse result = memberService.findMemberInfo(memberId);
+            MemberInfoResponse result = memberFacade.findMemberInfo(memberId);
 
             // then
             assertThat(result).isNotNull();
@@ -132,7 +132,7 @@ class MemberServiceTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberService.findMemberInfo(memberId))
+            assertThatThrownBy(() -> memberFacade.findMemberInfo(memberId))
                     .isInstanceOf(MemberNotFoundException.class);
 
             verify(memberRepository).findById(memberId);
@@ -151,7 +151,7 @@ class MemberServiceTest {
             when(defaultMember.getStatus()).thenReturn(Status.ONBOARDING);
 
             // when
-            MemberStatusResponse response = memberService.findMemberStatus(memberId);
+            MemberStatusResponse response = memberFacade.findMemberStatus(memberId);
 
             // then
             assertThat(response.status()).isEqualTo("ONBOARDING");
@@ -165,7 +165,7 @@ class MemberServiceTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberService.findMemberStatus(memberId))
+            assertThatThrownBy(() -> memberFacade.findMemberStatus(memberId))
                     .isInstanceOf(MemberNotFoundException.class);
         }
     }
@@ -182,7 +182,7 @@ class MemberServiceTest {
             when(addressRepository.findByMemberId(memberId)).thenReturn(List.of(homeAddress, schoolAddress));
 
             // when
-            MemberSavedAddressResponse response = memberService.findMemberSavedAddress(memberId);
+            MemberSavedAddressResponse response = memberFacade.findMemberSavedAddress(memberId);
 
             // then
             assertThat(response).isNotNull();
@@ -201,7 +201,7 @@ class MemberServiceTest {
             when(addressRepository.findByMemberId(memberId)).thenReturn(List.of());
 
             // when & then
-            assertThatThrownBy(() -> memberService.findMemberSavedAddress(memberId))
+            assertThatThrownBy(() -> memberFacade.findMemberSavedAddress(memberId))
                     .isInstanceOf(MemberSavedAddressNotFoundException.class);
         }
 
@@ -212,7 +212,7 @@ class MemberServiceTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberService.findMemberSavedAddress(memberId))
+            assertThatThrownBy(() -> memberFacade.findMemberSavedAddress(memberId))
                     .isInstanceOf(MemberNotFoundException.class);
         }
     }
@@ -240,7 +240,7 @@ class MemberServiceTest {
             when(categoryRepository.findByName("ENGLISH")).thenReturn(Optional.of(categoryEnglish));
 
             // when
-            memberService.completeOnboarding(memberId, request);
+            memberFacade.completeOnboarding(memberId, request);
 
             // then
             verify(spyMember).updateNickname("새닉네임");
@@ -265,7 +265,7 @@ class MemberServiceTest {
             );
 
             // when & then
-            assertThatThrownBy(() -> memberService.completeOnboarding(memberId, request))
+            assertThatThrownBy(() -> memberFacade.completeOnboarding(memberId, request))
                     .isInstanceOf(InvalidMemberStatusException.class);
         }
 
@@ -287,7 +287,7 @@ class MemberServiceTest {
             when(categoryRepository.findByName("없는카테고리")).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberService.completeOnboarding(memberId, request))
+            assertThatThrownBy(() -> memberFacade.completeOnboarding(memberId, request))
                     .isInstanceOf(CategoryNotFoundException.class);
         }
     }
@@ -363,7 +363,7 @@ class MemberServiceTest {
             when(addressRepository.findByMemberId(memberId)).thenReturn(List.of(addrHome, addrSchool));
 
             // when
-            MemberInfoResponse response = memberService.updateMemberInfo(memberId, request);
+            MemberInfoResponse response = memberFacade.updateMemberInfo(memberId, request);
 
             // then
             assertThat(response).isNotNull();
@@ -383,7 +383,7 @@ class MemberServiceTest {
 
             // when & then
             assertThatThrownBy(() ->
-                    memberService.updateMemberInfo(memberId, mock(MemberInfoUpdateRequest.class)))
+                    memberFacade.updateMemberInfo(memberId, mock(MemberInfoUpdateRequest.class)))
                     .isInstanceOf(MemberNotFoundException.class);
         }
 
@@ -406,7 +406,7 @@ class MemberServiceTest {
                     .thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberService.updateMemberInfo(memberId, request))
+            assertThatThrownBy(() -> memberFacade.updateMemberInfo(memberId, request))
                     .isInstanceOf(CategoryNotFoundException.class);
         }
     }
@@ -422,7 +422,7 @@ class MemberServiceTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(defaultMember));
 
             // when
-            memberService.updateMemberStatus(memberId, "MOVE");
+            memberFacade.updateMemberStatus(memberId, "MOVE");
 
             // then
             verify(defaultMember).updateStatus(Status.MOVE);
@@ -435,7 +435,7 @@ class MemberServiceTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberService.updateMemberStatus(memberId, "MOVE"))
+            assertThatThrownBy(() -> memberFacade.updateMemberStatus(memberId, "MOVE"))
                     .isInstanceOf(MemberNotFoundException.class);
         }
     }
@@ -456,7 +456,7 @@ class MemberServiceTest {
             when(mockPlan.isCompleted()).thenReturn(false);
 
             // when
-            memberService.updateMemberStatusByPlanChange(dto);
+            memberFacade.updateMemberStatusByPlanChange(dto);
 
             // then
             verify(defaultMember).updateStatus(Status.FEEDBACK);
@@ -474,7 +474,7 @@ class MemberServiceTest {
             when(mockPlan.isCompleted()).thenReturn(true);
 
             // when
-            memberService.updateMemberStatusByPlanChange(dto);
+            memberFacade.updateMemberStatusByPlanChange(dto);
 
             // then
             verify(defaultMember, never()).updateStatus(any());
@@ -488,7 +488,7 @@ class MemberServiceTest {
             when(memberRepository.findById(dto.memberId())).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberService.updateMemberStatusByPlanChange(dto))
+            assertThatThrownBy(() -> memberFacade.updateMemberStatusByPlanChange(dto))
                     .isInstanceOf(MemberNotFoundException.class);
         }
 
@@ -501,7 +501,7 @@ class MemberServiceTest {
             when(planRepository.findById(dto.planId())).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberService.updateMemberStatusByPlanChange(dto))
+            assertThatThrownBy(() -> memberFacade.updateMemberStatusByPlanChange(dto))
                     .isInstanceOf(PlanNotFoundException.class);
         }
     }
@@ -518,7 +518,7 @@ class MemberServiceTest {
             MemberLocationDto locationDto = new MemberLocationDto(37.1234, 127.5678);
 
             // when
-            memberService.updateMemberLocation(memberId, locationDto);
+            memberFacade.updateMemberLocation(memberId, locationDto);
 
             // then
             verify(locationRedisRepository).saveMemberLocation(memberId, locationDto);
@@ -531,7 +531,7 @@ class MemberServiceTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberService.updateMemberLocation(memberId, new MemberLocationDto(37.0, 127.0)))
+            assertThatThrownBy(() -> memberFacade.updateMemberLocation(memberId, new MemberLocationDto(37.0, 127.0)))
                     .isInstanceOf(MemberNotFoundException.class);
         }
 
@@ -544,7 +544,7 @@ class MemberServiceTest {
                     .when(locationRedisRepository).saveMemberLocation(anyLong(), any(MemberLocationDto.class));
 
             // when & then
-            assertThatThrownBy(() -> memberService.updateMemberLocation(memberId, new MemberLocationDto(37.0, 127.0)))
+            assertThatThrownBy(() -> memberFacade.updateMemberLocation(memberId, new MemberLocationDto(37.0, 127.0)))
                     .isInstanceOf(RedisUnavailableException.class);
         }
     }
