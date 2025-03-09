@@ -50,6 +50,7 @@ export const ERROR_MESSAGE: Record<ErrorCode | clientErrorType, string> = {
   TOKEN_BLACKLISTED: '차단된 인증 정보입니다. 관리자에게 문의해주세요.',
   MISSING_TOKEN_IN_COOKIE: '인증 정보가 없어요. 다시 로그인해 주세요.',
   REFRESH_TOKEN_EXPIRED: '로그인 세션이 만료되었어요. 다시 로그인해 주세요.',
+  TOKEN_MISSING: '인증 정보가 없어요. 다시 로그인해 주세요.',
 
   NAVER_SERVICE_UNAVAILABLE: '네이버 서비스가 현재 이용 불가능합니다. 잠시 후 다시 시도해 주세요.',
 

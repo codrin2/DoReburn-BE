@@ -25,7 +25,8 @@ export type ErrorCode =
   | 'TOKEN_BLACKLISTED'
   | 'MISSING_TOKEN_IN_COOKIE'
   | 'REFRESH_TOKEN_EXPIRED'
-  | 'NAVER_SERVICE_UNAVAILABLE';
+  | 'NAVER_SERVICE_UNAVAILABLE'
+  | 'TOKEN_MISSING';
 
 export interface ResponseError {
   errorCode: ErrorCode;

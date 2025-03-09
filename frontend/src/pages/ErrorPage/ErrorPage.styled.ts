@@ -27,6 +27,11 @@ export const ErrorSubTitle = styled.h2`
   max-width: 36rem;
   text-align: center;
 `;
+export const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+`;
 
 export const ErrorButton = styled.button`
   ${({ theme }) => theme.fonts.body16};
