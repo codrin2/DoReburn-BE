@@ -115,7 +115,6 @@ export const router = createBrowserRouter([
                 ),
               },
             ],
-            loader: memberStatusLoader,
             errorElement: <ErrorPage />,
           },
         ],
