@@ -25,7 +25,10 @@ const ErrorPage = ({ message, onClick }: ErrorPageProps) => {
           </>
         )}
       </S.TitleContainer>
-      <S.ErrorButton onClick={onClick || goToHome}>다시 시도</S.ErrorButton>
+      <S.ButtonContainer>
+        <S.ErrorButton onClick={onClick}>다시 시도</S.ErrorButton>
+        <S.ErrorButton onClick={goToHome}>홈으로</S.ErrorButton>
+      </S.ButtonContainer>
     </S.ErrorLayout>
   );
 };
