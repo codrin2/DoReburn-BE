@@ -1,7 +1,7 @@
 package com.dubu.backend.member.presentation;
 
 import com.dubu.backend.global.domain.SuccessResponse;
-import com.dubu.backend.member.dto.response.AddressSearchResponse;
+import com.dubu.backend.member.presentation.response.AddressSearchResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

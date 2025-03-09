@@ -1,6 +1,6 @@
 package com.dubu.backend.member.domain;
 
-import com.dubu.backend.member.dto.response.AddressSearchResponse;
+import com.dubu.backend.member.presentation.response.AddressSearchResponse;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package com.dubu.backend.member.infrastructure.amqp;
 
 import com.dubu.backend.member.application.MemberFacade;
 import com.dubu.backend.member.core.MemberRabbitMQConfig;
-import com.dubu.backend.member.dto.MemberStatusChangeDto;
+import com.dubu.backend.member.presentation.MemberStatusChangeDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

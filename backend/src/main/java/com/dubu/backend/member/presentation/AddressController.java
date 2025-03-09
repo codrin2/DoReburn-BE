@@ -2,7 +2,7 @@ package com.dubu.backend.member.presentation;
 
 import com.dubu.backend.global.domain.SuccessResponse;
 import com.dubu.backend.member.application.AddressFacade;
-import com.dubu.backend.member.dto.response.AddressSearchResponse;
+import com.dubu.backend.member.presentation.response.AddressSearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

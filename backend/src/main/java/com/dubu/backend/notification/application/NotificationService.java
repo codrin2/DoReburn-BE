@@ -1,7 +1,7 @@
 package com.dubu.backend.notification.application;
 
 import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.member.dto.MemberStatusChangeDto;
+import com.dubu.backend.member.presentation.MemberStatusChangeDto;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.infrastructure.amqp.MemberStatusEventProducer;
 import com.dubu.backend.member.infrastructure.repository.MemberRepository;

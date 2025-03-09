@@ -1,8 +1,8 @@
-package com.dubu.backend.member.dto.request;
+package com.dubu.backend.member.presentation.request;
 
 import java.util.List;
 
-public record MemberOnboardingRequest(
+public record MemberInfoUpdateRequest(
         List<String> categories,
         String homeTitle,
         String homeAddress,
@@ -11,7 +11,6 @@ public record MemberOnboardingRequest(
         String schoolTitle,
         String schoolAddress,
         double schoolAddressX,
-        double schoolAddressY,
-        String nickname
+        double schoolAddressY
 ) {
 }

@@ -1,13 +1,12 @@
 package com.dubu.backend.member.presentation;
 
 import com.dubu.backend.global.domain.SuccessResponse;
-import com.dubu.backend.member.dto.MemberLocationDto;
-import com.dubu.backend.member.dto.request.MemberInfoUpdateRequest;
-import com.dubu.backend.member.dto.request.MemberOnboardingRequest;
-import com.dubu.backend.member.dto.request.MemberStatusUpdateRequest;
-import com.dubu.backend.member.dto.response.MemberInfoResponse;
-import com.dubu.backend.member.dto.response.MemberSavedAddressResponse;
-import com.dubu.backend.member.dto.response.MemberStatusResponse;
+import com.dubu.backend.member.presentation.request.MemberInfoUpdateRequest;
+import com.dubu.backend.member.presentation.request.MemberOnboardingRequest;
+import com.dubu.backend.member.presentation.request.MemberStatusUpdateRequest;
+import com.dubu.backend.member.presentation.response.MemberInfoResponse;
+import com.dubu.backend.member.presentation.response.MemberSavedAddressResponse;
+import com.dubu.backend.member.presentation.response.MemberStatusResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

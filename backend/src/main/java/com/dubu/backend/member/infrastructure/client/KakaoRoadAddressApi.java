@@ -1,8 +1,8 @@
 package com.dubu.backend.member.infrastructure.client;
 
 import com.dubu.backend.member.application.RoadAddressApi;
-import com.dubu.backend.member.dto.response.AddressSearchResponse;
-import com.dubu.backend.member.dto.response.KakaoPlaceApiResponse;
+import com.dubu.backend.member.presentation.response.AddressSearchResponse;
+import com.dubu.backend.member.presentation.response.KakaoPlaceApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;

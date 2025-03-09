@@ -1,4 +1,4 @@
-package com.dubu.backend.member.dto.response;
+package com.dubu.backend.member.presentation.response;
 
 public record MemberStatusResponse(
         String status
