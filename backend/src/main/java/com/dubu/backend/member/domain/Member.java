@@ -2,6 +2,7 @@ package com.dubu.backend.member.domain;
 
 import com.dubu.backend.auth.domain.OauthProvider;
 import com.dubu.backend.global.domain.BaseTimeEntity;
+import com.dubu.backend.member.core.AggregateRoot;
 import com.dubu.backend.member.domain.enums.Role;
 import com.dubu.backend.member.domain.enums.Status;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+@AggregateRoot
 @Entity
 @Getter
 @Builder
