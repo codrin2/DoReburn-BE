@@ -36,7 +36,7 @@ import com.dubu.backend.todo.exception.TodoTypeMismatchException;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
-import com.dubu.backend.member.infrastructure.repository.MemberRepository;
+import com.dubu.backend.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

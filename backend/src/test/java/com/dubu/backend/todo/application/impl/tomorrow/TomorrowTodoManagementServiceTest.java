@@ -33,7 +33,7 @@ import com.dubu.backend.todo.exception.TodoLimitExceededException;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
-import com.dubu.backend.member.infrastructure.repository.MemberRepository;
+import com.dubu.backend.member.domain.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

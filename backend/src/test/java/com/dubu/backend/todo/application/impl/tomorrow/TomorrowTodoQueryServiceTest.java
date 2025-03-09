@@ -10,8 +10,8 @@ import java.util.Optional;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
-import com.dubu.backend.member.infrastructure.repository.MemberCategoryRepository;
-import com.dubu.backend.member.infrastructure.repository.MemberRepository;
+import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
+import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.todo.domain.Schedule;
 import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.domain.Todo;

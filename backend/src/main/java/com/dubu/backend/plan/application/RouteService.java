@@ -1,7 +1,7 @@
 package com.dubu.backend.plan.application;
 
 import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infrastructure.repository.MemberRepository;
+import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.domain.Route;

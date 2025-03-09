@@ -2,8 +2,8 @@ package com.dubu.backend.todo.application.impl.share;
 
 import com.dubu.backend.member.presentation.MemberLocationDto;
 import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infrastructure.repository.LocationRedisRepository;
-import com.dubu.backend.member.infrastructure.repository.MemberRepository;
+import com.dubu.backend.member.infrastructure.redis.LocationRedisRepository;
+import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.todo.dto.request.SurroundingMemberQueryRequest;
 import com.dubu.backend.todo.application.ShareService;
 import com.dubu.backend.todo.application.collection.share.MemberCategoryCollection;

@@ -1,4 +1,4 @@
-package com.dubu.backend.member.infrastructure.repository;
+package com.dubu.backend.member.domain.repository;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.MemberCategory;

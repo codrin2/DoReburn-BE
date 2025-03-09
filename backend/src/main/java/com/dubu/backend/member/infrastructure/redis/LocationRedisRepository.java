@@ -1,4 +1,4 @@
-package com.dubu.backend.member.infrastructure.repository;
+package com.dubu.backend.member.infrastructure.redis;
 
 import com.dubu.backend.member.presentation.MemberLocationDto;
 import com.dubu.backend.todo.dto.request.SurroundingMemberQueryRequest;

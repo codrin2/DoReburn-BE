@@ -5,7 +5,7 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Role;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infrastructure.repository.MemberRepository;
+import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.exception.InvalidMemberStatusException;
 import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.domain.Schedule;
