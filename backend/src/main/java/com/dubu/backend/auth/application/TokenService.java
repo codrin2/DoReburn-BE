@@ -2,7 +2,7 @@ package com.dubu.backend.auth.application;
 
 import com.dubu.backend.auth.dto.TokenResponse;
 import com.dubu.backend.auth.exception.*;
-import com.dubu.backend.auth.infra.repository.TokenRedisRepository;
+import com.dubu.backend.auth.infra.RedisTokenRepository;
 import com.dubu.backend.auth.config.JwtConfig;
 import io.jsonwebtoken.Claims;
 import jakarta.annotation.PostConstruct;
@@ -21,7 +21,7 @@ public class TokenService {
 
     private final JwtConfig jwtConfig;
     private final JwtManager jwtManager;
-    private final TokenRedisRepository tokenRedisRepository;
+    private final RedisTokenRepository redisTokenRepository;
     private long accessTokenTime;
     private long refreshTokenTime;
 
@@ -32,10 +32,10 @@ public class TokenService {
     }
 
     public TokenResponse issue(Long memberId) {
-        String newAccessToken = jwtManager.createAccessToken(memberId, accessTokenTime);
-        String newRefreshToken = jwtManager.createRefreshToken(memberId, refreshTokenTime);
+        String newAccessToken = jwtManager.createToken(memberId, accessTokenTime);
+        String newRefreshToken = jwtManager.createToken(memberId, refreshTokenTime);
 
-        tokenRedisRepository.saveRefreshToken(memberId.toString(), newRefreshToken, refreshTokenTime);
+        redisTokenRepository.saveRefreshToken(memberId.toString(), newRefreshToken, refreshTokenTime);
 
         return new TokenResponse(newAccessToken, newRefreshToken);
     }
@@ -46,15 +46,15 @@ public class TokenService {
         String jti = claims.getId();
         String memberId = claims.getSubject();
 
-        if (tokenRedisRepository.isBlacklisted(jti)) {
-            String currentRefreshToken = tokenRedisRepository.getRefreshToken(memberId);
+        if (redisTokenRepository.isBlacklisted(jti)) {
+            String currentRefreshToken = redisTokenRepository.getRefreshToken(memberId);
             Date expiration = jwtManager.parseClaimsFromRefreshToken(currentRefreshToken).getExpiration();
-            tokenRedisRepository.addBlacklistToken(currentRefreshToken, getRemainingDuration(expiration));
+            redisTokenRepository.addBlacklistToken(currentRefreshToken, getRemainingDuration(expiration));
 
             throw new TokenBlacklistedException();
         }
 
-        tokenRedisRepository.addBlacklistToken(jti, getRemainingDuration(claims.getExpiration()));
+        redisTokenRepository.addBlacklistToken(jti, getRemainingDuration(claims.getExpiration()));
 
         TokenResponse tokenResponse = issue(Long.valueOf(memberId));
 

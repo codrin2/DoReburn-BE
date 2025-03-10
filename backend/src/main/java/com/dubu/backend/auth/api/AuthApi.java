@@ -1,11 +1,9 @@
 package com.dubu.backend.auth.api;
 
-import com.dubu.backend.auth.domain.OauthProvider;
 import com.dubu.backend.auth.dto.AccessTokenResponse;
 import com.dubu.backend.auth.dto.TokenResponse;
 import com.dubu.backend.core.domain.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,45 +16,6 @@ import org.springframework.http.MediaType;
 import java.util.Map;
 
 public interface AuthApi {
-
-    @Operation(
-            summary = "소셜 로그인 페이지 이동",
-            description = """
-                    oauthProvider 경로 변수를 통해 소셜 로그인 유형(KAKAO)을 선택하고, 
-                    해당 소셜 로그인 인증 페이지로 리다이렉트한다.
-                    """
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "302",
-                    description = "소셜 로그인 인증 페이지로 리다이렉트 성공"
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "지원하지 않는 소셜 로그인 타입인 경우(UNSUPPORTED_SOCIAL_LOGIN)",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorResponseExample.class),
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            examples = {
-                                    @ExampleObject(value = """
-                                            {
-                                              "errorCode": "UNSUPPORTED_SOCIAL_LOGIN",
-                                              "message": "지원하지 않는 소셜 로그인 타입입니다."
-                                            }
-                                            """)
-                            }
-                    )
-            )
-    })
-    void redirectAuthCodeRequestUrl(
-            @Parameter(
-                    description = "소셜 로그인 제공자(KAKAO 등)",
-                    required = true
-            )
-            OauthProvider oauthProvider,
-            HttpServletResponse response
-    );
-
     @Operation(
             summary = "카카오 로그인 콜백 처리",
             description = """

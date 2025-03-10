@@ -33,20 +33,7 @@ public class JwtManager {
         secretKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createAccessToken(Long memberId, long accessTokenTime) {
-        Claims claims = Jwts.claims().subject(memberId.toString()).build();
-        Date now = new Date();
-
-        return Jwts.builder()
-                .issuer(TOKEN_ISSUER)
-                .claims(claims)
-                .issuedAt(now)
-                .expiration(new Date(now.getTime() + accessTokenTime))
-                .signWith(secretKey)
-                .compact();
-    }
-
-    public String createRefreshToken(Long memberId, long refreshTokenTime) {
+    public String createToken(Long memberId, long expirationTime) {
         Claims claims = Jwts.claims().subject(memberId.toString()).build();
         String jti = UUID.randomUUID().toString().substring(0, 16) + memberId;
         Date now = new Date();
@@ -56,7 +43,7 @@ public class JwtManager {
                 .issuer(TOKEN_ISSUER)
                 .claims(claims)
                 .issuedAt(now)
-                .expiration(new Date(now.getTime() + refreshTokenTime))
+                .expiration(new Date(now.getTime() + expirationTime))
                 .signWith(secretKey)
                 .compact();
     }

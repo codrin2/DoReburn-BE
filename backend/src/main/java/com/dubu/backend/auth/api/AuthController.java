@@ -1,19 +1,20 @@
 package com.dubu.backend.auth.api;
 
-import com.dubu.backend.auth.application.AuthService;
-import com.dubu.backend.auth.domain.OauthProvider;
+import com.dubu.backend.auth.application.AuthFacade;
+import com.dubu.backend.auth.config.JwtConfig;
 import com.dubu.backend.auth.dto.AccessTokenResponse;
 import com.dubu.backend.auth.dto.TokenResponse;
 import com.dubu.backend.auth.exception.MissingTokenInCookieException;
-import com.dubu.backend.auth.config.JwtConfig;
 import com.dubu.backend.core.domain.SuccessResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
@@ -25,17 +26,7 @@ public class AuthController implements AuthApi {
     public static final long HOURS_IN_MINIUTES = 60 * 60L;
 
     private final JwtConfig jwtConfig;
-    private final AuthService authService;
-
-    @SneakyThrows
-    @GetMapping("/{oauthProvider}")
-    public void redirectAuthCodeRequestUrl(
-            @PathVariable OauthProvider oauthProvider,
-            HttpServletResponse response
-    ) {
-        String redirectUrl = authService.getAuthCodeRequestUrl(oauthProvider);
-        response.sendRedirect(redirectUrl);
-    }
+    private final AuthFacade authFacade;
 
     @PostMapping("/kakao-login")
     public SuccessResponse<AccessTokenResponse> kakaoCallback(
@@ -43,7 +34,7 @@ public class AuthController implements AuthApi {
             HttpServletResponse response
     ) {
         String code = request.get("code");
-        TokenResponse tokenResponse = authService.issueTokenAfterKakaoLogin(code);
+        TokenResponse tokenResponse = authFacade.kakaoLogin(code);
         sendCookie(response, tokenResponse.refreshToken());
 
         return new SuccessResponse<>(new AccessTokenResponse(tokenResponse.accessToken()));
@@ -60,7 +51,7 @@ public class AuthController implements AuthApi {
             throw new MissingTokenInCookieException();
         }
 
-        TokenResponse tokenResponse = authService.reissueToken(refreshToken);
+        TokenResponse tokenResponse = authFacade.reissueToken(refreshToken);
         sendCookie(response, tokenResponse.refreshToken());
 
         return new SuccessResponse<>(new AccessTokenResponse(tokenResponse.accessToken()));
@@ -68,7 +59,7 @@ public class AuthController implements AuthApi {
 
     @PostMapping("/test/token")
     public SuccessResponse<AccessTokenResponse> testToken() {
-        AccessTokenResponse response = authService.issueTokenForTest();
+        AccessTokenResponse response = authFacade.issueTokenForTest();
 
         return new SuccessResponse<>(response);
     }

@@ -7,14 +7,11 @@ import com.dubu.backend.member.domain.enums.Role;
 import com.dubu.backend.member.domain.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 
 @AggregateRoot
 @Entity
 @Getter
 @Builder
-@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Member extends BaseTimeEntity {
@@ -38,15 +35,23 @@ public class Member extends BaseTimeEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("'USER'")
     private Role role;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("'ONBOARDING'")
     private Status status;
 
     private String recentRoute;
+
+    public static Member of(String email, OauthProvider oauthProvider, String oauthProviderId) {
+        return Member.builder()
+                .email(email)
+                .oauthProvider(oauthProvider)
+                .oauthProviderId(oauthProviderId)
+                .role(Role.USER)
+                .status(Status.ONBOARDING)
+                .build();
+    }
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;

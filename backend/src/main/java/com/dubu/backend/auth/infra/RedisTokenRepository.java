@@ -1,4 +1,4 @@
-package com.dubu.backend.auth.infra.repository;
+package com.dubu.backend.auth.infra;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
-public class TokenRedisRepository {
+public class RedisTokenRepository {
 
     private final RedisTemplate<String, String> redisTemplate;
 

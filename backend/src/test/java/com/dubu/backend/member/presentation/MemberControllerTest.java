@@ -3,7 +3,7 @@ package com.dubu.backend.member.presentation;
 import com.dubu.backend.core.config.WebConfig;
 import com.dubu.backend.core.interceptor.TokenInterceptor;
 import com.dubu.backend.member.application.MemberQueryFacade;
-import com.dubu.backend.member.application.MemberFacade;
+import com.dubu.backend.member.application.MemberCommandFacade;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.presentation.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.presentation.response.MemberInfoResponse;
@@ -49,7 +49,7 @@ class MemberControllerTest {
     @MockBean
     private MemberQueryFacade memberQueryFacade;
     @MockBean
-    private MemberFacade memberFacade;
+    private MemberCommandFacade memberCommandFacade;
 
     private static final String MEMBER_INFO_UPDATE_JSON = """
             {
@@ -139,7 +139,7 @@ class MemberControllerTest {
                     37.4784966
             );
 
-            BDDMockito.given(memberFacade.updateMemberInfo(eq(memberId), any(MemberInfoUpdateRequest.class)))
+            BDDMockito.given(memberCommandFacade.updateMemberInfo(eq(memberId), any(MemberInfoUpdateRequest.class)))
                     .willReturn(mockResponse);
 
             // when & then
@@ -158,7 +158,7 @@ class MemberControllerTest {
             // given
             Long memberId = 9999L;
             Mockito.doThrow(new MemberNotFoundException(memberId))
-                    .when(memberFacade).updateMemberInfo(eq(memberId), any(MemberInfoUpdateRequest.class));
+                    .when(memberCommandFacade).updateMemberInfo(eq(memberId), any(MemberInfoUpdateRequest.class));
 
             // when & then
             mockMvc.perform(patch("/members")

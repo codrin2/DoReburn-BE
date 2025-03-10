@@ -2,7 +2,7 @@ package com.dubu.backend.member.presentation;
 
 import com.dubu.backend.core.anotation.Polling;
 import com.dubu.backend.core.domain.SuccessResponse;
-import com.dubu.backend.member.application.MemberFacade;
+import com.dubu.backend.member.application.MemberCommandFacade;
 import com.dubu.backend.member.application.MemberLocationFacade;
 import com.dubu.backend.member.application.MemberQueryFacade;
 import com.dubu.backend.member.domain.MemberLocation;
@@ -26,7 +26,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 public class MemberController implements MemberApi {
     private final MemberQueryFacade memberQueryFacade;
     private final MemberLocationFacade memberLocationFacade;
-    private final MemberFacade memberFacade;
+    private final MemberCommandFacade memberCommandFacade;
 
     @GetMapping
     public SuccessResponse<MemberInfoResponse> getMemberInfo(
@@ -68,7 +68,7 @@ public class MemberController implements MemberApi {
             @RequestAttribute("memberId") Long memberId,
             @RequestBody MemberOnboardingRequest request
     ) {
-        memberFacade.completeOnboarding(memberId, request);
+        memberCommandFacade.completeOnboarding(memberId, request);
     }
 
     @PatchMapping
@@ -76,7 +76,7 @@ public class MemberController implements MemberApi {
             @RequestAttribute("memberId") Long memberId,
             @RequestBody MemberInfoUpdateRequest request
     ) {
-        MemberInfoResponse response = memberFacade.updateMemberInfo(memberId, request);
+        MemberInfoResponse response = memberCommandFacade.updateMemberInfo(memberId, request);
 
         return new SuccessResponse<>(response);
     }
@@ -87,7 +87,7 @@ public class MemberController implements MemberApi {
             @RequestAttribute("memberId") Long memberId,
             @RequestBody MemberStatusUpdateRequest request
     ) {
-        memberFacade.updateMemberStatus(memberId, request.status());
+        memberCommandFacade.updateMemberStatus(memberId, request.status());
     }
 
     @Polling

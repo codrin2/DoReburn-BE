@@ -16,11 +16,11 @@ import static com.dubu.backend.member.application.MemberServiceHelper.findExisti
 
 @Service
 @RequiredArgsConstructor
-public class MemberFacade {
+@Transactional
+public class MemberCommandFacade {
     private final MemberRepository memberRepository;
     private final MemberInfoService memberInfoService;
 
-    @Transactional
     public void completeOnboarding(Long memberId, MemberOnboardingRequest request) {
         Member currentMember = findExistingMember(memberRepository, memberId);
 
@@ -31,21 +31,18 @@ public class MemberFacade {
         memberInfoService.completeOnboarding(currentMember, request);
     }
 
-    @Transactional
     public MemberInfoResponse updateMemberInfo(Long memberId, MemberInfoUpdateRequest request) {
         Member currentMember = findExistingMember(memberRepository, memberId);
 
         return memberInfoService.updateMemberInfo(currentMember, request);
     }
 
-    @Transactional
     public void updateMemberStatus(Long memberId, String status) {
         Member currentMember = findExistingMember(memberRepository, memberId);
 
         currentMember.updateStatus(Status.fromString(status));
     }
 
-    @Transactional
     public void updateMemberStatusByPlanChange(MovementCompletedEvent event) {
         Member currentMember = findExistingMember(memberRepository, event.memberId());
 

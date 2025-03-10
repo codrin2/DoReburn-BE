@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @DisplayName("MemberService 단위 테스트")
-class MemberFacadeTest {
+class MemberCommandFacadeTest {
 
     @Mock
     private MemberRepository memberRepository;
@@ -60,7 +60,7 @@ class MemberFacadeTest {
     @InjectMocks
     private MemberLocationFacade memberLocationFacade;
     @InjectMocks
-    private MemberFacade memberFacade;
+    private MemberCommandFacade memberCommandFacade;
 
     private Long memberId;
     private Member defaultMember;
@@ -243,7 +243,7 @@ class MemberFacadeTest {
             when(categoryRepository.findByName("ENGLISH")).thenReturn(Optional.of(categoryEnglish));
 
             // when
-            memberFacade.completeOnboarding(memberId, request);
+            memberCommandFacade.completeOnboarding(memberId, request);
 
             // then
             verify(spyMember).updateNickname("새닉네임");
@@ -268,7 +268,7 @@ class MemberFacadeTest {
             );
 
             // when & then
-            assertThatThrownBy(() -> memberFacade.completeOnboarding(memberId, request))
+            assertThatThrownBy(() -> memberCommandFacade.completeOnboarding(memberId, request))
                     .isInstanceOf(InvalidMemberStatusException.class);
         }
 
@@ -290,7 +290,7 @@ class MemberFacadeTest {
             when(categoryRepository.findByName("없는카테고리")).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberFacade.completeOnboarding(memberId, request))
+            assertThatThrownBy(() -> memberCommandFacade.completeOnboarding(memberId, request))
                     .isInstanceOf(CategoryNotFoundException.class);
         }
     }
@@ -366,7 +366,7 @@ class MemberFacadeTest {
             when(addressRepository.findByMemberId(memberId)).thenReturn(List.of(addrHome, addrSchool));
 
             // when
-            MemberInfoResponse response = memberFacade.updateMemberInfo(memberId, request);
+            MemberInfoResponse response = memberCommandFacade.updateMemberInfo(memberId, request);
 
             // then
             assertThat(response).isNotNull();
@@ -386,7 +386,7 @@ class MemberFacadeTest {
 
             // when & then
             assertThatThrownBy(() ->
-                    memberFacade.updateMemberInfo(memberId, mock(MemberInfoUpdateRequest.class)))
+                    memberCommandFacade.updateMemberInfo(memberId, mock(MemberInfoUpdateRequest.class)))
                     .isInstanceOf(MemberNotFoundException.class);
         }
 
@@ -409,7 +409,7 @@ class MemberFacadeTest {
                     .thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberFacade.updateMemberInfo(memberId, request))
+            assertThatThrownBy(() -> memberCommandFacade.updateMemberInfo(memberId, request))
                     .isInstanceOf(CategoryNotFoundException.class);
         }
     }
@@ -425,7 +425,7 @@ class MemberFacadeTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(defaultMember));
 
             // when
-            memberFacade.updateMemberStatus(memberId, "MOVE");
+            memberCommandFacade.updateMemberStatus(memberId, "MOVE");
 
             // then
             verify(defaultMember).updateStatus(Status.MOVE);
@@ -438,7 +438,7 @@ class MemberFacadeTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberFacade.updateMemberStatus(memberId, "MOVE"))
+            assertThatThrownBy(() -> memberCommandFacade.updateMemberStatus(memberId, "MOVE"))
                     .isInstanceOf(MemberNotFoundException.class);
         }
     }
@@ -459,7 +459,7 @@ class MemberFacadeTest {
             when(mockPlan.isCompleted()).thenReturn(false);
 
             // when
-            memberFacade.updateMemberStatusByPlanChange(dto);
+            memberCommandFacade.updateMemberStatusByPlanChange(dto);
 
             // then
             verify(defaultMember).updateStatus(Status.FEEDBACK);
@@ -477,7 +477,7 @@ class MemberFacadeTest {
             when(mockPlan.isCompleted()).thenReturn(true);
 
             // when
-            memberFacade.updateMemberStatusByPlanChange(dto);
+            memberCommandFacade.updateMemberStatusByPlanChange(dto);
 
             // then
             verify(defaultMember, never()).updateStatus(any());
@@ -491,7 +491,7 @@ class MemberFacadeTest {
             when(memberRepository.findById(dto.memberId())).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberFacade.updateMemberStatusByPlanChange(dto))
+            assertThatThrownBy(() -> memberCommandFacade.updateMemberStatusByPlanChange(dto))
                     .isInstanceOf(MemberNotFoundException.class);
         }
 
@@ -504,7 +504,7 @@ class MemberFacadeTest {
             when(planRepository.findById(dto.planId())).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberFacade.updateMemberStatusByPlanChange(dto))
+            assertThatThrownBy(() -> memberCommandFacade.updateMemberStatusByPlanChange(dto))
                     .isInstanceOf(PlanNotFoundException.class);
         }
     }
