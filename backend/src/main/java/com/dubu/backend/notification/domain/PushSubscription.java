@@ -2,7 +2,7 @@ package com.dubu.backend.notification.domain;
 
 import com.dubu.backend.core.domain.BaseTimeEntity;
 import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.notification.dto.PushSubscriptionDto;
+import com.dubu.backend.notification.api.dto.PushSubscriptionDto;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,8 +1,8 @@
 package com.dubu.backend.notification.api;
 
-import com.dubu.backend.notification.dto.FcmTokenDto;
-import com.dubu.backend.notification.dto.PushMessageDto;
-import com.dubu.backend.notification.dto.PushSubscriptionDto;
+import com.dubu.backend.notification.api.dto.FcmTokenDto;
+import com.dubu.backend.notification.api.dto.PushMessageDto;
+import com.dubu.backend.notification.api.dto.PushSubscriptionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

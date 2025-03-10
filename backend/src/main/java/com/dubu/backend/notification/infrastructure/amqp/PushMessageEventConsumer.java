@@ -1,9 +1,9 @@
-package com.dubu.backend.notification.infra.amqp;
+package com.dubu.backend.notification.infrastructure.amqp;
 
 import com.dubu.backend.notification.application.FcmService;
 import com.dubu.backend.notification.application.NotificationService;
 import com.dubu.backend.notification.core.NotificationRabbitMQConfig;
-import com.dubu.backend.notification.dto.PushMessageDto;
+import com.dubu.backend.notification.api.dto.PushMessageDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.dubu.backend.notification.exception;
+package com.dubu.backend.notification.core.exception;
 
 import com.dubu.backend.core.exception.NotFoundException;
 
