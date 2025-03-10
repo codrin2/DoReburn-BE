@@ -2,7 +2,7 @@ package com.dubu.backend.plan.domain;
 
 import com.dubu.backend.core.domain.BaseTimeEntity;
 import com.dubu.backend.plan.domain.enums.TrafficType;
-import com.dubu.backend.plan.dto.request.PlanCreateRequest;
+import com.dubu.backend.plan.api.request.PlanCreateRequest;
 import com.dubu.backend.todo.domain.Todo;
 import jakarta.persistence.*;
 import lombok.*;

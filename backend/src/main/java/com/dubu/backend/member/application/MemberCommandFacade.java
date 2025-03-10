@@ -8,7 +8,7 @@ import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.member.api.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.api.request.MemberOnboardingRequest;
 import com.dubu.backend.member.api.response.MemberInfoResponse;
-import com.dubu.backend.plan.exception.InvalidMemberStatusException;
+import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

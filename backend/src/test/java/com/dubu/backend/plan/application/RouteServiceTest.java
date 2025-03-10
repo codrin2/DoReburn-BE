@@ -7,12 +7,12 @@ import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Route;
 import com.dubu.backend.plan.domain.enums.TrafficType;
 import com.dubu.backend.plan.domain.vo.PathIdentifier;
-import com.dubu.backend.plan.dto.response.OdsayRouteApiResponse;
-import com.dubu.backend.plan.dto.response.RouteSearchResponse;
-import com.dubu.backend.plan.infra.client.OdsayApiClient;
-import com.dubu.backend.plan.infra.repository.PathRepository;
-import com.dubu.backend.plan.infra.repository.PlanRepository;
-import com.dubu.backend.plan.infra.repository.RouteRepository;
+import com.dubu.backend.plan.api.response.OdsayRouteApiResponse;
+import com.dubu.backend.plan.api.response.RouteSearchResponse;
+import com.dubu.backend.plan.infrastructure.OdsayPathApi;
+import com.dubu.backend.plan.domain.repository.PathRepository;
+import com.dubu.backend.plan.domain.repository.PlanRepository;
+import com.dubu.backend.plan.domain.repository.RouteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -36,7 +36,7 @@ import static org.mockito.Mockito.*;
 class RouteServiceTest {
 
     @Mock
-    private OdsayApiClient odsayApiClient;
+    private OdsayPathApi odsayPathApi;
     @Mock
     private MemberRepository memberRepository;
     @Mock
@@ -92,7 +92,7 @@ class RouteServiceTest {
             Double startX = 127.0, startY = 37.0, endX = 126.9, endY = 37.1;
 
             // ODsay API 결과가 없다고 가정
-            given(odsayApiClient.searchPublicTransportRoute(eq(startX), eq(startY), eq(endX), eq(endY)))
+            given(odsayPathApi.searchPublicTransportRoute(eq(startX), eq(startY), eq(endX), eq(endY)))
                     .willReturn(null);
 
             // DB에서 검색되는 Route
@@ -144,7 +144,7 @@ class RouteServiceTest {
                     apiPaths
             );
             OdsayRouteApiResponse odsayResponse = new OdsayRouteApiResponse(apiResult);
-            given(odsayApiClient.searchPublicTransportRoute(eq(startX), eq(startY), eq(endX), eq(endY)))
+            given(odsayPathApi.searchPublicTransportRoute(eq(startX), eq(startY), eq(endX), eq(endY)))
                     .willReturn(odsayResponse);
 
             // subPath, info mocking
@@ -159,7 +159,7 @@ class RouteServiceTest {
             // then
             assertThat(result).hasSize(1);
             assertThat(result.get(0).paths()).isEmpty();
-            verify(odsayApiClient).searchPublicTransportRoute(startX, startY, endX, endY);
+            verify(odsayPathApi).searchPublicTransportRoute(startX, startY, endX, endY);
         }
     }
 

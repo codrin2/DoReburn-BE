@@ -1,7 +1,7 @@
-package com.dubu.backend.plan.infra;
+package com.dubu.backend.plan.infrastructure;
 
-import com.dubu.backend.core.config.RabbitMQNotificationConfig;
-import com.dubu.backend.notification.api.dto.PushMessageDto;
+import com.dubu.backend.core.config.RabbitMQMemberConfig;
+import com.dubu.backend.member.application.event.MovementCompletedEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -12,20 +12,20 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RabbitMQPushMessagePublisher {
+public class RabbitMQMovementCompletedPublisher {
     private final AmqpTemplate amqpTemplate;
     private final ObjectMapper objectMapper;
 
-    public void sendDelayedPush(PushMessageDto message) {
+    public void send(MovementCompletedEvent message) {
         try {
             String jsonMessage = objectMapper.writeValueAsString(message);
 
             amqpTemplate.convertAndSend(
-                    RabbitMQNotificationConfig.NOTIFICATION_EXCHANGE_NAME,
-                    RabbitMQNotificationConfig.DELAY_ROUTING_KEY,
+                    RabbitMQMemberConfig.MEMBER_EXCHANGE_NAME,
+                    RabbitMQMemberConfig.DELAY_ROUTING_KEY,
                     jsonMessage
             );
-            log.info("[푸시 알림 이벤트 발급] message : {}", message);
+            log.info("[멤버 상태 변경 이벤트 생성] message : {}", message);
         } catch (JsonProcessingException e) {
             log.error("메시지 변환 중 오류 발생: {}", e.getMessage(), e);
         }

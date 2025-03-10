@@ -12,7 +12,7 @@ import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.plan.exception.InvalidMemberStatusException;
+import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.domain.Todo;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;

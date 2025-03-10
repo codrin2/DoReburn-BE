@@ -1,4 +1,4 @@
-package com.dubu.backend.plan.config;
+package com.dubu.backend.plan.core;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

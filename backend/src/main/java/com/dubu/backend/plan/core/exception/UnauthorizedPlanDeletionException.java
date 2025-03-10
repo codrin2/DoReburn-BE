@@ -1,4 +1,4 @@
-package com.dubu.backend.plan.exception;
+package com.dubu.backend.plan.core.exception;
 
 import com.dubu.backend.core.exception.UnauthorizedException;
 

@@ -6,12 +6,12 @@ import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.domain.Route;
 import com.dubu.backend.plan.domain.vo.PathIdentifier;
-import com.dubu.backend.plan.dto.response.OdsayRouteApiResponse;
-import com.dubu.backend.plan.dto.response.RouteSearchResponse;
-import com.dubu.backend.plan.infra.client.OdsayApiClient;
-import com.dubu.backend.plan.infra.repository.PathRepository;
-import com.dubu.backend.plan.infra.repository.PlanRepository;
-import com.dubu.backend.plan.infra.repository.RouteRepository;
+import com.dubu.backend.plan.api.response.OdsayRouteApiResponse;
+import com.dubu.backend.plan.api.response.RouteSearchResponse;
+import com.dubu.backend.plan.infrastructure.OdsayPathApi;
+import com.dubu.backend.plan.domain.repository.PathRepository;
+import com.dubu.backend.plan.domain.repository.PlanRepository;
+import com.dubu.backend.plan.domain.repository.RouteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +30,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class RouteService {
-    private final OdsayApiClient odsayApiClient;
+    private final OdsayPathApi odsayPathApi;
     private final MemberRepository memberRepository;
     private final PlanRepository planRepository;
     private final RouteRepository routeRepository;
@@ -57,7 +57,7 @@ public class RouteService {
         // 사용자가 최근 이용한 경로 조회
         List<PathIdentifier> recentlyUsedRoute = loadRecentlyUsedRoute(memberId);
 
-        OdsayRouteApiResponse odsayRouteApiResponse = odsayApiClient.searchPublicTransportRoute(startX, startY, endX, endY);
+        OdsayRouteApiResponse odsayRouteApiResponse = odsayPathApi.searchPublicTransportRoute(startX, startY, endX, endY);
 
         List<RouteSearchResponse> response = new ArrayList<>();
         if (odsayRouteApiResponse == null || odsayRouteApiResponse.result() == null || odsayRouteApiResponse.result().path() == null) {

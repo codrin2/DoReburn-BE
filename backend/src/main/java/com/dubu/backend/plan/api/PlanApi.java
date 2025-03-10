@@ -2,10 +2,10 @@ package com.dubu.backend.plan.api;
 
 import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.member.api.MemberApi;
-import com.dubu.backend.plan.dto.request.PlanCreateRequest;
-import com.dubu.backend.plan.dto.request.PlanFeedbackCreateRequest;
-import com.dubu.backend.plan.dto.response.FeedbackWritePageInfoResponse;
-import com.dubu.backend.plan.dto.response.PlanRecentResponse;
+import com.dubu.backend.plan.api.request.PlanCreateRequest;
+import com.dubu.backend.plan.api.request.PlanFeedbackCreateRequest;
+import com.dubu.backend.plan.api.response.FeedbackWritePageInfoResponse;
+import com.dubu.backend.plan.api.response.PlanRecentResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

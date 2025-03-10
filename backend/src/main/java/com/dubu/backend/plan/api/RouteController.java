@@ -3,7 +3,7 @@ package com.dubu.backend.plan.api;
 
 import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.plan.application.RouteService;
-import com.dubu.backend.plan.dto.response.RouteSearchResponse;
+import com.dubu.backend.plan.api.response.RouteSearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

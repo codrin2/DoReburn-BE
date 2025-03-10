@@ -1,7 +1,8 @@
-package com.dubu.backend.plan.infra.repository;
+package com.dubu.backend.plan.infrastructure;
 
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
+import com.dubu.backend.plan.domain.repository.CustomPathRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 

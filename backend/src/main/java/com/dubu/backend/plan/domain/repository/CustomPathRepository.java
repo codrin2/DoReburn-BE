@@ -1,4 +1,4 @@
-package com.dubu.backend.plan.infra.repository;
+package com.dubu.backend.plan.domain.repository;
 
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
