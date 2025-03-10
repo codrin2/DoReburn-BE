@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
-import com.dubu.backend.member.exception.MemberNotFoundException;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.enums.TrafficType;

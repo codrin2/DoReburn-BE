@@ -1,0 +1,17 @@
+package com.dubu.backend.member.core.exception;
+
+import com.dubu.backend.core.exception.UnauthorizedException;
+
+import static com.dubu.backend.core.exception.ErrorCode.TOKEN_MISSING;
+
+public class TokenMissingException extends UnauthorizedException {
+
+    public TokenMissingException() {
+        super(TOKEN_MISSING.getMessage());
+    }
+
+    @Override
+    public String getErrorCode() {
+        return TOKEN_MISSING.name();
+    }
+}

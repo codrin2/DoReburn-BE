@@ -1,8 +1,8 @@
 package com.dubu.backend.member.infrastructure;
 
-import com.dubu.backend.member.application.PlaceApi;
-import com.dubu.backend.member.presentation.response.AddressSearchResponse;
-import com.dubu.backend.member.presentation.response.NaverPlaceApiResponse;
+import com.dubu.backend.member.application.api.PlaceApi;
+import com.dubu.backend.member.api.response.AddressSearchResponse;
+import com.dubu.backend.member.api.response.NaverPlaceApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

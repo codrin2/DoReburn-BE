@@ -1,6 +1,8 @@
 package com.dubu.backend.member.application;
 
-import com.dubu.backend.member.presentation.response.AddressSearchResponse;
+import com.dubu.backend.member.api.response.AddressSearchResponse;
+import com.dubu.backend.member.application.api.PlaceApi;
+import com.dubu.backend.member.application.api.RoadAddressApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

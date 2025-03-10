@@ -2,7 +2,7 @@ package com.dubu.backend.plan.api;
 
 import com.dubu.backend.core.config.WebConfig;
 import com.dubu.backend.core.interceptor.TokenInterceptor;
-import com.dubu.backend.member.exception.MemberNotFoundException;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.plan.application.RouteService;
 import com.dubu.backend.plan.dto.response.RouteSearchResponse;
 import org.junit.jupiter.api.DisplayName;

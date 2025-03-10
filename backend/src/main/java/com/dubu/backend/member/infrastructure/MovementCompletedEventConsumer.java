@@ -2,7 +2,7 @@ package com.dubu.backend.member.infrastructure;
 
 import com.dubu.backend.member.application.MemberCommandFacade;
 import com.dubu.backend.core.config.MemberRabbitMQConfig;
-import com.dubu.backend.member.application.MovementCompletedEvent;
+import com.dubu.backend.member.application.event.MovementCompletedEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

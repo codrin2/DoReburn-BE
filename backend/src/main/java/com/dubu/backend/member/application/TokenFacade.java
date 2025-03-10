@@ -1,11 +1,11 @@
 package com.dubu.backend.member.application;
 
-import com.dubu.backend.member.presentation.response.Token;
+import com.dubu.backend.member.api.response.Token;
 import com.dubu.backend.member.infrastructure.RedisTokenRepository;
 import com.dubu.backend.member.core.JwtProperties;
-import com.dubu.backend.member.exception.InvalidTokenHeaderException;
-import com.dubu.backend.member.exception.TokenBlacklistedException;
-import com.dubu.backend.member.exception.TokenMissingException;
+import com.dubu.backend.member.core.exception.InvalidTokenHeaderException;
+import com.dubu.backend.member.core.exception.TokenBlacklistedException;
+import com.dubu.backend.member.core.exception.TokenMissingException;
 import io.jsonwebtoken.Claims;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;

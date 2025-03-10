@@ -1,0 +1,16 @@
+package com.dubu.backend.member.core.exception;
+
+import com.dubu.backend.core.exception.BadRequestException;
+
+import static com.dubu.backend.core.exception.ErrorCode.INVALID_MEMBER_STATUS;
+
+public class InvalidStatusException extends BadRequestException {
+    public InvalidStatusException(String status) {
+        super(INVALID_MEMBER_STATUS.getMessage().formatted(status));
+    }
+
+    @Override
+    public String getErrorCode() {
+        return INVALID_MEMBER_STATUS.name();
+    }
+}

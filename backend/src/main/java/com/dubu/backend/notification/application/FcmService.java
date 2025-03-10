@@ -1,7 +1,7 @@
 package com.dubu.backend.notification.application;
 
 import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.member.exception.MemberNotFoundException;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.notification.domain.FcmToken;
 import com.dubu.backend.notification.dto.FcmTokenDto;

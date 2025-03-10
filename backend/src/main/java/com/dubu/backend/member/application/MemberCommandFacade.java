@@ -1,12 +1,13 @@
 package com.dubu.backend.member.application;
 
+import com.dubu.backend.member.application.event.MovementCompletedEvent;
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.MemberInfoService;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.member.presentation.request.MemberInfoUpdateRequest;
-import com.dubu.backend.member.presentation.request.MemberOnboardingRequest;
-import com.dubu.backend.member.presentation.response.MemberInfoResponse;
+import com.dubu.backend.member.api.request.MemberInfoUpdateRequest;
+import com.dubu.backend.member.api.request.MemberOnboardingRequest;
+import com.dubu.backend.member.api.response.MemberInfoResponse;
 import com.dubu.backend.plan.exception.InvalidMemberStatusException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

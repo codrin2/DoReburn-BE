@@ -1,0 +1,16 @@
+package com.dubu.backend.member.core.exception;
+
+import com.dubu.backend.core.exception.InternalServerException;
+
+import static com.dubu.backend.core.exception.ErrorCode.REDIS_UNAVAILABLE;
+
+public class RedisUnavailableException extends InternalServerException {
+    public RedisUnavailableException() {
+        super(REDIS_UNAVAILABLE.getMessage());
+    }
+
+    @Override
+    public String getErrorCode() {
+        return REDIS_UNAVAILABLE.name();
+    }
+}

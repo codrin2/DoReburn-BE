@@ -1,11 +1,11 @@
 package com.dubu.backend.member.application;
 
-import com.dubu.backend.member.presentation.response.KakaoPlaceApiResponse;
-import com.dubu.backend.member.presentation.response.KakaoPlaceApiResponse.DocumentsResponse;
-import com.dubu.backend.member.presentation.response.KakaoPlaceApiResponse.DocumentsResponse.RoadAddressResponse;
-import com.dubu.backend.member.presentation.response.NaverPlaceApiResponse;
-import com.dubu.backend.member.presentation.response.NaverPlaceApiResponse.NaverPlace;
-import com.dubu.backend.member.presentation.response.AddressSearchResponse;
+import com.dubu.backend.member.api.response.KakaoPlaceApiResponse;
+import com.dubu.backend.member.api.response.KakaoPlaceApiResponse.DocumentsResponse;
+import com.dubu.backend.member.api.response.KakaoPlaceApiResponse.DocumentsResponse.RoadAddressResponse;
+import com.dubu.backend.member.api.response.NaverPlaceApiResponse;
+import com.dubu.backend.member.api.response.NaverPlaceApiResponse.NaverPlace;
+import com.dubu.backend.member.api.response.AddressSearchResponse;
 import com.dubu.backend.member.infrastructure.KakaoRoadAddressApi;
 import com.dubu.backend.member.infrastructure.NaverPlaceApi;
 import org.junit.jupiter.api.BeforeEach;

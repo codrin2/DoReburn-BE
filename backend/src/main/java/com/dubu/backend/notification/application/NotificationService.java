@@ -1,11 +1,11 @@
 package com.dubu.backend.notification.application;
 
 import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.member.application.MovementCompletedEvent;
-import com.dubu.backend.member.exception.MemberNotFoundException;
+import com.dubu.backend.member.application.event.MovementCompletedEvent;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.notification.infra.MovementCompletedEventProducer;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.notification.config.VapidKeyConfig;
+import com.dubu.backend.notification.core.VapidKeyConfig;
 import com.dubu.backend.notification.domain.PushSubscription;
 import com.dubu.backend.notification.dto.PushMessageDto;
 import com.dubu.backend.notification.dto.PushSubscriptionDto;

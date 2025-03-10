@@ -1,7 +1,7 @@
 package com.dubu.backend.member.infrastructure;
 
-import com.dubu.backend.member.application.OauthApi;
-import com.dubu.backend.member.presentation.response.UserInfo;
+import com.dubu.backend.member.application.api.OauthApi;
+import com.dubu.backend.member.api.response.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;

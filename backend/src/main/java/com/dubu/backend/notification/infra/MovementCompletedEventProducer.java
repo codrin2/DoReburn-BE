@@ -1,7 +1,7 @@
 package com.dubu.backend.notification.infra;
 
 import com.dubu.backend.core.config.MemberRabbitMQConfig;
-import com.dubu.backend.member.application.MovementCompletedEvent;
+import com.dubu.backend.member.application.event.MovementCompletedEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

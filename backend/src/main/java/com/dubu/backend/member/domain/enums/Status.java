@@ -1,6 +1,6 @@
 package com.dubu.backend.member.domain.enums;
 
-import com.dubu.backend.member.exception.InvalidStatusException;
+import com.dubu.backend.member.core.exception.InvalidStatusException;
 
 import java.util.Arrays;
 

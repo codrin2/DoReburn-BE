@@ -2,7 +2,7 @@ package com.dubu.backend.plan.api;
 
 import com.dubu.backend.core.config.WebConfig;
 import com.dubu.backend.core.interceptor.TokenInterceptor;
-import com.dubu.backend.member.exception.MemberNotFoundException;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.plan.application.PlanService;
 import com.dubu.backend.plan.dto.request.PlanCreateRequest;
 import com.dubu.backend.plan.dto.request.PlanFeedbackCreateRequest;
