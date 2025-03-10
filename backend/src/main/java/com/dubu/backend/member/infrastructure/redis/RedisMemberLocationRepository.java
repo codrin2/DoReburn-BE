@@ -2,10 +2,12 @@ package com.dubu.backend.member.infrastructure.redis;
 
 import com.dubu.backend.member.domain.MemberLocation;
 import com.dubu.backend.member.domain.repository.MemberLocationRepository;
+import com.dubu.backend.member.exception.RedisUnavailableException;
 import com.dubu.backend.todo.dto.request.SurroundingMemberQueryRequest;
 import com.dubu.backend.todo.dto.response.MemberLocationInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.geo.*;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.GeoOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,9 +25,13 @@ public class RedisMemberLocationRepository implements MemberLocationRepository {
 
     @Override
     public void saveMemberLocation(Long memberId, MemberLocation memberLocation) {
-        GeoOperations<String, String> geoOperations = redisTemplate.opsForGeo();
-        Point point = new Point(memberLocation.x_coordinate(), memberLocation.y_coordinate());
-        geoOperations.add(GEO_KEY, point, String.valueOf(memberId));
+        try {
+            GeoOperations<String, String> geoOperations = redisTemplate.opsForGeo();
+            Point point = new Point(memberLocation.x_coordinate(), memberLocation.y_coordinate());
+            geoOperations.add(GEO_KEY, point, String.valueOf(memberId));
+        } catch (RedisConnectionFailureException e) {
+            throw new RedisUnavailableException();
+        }
     }
 
     public List<MemberLocationInfo> findMemberLocations(Long memberId, SurroundingMemberQueryRequest request){
