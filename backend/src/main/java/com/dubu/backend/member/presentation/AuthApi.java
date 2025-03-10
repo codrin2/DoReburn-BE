@@ -1,7 +1,7 @@
-package com.dubu.backend.auth.api;
+package com.dubu.backend.member.presentation;
 
-import com.dubu.backend.auth.dto.AccessTokenResponse;
-import com.dubu.backend.auth.dto.TokenResponse;
+import com.dubu.backend.member.presentation.response.AccessToken;
+import com.dubu.backend.member.presentation.response.Token;
 import com.dubu.backend.core.domain.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -59,7 +59,7 @@ public interface AuthApi {
                     )
             )
     })
-    SuccessResponse<AccessTokenResponse> kakaoCallback(
+    SuccessResponse<AccessToken> kakaoCallback(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "카카오에서 인가 코드를 전달받을 때 사용되는 필드(code)",
                     required = true,
@@ -143,7 +143,7 @@ public interface AuthApi {
                     )
             )
     })
-    SuccessResponse<AccessTokenResponse> reissue(
+    SuccessResponse<AccessToken> reissue(
             HttpServletRequest request,
             HttpServletResponse response
     );
@@ -196,7 +196,7 @@ public interface AuthApi {
                     )
             )
     })
-    SuccessResponse<AccessTokenResponse> testToken();
+    SuccessResponse<AccessToken> testToken();
 
     class ErrorResponseExample {
         public String errorCode;
@@ -204,7 +204,7 @@ public interface AuthApi {
     }
 
     class TokenResponseExample {
-        public TokenResponse data;
+        public Token data;
     }
 
     class KakaoLoginRequestExample {

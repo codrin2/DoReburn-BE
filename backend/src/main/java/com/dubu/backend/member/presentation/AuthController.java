@@ -1,10 +1,10 @@
-package com.dubu.backend.auth.api;
+package com.dubu.backend.member.presentation;
 
-import com.dubu.backend.auth.application.AuthFacade;
-import com.dubu.backend.auth.config.JwtConfig;
-import com.dubu.backend.auth.dto.AccessTokenResponse;
-import com.dubu.backend.auth.dto.TokenResponse;
-import com.dubu.backend.auth.exception.MissingTokenInCookieException;
+import com.dubu.backend.member.application.AuthFacade;
+import com.dubu.backend.member.core.JwtProperties;
+import com.dubu.backend.member.presentation.response.AccessToken;
+import com.dubu.backend.member.presentation.response.Token;
+import com.dubu.backend.member.exception.MissingTokenInCookieException;
 import com.dubu.backend.core.domain.SuccessResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,23 +25,23 @@ import java.util.Map;
 public class AuthController implements AuthApi {
     public static final long HOURS_IN_MINIUTES = 60 * 60L;
 
-    private final JwtConfig jwtConfig;
+    private final JwtProperties jwtProperties;
     private final AuthFacade authFacade;
 
     @PostMapping("/kakao-login")
-    public SuccessResponse<AccessTokenResponse> kakaoCallback(
+    public SuccessResponse<AccessToken> kakaoCallback(
             @RequestBody Map<String, String> request,
             HttpServletResponse response
     ) {
         String code = request.get("code");
-        TokenResponse tokenResponse = authFacade.kakaoLogin(code);
-        sendCookie(response, tokenResponse.refreshToken());
+        Token token = authFacade.kakaoLogin(code);
+        sendCookie(response, token.refreshToken());
 
-        return new SuccessResponse<>(new AccessTokenResponse(tokenResponse.accessToken()));
+        return new SuccessResponse<>(new AccessToken(token.accessToken()));
     }
 
     @PostMapping("/reissue")
-    public SuccessResponse<AccessTokenResponse> reissue(
+    public SuccessResponse<AccessToken> reissue(
             HttpServletRequest request,
             HttpServletResponse response
     ) {
@@ -51,15 +51,15 @@ public class AuthController implements AuthApi {
             throw new MissingTokenInCookieException();
         }
 
-        TokenResponse tokenResponse = authFacade.reissueToken(refreshToken);
-        sendCookie(response, tokenResponse.refreshToken());
+        Token token = authFacade.reissueToken(refreshToken);
+        sendCookie(response, token.refreshToken());
 
-        return new SuccessResponse<>(new AccessTokenResponse(tokenResponse.accessToken()));
+        return new SuccessResponse<>(new AccessToken(token.accessToken()));
     }
 
     @PostMapping("/test/token")
-    public SuccessResponse<AccessTokenResponse> testToken() {
-        AccessTokenResponse response = authFacade.issueTokenForTest();
+    public SuccessResponse<AccessToken> testToken() {
+        AccessToken response = authFacade.issueTokenForTest();
 
         return new SuccessResponse<>(response);
     }
@@ -81,7 +81,7 @@ public class AuthController implements AuthApi {
         cookie.setHttpOnly(true);
 //        cookie.setSecure(true);
         cookie.setPath("/");
-        cookie.setMaxAge((int)(jwtConfig.refreshTokenExpireTimeInHours() * HOURS_IN_MINIUTES));
+        cookie.setMaxAge((int)(jwtProperties.refreshTokenExpireTimeInHours() * HOURS_IN_MINIUTES));
         response.addCookie(cookie);
     }
 }

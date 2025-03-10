@@ -1,6 +1,6 @@
 package com.dubu.backend.core.interceptor;
 
-import com.dubu.backend.auth.application.TokenService;
+import com.dubu.backend.member.application.TokenFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,18 +11,18 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
 
-    private final TokenService tokenService;
+    private final TokenFacade tokenFacade;
 
     @Autowired
-    public TokenInterceptor(TokenService tokenService) {
-        this.tokenService = tokenService;
+    public TokenInterceptor(TokenFacade tokenFacade) {
+        this.tokenFacade = tokenFacade;
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (handler instanceof HandlerMethod handlerMethod) {
-            String token = tokenService.resolveToken(request);
-            Long memberId = tokenService.validateToken(token);
+            String token = tokenFacade.resolveToken(request);
+            Long memberId = tokenFacade.validateToken(token);
 
             request.setAttribute("memberId", memberId);
         }

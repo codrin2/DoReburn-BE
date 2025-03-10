@@ -1,9 +1,9 @@
-package com.dubu.backend.auth.application;
+package com.dubu.backend.member.application;
 
-import com.dubu.backend.auth.domain.OauthProvider;
-import com.dubu.backend.auth.dto.AccessTokenResponse;
-import com.dubu.backend.auth.dto.KakaoUserInfo;
-import com.dubu.backend.auth.dto.TokenResponse;
+import com.dubu.backend.member.domain.enums.OauthProvider;
+import com.dubu.backend.member.presentation.response.AccessToken;
+import com.dubu.backend.member.presentation.response.UserInfo;
+import com.dubu.backend.member.presentation.response.Token;
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,33 +16,33 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthFacade {
     private final OauthApi oauthApi;
-    private final TokenService tokenService;
+    private final TokenFacade tokenFacade;
     private final MemberRepository memberRepository;
 
     @Transactional
-    public TokenResponse kakaoLogin(String code) {
+    public Token kakaoLogin(String code) {
         String accessToken = oauthApi.getAccessToken(code);
-        KakaoUserInfo userInfo = oauthApi.getOauthUser(accessToken);
+        UserInfo userInfo = oauthApi.getOauthUser(accessToken);
 
         Member member = memberRepository.findByOauthProviderId(userInfo.oauthProviderId())
                 .orElseGet(() -> creatMember(userInfo));
 
-        return tokenService.issue(member.getId());
+        return tokenFacade.issue(member.getId());
     }
 
-    public TokenResponse reissueToken(String oldRefreshToken) {
-        TokenResponse tokenResponse = tokenService.reissue(oldRefreshToken);
+    public Token reissueToken(String oldRefreshToken) {
+        Token token = tokenFacade.reissue(oldRefreshToken);
 
-        return tokenResponse;
+        return token;
     }
 
-    public AccessTokenResponse issueTokenForTest() {
-        TokenResponse tokenResponse = tokenService.issue(1L);
+    public AccessToken issueTokenForTest() {
+        Token token = tokenFacade.issue(1L);
 
-        return new AccessTokenResponse(tokenResponse.accessToken());
+        return new AccessToken(token.accessToken());
     }
 
-    private Member creatMember(KakaoUserInfo userInfo) {
+    private Member creatMember(UserInfo userInfo) {
         Member newMember = Member.of(
                 userInfo.email(),
                 OauthProvider.KAKAO,

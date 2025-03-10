@@ -1,4 +1,4 @@
-package com.dubu.backend.auth.exception;
+package com.dubu.backend.member.exception;
 
 import com.dubu.backend.core.exception.UnauthorizedException;
 

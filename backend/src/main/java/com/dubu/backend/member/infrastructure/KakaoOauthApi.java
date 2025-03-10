@@ -1,7 +1,7 @@
-package com.dubu.backend.auth.infra;
+package com.dubu.backend.member.infrastructure;
 
-import com.dubu.backend.auth.application.OauthApi;
-import com.dubu.backend.auth.dto.KakaoUserInfo;
+import com.dubu.backend.member.application.OauthApi;
+import com.dubu.backend.member.presentation.response.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -15,15 +15,15 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class KakaoOauthApi implements OauthApi {
+    private static final String TOKEN_URL = "https://kauth.kakao.com/oauth/token";
+    private static final String USERINFO_URL = "https://kapi.kakao.com/v2/user/me";
+
     @Value("${oauth2.client.registration.kakao.client-id}")
     private String clientId;
     @Value("${oauth2.client.registration.kakao.client-secret}")
     private String clientSecret;
     @Value("${oauth2.client.registration.kakao.redirect-uri}")
     private String redirectUri;
-
-    private static final String TOKEN_URL = "https://kauth.kakao.com/oauth/token";
-    private static final String USERINFO_URL = "https://kapi.kakao.com/v2/user/me";
 
     private final RestClient restClient = RestClient.create();
 
@@ -47,7 +47,7 @@ public class KakaoOauthApi implements OauthApi {
     }
 
     @Override
-    public KakaoUserInfo getOauthUser(String accessToken) {
+    public UserInfo getOauthUser(String accessToken) {
         Map response = restClient.get()
                 .uri(USERINFO_URL)
                 .header("Authorization", "Bearer " + accessToken)
@@ -59,6 +59,6 @@ public class KakaoOauthApi implements OauthApi {
         Map<String, Object> kakaoAccount = (Map<String, Object>) response.get("kakao_account");
         String email = (String) kakaoAccount.get("email");
 
-        return new KakaoUserInfo(oauthProviderId, email);
+        return new UserInfo(oauthProviderId, email);
     }
 }

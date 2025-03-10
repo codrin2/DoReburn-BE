@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.enums.Role;
-import com.dubu.backend.auth.domain.OauthProvider;
+import com.dubu.backend.member.domain.enums.OauthProvider;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.infra.repository.PlanRepository;
 import com.dubu.backend.plan.infra.repository.PathRepository;

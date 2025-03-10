@@ -1,9 +1,11 @@
-package com.dubu.backend.auth.application;
+package com.dubu.backend.member.application;
 
-import com.dubu.backend.auth.dto.TokenResponse;
-import com.dubu.backend.auth.exception.*;
-import com.dubu.backend.auth.infra.RedisTokenRepository;
-import com.dubu.backend.auth.config.JwtConfig;
+import com.dubu.backend.member.presentation.response.Token;
+import com.dubu.backend.member.infrastructure.RedisTokenRepository;
+import com.dubu.backend.member.core.JwtProperties;
+import com.dubu.backend.member.exception.InvalidTokenHeaderException;
+import com.dubu.backend.member.exception.TokenBlacklistedException;
+import com.dubu.backend.member.exception.TokenMissingException;
 import io.jsonwebtoken.Claims;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,10 +18,10 @@ import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
-public class TokenService {
+public class TokenFacade {
     public static final long HOURS_IN_MILLIS = 60 * 60 * 1000L;
 
-    private final JwtConfig jwtConfig;
+    private final JwtProperties jwtProperties;
     private final JwtManager jwtManager;
     private final RedisTokenRepository redisTokenRepository;
     private long accessTokenTime;
@@ -27,20 +29,20 @@ public class TokenService {
 
     @PostConstruct
     public void init() {
-        this.accessTokenTime = jwtConfig.accessTokenExpireTimeInHours() * HOURS_IN_MILLIS;
-        this.refreshTokenTime = jwtConfig.refreshTokenExpireTimeInHours() * HOURS_IN_MILLIS;
+        this.accessTokenTime = jwtProperties.accessTokenExpireTimeInHours() * HOURS_IN_MILLIS;
+        this.refreshTokenTime = jwtProperties.refreshTokenExpireTimeInHours() * HOURS_IN_MILLIS;
     }
 
-    public TokenResponse issue(Long memberId) {
+    public Token issue(Long memberId) {
         String newAccessToken = jwtManager.createToken(memberId, accessTokenTime);
         String newRefreshToken = jwtManager.createToken(memberId, refreshTokenTime);
 
         redisTokenRepository.saveRefreshToken(memberId.toString(), newRefreshToken, refreshTokenTime);
 
-        return new TokenResponse(newAccessToken, newRefreshToken);
+        return new Token(newAccessToken, newRefreshToken);
     }
 
-    public TokenResponse reissue(String oldRefreshToken) {
+    public Token reissue(String oldRefreshToken) {
         Claims claims = jwtManager.parseClaimsFromRefreshToken(oldRefreshToken);
 
         String jti = claims.getId();
@@ -56,9 +58,9 @@ public class TokenService {
 
         redisTokenRepository.addBlacklistToken(jti, getRemainingDuration(claims.getExpiration()));
 
-        TokenResponse tokenResponse = issue(Long.valueOf(memberId));
+        Token token = issue(Long.valueOf(memberId));
 
-        return tokenResponse;
+        return token;
     }
 
     public Long validateToken(String accessToken) {

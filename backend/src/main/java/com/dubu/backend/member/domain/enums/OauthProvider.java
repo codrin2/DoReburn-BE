@@ -1,4 +1,4 @@
-package com.dubu.backend.auth.domain;
+package com.dubu.backend.member.domain.enums;
 
 import static java.util.Locale.ENGLISH;
 

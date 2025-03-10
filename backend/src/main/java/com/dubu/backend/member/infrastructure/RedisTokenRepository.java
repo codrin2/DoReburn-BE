@@ -1,4 +1,4 @@
-package com.dubu.backend.auth.infra;
+package com.dubu.backend.member.infrastructure;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

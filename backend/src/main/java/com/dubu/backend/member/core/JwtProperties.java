@@ -1,9 +1,9 @@
-package com.dubu.backend.auth.config;
+package com.dubu.backend.member.core;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "jwt")
-public record JwtConfig(
+public record JwtProperties(
         String secret,
         long accessTokenExpireTimeInHours,
         long refreshTokenExpireTimeInHours

@@ -1,8 +1,8 @@
-package com.dubu.backend.auth.application;
+package com.dubu.backend.member.application;
 
-import com.dubu.backend.auth.exception.RefreshTokenExpiredException;
-import com.dubu.backend.auth.exception.TokenExpiredException;
-import com.dubu.backend.auth.exception.TokenInvalidException;
+import com.dubu.backend.member.exception.RefreshTokenExpiredException;
+import com.dubu.backend.member.exception.TokenExpiredException;
+import com.dubu.backend.member.exception.TokenInvalidException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -24,7 +24,6 @@ public class JwtManager {
 
     @Value("${jwt.secret}")
     private String secret;
-
     private SecretKey secretKey;
 
     @PostConstruct
