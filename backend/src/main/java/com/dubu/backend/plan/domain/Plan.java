@@ -2,12 +2,14 @@ package com.dubu.backend.plan.domain;
 
 import com.dubu.backend.core.domain.BaseTimeEntity;
 import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.plan.core.AggregateRoot;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@AggregateRoot
 @Entity
 @Getter
 @Builder
