@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class MemberRabbitMQConfig {
+public class RabbitMQMemberConfig {
     public static final String DELAY_QUEUE_NAME = "member.delay.queue";
     public static final String DLX_QUEUE_NAME = "member.dlx.queue";
 

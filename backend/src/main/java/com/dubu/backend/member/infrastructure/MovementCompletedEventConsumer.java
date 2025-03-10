@@ -1,7 +1,7 @@
 package com.dubu.backend.member.infrastructure;
 
 import com.dubu.backend.member.application.MemberCommandFacade;
-import com.dubu.backend.core.config.MemberRabbitMQConfig;
+import com.dubu.backend.core.config.RabbitMQMemberConfig;
 import com.dubu.backend.member.application.event.MovementCompletedEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class MovementCompletedEventConsumer {
     private final MemberCommandFacade memberCommandFacade;
     private final ObjectMapper objectMapper;
 
-    @RabbitListener(queues = MemberRabbitMQConfig.DLX_QUEUE_NAME)
+    @RabbitListener(queues = RabbitMQMemberConfig.DLX_QUEUE_NAME)
     public void receive(String jsonMessage) {
         try {
             MovementCompletedEvent message = objectMapper.readValue(jsonMessage, MovementCompletedEvent.class);

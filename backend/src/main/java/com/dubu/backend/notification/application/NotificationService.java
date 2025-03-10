@@ -3,16 +3,16 @@ package com.dubu.backend.notification.application;
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.application.event.MovementCompletedEvent;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
-import com.dubu.backend.notification.infrastructure.MovementCompletedEventProducer;
+import com.dubu.backend.plan.infra.RabbitMQMovementCompletedPublisher;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.notification.core.VapidKeyConfig;
+import com.dubu.backend.notification.core.VapidKeyProperties;
 import com.dubu.backend.notification.domain.PushSubscription;
 import com.dubu.backend.notification.api.dto.PushMessageDto;
 import com.dubu.backend.notification.api.dto.PushSubscriptionDto;
 import com.dubu.backend.notification.core.exception.DuplicateSubscriptionException;
 import com.dubu.backend.notification.core.exception.UnavailablePushServiceException;
-import com.dubu.backend.notification.infrastructure.amqp.PushMessageEventProducer;
-import com.dubu.backend.notification.infrastructure.repository.PushSubscriptionRepository;
+import com.dubu.backend.plan.infra.RabbitMQPushMessagePublisher;
+import com.dubu.backend.notification.domain.repository.PushSubscriptionRepository;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.exception.PlanNotFoundException;
 import com.dubu.backend.plan.infra.repository.PlanRepository;
@@ -35,12 +35,12 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
-    private final VapidKeyConfig vapidKeyConfig;
+    private final VapidKeyProperties vapidKeyProperties;
     private final MemberRepository memberRepository;
     private final PlanRepository planRepository;
     private final PushSubscriptionRepository subscriptionRepository;
-    private final PushMessageEventProducer pushMessageEventProducer;
-    private final MovementCompletedEventProducer movementCompletedEventProducer;
+    private final RabbitMQPushMessagePublisher rabbitMQPushMessagePublisher;
+    private final RabbitMQMovementCompletedPublisher rabbitMQMovementCompletedPublisher;
     private final ObjectMapper objectMapper;
 
     @Value("${admin.email}")
@@ -75,7 +75,7 @@ public class NotificationService {
         PushService pushService;
 
         try {
-            pushService = new PushService(vapidKeyConfig.publicKey(), vapidKeyConfig.privateKey(), adminEmail);
+            pushService = new PushService(vapidKeyProperties.publicKey(), vapidKeyProperties.privateKey(), adminEmail);
         } catch (GeneralSecurityException e) {
             throw new UnavailablePushServiceException();
         }
@@ -117,13 +117,13 @@ public class NotificationService {
                 "잘 도착하셨나요? 30분 뒤면 오늘 한 일을 체크할 수 없어요😭",
                 "얼른 접속해서 오늘 한 일을 체크하고 피드백을 기록해 보세요~"
         );
-        pushMessageEventProducer.sendDelayedPush(pushMessageDto);
+        rabbitMQPushMessagePublisher.sendDelayedPush(pushMessageDto);
 
         // 상태 변경 이벤트 발행
         MovementCompletedEvent movementCompletedEvent = new MovementCompletedEvent(
                 memberId,
                 plan.getId()
         );
-        movementCompletedEventProducer.send(movementCompletedEvent);
+        rabbitMQMovementCompletedPublisher.send(movementCompletedEvent);
     }
 }

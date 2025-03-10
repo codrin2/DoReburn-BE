@@ -1,8 +1,8 @@
-package com.dubu.backend.notification.infrastructure.amqp;
+package com.dubu.backend.notification.infrastructure;
 
 import com.dubu.backend.notification.application.FcmService;
 import com.dubu.backend.notification.application.NotificationService;
-import com.dubu.backend.notification.core.NotificationRabbitMQConfig;
+import com.dubu.backend.core.config.RabbitMQNotificationConfig;
 import com.dubu.backend.notification.api.dto.PushMessageDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PushMessageEventConsumer {
+public class RabbitMQPushMessageConsumer {
     private final NotificationService notificationService;
     private final FcmService fcmService;
     private final ObjectMapper objectMapper;
 
-    @RabbitListener(queues = NotificationRabbitMQConfig.DLX_QUEUE_NAME)
+    @RabbitListener(queues = RabbitMQNotificationConfig.DLX_QUEUE_NAME)
     public void receivePushMessage(String jsonMessage) {
         try {
             PushMessageDto message = objectMapper.readValue(jsonMessage, PushMessageDto.class);

@@ -1,6 +1,6 @@
-package com.dubu.backend.notification.infrastructure.amqp;
+package com.dubu.backend.plan.infra;
 
-import com.dubu.backend.notification.core.NotificationRabbitMQConfig;
+import com.dubu.backend.core.config.RabbitMQNotificationConfig;
 import com.dubu.backend.notification.api.dto.PushMessageDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PushMessageEventProducer {
+public class RabbitMQPushMessagePublisher {
     private final AmqpTemplate amqpTemplate;
     private final ObjectMapper objectMapper;
 
@@ -21,8 +21,8 @@ public class PushMessageEventProducer {
             String jsonMessage = objectMapper.writeValueAsString(message);
 
             amqpTemplate.convertAndSend(
-                    NotificationRabbitMQConfig.NOTIFICATION_EXCHANGE_NAME,
-                    NotificationRabbitMQConfig.DELAY_ROUTING_KEY,
+                    RabbitMQNotificationConfig.NOTIFICATION_EXCHANGE_NAME,
+                    RabbitMQNotificationConfig.DELAY_ROUTING_KEY,
                     jsonMessage
             );
             log.info("[푸시 알림 이벤트 발급] message : {}", message);

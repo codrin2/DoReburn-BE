@@ -6,7 +6,7 @@ import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.notification.domain.FcmToken;
 import com.dubu.backend.notification.api.dto.FcmTokenDto;
 import com.dubu.backend.notification.api.dto.PushMessageDto;
-import com.dubu.backend.notification.infrastructure.repository.FcmTokenRepository;
+import com.dubu.backend.notification.domain.repository.FcmTokenRepository;
 import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.dubu.backend.notification.core;
+package com.dubu.backend.core.config;
 
 import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -6,14 +6,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class NotificationRabbitMQConfig {
-    public static final String DELAY_QUEUE_NAME = "plan.delay.queue";
-    public static final String DLX_QUEUE_NAME = "plan.dlx.queue";
+public class RabbitMQNotificationConfig {
+    public static final String DELAY_QUEUE_NAME = "notification.delay.queue";
+    public static final String DLX_QUEUE_NAME = "notification.dlx.queue";
 
-    public static final String NOTIFICATION_EXCHANGE_NAME = "plan.exchange";
+    public static final String NOTIFICATION_EXCHANGE_NAME = "notification.exchange";
 
-    public static final String DELAY_ROUTING_KEY = "plan.delay.key";
-    public static final String DLX_ROUTING_KEY = "plan.dlx.key";
+    public static final String DELAY_ROUTING_KEY = "notification.delay.key";
+    public static final String DLX_ROUTING_KEY = "notification.dlx.key";
 
     @Value("${spring.rabbitmq.ttl.app-push}")
     private long pushDelayMs;

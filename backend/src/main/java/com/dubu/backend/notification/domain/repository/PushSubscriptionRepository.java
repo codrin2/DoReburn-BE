@@ -1,4 +1,4 @@
-package com.dubu.backend.notification.infrastructure.repository;
+package com.dubu.backend.notification.domain.repository;
 
 import com.dubu.backend.notification.domain.PushSubscription;
 import org.springframework.data.jpa.repository.JpaRepository;
