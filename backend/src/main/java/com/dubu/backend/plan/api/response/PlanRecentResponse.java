@@ -1,6 +1,6 @@
 package com.dubu.backend.plan.api.response;
 
-import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.domain.enums.TrafficType;
 import com.dubu.backend.todo.domain.Todo;
@@ -14,12 +14,12 @@ public record PlanRecentResponse(
         LocalDateTime createdAt,
         List<PlanRecentResponse.PlanPathResponse> paths
 ) {
-    public static PlanRecentResponse of(Plan plan, List<Path> paths) {
+    public static PlanRecentResponse of(Plan plan, List<SubPath> subPaths) {
         return new PlanRecentResponse(
                 plan.getId(),
                 plan.getTotalTime(),
                 plan.getCreatedAt(),
-                paths.stream()
+                subPaths.stream()
                         .filter(path -> path.getTrafficType() != TrafficType.WALK)
                         .map(PlanPathResponse::from)
                         .toList()
@@ -37,17 +37,17 @@ public record PlanRecentResponse(
             String endName,
             List<PlanRecentResponse.PathTodoResponse> todos
     ) {
-        public static PlanPathResponse from(Path path) {
+        public static PlanPathResponse from(SubPath subPath) {
             return new PlanPathResponse(
-                    path.getId(),
-                    path.getTrafficType().name(),
-                    path.getSectionTime(),
-                    path.getSubwayCode(),
-                    path.getBusNumber(),
-                    path.getBusType(),
-                    path.getStartName(),
-                    path.getEndName(),
-                    path.getTodos().stream().map(PathTodoResponse::from).toList()
+                    subPath.getId(),
+                    subPath.getTrafficType().name(),
+                    subPath.getSectionTime(),
+                    subPath.getSubwayCode(),
+                    subPath.getBusNumber(),
+                    subPath.getBusType(),
+                    subPath.getStartName(),
+                    subPath.getEndName(),
+                    subPath.getTodos().stream().map(PathTodoResponse::from).toList()
             );
         }
     }

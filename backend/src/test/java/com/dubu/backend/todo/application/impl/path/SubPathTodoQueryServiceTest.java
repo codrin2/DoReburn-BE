@@ -13,10 +13,10 @@ import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.core.exception.PathNotFoundException;
-import com.dubu.backend.plan.domain.repository.PathRepository;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.domain.Todo;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
@@ -42,13 +42,13 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
 @ExtendWith(MockitoExtension.class)
-class PathTodoQueryServiceTest {
+class SubPathTodoQueryServiceTest {
 
     @Mock private MemberRepository memberRepository;
     @Mock private MemberCategoryRepository memberCategoryRepository;
     @Mock private CategoryRepository categoryRepository;
     @Mock private TodoRepository todoRepository;
-    @Mock private PathRepository pathRepository;
+    @Mock private SubPathRepository subPathRepository;
     @Mock private TodoRandomSelector todoRandomSelector;
 
     @InjectMocks
@@ -64,12 +64,12 @@ class PathTodoQueryServiceTest {
                 .build();
     }
 
-    private Path createPath(Long pathId) {
-        Path path = Path.builder()
+    private SubPath createPath(Long pathId) {
+        SubPath subPath = SubPath.builder()
                 .id(pathId)
                 .build();
         // Path 엔티티 내부 todos는 @Builder.Default로 ArrayList 초기화
-        return path;
+        return subPath;
     }
 
     // Category 헬퍼
@@ -80,13 +80,13 @@ class PathTodoQueryServiceTest {
     }
 
     // Todo 헬퍼 (difficulty 반드시 설정)
-    private Todo createTodo(Long id, String title, Member member, Category category, Path path, TodoType type) {
+    private Todo createTodo(Long id, String title, Member member, Category category, SubPath subPath, TodoType type) {
         return Todo.builder()
                 .id(id)
                 .title(title)
                 .member(member)
                 .category(category)
-                .path(path)
+                .subPath(subPath)
                 .type(type)
                 .difficulty(TodoDifficulty.NORMAL) // NPE 방지
                 .memo("Memo " + id)
@@ -104,16 +104,16 @@ class PathTodoQueryServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, pathId);
 
         Member member = createMember(memberId, Status.MOVE);
-        Path path = createPath(pathId);
+        SubPath subPath = createPath(pathId);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        when(pathRepository.findById(pathId)).thenReturn(Optional.of(path));
+        when(subPathRepository.findById(pathId)).thenReturn(Optional.of(subPath));
 
         // Path에 연결된 Todo 2건
         Category cat = createCategory("TEST");
-        Todo todo1 = createTodo(10L, "Path Todo 1", member, cat, path, TodoType.IN_PROGRESS);
-        Todo todo2 = createTodo(11L, "Path Todo 2", member, cat, path, TodoType.IN_PROGRESS);
+        Todo todo1 = createTodo(10L, "Path Todo 1", member, cat, subPath, TodoType.IN_PROGRESS);
+        Todo todo2 = createTodo(11L, "Path Todo 2", member, cat, subPath, TodoType.IN_PROGRESS);
         List<Todo> todos = List.of(todo1, todo2);
-        when(todoRepository.findTodosWithCategoryByPath(path)).thenReturn(todos);
+        when(todoRepository.findTodosWithCategoryByPath(subPath)).thenReturn(todos);
 
         // 실행
         List<TodoInfo> result = service.findTargetTodos(identifier);
@@ -154,7 +154,7 @@ class PathTodoQueryServiceTest {
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         Long pathId = 999L;
-        when(pathRepository.findById(pathId)).thenReturn(Optional.empty());
+        when(subPathRepository.findById(pathId)).thenReturn(Optional.empty());
 
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, pathId);
         assertThrows(PathNotFoundException.class, () -> service.findTargetTodos(identifier));
@@ -171,16 +171,16 @@ class PathTodoQueryServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, pathId);
 
         Member member = createMember(memberId, Status.MOVE);
-        Path path = createPath(pathId);
+        SubPath subPath = createPath(pathId);
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        when(pathRepository.findById(pathId)).thenReturn(Optional.of(path));
+        when(subPathRepository.findById(pathId)).thenReturn(Optional.of(subPath));
 
         SaveTodoQueryRequest request = new SaveTodoQueryRequest(5);
         // slice stub
         Category cat = createCategory("SAVE_CAT");
-        Todo todo1 = createTodo(20L, "Save Todo 1", member, cat, path, TodoType.SAVE);
-        Todo todo2 = createTodo(21L, "Save Todo 2", member, cat, path, TodoType.SAVE);
+        Todo todo1 = createTodo(20L, "Save Todo 1", member, cat, subPath, TodoType.SAVE);
+        Todo todo2 = createTodo(21L, "Save Todo 2", member, cat, subPath, TodoType.SAVE);
         List<Todo> todos = List.of(todo1, todo2);
         Slice<Todo> fakeSlice = new SliceImpl<>(todos, PageRequest.ofSize(request.size()), false);
 
@@ -191,7 +191,7 @@ class PathTodoQueryServiceTest {
                 .thenReturn(fakeSlice);
 
         // stubbing: path의 부모 todo ID 목록
-        when(todoRepository.findParentTodoIdsByPathAndParentTodoNotNull(path))
+        when(todoRepository.findParentTodoIdsByPathAndParentTodoNotNull(subPath))
                 .thenReturn(List.of(30L));
 
         PageResponse<Long, List<TodoInfo>> response =
@@ -216,10 +216,10 @@ class PathTodoQueryServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, pathId);
 
         Member member = createMember(memberId, Status.MOVE);
-        Path path = createPath(pathId);
+        SubPath subPath = createPath(pathId);
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        when(pathRepository.findById(pathId)).thenReturn(Optional.of(path));
+        when(subPathRepository.findById(pathId)).thenReturn(Optional.of(subPath));
 
         // 카테고리
         when(memberCategoryRepository.findCategoryIdsByMember(member))
@@ -229,11 +229,11 @@ class PathTodoQueryServiceTest {
 
         when(todoRandomSelector.selectTodos(5, List.of(200L, 201L))).thenReturn(List.of(200L));
         Category cat = createCategory("RECOMMEND");
-        Todo recommended = createTodo(200L, "Path Recommend", member, cat, path, TodoType.RECOMMEND);
+        Todo recommended = createTodo(200L, "Path Recommend", member, cat, subPath, TodoType.RECOMMEND);
         when(todoRepository.findAllById(List.of(200L))).thenReturn(List.of(recommended));
 
         // path의 부모 todo
-        when(todoRepository.findParentTodoIdsByPathAndParentTodoNotNull(path))
+        when(todoRepository.findParentTodoIdsByPathAndParentTodoNotNull(subPath))
                 .thenReturn(List.of(30L));
         when(todoRepository.findParentTodoIdsByIdsAndTypeAndParentTodoNotNull(List.of(30L), TodoType.SAVE))
                 .thenReturn(List.of(40L));
@@ -255,9 +255,9 @@ class PathTodoQueryServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, pathId);
 
         Member member = createMember(memberId, Status.MOVE);
-        Path path = createPath(pathId);
+        SubPath subPath = createPath(pathId);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        when(pathRepository.findById(pathId)).thenReturn(Optional.of(path));
+        when(subPathRepository.findById(pathId)).thenReturn(Optional.of(subPath));
 
         // 요청 DTO
         Cursor cursor = Cursor.of(1L, TodoDifficulty.EASY, 10L);
@@ -273,7 +273,7 @@ class PathTodoQueryServiceTest {
         List<TodoDifficulty> diffs = List.of(TodoDifficulty.EASY);
 
         // slice
-        Todo recommended = createTodo(100L, "Path Recommended", member, readingCat, path, TodoType.RECOMMEND);
+        Todo recommended = createTodo(100L, "Path Recommended", member, readingCat, subPath, TodoType.RECOMMEND);
         recommended.updateTodo(null, null, TodoDifficulty.EASY, null); // 안전
         List<Todo> recTodos = List.of(recommended);
         Slice<Todo> fakeSlice = new SliceImpl<>(recTodos, PageRequest.ofSize(5), false);
@@ -288,7 +288,7 @@ class PathTodoQueryServiceTest {
                 PageRequest.ofSize(5)))
                 .thenReturn(fakeSlice);
 
-        when(todoRepository.findParentTodoIdsByPathAndParentTodoNotNull(path))
+        when(todoRepository.findParentTodoIdsByPathAndParentTodoNotNull(subPath))
                 .thenReturn(List.of(30L));
         when(todoRepository.findParentTodoIdsByIdsAndTypeAndParentTodoNotNull(List.of(30L), TodoType.SAVE))
                 .thenReturn(List.of(40L));

@@ -2,16 +2,16 @@ package com.dubu.backend.plan.application;
 
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.domain.Plan;
-import com.dubu.backend.plan.domain.Route;
+import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.vo.PathIdentifier;
 import com.dubu.backend.plan.api.response.OdsayRouteApiResponse;
 import com.dubu.backend.plan.api.response.RouteSearchResponse;
 import com.dubu.backend.plan.infrastructure.OdsayPathApi;
-import com.dubu.backend.plan.domain.repository.PathRepository;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
-import com.dubu.backend.plan.domain.repository.RouteRepository;
+import com.dubu.backend.plan.domain.repository.PathRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,20 +29,20 @@ import java.util.Objects;
  */
 @Service
 @RequiredArgsConstructor
-public class RouteService {
+public class PathFacade {
     private final OdsayPathApi odsayPathApi;
     private final MemberRepository memberRepository;
     private final PlanRepository planRepository;
-    private final RouteRepository routeRepository;
     private final PathRepository pathRepository;
+    private final SubPathRepository subPathRepository;
 
     @Transactional
-    public Route createNewRoute(Double startX, Double startY,
-                                Double endX, Double endY,
-                                Integer totalTime
+    public Path createNewRoute(Double startX, Double startY,
+                               Double endX, Double endY,
+                               Integer totalTime
     ) {
-        Route newRoute = Route.createRoute(startX, startY, endX, endY, totalTime);
-        return routeRepository.save(newRoute);
+        Path newPath = Path.createRoute(startX, startY, endX, endY, totalTime);
+        return pathRepository.save(newPath);
     }
 
     /**
@@ -62,8 +62,8 @@ public class RouteService {
         List<RouteSearchResponse> response = new ArrayList<>();
         if (odsayRouteApiResponse == null || odsayRouteApiResponse.result() == null || odsayRouteApiResponse.result().path() == null) {
             // API 결과가 없는 경우, DB에서 좌표에 해당하는 Route를 조회 (경로와 관련된 Path도 함께 로딩)
-            List<Route> routeList = routeRepository.findAllWithPathsByCoordinates(startX, startY, endX, endY);
-            routeList.forEach(route -> {
+            List<Path> pathList = pathRepository.findAllWithPathsByCoordinates(startX, startY, endX, endY);
+            pathList.forEach(route -> {
                 // DB에 저장된 경로와 최근 사용 경로가 동일한지 확인
                 boolean isRecentlyUsed = isSameAsSavedRoute(route, recentlyUsedRoute);
                 RouteSearchResponse dto = RouteSearchResponse.fromRoute(route, isRecentlyUsed);
@@ -88,16 +88,16 @@ public class RouteService {
     }
 
     @Transactional(readOnly = true)
-    public Route findReusableRoute(Double startX, Double startY, Double endX, Double endY,
-                                   List<PathIdentifier> newPathIdentifiers) {
+    public Path findReusableRoute(Double startX, Double startY, Double endX, Double endY,
+                                  List<PathIdentifier> newPathIdentifiers) {
 
         // 좌표가 같은 Route들 모두 조회
-        List<Route> existingRoutes = routeRepository.findAllWithPathsByCoordinates(startX, startY, endX, endY);
+        List<Path> existingPaths = pathRepository.findAllWithPathsByCoordinates(startX, startY, endX, endY);
 
         // 각 Route의 PathIdentifier 목록 추출 후, newPathIdentifiers를 포함하는지 검사
-        return existingRoutes.stream()
+        return existingPaths.stream()
                 .filter(routeCandidate -> {
-                    List<PathIdentifier> existingPathIdentifiers = routeCandidate.getPaths().stream()
+                    List<PathIdentifier> existingPathIdentifiers = routeCandidate.getSubPaths().stream()
                             .map(p -> new PathIdentifier(
                                     p.getTrafficType().name(),
                                     p.getStartName(),
@@ -119,9 +119,9 @@ public class RouteService {
             return List.of();
         }
 
-        List<Path> pathList = pathRepository.findByPlanIdOrderByPathOrderAsc(latestPlan.getId());
+        List<SubPath> subPathList = subPathRepository.findByPlanIdOrderByPathOrderAsc(latestPlan.getId());
 
-        return pathList.stream()
+        return subPathList.stream()
                 .map(p -> {
                     String startName = p.getStartName();
                     String endName = p.getEndName();
@@ -138,9 +138,9 @@ public class RouteService {
     /**
      * DB에서 조회한 Route와 최근 사용 Route가 동일한지 확인
      */
-    private boolean isSameAsSavedRoute(Route route, List<PathIdentifier> recentlyUsedRoute) {
-        List<PathIdentifier> routePathIdentifiers = route.getPaths().stream()
-                .sorted(Comparator.comparing(Path::getPathOrder)) // pathOrder 기준 정렬
+    private boolean isSameAsSavedRoute(Path path, List<PathIdentifier> recentlyUsedRoute) {
+        List<PathIdentifier> routePathIdentifiers = path.getSubPaths().stream()
+                .sorted(Comparator.comparing(SubPath::getPathOrder)) // pathOrder 기준 정렬
                 .map(p -> new PathIdentifier(
                         p.getTrafficType().name(),
                         p.getStartName(),

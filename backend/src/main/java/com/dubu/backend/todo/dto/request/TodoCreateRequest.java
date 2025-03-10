@@ -1,7 +1,7 @@
 package com.dubu.backend.todo.dto.request;
 
 import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.todo.domain.*;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;
@@ -14,7 +14,7 @@ public record TodoCreateRequest(
         @Schema(description = "할 일 난이도", example = "EASY") String difficulty,
         @Schema(description = "할 일 메모", example = "매일 30분 이상 독서") String memo){
 
-    public Todo toEntity(Member member, Category category, Schedule schedule, Path path, TodoType type){
+    public Todo toEntity(Member member, Category category, Schedule schedule, SubPath subPath, TodoType type){
         return Todo.builder()
                 .title(title)
                 .category(category)
@@ -22,7 +22,7 @@ public record TodoCreateRequest(
                 .memo(memo)
                 .member(member)
                 .schedule(schedule)
-                .path(path)
+                .subPath(subPath)
                 .type(type)
                 .build();
     }

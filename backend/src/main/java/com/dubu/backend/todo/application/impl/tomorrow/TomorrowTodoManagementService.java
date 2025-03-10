@@ -220,7 +220,7 @@ public class TomorrowTodoManagementService implements TodoManagementService {
     }
 
     private List<Todo> createTomorrowTodosFromTodayTodos(Schedule tomorrowSchedule, List<Todo> todayTodos){
-        List<Todo> tomorrowTodos = todayTodos.stream().map(t -> Todo.of(t.getTitle(), TodoType.SCHEDULED, t.getDifficulty(), t.getMemo(), t.getMember(), t.getCategory(), t.getParentTodo(), tomorrowSchedule, t.getPath())).toList();
+        List<Todo> tomorrowTodos = todayTodos.stream().map(t -> Todo.of(t.getTitle(), TodoType.SCHEDULED, t.getDifficulty(), t.getMemo(), t.getMember(), t.getCategory(), t.getParentTodo(), tomorrowSchedule, t.getSubPath())).toList();
         return todoRepository.saveAll(tomorrowTodos);
     }
 }

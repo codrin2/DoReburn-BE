@@ -19,11 +19,11 @@ import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Feedback;
 import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.domain.Plan;
-import com.dubu.backend.plan.domain.Route;
 import com.dubu.backend.plan.domain.enums.Mood;
 import com.dubu.backend.plan.domain.enums.TrafficType;
-import com.dubu.backend.plan.domain.repository.PathRepository;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.domain.Todo;
@@ -50,7 +50,7 @@ class StatisticServiceImplTest {
     @Mock private CategoryRepository categoryRepository;
     @Mock private PlanRepository planRepository;
     @Mock private TodoRepository todoRepository;
-    @Mock private PathRepository pathRepository;
+    @Mock private SubPathRepository subPathRepository;
 
     @InjectMocks
     private StatisticServiceImpl statisticService;
@@ -114,14 +114,14 @@ class StatisticServiceImplTest {
                 eq(date.atTime(LocalTime.MAX)))
         ).thenReturn(dayPlans);
 
-        Path path1 = createPath(10L, 20);
-        Path path2 = createPath(11L, 10);
-        path1.getTodos().add(createTodo(100L, allCategories.get(0), TodoType.DONE));
-        path1.getTodos().add(createTodo(101L, allCategories.get(1), TodoType.DONE));
-        path2.getTodos().add(createTodo(102L, allCategories.get(0), TodoType.DONE));
-        List<Path> dayPaths = List.of(path1, path2);
-        when(pathRepository.findByPlansAndTypeAndIsCompleted(dayPlans, TodoType.DONE, true))
-                .thenReturn(dayPaths);
+        SubPath subPath1 = createPath(10L, 20);
+        SubPath subPath2 = createPath(11L, 10);
+        subPath1.getTodos().add(createTodo(100L, allCategories.get(0), TodoType.DONE));
+        subPath1.getTodos().add(createTodo(101L, allCategories.get(1), TodoType.DONE));
+        subPath2.getTodos().add(createTodo(102L, allCategories.get(0), TodoType.DONE));
+        List<SubPath> daySubPaths = List.of(subPath1, subPath2);
+        when(subPathRepository.findByPlansAndTypeAndIsCompleted(dayPlans, TodoType.DONE, true))
+                .thenReturn(daySubPaths);
 
         // when
         DayStatisticInfo result = statisticService.collectDayStatistic(memberId, date);
@@ -207,10 +207,10 @@ class StatisticServiceImplTest {
         Plan planB = createPlan(102L, 30, createFeedback("MODERATE"));
         ReflectionTestUtils.setField(planB, "createdAt", LocalDateTime.of(2023, 5, 3, 12, 0));
         // 각 plan에 대한 path 생성 및 할당 (sectionTime이 totalAvailableTime 산출에 사용됨)
-        Path pathA = createPathForPlan(planA, 111L, 20);  // sectionTime=20
-        Path pathB = createPathForPlan(planB, 112L, 30);  // sectionTime=30
-        planA.getPaths().add(pathA);
-        planB.getPaths().add(pathB);
+        SubPath subPathA = createPathForPlan(planA, 111L, 20);  // sectionTime=20
+        SubPath subPathB = createPathForPlan(planB, 112L, 30);  // sectionTime=30
+        planA.getSubPaths().add(subPathA);
+        planB.getSubPaths().add(subPathB);
         List<Plan> thisWeekPlans = List.of(planA, planB);
         when(planRepository.findWithPathsByMemberAndCreatedAtBetween(
                 eq(member),
@@ -219,7 +219,7 @@ class StatisticServiceImplTest {
         ).thenReturn(thisWeekPlans);
 
         List<Long> pathIds = List.of(111L, 112L);
-        when(pathRepository.findPathIdsByMemberAndCreatedAtBetween(
+        when(subPathRepository.findPathIdsByMemberAndCreatedAtBetween(
                 eq(member),
                 eq(startDate.atStartOfDay()),
                 eq(startDate.plusDays(6).atTime(LocalTime.MAX)))
@@ -236,8 +236,8 @@ class StatisticServiceImplTest {
         Plan lastWeekPlan = createPlan(999L, 25, createFeedback("MODERATE"));
         ReflectionTestUtils.setField(lastWeekPlan, "createdAt", LocalDateTime.of(2023, 4, 28, 8, 0));
         // lastWeekPlan에도 path를 할당하여 사용 시간 산출에 포함
-        Path lastWeekPath = createPathForPlan(lastWeekPlan, 888L, 10);
-        lastWeekPlan.getPaths().add(lastWeekPath);
+        SubPath lastWeekSubPath = createPathForPlan(lastWeekPlan, 888L, 10);
+        lastWeekPlan.getSubPaths().add(lastWeekSubPath);
         List<Plan> lastWeekPlans = List.of(lastWeekPlan);
         when(planRepository.findWithPathsByMemberAndCreatedAtBetween(
                 eq(member),
@@ -313,14 +313,14 @@ class StatisticServiceImplTest {
                 .build();
     }
 
-    private Path createPath(Long pathId, int sectionTime) {
-        Path path = Path.builder()
+    private SubPath createPath(Long pathId, int sectionTime) {
+        SubPath subPath = SubPath.builder()
                 .id(pathId)
                 .sectionTime(sectionTime)
                 .build();
         // path의 todos 리스트는 builder.default이거나 아래처럼
-        path.getTodos().addAll(new ArrayList<>());
-        return path;
+        subPath.getTodos().addAll(new ArrayList<>());
+        return subPath;
     }
 
     private Todo createTodo(Long todoId, Category category, TodoType type) {
@@ -332,18 +332,18 @@ class StatisticServiceImplTest {
                 .build();
     }
 
-    private Path createPathForPlan(Plan plan, Long pathId, Integer sectionTime) {
-        Route route = Route.createRoute(0.0, 0.0, 0.0, 0.0, sectionTime);
-        Path path = Path.builder()
+    private SubPath createPathForPlan(Plan plan, Long pathId, Integer sectionTime) {
+        Path path = Path.createRoute(0.0, 0.0, 0.0, 0.0, sectionTime);
+        SubPath subPath = SubPath.builder()
                 .plan(plan)
-                .route(route)
+                .path(path)
                 .trafficType(TrafficType.BUS) // 적절한 기본값 설정
                 .startName("Start")
                 .endName("End")
                 .sectionTime(sectionTime)
                 .pathOrder(1)
                 .build();
-        ReflectionTestUtils.setField(path, "id", pathId);
-        return path;
+        ReflectionTestUtils.setField(subPath, "id", pathId);
+        return subPath;
     }
 }

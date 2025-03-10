@@ -27,7 +27,7 @@ public class Plan extends BaseTimeEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "plan", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Path> paths = new ArrayList<>();
+    private List<SubPath> subPaths = new ArrayList<>();
 
     @OneToOne(mappedBy = "plan")
     private Feedback feedback;

@@ -1,7 +1,7 @@
 package com.dubu.backend.todo.infra.repository;
 
 import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.todo.dto.response.MemberCategoryInfo;
 import com.dubu.backend.todo.domain.Schedule;
 import com.dubu.backend.todo.domain.Todo;
@@ -47,19 +47,19 @@ public interface TodoRepository extends JpaRepository<Todo, Long>, CustomTodoRep
     Optional<Todo> findByMemberAndParentTodoAndType(@Param("member") Member member, @Param("parentTodo") Todo parentTod, @Param("type") TodoType type);
 
     // 경로로 조회
-    @Query("SELECT t FROM Todo t WHERE t.path = :path")
-    List<Todo> findTodosByPath(Path path);
+    @Query("SELECT t FROM Todo t WHERE t.subPath = :subPath")
+    List<Todo> findTodosByPath(SubPath subPath);
 
-    @Query("SELECT t FROM Todo t JOIN FETCH t.category WHERE t.path = :path")
-    List<Todo> findTodosWithCategoryByPath(@Param("path") Path path);
+    @Query("SELECT t FROM Todo t JOIN FETCH t.category WHERE t.subPath = :subPath")
+    List<Todo> findTodosWithCategoryByPath(@Param("subPath") SubPath subPath);
 
-    @Query("SELECT t.parentTodo.id FROM Todo t where t.path = :path AND t.parentTodo IS NOT NULL")
-    List<Long> findParentTodoIdsByPathAndParentTodoNotNull(Path path);
+    @Query("SELECT t.parentTodo.id FROM Todo t where t.subPath = :subPath AND t.parentTodo IS NOT NULL")
+    List<Long> findParentTodoIdsByPathAndParentTodoNotNull(SubPath subPath);
 
-    @Query("SELECT t FROM Todo t WHERE t.parentTodo = :parentTodo AND t.path = :path")
-    Optional<Todo> findByParentTodoAndPath(@Param("parentTodo") Todo parentTodo, @Param("path") Path path);
+    @Query("SELECT t FROM Todo t WHERE t.parentTodo = :parentTodo AND t.subPath = :subPath")
+    Optional<Todo> findByParentTodoAndPath(@Param("parentTodo") Todo parentTodo, @Param("subPath") SubPath subPath);
 
-    @Query("SELECT t FROM Todo t WHERE t.path.id IN :pathIds AND t.type = :type AND t.isCompleted = true")
+    @Query("SELECT t FROM Todo t WHERE t.subPath.id IN :pathIds AND t.type = :type AND t.isCompleted = true")
     List<Todo> findByPathIdsAndTypeAndIsCompleted(List<Long> pathIds, TodoType type);
 
     @Query(value = """
@@ -71,7 +71,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long>, CustomTodoRep
             SELECT DISTINCT t.member_id, c.name
             FROM todo t
                      JOIN category c ON c.category_id = t.category_id
-                     JOIN path p ON p.path_id = t.path_id
+                     JOIN subPath p ON p.sub_path_id = t.sub_path_id
                      JOIN ranked_plan rp ON rp.plan_id = p.plan_id AND rp.rn = 1
             WHERE t.is_completed = true;
     """, nativeQuery = true)

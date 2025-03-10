@@ -6,7 +6,7 @@ import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.notification.application.WebPushService;
 import com.dubu.backend.plan.domain.Feedback;
-import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.domain.enums.TrafficType;
 import com.dubu.backend.plan.api.request.PlanCreateRequest;
@@ -17,7 +17,7 @@ import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.core.exception.PlanNotFoundException;
 import com.dubu.backend.plan.core.exception.UnauthorizedPlanDeletionException;
 import com.dubu.backend.plan.domain.repository.FeedbackRepository;
-import com.dubu.backend.plan.domain.repository.PathRepository;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.todo.domain.Schedule;
 import com.dubu.backend.todo.domain.Todo;
@@ -43,10 +43,10 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.*;
 
 @DisplayName("PlanService 단위 테스트")
-class PlanServiceTest {
+class PlanFacadeTest {
 
     @Mock
-    private RouteService routeService;
+    private PathFacade pathFacade;
     @Mock
     private WebPushService webPushService;
     @Mock
@@ -54,7 +54,7 @@ class PlanServiceTest {
     @Mock
     private PlanRepository planRepository;
     @Mock
-    private PathRepository pathRepository;
+    private SubPathRepository subPathRepository;
     @Mock
     private ScheduleRepository scheduleRepository;
     @Mock
@@ -63,7 +63,7 @@ class PlanServiceTest {
     private FeedbackRepository feedbackRepository;
 
     @InjectMocks
-    private PlanService planService;
+    private PlanFacade planFacade;
 
     @BeforeEach
     void setUp() {
@@ -104,7 +104,7 @@ class PlanServiceTest {
             given(planRepository.save(any(Plan.class))).willReturn(savedPlan);
 
             // when
-            Long result = planService.savePlan(memberId, 127.0, 37.0, 126.9, 37.1, request);
+            Long result = planFacade.savePlan(memberId, 127.0, 37.0, 126.9, 37.1, request);
 
             // then
             assertThat(result).isNotNull();
@@ -129,7 +129,7 @@ class PlanServiceTest {
             );
 
             // when & then
-            assertThatThrownBy(() -> planService.savePlan(memberId, 127.0, 37.0, 126.9, 37.1, request))
+            assertThatThrownBy(() -> planFacade.savePlan(memberId, 127.0, 37.0, 126.9, 37.1, request))
                     .isInstanceOf(InvalidMemberStatusException.class);
         }
 
@@ -146,7 +146,7 @@ class PlanServiceTest {
 
             // when & then
             assertThatThrownBy(() ->
-                    planService.savePlan(memberId, 127.0, 37.0, 126.9, 37.1, request))
+                    planFacade.savePlan(memberId, 127.0, 37.0, 126.9, 37.1, request))
                     .isInstanceOf(MemberNotFoundException.class);
         }
     }
@@ -183,7 +183,7 @@ class PlanServiceTest {
                 when(feedbackRepository.save(any(Feedback.class))).thenReturn(savedFeedback);
 
                 // when
-                Long feedbackId = planService.savePlanFeedback(memberId, planId, request);
+                Long feedbackId = planFacade.savePlanFeedback(memberId, planId, request);
 
                 // then
                 assertThat(feedbackId).isEqualTo(999L);
@@ -204,7 +204,7 @@ class PlanServiceTest {
             PlanFeedbackCreateRequest request = new PlanFeedbackCreateRequest("SATISFIED", "좋았어요!");
 
             // when & then
-            assertThatThrownBy(() -> planService.savePlanFeedback(memberId, planId, request))
+            assertThatThrownBy(() -> planFacade.savePlanFeedback(memberId, planId, request))
                     .isInstanceOf(InvalidMemberStatusException.class);
         }
 
@@ -223,7 +223,7 @@ class PlanServiceTest {
             PlanFeedbackCreateRequest request = new PlanFeedbackCreateRequest("SATISFIED", "좋았어요!");
 
             // when & then
-            assertThatThrownBy(() -> planService.savePlanFeedback(memberId, planId, request))
+            assertThatThrownBy(() -> planFacade.savePlanFeedback(memberId, planId, request))
                     .isInstanceOf(PlanNotFoundException.class);
         }
 
@@ -247,7 +247,7 @@ class PlanServiceTest {
             PlanFeedbackCreateRequest request = new PlanFeedbackCreateRequest("SATISFIED", "좋았어요!");
 
             // when & then
-            assertThatThrownBy(() -> planService.savePlanFeedback(memberId, planId, request))
+            assertThatThrownBy(() -> planFacade.savePlanFeedback(memberId, planId, request))
                     .isInstanceOf(UnauthorizedPlanDeletionException.class);
         }
     }
@@ -271,16 +271,16 @@ class PlanServiceTest {
             when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId))
                     .thenReturn(Optional.of(mockPlan));
 
-            Path mockPath1 = mock(Path.class);
-            Path mockPath2 = mock(Path.class);
-            when(mockPath1.getTrafficType()).thenReturn(TrafficType.SUBWAY);
-            when(mockPath2.getTrafficType()).thenReturn(TrafficType.BUS);
+            SubPath mockSubPath1 = mock(SubPath.class);
+            SubPath mockSubPath2 = mock(SubPath.class);
+            when(mockSubPath1.getTrafficType()).thenReturn(TrafficType.SUBWAY);
+            when(mockSubPath2.getTrafficType()).thenReturn(TrafficType.BUS);
 
-            when(pathRepository.findByPlanWithTodosOrderByPathOrder(mockPlan))
-                    .thenReturn(List.of(mockPath1, mockPath2));
+            when(subPathRepository.findByPlanWithTodosOrderByPathOrder(mockPlan))
+                    .thenReturn(List.of(mockSubPath1, mockSubPath2));
 
             // when
-            PlanRecentResponse result = planService.findRecentPlan(memberId);
+            PlanRecentResponse result = planFacade.findRecentPlan(memberId);
 
             // then
             assertThat(result).isNotNull();
@@ -296,7 +296,7 @@ class PlanServiceTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> planService.findRecentPlan(memberId))
+            assertThatThrownBy(() -> planFacade.findRecentPlan(memberId))
                     .isInstanceOf(MemberNotFoundException.class);
         }
 
@@ -310,7 +310,7 @@ class PlanServiceTest {
                     .thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> planService.findRecentPlan(memberId))
+            assertThatThrownBy(() -> planFacade.findRecentPlan(memberId))
                     .isInstanceOf(PlanNotFoundException.class);
         }
     }
@@ -336,7 +336,7 @@ class PlanServiceTest {
                     .thenReturn(Optional.of(mockPlan));
 
             // when
-            FeedbackWritePageInfoResponse result = planService.findFeedbackWritePageInfo(memberId);
+            FeedbackWritePageInfoResponse result = planFacade.findFeedbackWritePageInfo(memberId);
 
             // then
             assertThat(result).isNotNull();
@@ -354,7 +354,7 @@ class PlanServiceTest {
             when(mockMember.getStatus()).thenReturn(Status.MOVE);
 
             // when & then
-            assertThatThrownBy(() -> planService.findFeedbackWritePageInfo(memberId))
+            assertThatThrownBy(() -> planFacade.findFeedbackWritePageInfo(memberId))
                     .isInstanceOf(InvalidMemberStatusException.class);
         }
 
@@ -371,7 +371,7 @@ class PlanServiceTest {
                     .thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> planService.findFeedbackWritePageInfo(memberId))
+            assertThatThrownBy(() -> planFacade.findFeedbackWritePageInfo(memberId))
                     .isInstanceOf(PlanNotFoundException.class);
         }
     }
@@ -396,21 +396,21 @@ class PlanServiceTest {
             when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId))
                     .thenReturn(Optional.of(mockPlan));
 
-            Path mockPath = mock(Path.class);
+            SubPath mockSubPath = mock(SubPath.class);
             Todo todo1 = mock(Todo.class);
             Todo todo2 = mock(Todo.class);
 
-            when(mockPath.getTodos()).thenReturn(List.of(todo1, todo2));
-            when(mockPath.getTrafficType()).thenReturn(TrafficType.SUBWAY);
-            when(mockPath.getSectionTime()).thenReturn(40);
+            when(mockSubPath.getTodos()).thenReturn(List.of(todo1, todo2));
+            when(mockSubPath.getTrafficType()).thenReturn(TrafficType.SUBWAY);
+            when(mockSubPath.getSectionTime()).thenReturn(40);
 
-            when(mockPlan.getPaths()).thenReturn(List.of(mockPath));
+            when(mockPlan.getSubPaths()).thenReturn(List.of(mockSubPath));
 
             when(todo1.getIsCompleted()).thenReturn(true);
             when(todo2.getIsCompleted()).thenReturn(true);
 
             // when
-            planService.completeMove(memberId);
+            planFacade.completeMove(memberId);
 
             // then
             verify(mockMember).updateStatus(Status.FEEDBACK);
@@ -429,7 +429,7 @@ class PlanServiceTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
             when(mockMember.getStatus()).thenReturn(Status.STOP);
 
-            assertThatThrownBy(() -> planService.completeMove(memberId))
+            assertThatThrownBy(() -> planFacade.completeMove(memberId))
                     .isInstanceOf(InvalidMemberStatusException.class);
         }
 
@@ -444,7 +444,7 @@ class PlanServiceTest {
             when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId))
                     .thenReturn(Optional.empty());
 
-            assertThatThrownBy(() -> planService.completeMove(memberId))
+            assertThatThrownBy(() -> planFacade.completeMove(memberId))
                     .isInstanceOf(PlanNotFoundException.class);
         }
     }
@@ -474,7 +474,7 @@ class PlanServiceTest {
             when(mockMember.getId()).thenReturn(memberId);
 
             // when
-            planService.removePlan(memberId, planId);
+            planFacade.removePlan(memberId, planId);
 
             // then
             verify(planRepository).delete(mockPlan);
@@ -491,7 +491,7 @@ class PlanServiceTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
             when(mockMember.getStatus()).thenReturn(Status.STOP);
 
-            assertThatThrownBy(() -> planService.removePlan(memberId, planId))
+            assertThatThrownBy(() -> planFacade.removePlan(memberId, planId))
                     .isInstanceOf(InvalidMemberStatusException.class);
         }
 
@@ -507,7 +507,7 @@ class PlanServiceTest {
 
             when(planRepository.findById(planId)).thenReturn(Optional.empty());
 
-            assertThatThrownBy(() -> planService.removePlan(memberId, planId))
+            assertThatThrownBy(() -> planFacade.removePlan(memberId, planId))
                     .isInstanceOf(PlanNotFoundException.class);
         }
 
@@ -529,7 +529,7 @@ class PlanServiceTest {
             when(planRepository.findById(planId)).thenReturn(Optional.of(mockPlan));
             when(mockPlan.getMember()).thenReturn(anotherMember);
 
-            assertThatThrownBy(() -> planService.removePlan(memberId, planId))
+            assertThatThrownBy(() -> planFacade.removePlan(memberId, planId))
                     .isInstanceOf(UnauthorizedPlanDeletionException.class);
         }
     }

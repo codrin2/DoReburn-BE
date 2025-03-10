@@ -90,7 +90,7 @@ public interface TodoApi {
                         1. 회원의 상태가 해당 API를 호출할 수 없는 경우 (INVALID_MEMBER_STATUS)
                         2. 할 일 개수를 초과한 경우 (TODO_LIMIT_EXCEEDED)
                         3. type 에 잘못된 값을 넣은 경우 (METHOD_ARGUMENT_TYPE_MISMATCH)
-                        4. type 이 path 일 때 pathId 가 주어지지 않은 경우 (PATH_ID_NOT_PROVIDED)
+                        4. type 이 subPath 일 때 pathId 가 주어지지 않은 경우 (PATH_ID_NOT_PROVIDED)
                     """,
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -181,7 +181,7 @@ public interface TodoApi {
     TodoSuccessResponse<?> postTodo(
             @Parameter(description = "회원 ID", required = true) @RequestAttribute Long memberId,
             @Parameter(description = "할 일 유형", required = true) @PathVariable("type") TodoRequestType type,
-            @Parameter(description = "경로 ID - type = path 인 경우만 사용") @Nullable @RequestParam("pathId") Long pathId,
+            @Parameter(description = "경로 ID - type = subPath 인 경우만 사용") @Nullable @RequestParam("pathId") Long pathId,
             @RequestBody TodoCreateRequest request);
 
     @Operation(summary = "다른 할 일로부터 할 일 생성 - 지도(공유)에서도 사용", description = "다른 할 일로부터 할 일을 추가합니다.지도(공유)에서 사용 시 type=save 로 설정")
@@ -251,7 +251,7 @@ public interface TodoApi {
                         2. 할 일 개수를 초과한 경우 (TODO_LIMIT_EXCEEDED)
                         3. 이미 추가한 한 할 일의 경우 (ALREADY_ADDED_TODO)
                         4. type 에 잘못된 값을 넣은 경우 (METHOD_ARGUMENT_TYPE_MISMATCH)
-                        5. type 이 path 일 때 pathId 가 주어지지 않은 경우 (PATH_ID_NOT_PROVIDED)
+                        5. type 이 subPath 일 때 pathId 가 주어지지 않은 경우 (PATH_ID_NOT_PROVIDED)
                     """,
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -349,7 +349,7 @@ public interface TodoApi {
     TodoSuccessResponse<?> postTodoFromArchived(
             @Parameter(description = "회원 ID", required = true) @RequestAttribute Long memberId,
             @Parameter(description = "할 일 유형", required = true) @PathVariable("type")TodoRequestType type,
-            @Parameter(description = "경로 ID  - type = path 인 경우만 사용") @Nullable @RequestParam("pathId") Long pathId,
+            @Parameter(description = "경로 ID  - type = subPath 인 경우만 사용") @Nullable @RequestParam("pathId") Long pathId,
             @RequestBody TodoCreateFromArchivedRequest request);
 
     @Operation(summary = "할 일 수정", description = "할 일을 수정한다.")
@@ -1008,7 +1008,7 @@ public interface TodoApi {
     })
     SuccessResponse<List<TodoInfo>> getTodosByPath(
             @Parameter(description = "회원 ID", required = true) @RequestAttribute("memberId") Long memberId,
-            @Parameter(description = "경로 ID - type = path 인 경우만 사용", required = true) @RequestParam("pathId") Long pathId);
+            @Parameter(description = "경로 ID - type = subPath 인 경우만 사용", required = true) @RequestParam("pathId") Long pathId);
 
 
 
@@ -1082,7 +1082,7 @@ public interface TodoApi {
                         다음 경우에 발생할 수 있습니다.
                         1. 회원의 상태가 해당 API를 호출할 없는 경우 (INVALID_MEMBER_STATUS)
                         2. modifyType 에 잘못된 값을 넣은 경우 (METHOD_ARGUMENT_TYPE_MISMATCH)
-                        3. type 이 path 일 때 pathId 가 주어지지 않은 경우 (PATH_ID_NOT_PROVIDED)
+                        3. type 이 subPath 일 때 pathId 가 주어지지 않은 경우 (PATH_ID_NOT_PROVIDED)
                     """,
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -1157,7 +1157,7 @@ public interface TodoApi {
     })
     PageResponse<Long, List<TodoInfo>> getSaveTodos(
             @Parameter(description = "회원 ID", required = true) @RequestAttribute Long memberId,
-            @Parameter(description = "경로 ID - type = path 인 경우만 사용") @Nullable @RequestParam("pathId") Long pathId,
+            @Parameter(description = "경로 ID - type = subPath 인 경우만 사용") @Nullable @RequestParam("pathId") Long pathId,
             @Parameter(description = "수정 할 일 타입 - xx 수정 페이지(오늘 할 일, 내일 할 일, 경로별 할 일, 마이 페이지)", required = true) @RequestParam(value = "modifyType", required = true) TodoRequestType modifyType,
             @Parameter(description = "커서 - 할 일 ID") @Nullable @RequestParam("cursor") Long cursor,
             @ModelAttribute SaveTodoQueryRequest request);
@@ -1231,7 +1231,7 @@ public interface TodoApi {
                         다음 경우에 발생할 수 있습니다.
                         1. 회원의 상태가 해당 API를 호출할 없는 경우 (INVALID_MEMBER_STATUS)
                         2. modifyType 에 잘못된 값을 넣은 경우 (METHOD_ARGUMENT_TYPE_MISMATCH)
-                        3. type 이 path 일 때 pathId 가 주어지지 않은 경우 (PATH_ID_NOT_PROVIDED)
+                        3. type 이 subPath 일 때 pathId 가 주어지지 않은 경우 (PATH_ID_NOT_PROVIDED)
                     """,
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -1306,7 +1306,7 @@ public interface TodoApi {
     })
     SuccessResponse<List<TodoInfo>> getPersonalizedRecommendTodos(
             @Parameter(description = "회원 ID", required = true) @RequestAttribute Long memberId,
-            @Parameter(description = "경로 ID - type = path 인 경우만 사용") @Nullable @RequestParam("pathId") Long pathId,
+            @Parameter(description = "경로 ID - type = subPath 인 경우만 사용") @Nullable @RequestParam("pathId") Long pathId,
             @Parameter(description = "수정 할 일 타입 - xx 수정 페이지(오늘 할 일, 내일 할 일, 경로별 할 일, 마이 페이지)", required = true) @RequestParam(value = "modifyType", required = true) TodoRequestType modifyType
     );
 
@@ -1384,7 +1384,7 @@ public interface TodoApi {
                         다음 경우에 발생할 수 있습니다.
                         1. 회원의 상태가 해당 API를 호출할 없는 경우 (INVALID_MEMBER_STATUS)
                         2. modifyType 에 잘못된 값을 넣은 경우 (METHOD_ARGUMENT_TYPE_MISMATCH)
-                        3. type 이 path 일 때 pathId 가 주어지지 않은 경우 (PATH_ID_NOT_PROVIDED)
+                        3. type 이 subPath 일 때 pathId 가 주어지지 않은 경우 (PATH_ID_NOT_PROVIDED)
                     """,
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -1459,7 +1459,7 @@ public interface TodoApi {
     })
     PageResponse<Cursor, List<TodoInfo>> getAllRecommendTodos(
             @Parameter(description = "회원 ID", required = true) @RequestAttribute Long memberId,
-            @Parameter(description = "경로 ID - type = path 인 경우만 사용") @Nullable @RequestParam("pathId") Long pathId,
+            @Parameter(description = "경로 ID - type = subPath 인 경우만 사용") @Nullable @RequestParam("pathId") Long pathId,
             @Parameter(description = "수정 할 일 타입 - xx 수정 페이지(오늘 할 일, 내일 할 일, 경로별 할 일, 마이 페이지)", required = true) @RequestParam(value = "modifyType", required = true) TodoRequestType modifyType,
             @Nullable @ModelAttribute Cursor cursor,
             @ModelAttribute RecommendTodoQueryRequest request);

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-public interface RouteApi {
+public interface PathApi {
 
     @Operation(summary = "경로 검색",
             description = """
@@ -36,7 +36,7 @@ public interface RouteApi {
                                                   "isRecentlyUsed": true,
                                                   "totalTime": 40,
                                                   "totalSectionTime": 40,
-                                                  "paths": [
+                                                  "subPaths": [
                                                     {
                                                       "trafficType": "SUBWAY",
                                                       "sectionTime": 20,
@@ -82,7 +82,7 @@ public interface RouteApi {
             )
     })
     @GetMapping("/search")
-    SuccessResponse<List<RouteSearchResponse>> routeSearch(
+    SuccessResponse<List<RouteSearchResponse>> pathSearch(
             Long memberId,
             @Parameter(
                     description = "출발지의 X 좌표(경도)",

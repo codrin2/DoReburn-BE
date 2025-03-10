@@ -1,7 +1,7 @@
 package com.dubu.backend.plan.api.response;
 
 import com.dubu.backend.plan.domain.Path;
-import com.dubu.backend.plan.domain.Route;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.domain.enums.TrafficType;
 
 import java.util.Comparator;
@@ -25,15 +25,15 @@ public record RouteSearchResponse(
     ) {
     }
 
-    public static RouteSearchResponse fromRoute(Route route, boolean isRecentlyUsed) {
-        int totalSectionTime = route.getPaths().stream()
-                .filter(path -> path.getTrafficType() != TrafficType.WALK)
-                .mapToInt(Path::getSectionTime)
+    public static RouteSearchResponse fromRoute(Path path, boolean isRecentlyUsed) {
+        int totalSectionTime = path.getSubPaths().stream()
+                .filter(subPath ->  subPath.getTrafficType() != TrafficType.WALK)
+                .mapToInt(SubPath::getSectionTime)
                 .sum();
 
         // 각 Path 엔티티를 DTO로 변환 (pathOrder 기준 정렬)
-        List<PathDto> pathDtoList = route.getPaths().stream()
-                .sorted(Comparator.comparing(Path::getPathOrder))
+        List<PathDto> pathDtoList = path.getSubPaths().stream()
+                .sorted(Comparator.comparing(SubPath::getPathOrder))
                 .map(p -> new PathDto(
                         p.getTrafficType().name(),
                         p.getSectionTime(),
@@ -45,6 +45,6 @@ public record RouteSearchResponse(
                 ))
                 .collect(Collectors.toList());
 
-        return new RouteSearchResponse(isRecentlyUsed, route.getTotalTime(), totalSectionTime, pathDtoList);
+        return new RouteSearchResponse(isRecentlyUsed, path.getTotalTime(), totalSectionTime, pathDtoList);
     }
 }

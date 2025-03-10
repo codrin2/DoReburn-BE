@@ -7,8 +7,8 @@ import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.notification.application.WebPushService;
 import com.dubu.backend.plan.domain.Feedback;
 import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.domain.Plan;
-import com.dubu.backend.plan.domain.Route;
 import com.dubu.backend.plan.domain.enums.TrafficType;
 import com.dubu.backend.plan.domain.vo.PathIdentifier;
 import com.dubu.backend.plan.api.request.PlanCreateRequest;
@@ -19,7 +19,7 @@ import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.core.exception.PlanNotFoundException;
 import com.dubu.backend.plan.core.exception.UnauthorizedPlanDeletionException;
 import com.dubu.backend.plan.domain.repository.FeedbackRepository;
-import com.dubu.backend.plan.domain.repository.PathRepository;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.todo.domain.Schedule;
 import com.dubu.backend.todo.domain.Todo;
@@ -39,12 +39,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
-public class PlanService {
-    private final RouteService routeService;
+public class PlanFacade {
+    private final PathFacade pathFacade;
     private final WebPushService webPushService;
     private final MemberRepository memberRepository;
     private final PlanRepository planRepository;
-    private final PathRepository pathRepository;
+    private final SubPathRepository subPathRepository;
     private final ScheduleRepository scheduleRepository;
     private final TodoRepository todoRepository;
     private final FeedbackRepository feedbackRepository;
@@ -70,21 +70,21 @@ public class PlanService {
                 .toList();
 
         // Route 재사용 여부 확인
-        Route reusableRoute = routeService.findReusableRoute(startX, startY, endX, endY, newPathIdentifiers);
+        Path reusablePath = pathFacade.findReusableRoute(startX, startY, endX, endY, newPathIdentifiers);
 
         Plan newPlan = Plan.createPlan(currentMember, request.totalSectionTime());
         Plan savedPlan = planRepository.save(newPlan);
 
-        Route finalRoute = null;
-        if (reusableRoute == null) {
-            finalRoute = routeService.createNewRoute(startX, startY, endX, endY, request.totalTime());
+        Path finalPath = null;
+        if (reusablePath == null) {
+            finalPath = pathFacade.createNewRoute(startX, startY, endX, endY, request.totalTime());
         }
 
         // Path 생성 → route는 기존꺼면 null, 새 route 있으면 연결
-        List<Path> paths = createAndSavePaths(savedPlan, finalRoute, request);
+        List<SubPath> subPaths = createAndSavePaths(savedPlan, finalPath, request);
 
         // 오늘의 할 일(Todo) Path 할당 & Todo 내용 복제하여 저장
-        assignTodosToPaths(currentMember, paths);
+        assignTodosToPaths(currentMember, subPaths);
 
         currentMember.updateStatus(Status.MOVE);
 
@@ -124,9 +124,9 @@ public class PlanService {
         Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
                 .orElseThrow(PlanNotFoundException::new);
 
-        List<Path> paths = pathRepository.findByPlanWithTodosOrderByPathOrder(recentPlan);
+        List<SubPath> subPaths = subPathRepository.findByPlanWithTodosOrderByPathOrder(recentPlan);
 
-        return PlanRecentResponse.of(recentPlan, paths);
+        return PlanRecentResponse.of(recentPlan, subPaths);
     }
 
     @Transactional(readOnly = true)
@@ -156,7 +156,7 @@ public class PlanService {
         Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
                 .orElseThrow(PlanNotFoundException::new);
 
-        recentPlan.getPaths().forEach(path -> {
+        recentPlan.getSubPaths().forEach(path -> {
             List<Todo> todos = path.getTodos();
             List<Todo> doneTodos = todos.stream().filter(todo -> todo.getIsCompleted() == Boolean.TRUE).toList();
 
@@ -193,38 +193,38 @@ public class PlanService {
         planRepository.delete(planToDelete);
     }
 
-    private List<Path> createAndSavePaths(Plan plan, Route route, PlanCreateRequest request) {
+    private List<SubPath> createAndSavePaths(Plan plan, Path path, PlanCreateRequest request) {
         AtomicInteger index = new AtomicInteger(0);
-        List<Path> paths = request.paths().stream()
-                .filter(pathRequest -> route != null || !Objects.equals(pathRequest.trafficType(), "WALK")) // route가 null이면 WALK 제외
-                .map(pathRequest -> Path.createPath(
+        List<SubPath> subPaths = request.paths().stream()
+                .filter(pathRequest -> path != null || !Objects.equals(pathRequest.trafficType(), "WALK")) // route가 null이면 WALK 제외
+                .map(pathRequest -> SubPath.createPath(
                         plan,
-                        route,
+                        path,
                         pathRequest,
                         index.getAndIncrement()
                 ))
                 .toList();
 
-        pathRepository.saveAll(paths);
-        return paths;
+        subPathRepository.saveAll(subPaths);
+        return subPaths;
     }
 
     /**
      * Schedule에서 Todo를 가져와 첫번째 Paths에 모두 할당
      */
-    private void assignTodosToPaths(Member member, List<Path> paths) {
+    private void assignTodosToPaths(Member member, List<SubPath> subPaths) {
         Schedule schedule = scheduleRepository.findLatestSchedule(member, LocalDate.now())
                 .orElseThrow(ScheduleNotFoundException::new);
 
         List<Todo> existingTodos = schedule.getTodos();
         List<Todo> newTodos = new ArrayList<>();
-        Path assignedPath = paths.stream()
+        SubPath assignedSubPath = subPaths.stream()
                 .filter(path -> path.getTrafficType()!= TrafficType.WALK)
                 .findFirst()
                 .orElse(null);
 
         for (Todo original : existingTodos) {
-            Todo cloned = Todo.copyWithPlan(member, original, assignedPath);
+            Todo cloned = Todo.copyWithPlan(member, original, assignedSubPath);
             newTodos.add(cloned);
         }
         todoRepository.saveAll(newTodos);

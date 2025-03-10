@@ -4,15 +4,15 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Path;
-import com.dubu.backend.plan.domain.Route;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.domain.enums.TrafficType;
 import com.dubu.backend.plan.domain.vo.PathIdentifier;
 import com.dubu.backend.plan.api.response.OdsayRouteApiResponse;
 import com.dubu.backend.plan.api.response.RouteSearchResponse;
 import com.dubu.backend.plan.infrastructure.OdsayPathApi;
-import com.dubu.backend.plan.domain.repository.PathRepository;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
-import com.dubu.backend.plan.domain.repository.RouteRepository;
+import com.dubu.backend.plan.domain.repository.PathRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -33,7 +33,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @DisplayName("RouteService 단위 테스트")
-class RouteServiceTest {
+class SubPathFacadeTest {
 
     @Mock
     private OdsayPathApi odsayPathApi;
@@ -42,12 +42,12 @@ class RouteServiceTest {
     @Mock
     private PlanRepository planRepository;
     @Mock
-    private RouteRepository routeRepository;
-    @Mock
     private PathRepository pathRepository;
+    @Mock
+    private SubPathRepository subPathRepository;
 
     @InjectMocks
-    private RouteService routeService;
+    private PathFacade pathFacade;
 
     @BeforeEach
     void setUp() {
@@ -56,7 +56,7 @@ class RouteServiceTest {
 
     @Nested
     @DisplayName("[createNewRoute] 경로(Route) 생성")
-    class Describe_createNewRoute {
+    class Describe_createNewPath {
 
         @Test
         @DisplayName("주어진 좌표와 시간으로 Route를 생성 후 저장한다.")
@@ -65,15 +65,15 @@ class RouteServiceTest {
             Double startX = 127.0, startY = 37.0, endX = 126.9, endY = 37.1;
             int totalTime = 40;
 
-            Route routeMock = mock(Route.class);
-            given(routeRepository.save(any(Route.class))).willReturn(routeMock);
+            Path pathMock = mock(Path.class);
+            given(pathRepository.save(any(Path.class))).willReturn(pathMock);
 
             // when
-            Route result = routeService.createNewRoute(startX, startY, endX, endY, totalTime);
+            Path result = pathFacade.createNewRoute(startX, startY, endX, endY, totalTime);
 
             // then
             assertThat(result).isNotNull();
-            verify(routeRepository).save(any(Route.class));
+            verify(pathRepository).save(any(Path.class));
         }
     }
 
@@ -96,20 +96,20 @@ class RouteServiceTest {
                     .willReturn(null);
 
             // DB에서 검색되는 Route
-            Route mockRoute = mock(Route.class);
-            when(mockRoute.getPaths()).thenReturn(List.of()); // 경로 Path는 없다고 가정
-            when(mockRoute.getTotalTime()).thenReturn(40);
+            Path mockPath = mock(Path.class);
+            when(mockPath.getSubPaths()).thenReturn(List.of()); // 경로 Path는 없다고 가정
+            when(mockPath.getTotalTime()).thenReturn(40);
 
-            List<Route> routeList = List.of(mockRoute);
-            given(routeRepository.findAllWithPathsByCoordinates(startX, startY, endX, endY))
-                    .willReturn(routeList);
+            List<Path> pathList = List.of(mockPath);
+            given(pathRepository.findAllWithPathsByCoordinates(startX, startY, endX, endY))
+                    .willReturn(pathList);
 
             // when
-            List<RouteSearchResponse> result = routeService.getRoutesByStartAndDestination(memberId, startX, startY, endX, endY);
+            List<RouteSearchResponse> result = pathFacade.getRoutesByStartAndDestination(memberId, startX, startY, endX, endY);
 
             // then
             assertThat(result).hasSize(1);
-            verify(routeRepository).findAllWithPathsByCoordinates(eq(startX), eq(startY), eq(endX), eq(endY));
+            verify(pathRepository).findAllWithPathsByCoordinates(eq(startX), eq(startY), eq(endX), eq(endY));
         }
 
         @Test
@@ -121,7 +121,7 @@ class RouteServiceTest {
 
             // when & then
             assertThatThrownBy(() ->
-                    routeService.getRoutesByStartAndDestination(memberId, 127.0, 37.0, 126.9, 37.1)
+                    pathFacade.getRoutesByStartAndDestination(memberId, 127.0, 37.0, 126.9, 37.1)
             ).isInstanceOf(MemberNotFoundException.class);
         }
 
@@ -154,7 +154,7 @@ class RouteServiceTest {
             when(apiPath.subPath()).thenReturn(Collections.emptyList());
 
             // when
-            List<RouteSearchResponse> result = routeService.getRoutesByStartAndDestination(memberId, startX, startY, endX, endY);
+            List<RouteSearchResponse> result = pathFacade.getRoutesByStartAndDestination(memberId, startX, startY, endX, endY);
 
             // then
             assertThat(result).hasSize(1);
@@ -165,7 +165,7 @@ class RouteServiceTest {
 
     @Nested
     @DisplayName("[findReusableRoute] 재사용 가능 경로 조회")
-    class Describe_findReusableRoute {
+    class Describe_findReusablePath {
 
         @Test
         @DisplayName("DB에서 동일한 좌표와 PathIdentifier를 갖는 Route가 있으면 반환한다.")
@@ -177,27 +177,27 @@ class RouteServiceTest {
                     new PathIdentifier("BUS", "역삼", "강남")
             );
 
-            Route mockRoute = mock(Route.class);
-            Path mockPath1 = mock(Path.class);
-            when(mockPath1.getTrafficType()).thenReturn(TrafficType.SUBWAY);
-            when(mockPath1.getStartName()).thenReturn("선릉");
-            when(mockPath1.getEndName()).thenReturn("역삼");
+            Path mockPath = mock(Path.class);
+            SubPath mockSubPath1 = mock(SubPath.class);
+            when(mockSubPath1.getTrafficType()).thenReturn(TrafficType.SUBWAY);
+            when(mockSubPath1.getStartName()).thenReturn("선릉");
+            when(mockSubPath1.getEndName()).thenReturn("역삼");
 
-            Path mockPath2 = mock(Path.class);
-            when(mockPath2.getTrafficType()).thenReturn(TrafficType.BUS);
-            when(mockPath2.getStartName()).thenReturn("역삼");
-            when(mockPath2.getEndName()).thenReturn("강남");
+            SubPath mockSubPath2 = mock(SubPath.class);
+            when(mockSubPath2.getTrafficType()).thenReturn(TrafficType.BUS);
+            when(mockSubPath2.getStartName()).thenReturn("역삼");
+            when(mockSubPath2.getEndName()).thenReturn("강남");
 
-            when(mockRoute.getPaths()).thenReturn(List.of(mockPath1, mockPath2));
+            when(mockPath.getSubPaths()).thenReturn(List.of(mockSubPath1, mockSubPath2));
 
-            given(routeRepository.findAllWithPathsByCoordinates(startX, startY, endX, endY))
-                    .willReturn(List.of(mockRoute));
+            given(pathRepository.findAllWithPathsByCoordinates(startX, startY, endX, endY))
+                    .willReturn(List.of(mockPath));
 
             // when
-            Route result = routeService.findReusableRoute(startX, startY, endX, endY, newPathIdentifiers);
+            Path result = pathFacade.findReusableRoute(startX, startY, endX, endY, newPathIdentifiers);
 
             // then
-            assertThat(result).isEqualTo(mockRoute);
+            assertThat(result).isEqualTo(mockPath);
         }
 
         @Test
@@ -208,11 +208,11 @@ class RouteServiceTest {
             List<PathIdentifier> newPathIdentifiers = List.of(
                     new PathIdentifier("SUBWAY", "선릉", "역삼")
             );
-            given(routeRepository.findAllWithPathsByCoordinates(startX, startY, endX, endY))
+            given(pathRepository.findAllWithPathsByCoordinates(startX, startY, endX, endY))
                     .willReturn(List.of());
 
             // when
-            Route result = routeService.findReusableRoute(startX, startY, endX, endY, newPathIdentifiers);
+            Path result = pathFacade.findReusableRoute(startX, startY, endX, endY, newPathIdentifiers);
 
             // then
             assertThat(result).isNull();

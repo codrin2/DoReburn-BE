@@ -12,7 +12,7 @@ public record FeedbackWritePageInfoResponse(
         List<FeedbackTodoResponse> todos
 ) {
     public static FeedbackWritePageInfoResponse of(Plan plan) {
-        List<Todo> allTodos = plan.getPaths().stream()
+        List<Todo> allTodos = plan.getSubPaths().stream()
                 .flatMap(path -> path.getTodos().stream())
                 .filter(todo -> Boolean.TRUE.equals(todo.getIsCompleted()))
                 .toList();

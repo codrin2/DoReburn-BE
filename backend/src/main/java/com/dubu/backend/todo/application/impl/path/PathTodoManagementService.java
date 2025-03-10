@@ -4,10 +4,10 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.core.exception.PathNotFoundException;
-import com.dubu.backend.plan.domain.repository.PathRepository;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.todo.dto.common.TodoIdentifier;
 import com.dubu.backend.todo.dto.request.*;
 import com.dubu.backend.todo.dto.response.TodoInfo;
@@ -33,7 +33,7 @@ public class PathTodoManagementService implements TodoManagementService {
     private final MemberRepository memberRepository;
     private final TodoRepository todoRepository;
     private final CategoryRepository categoryRepository;
-    private final PathRepository pathRepository;
+    private final SubPathRepository subPathRepository;
 
     @Override
     public TodoManageResult<?> createTodo(TodoIdentifier identifier, TodoCreateRequest todoCreateRequest) {
@@ -44,16 +44,16 @@ public class PathTodoManagementService implements TodoManagementService {
             throw new InvalidMemberStatusException(member.getStatus().name());
         }
 
-        Path path = pathRepository.findById(identifier.pathId()).orElseThrow(() -> new PathNotFoundException(identifier.pathId()));
+        SubPath subPath = subPathRepository.findById(identifier.pathId()).orElseThrow(() -> new PathNotFoundException(identifier.pathId()));
         Category category = categoryRepository.findByName(todoCreateRequest.category()).orElseThrow(() -> new CategoryNotFoundException(todoCreateRequest.category()));
 
-        List<Todo> todosByPath = todoRepository.findTodosByPath(path);
+        List<Todo> todosByPath = todoRepository.findTodosByPath(subPath);
 
         if(todosByPath.size() == 10){
             throw new TodoLimitExceededException("경로별", 10);
         }
 
-        Todo todo = todoCreateRequest.toEntity(member, category, null, path, TodoType.IN_PROGRESS);
+        Todo todo = todoCreateRequest.toEntity(member, category, null, subPath, TodoType.IN_PROGRESS);
         Todo savedTodo = todoRepository.save(todo);
 
         return TodoManageResult.of(null, TodoInfo.fromEntity(savedTodo));
@@ -69,16 +69,16 @@ public class PathTodoManagementService implements TodoManagementService {
         }
 
         Todo parentTodo = todoRepository.findWithCategoryById(todoCreateRequest.todoId()).orElseThrow(() -> new TodoNotFoundException(identifier.todoId()));
-        Path path = pathRepository.findById(identifier.pathId()).orElseThrow(() -> new PathNotFoundException(identifier.pathId()));
+        SubPath subPath = subPathRepository.findById(identifier.pathId()).orElseThrow(() -> new PathNotFoundException(identifier.pathId()));
 
-        List<Todo> todosByPath = todoRepository.findTodosByPath(path);
+        List<Todo> todosByPath = todoRepository.findTodosByPath(subPath);
 
         if(todosByPath.size() == 10){
             throw new TodoLimitExceededException("경로별", 10);
         }
 
-        todoRepository.findByParentTodoAndPath(parentTodo, path).ifPresent(todo ->{throw new AlreadyAddedTodoFromArchivedException();});
-        Todo todo = Todo.of(parentTodo.getTitle(), TodoType.IN_PROGRESS, parentTodo.getDifficulty(), parentTodo.getMemo(), member, parentTodo.getCategory(), parentTodo, null, path);
+        todoRepository.findByParentTodoAndPath(parentTodo, subPath).ifPresent(todo ->{throw new AlreadyAddedTodoFromArchivedException();});
+        Todo todo = Todo.of(parentTodo.getTitle(), TodoType.IN_PROGRESS, parentTodo.getDifficulty(), parentTodo.getMemo(), member, parentTodo.getCategory(), parentTodo, null, subPath);
         Todo savedTodo = todoRepository.save(todo);
 
         return TodoManageResult.of(null, TodoInfo.fromEntity(savedTodo));
@@ -170,8 +170,8 @@ public class PathTodoManagementService implements TodoManagementService {
             throw new TodoTypeMismatchException(todo.getType(), TodoType.IN_PROGRESS);
         }
 
-        Path newPath = pathRepository.findById(request.newPathId()).orElseThrow(() -> new PathNotFoundException(request.newPathId()));
+        SubPath newSubPath = subPathRepository.findById(request.newPathId()).orElseThrow(() -> new PathNotFoundException(request.newPathId()));
 
-        todo.updatePath(newPath);
+        todo.updatePath(newSubPath);
     }
 }

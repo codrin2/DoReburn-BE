@@ -4,11 +4,11 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.core.exception.PlanNotFoundException;
-import com.dubu.backend.plan.domain.repository.PathRepository;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.todo.dto.response.ShareTodoInfo;
 import com.dubu.backend.todo.dto.response.SurroundingMemberInfo;
@@ -31,7 +31,7 @@ public class ShareTodoService {
     private final TodoRepository todoRepository;
     private final ScheduleRepository scheduleRepository;
     private final PlanRepository planRepository;
-    private final PathRepository pathRepository;
+    private final SubPathRepository subPathRepository;
 
     @Transactional(readOnly = true)
     public SurroundingMemberInfo findTodosOfSurroundMember(Long memberId, Long surroundingMemberId) {
@@ -47,7 +47,7 @@ public class ShareTodoService {
 
         Plan latestPlan = planRepository.findTopByMemberAndIsCompletedOrderByCreatedAtDesc(surroundingMember, true).orElseThrow(PlanNotFoundException::new);
 
-        List<Path> pathsOfLatestPlan = pathRepository.findPathsByPlanAndIsCompleted(latestPlan, true);
+        List<SubPath> pathsOfLatestPlan = subPathRepository.findPathsByPlanAndIsCompleted(latestPlan, true);
 
         List<Todo> surroundMemberTodos = pathsOfLatestPlan.stream()
                 .flatMap(path -> path.getTodos().stream())

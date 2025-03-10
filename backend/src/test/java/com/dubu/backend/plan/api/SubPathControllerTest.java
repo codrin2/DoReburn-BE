@@ -3,7 +3,7 @@ package com.dubu.backend.plan.api;
 import com.dubu.backend.core.config.WebConfig;
 import com.dubu.backend.core.interceptor.TokenInterceptor;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
-import com.dubu.backend.plan.application.RouteService;
+import com.dubu.backend.plan.application.PathFacade;
 import com.dubu.backend.plan.api.response.RouteSearchResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * RouteController만 로드하여 MockMvc로 테스트.
  */
 @WebMvcTest(
-        controllers = RouteController.class,
+        controllers = PathController.class,
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
                         WebConfig.class,
@@ -37,13 +37,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 })
         })
 @DisplayName("RouteController 테스트")
-class RouteControllerTest {
+class SubPathControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private RouteService routeService;
+    private PathFacade pathFacade;
 
     @Nested
     @DisplayName("[GET /routes/search] 경로 검색")
@@ -57,7 +57,7 @@ class RouteControllerTest {
             List<RouteSearchResponse> mockResponse = List.of(
                     new RouteSearchResponse(true, 40, 40, List.of())
             );
-            BDDMockito.given(routeService.getRoutesByStartAndDestination(eq(memberId), anyDouble(), anyDouble(), anyDouble(), anyDouble()))
+            BDDMockito.given(pathFacade.getRoutesByStartAndDestination(eq(memberId), anyDouble(), anyDouble(), anyDouble(), anyDouble()))
                     .willReturn(mockResponse);
 
             // when & then
@@ -78,7 +78,7 @@ class RouteControllerTest {
         void it_returns_404_when_member_not_found() throws Exception {
             Long memberId = 9999L;
             Mockito.doThrow(new MemberNotFoundException(memberId))
-                    .when(routeService).getRoutesByStartAndDestination(eq(memberId), anyDouble(), anyDouble(), anyDouble(), anyDouble());
+                    .when(pathFacade).getRoutesByStartAndDestination(eq(memberId), anyDouble(), anyDouble(), anyDouble(), anyDouble());
 
             mockMvc.perform(get("/routes/search")
                             .requestAttr("memberId", memberId)

@@ -13,11 +13,11 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.domain.enums.TrafficType;
 import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.core.exception.PathNotFoundException;
-import com.dubu.backend.plan.domain.repository.PathRepository;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.domain.Todo;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
@@ -42,12 +42,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class PathTodoManagementServiceTest {
+class SubPathTodoManagementServiceTest {
 
     @Mock private MemberRepository memberRepository;
     @Mock private TodoRepository todoRepository;
     @Mock private CategoryRepository categoryRepository;
-    @Mock private PathRepository pathRepository;
+    @Mock private SubPathRepository subPathRepository;
 
     @InjectMocks
     private PathTodoManagementService service;
@@ -69,8 +69,8 @@ class PathTodoManagementServiceTest {
     private Category createCategory(String name) {
         return Category.builder().name(name).build();
     }
-    private Path createPath(Long pathId) {
-        return Path.builder()
+    private SubPath createPath(Long pathId) {
+        return SubPath.builder()
                 .id(pathId)
                 .trafficType(TrafficType.BUS)  // 예시: 적절한 TrafficType 사용
                 .subwayCode(0)
@@ -83,14 +83,14 @@ class PathTodoManagementServiceTest {
                 .build();
     }
 
-    private Path createPathWithTodo(Long pathId, Todo todo) {
-        Path path = createPath(pathId);
-        path.getTodos().add(todo);
-        return path;
+    private SubPath createPathWithTodo(Long pathId, Todo todo) {
+        SubPath subPath = createPath(pathId);
+        subPath.getTodos().add(todo);
+        return subPath;
     }
 
     // 헬퍼 메서드: Todo 생성 (예시)
-    private Todo createTodo(Long todoId, Member member, Category category, Path path, TodoType type) {
+    private Todo createTodo(Long todoId, Member member, Category category, SubPath subPath, TodoType type) {
         return Todo.builder()
                 .id(todoId)
                 .title("기존 제목")
@@ -116,16 +116,16 @@ class PathTodoManagementServiceTest {
 
         Member member = createMember(memberId, Status.MOVE);
         Category category = createCategory("CATEGORY");
-        Path path = createPath(pathId);
+        SubPath subPath = createPath(pathId);
         List<Todo> todosByPath = new ArrayList<>(); // 현재 등록된 할 일 없음
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        when(pathRepository.findById(pathId)).thenReturn(Optional.of(path));
+        when(subPathRepository.findById(pathId)).thenReturn(Optional.of(subPath));
         when(categoryRepository.findByName("CATEGORY")).thenReturn(Optional.of(category));
-        when(todoRepository.findTodosByPath(path)).thenReturn(todosByPath);
+        when(todoRepository.findTodosByPath(subPath)).thenReturn(todosByPath);
 
         // DTO 내부 toEntity()를 통해 생성된 Todo (IN_PROGRESS 타입)
-        Todo todo = request.toEntity(member, category, null, path, TodoType.IN_PROGRESS);
+        Todo todo = request.toEntity(member, category, null, subPath, TodoType.IN_PROGRESS);
         when(todoRepository.save(any(Todo.class))).thenReturn(todo);
 
         TodoManageResult<?> result = service.createTodo(identifier, request);
@@ -169,7 +169,7 @@ class PathTodoManagementServiceTest {
 
         Member member = createMember(memberId, Status.MOVE);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        when(pathRepository.findById(pathId)).thenReturn(Optional.empty());
+        when(subPathRepository.findById(pathId)).thenReturn(Optional.empty());
         assertThrows(PathNotFoundException.class, () -> service.createTodo(identifier, request));
     }
 
@@ -183,16 +183,16 @@ class PathTodoManagementServiceTest {
 
         Member member = createMember(memberId, Status.MOVE);
         Category category = createCategory("CATEGORY");
-        Path path = createPath(pathId);
+        SubPath subPath = createPath(pathId);
         // 이미 10건의 할 일이 등록되어 있다고 가정
         List<Todo> todosByPath = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             todosByPath.add(Todo.builder().build());
         }
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        when(pathRepository.findById(pathId)).thenReturn(Optional.of(path));
+        when(subPathRepository.findById(pathId)).thenReturn(Optional.of(subPath));
         when(categoryRepository.findByName("CATEGORY")).thenReturn(Optional.of(category));
-        when(todoRepository.findTodosByPath(path)).thenReturn(todosByPath);
+        when(todoRepository.findTodosByPath(subPath)).thenReturn(todosByPath);
         assertThrows(TodoLimitExceededException.class, () -> service.createTodo(identifier, request));
     }
 
@@ -211,7 +211,7 @@ class PathTodoManagementServiceTest {
 
         Member member = createMember(memberId, Status.MOVE);
         Category category = createCategory("ARCHIVE");
-        Path path = createPath(pathId);
+        SubPath subPath = createPath(pathId);
         // 부모 할 일
         Todo parentTodo = Todo.builder()
                 .id(parentTodoId)
@@ -228,13 +228,13 @@ class PathTodoManagementServiceTest {
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(todoRepository.findWithCategoryById(parentTodoId)).thenReturn(Optional.of(parentTodo));
-        when(pathRepository.findById(pathId)).thenReturn(Optional.of(path));
-        when(todoRepository.findTodosByPath(path)).thenReturn(todosByPath);
+        when(subPathRepository.findById(pathId)).thenReturn(Optional.of(subPath));
+        when(todoRepository.findTodosByPath(subPath)).thenReturn(todosByPath);
         // 이미 추가된 할 일이 없음을 확인
-        when(todoRepository.findByParentTodoAndPath(parentTodo, path)).thenReturn(Optional.empty());
+        when(todoRepository.findByParentTodoAndPath(parentTodo, subPath)).thenReturn(Optional.empty());
         // 새 할 일 생성
         Todo newTodo = Todo.of(parentTodo.getTitle(), TodoType.IN_PROGRESS, parentTodo.getDifficulty(),
-                parentTodo.getMemo(), member, category, parentTodo, null, path);
+                parentTodo.getMemo(), member, category, parentTodo, null, subPath);
         when(todoRepository.save(any(Todo.class))).thenReturn(newTodo);
 
         TodoManageResult<?> result = service.createTodoFromArchived(identifier, request);
@@ -362,15 +362,15 @@ class PathTodoManagementServiceTest {
 
         Member member = createMember(memberId, Status.MOVE);
         Todo todo = createTodo(todoId, member, createCategory("CAT"), createPath(10L), TodoType.IN_PROGRESS);
-        Path newPath = createPath(newPathId);
+        SubPath newSubPath = createPath(newPathId);
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(todoRepository.findById(todoId)).thenReturn(Optional.of(todo));
-        when(pathRepository.findById(newPathId)).thenReturn(Optional.of(newPath));
+        when(subPathRepository.findById(newPathId)).thenReturn(Optional.of(newSubPath));
 
         // 실행: 할 일의 경로를 업데이트
         service.modifyTodoPath(identifier, request);
         // todo 객체의 path가 newPath로 변경되었는지 검증 (가정: getPath() 메서드 존재)
-        assertEquals(newPath, todo.getPath());
+        assertEquals(newSubPath, todo.getSubPath());
     }
 }

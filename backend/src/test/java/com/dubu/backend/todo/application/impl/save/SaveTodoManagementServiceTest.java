@@ -16,7 +16,7 @@ import com.dubu.backend.member.domain.enums.OauthProvider;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
-import com.dubu.backend.plan.domain.repository.PathRepository;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.domain.Schedule;
@@ -52,7 +52,7 @@ class SaveTodoManagementServiceTest {
     @Mock private TodoRepository todoRepository;
     @Mock private ScheduleRepository scheduleRepository;
     @Mock private PlanRepository planRepository;
-    @Mock private PathRepository pathRepository;
+    @Mock private SubPathRepository subPathRepository;
 
     @InjectMocks
     private SaveTodoManagementService todoService;
@@ -275,7 +275,7 @@ class SaveTodoManagementServiceTest {
         Plan latestPlan = createPlan(10L);
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId))
                 .thenReturn(Optional.of(latestPlan));
-        when(pathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS))
+        when(subPathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS))
                 .thenReturn(Collections.emptyList());
         when(categoryRepository.findByName("NEW_CAT")).thenReturn(Optional.of(newCategory));
         when(todoRepository.findWithCategoryById(todoId)).thenReturn(Optional.of(todo));
@@ -372,7 +372,7 @@ class SaveTodoManagementServiceTest {
         // stubbing for plan and path
         Plan latestPlan = createPlan(10L);
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)).thenReturn(Optional.of(latestPlan));
-        when(pathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS)).thenReturn(Collections.emptyList());
+        when(subPathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS)).thenReturn(Collections.emptyList());
 
         // 마지막으로, 카테고리 조회 시 Optional.empty() 반환
         when(categoryRepository.findByName("NON_EXIST_CAT")).thenReturn(Optional.empty());
@@ -409,7 +409,7 @@ class SaveTodoManagementServiceTest {
         Plan latestPlan = createPlan(10L);
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId))
                 .thenReturn(Optional.of(latestPlan));
-        when(pathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS))
+        when(subPathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS))
                 .thenReturn(Collections.emptyList());
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
