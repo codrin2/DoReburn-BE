@@ -1,4 +1,4 @@
-package com.dubu.backend.notification.infrastructure;
+package com.dubu.backend.notification.core;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
