@@ -6,8 +6,8 @@ import com.dubu.backend.member.presentation.response.KakaoPlaceApiResponse.Docum
 import com.dubu.backend.member.presentation.response.NaverPlaceApiResponse;
 import com.dubu.backend.member.presentation.response.NaverPlaceApiResponse.NaverPlace;
 import com.dubu.backend.member.presentation.response.AddressSearchResponse;
-import com.dubu.backend.member.infrastructure.client.KakaoRoadAddressApi;
-import com.dubu.backend.member.infrastructure.client.NaverPlaceApi;
+import com.dubu.backend.member.infrastructure.KakaoRoadAddressApi;
+import com.dubu.backend.member.infrastructure.NaverPlaceApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

@@ -1,4 +1,4 @@
-package com.dubu.backend.member.infrastructure.client;
+package com.dubu.backend.member.infrastructure;
 
 import com.dubu.backend.member.application.RoadAddressApi;
 import com.dubu.backend.member.presentation.response.AddressSearchResponse;
