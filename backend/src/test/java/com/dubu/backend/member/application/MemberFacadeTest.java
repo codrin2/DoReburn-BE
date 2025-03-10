@@ -5,7 +5,7 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.MemberCategory;
 import com.dubu.backend.member.domain.enums.AddressType;
 import com.dubu.backend.member.domain.enums.Status;
-import com.dubu.backend.member.presentation.MemberLocationDto;
+import com.dubu.backend.member.domain.MemberLocation;
 import com.dubu.backend.member.presentation.MemberStatusChangeDto;
 import com.dubu.backend.member.presentation.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.presentation.request.MemberOnboardingRequest;
@@ -16,7 +16,7 @@ import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.exception.MemberSavedAddressNotFoundException;
 import com.dubu.backend.member.exception.RedisUnavailableException;
 import com.dubu.backend.member.domain.repository.AddressRepository;
-import com.dubu.backend.member.infrastructure.redis.LocationRedisRepository;
+import com.dubu.backend.member.infrastructure.redis.RedisMemberLocationRepository;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Plan;
@@ -54,10 +54,12 @@ class MemberFacadeTest {
     @Mock
     private PlanRepository planRepository;
     @Mock
-    private LocationRedisRepository locationRedisRepository;
+    private RedisMemberLocationRepository redisMemberLocationRepository;
 
     @InjectMocks
     private MemberQueryFacade memberQueryFacade;
+    @InjectMocks
+    private MemberLocationFacade memberLocationFacade;
     @InjectMocks
     private MemberFacade memberFacade;
 
@@ -517,13 +519,13 @@ class MemberFacadeTest {
         void it_saves_member_location_in_redis() {
             // given
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(defaultMember));
-            MemberLocationDto locationDto = new MemberLocationDto(37.1234, 127.5678);
+            MemberLocation locationDto = new MemberLocation(37.1234, 127.5678);
 
             // when
-            memberFacade.updateMemberLocation(memberId, locationDto);
+            memberLocationFacade.updateMemberLocation(memberId, locationDto);
 
             // then
-            verify(locationRedisRepository).saveMemberLocation(memberId, locationDto);
+            verify(redisMemberLocationRepository).saveMemberLocation(memberId, locationDto);
         }
 
         @Test
@@ -533,7 +535,7 @@ class MemberFacadeTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberFacade.updateMemberLocation(memberId, new MemberLocationDto(37.0, 127.0)))
+            assertThatThrownBy(() -> memberLocationFacade.updateMemberLocation(memberId, new MemberLocation(37.0, 127.0)))
                     .isInstanceOf(MemberNotFoundException.class);
         }
 
@@ -543,10 +545,10 @@ class MemberFacadeTest {
             // given
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(defaultMember));
             doThrow(new RedisConnectionFailureException("Redis 연결 실패"))
-                    .when(locationRedisRepository).saveMemberLocation(anyLong(), any(MemberLocationDto.class));
+                    .when(redisMemberLocationRepository).saveMemberLocation(anyLong(), any(MemberLocation.class));
 
             // when & then
-            assertThatThrownBy(() -> memberFacade.updateMemberLocation(memberId, new MemberLocationDto(37.0, 127.0)))
+            assertThatThrownBy(() -> memberLocationFacade.updateMemberLocation(memberId, new MemberLocation(37.0, 127.0)))
                     .isInstanceOf(RedisUnavailableException.class);
         }
     }

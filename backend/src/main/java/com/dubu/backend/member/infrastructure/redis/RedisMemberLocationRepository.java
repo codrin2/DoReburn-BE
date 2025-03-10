@@ -1,6 +1,7 @@
 package com.dubu.backend.member.infrastructure.redis;
 
-import com.dubu.backend.member.presentation.MemberLocationDto;
+import com.dubu.backend.member.domain.MemberLocation;
+import com.dubu.backend.member.domain.repository.MemberLocationRepository;
 import com.dubu.backend.todo.dto.request.SurroundingMemberQueryRequest;
 import com.dubu.backend.todo.dto.response.MemberLocationInfo;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +17,14 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class LocationRedisRepository {
+public class RedisMemberLocationRepository implements MemberLocationRepository {
     private final RedisTemplate<String, String> redisTemplate;
     private static final String GEO_KEY = "member_location";
 
-    public void saveMemberLocation(Long memberId, MemberLocationDto memberLocationDto) {
+    @Override
+    public void saveMemberLocation(Long memberId, MemberLocation memberLocation) {
         GeoOperations<String, String> geoOperations = redisTemplate.opsForGeo();
-        Point point = new Point(memberLocationDto.x_coordinate(), memberLocationDto.y_coordinate());
+        Point point = new Point(memberLocation.x_coordinate(), memberLocation.y_coordinate());
         geoOperations.add(GEO_KEY, point, String.valueOf(memberId));
     }
 

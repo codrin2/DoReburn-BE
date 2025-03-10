@@ -1,6 +1,7 @@
 package com.dubu.backend.member.presentation;
 
 import com.dubu.backend.global.domain.SuccessResponse;
+import com.dubu.backend.member.domain.MemberLocation;
 import com.dubu.backend.member.presentation.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.presentation.request.MemberOnboardingRequest;
 import com.dubu.backend.member.presentation.request.MemberStatusUpdateRequest;
@@ -550,7 +551,7 @@ public interface MemberApi {
                     required = true,
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = MemberLocationDto.class),
+                            schema = @Schema(implementation = MemberLocation.class),
                             examples = {
                                     @ExampleObject(name = "회원 위치 업데이트 요청 예시",
                                             value = """
@@ -562,7 +563,7 @@ public interface MemberApi {
                             }
                     )
             )
-            MemberLocationDto memberLocationDto
+            MemberLocation memberLocation
     );
 
     @Schema(name = "ErrorResponseExample", description = "에러 응답 예시")

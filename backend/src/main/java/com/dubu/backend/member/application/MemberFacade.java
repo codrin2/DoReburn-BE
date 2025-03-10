@@ -8,10 +8,6 @@ import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.repository.AddressRepository;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.exception.RedisUnavailableException;
-import com.dubu.backend.member.infrastructure.redis.LocationRedisRepository;
-import com.dubu.backend.member.presentation.MemberLocationDto;
 import com.dubu.backend.member.presentation.MemberStatusChangeDto;
 import com.dubu.backend.member.presentation.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.presentation.request.MemberOnboardingRequest;
@@ -24,7 +20,6 @@ import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.exception.CategoryNotFoundException;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +38,6 @@ public class MemberFacade {
     private final MemberCategoryRepository memberCategoryRepository;
     private final AddressRepository addressRepository;
     private final PlanRepository planRepository;
-    private final LocationRedisRepository locationRedisRepository;
 
     @Transactional
     public void completeOnboarding(Long memberId, MemberOnboardingRequest request) {
@@ -177,18 +171,6 @@ public class MemberFacade {
         } else {
             Address newAddress = Address.createAddress(member, type, title, roadAddress, x, y);
             addressRepository.save(newAddress);
-        }
-    }
-
-    public void updateMemberLocation(Long memberId, MemberLocationDto location) {
-        memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
-
-        try {
-            locationRedisRepository.saveMemberLocation(memberId, location);
-        }
-        catch (RedisConnectionFailureException e) {
-            throw new RedisUnavailableException();
         }
     }
 }

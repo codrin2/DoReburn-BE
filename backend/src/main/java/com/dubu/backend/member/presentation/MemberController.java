@@ -2,8 +2,10 @@ package com.dubu.backend.member.presentation;
 
 import com.dubu.backend.global.anotation.Polling;
 import com.dubu.backend.global.domain.SuccessResponse;
-import com.dubu.backend.member.application.MemberQueryFacade;
 import com.dubu.backend.member.application.MemberFacade;
+import com.dubu.backend.member.application.MemberLocationFacade;
+import com.dubu.backend.member.application.MemberQueryFacade;
+import com.dubu.backend.member.domain.MemberLocation;
 import com.dubu.backend.member.presentation.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.presentation.request.MemberOnboardingRequest;
 import com.dubu.backend.member.presentation.request.MemberStatusUpdateRequest;
@@ -23,6 +25,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RequestMapping("/members")
 public class MemberController implements MemberApi {
     private final MemberQueryFacade memberQueryFacade;
+    private final MemberLocationFacade memberLocationFacade;
     private final MemberFacade memberFacade;
 
     @GetMapping
@@ -92,8 +95,8 @@ public class MemberController implements MemberApi {
     @PutMapping("/location")
     public void updateMemberLocation(
             @RequestAttribute("memberId") Long memberId,
-            @Valid @RequestBody MemberLocationDto memberLocationDto
+            @Valid @RequestBody MemberLocation memberLocation
     ) {
-        memberFacade.updateMemberLocation(memberId, memberLocationDto);
+        memberLocationFacade.updateMemberLocation(memberId, memberLocation);
     }
 }
