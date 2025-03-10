@@ -6,7 +6,6 @@ import com.dubu.backend.member.domain.MemberCategory;
 import com.dubu.backend.member.domain.enums.AddressType;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.MemberLocation;
-import com.dubu.backend.member.presentation.MemberStatusChangeDto;
 import com.dubu.backend.member.presentation.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.presentation.request.MemberOnboardingRequest;
 import com.dubu.backend.member.presentation.response.MemberInfoResponse;
@@ -16,7 +15,7 @@ import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.exception.MemberSavedAddressNotFoundException;
 import com.dubu.backend.member.exception.RedisUnavailableException;
 import com.dubu.backend.member.domain.repository.AddressRepository;
-import com.dubu.backend.member.infrastructure.redis.RedisMemberLocationRepository;
+import com.dubu.backend.member.infrastructure.RedisMemberLocationRepository;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Plan;
@@ -452,7 +451,7 @@ class MemberFacadeTest {
         @DisplayName("플랜 미완료 시, 회원 상태를 FEEDBACK으로 변경")
         void it_updates_status_to_feedback_when_plan_is_not_completed() {
             // given
-            MemberStatusChangeDto dto = new MemberStatusChangeDto(memberId, 10L);
+            MovementCompletedEvent dto = new MovementCompletedEvent(memberId, 10L);
             Plan mockPlan = mock(Plan.class);
 
             when(memberRepository.findById(dto.memberId())).thenReturn(Optional.of(defaultMember));
@@ -470,7 +469,7 @@ class MemberFacadeTest {
         @DisplayName("플랜이 이미 완료 상태면, 회원 상태 변경하지 않음")
         void it_does_not_update_status_when_plan_completed() {
             // given
-            MemberStatusChangeDto dto = new MemberStatusChangeDto(memberId, 10L);
+            MovementCompletedEvent dto = new MovementCompletedEvent(memberId, 10L);
             Plan mockPlan = mock(Plan.class);
 
             when(memberRepository.findById(dto.memberId())).thenReturn(Optional.of(defaultMember));
@@ -488,7 +487,7 @@ class MemberFacadeTest {
         @DisplayName("존재하지 않는 회원 ID면 MemberNotFoundException")
         void it_throws_MemberNotFoundException() {
             // given
-            MemberStatusChangeDto dto = new MemberStatusChangeDto(memberId, 10L);
+            MovementCompletedEvent dto = new MovementCompletedEvent(memberId, 10L);
             when(memberRepository.findById(dto.memberId())).thenReturn(Optional.empty());
 
             // when & then
@@ -500,7 +499,7 @@ class MemberFacadeTest {
         @DisplayName("존재하지 않는 플랜 ID면 PlanNotFoundException")
         void it_throws_PlanNotFoundException() {
             // given
-            MemberStatusChangeDto dto = new MemberStatusChangeDto(memberId, 10L);
+            MovementCompletedEvent dto = new MovementCompletedEvent(memberId, 10L);
             when(memberRepository.findById(dto.memberId())).thenReturn(Optional.of(defaultMember));
             when(planRepository.findById(dto.planId())).thenReturn(Optional.empty());
 

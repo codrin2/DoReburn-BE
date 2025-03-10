@@ -55,4 +55,8 @@ public class Member extends BaseTimeEntity {
     public void updateStatus(Status status) {
         this.status = status;
     }
+
+    public boolean isOnboarding() {
+        return this.status == Status.ONBOARDING;
+    }
 }

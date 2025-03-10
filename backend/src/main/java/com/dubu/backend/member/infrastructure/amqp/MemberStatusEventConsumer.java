@@ -2,7 +2,7 @@ package com.dubu.backend.member.infrastructure.amqp;
 
 import com.dubu.backend.member.application.MemberFacade;
 import com.dubu.backend.member.core.MemberRabbitMQConfig;
-import com.dubu.backend.member.presentation.MemberStatusChangeDto;
+import com.dubu.backend.member.application.MovementCompletedEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class MemberStatusEventConsumer {
     @RabbitListener(queues = MemberRabbitMQConfig.DLX_QUEUE_NAME)
     public void receive(String jsonMessage) {
         try {
-            MemberStatusChangeDto message = objectMapper.readValue(jsonMessage, MemberStatusChangeDto.class);
+            MovementCompletedEvent message = objectMapper.readValue(jsonMessage, MovementCompletedEvent.class);
             log.info("[멤버 상태 전환 이벤트 실행] message : {}", message);
             memberFacade.updateMemberStatusByPlanChange(message);
         } catch (Exception e) {

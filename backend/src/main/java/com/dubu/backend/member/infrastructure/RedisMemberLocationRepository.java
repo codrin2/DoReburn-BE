@@ -1,4 +1,4 @@
-package com.dubu.backend.member.infrastructure.redis;
+package com.dubu.backend.member.infrastructure;
 
 import com.dubu.backend.member.domain.MemberLocation;
 import com.dubu.backend.member.domain.repository.MemberLocationRepository;

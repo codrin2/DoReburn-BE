@@ -1,7 +1,7 @@
 package com.dubu.backend.notification.application;
 
 import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.member.presentation.MemberStatusChangeDto;
+import com.dubu.backend.member.application.MovementCompletedEvent;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.infrastructure.amqp.MemberStatusEventProducer;
 import com.dubu.backend.member.domain.repository.MemberRepository;
@@ -120,10 +120,10 @@ public class NotificationService {
         pushMessageEventProducer.sendDelayedPush(pushMessageDto);
 
         // 상태 변경 이벤트 발행
-        MemberStatusChangeDto memberStatusChangeDto = new MemberStatusChangeDto(
+        MovementCompletedEvent movementCompletedEvent = new MovementCompletedEvent(
                 memberId,
                 plan.getId()
         );
-        memberStatusEventProducer.send(memberStatusChangeDto);
+        memberStatusEventProducer.send(movementCompletedEvent);
     }
 }

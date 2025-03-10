@@ -1,7 +1,7 @@
 package com.dubu.backend.member.infrastructure.amqp;
 
 import com.dubu.backend.member.core.MemberRabbitMQConfig;
-import com.dubu.backend.member.presentation.MemberStatusChangeDto;
+import com.dubu.backend.member.application.MovementCompletedEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class MemberStatusEventProducer {
     private final AmqpTemplate amqpTemplate;
     private final ObjectMapper objectMapper;
 
-    public void send(MemberStatusChangeDto message) {
+    public void send(MovementCompletedEvent message) {
         try {
             String jsonMessage = objectMapper.writeValueAsString(message);
 
