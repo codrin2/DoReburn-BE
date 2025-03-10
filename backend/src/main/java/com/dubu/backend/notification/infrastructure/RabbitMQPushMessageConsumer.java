@@ -1,7 +1,7 @@
 package com.dubu.backend.notification.infrastructure;
 
 import com.dubu.backend.notification.application.FcmService;
-import com.dubu.backend.notification.application.NotificationService;
+import com.dubu.backend.notification.application.WebPushService;
 import com.dubu.backend.core.config.RabbitMQNotificationConfig;
 import com.dubu.backend.notification.api.dto.PushMessageDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class RabbitMQPushMessageConsumer {
-    private final NotificationService notificationService;
+    private final WebPushService webPushService;
     private final FcmService fcmService;
     private final ObjectMapper objectMapper;
 
@@ -23,8 +23,8 @@ public class RabbitMQPushMessageConsumer {
         try {
             PushMessageDto message = objectMapper.readValue(jsonMessage, PushMessageDto.class);
             log.info("[푸시 알림 이벤트 소모] message : {}", message);
-            notificationService.sendPushNotification(message);
-            fcmService.sendMessage(message);
+            webPushService.send(message);
+            fcmService.send(message);
         } catch (Exception e) {
             log.error("메시지 변환 중 오류 발생: {}", e.getMessage(), e);
         }

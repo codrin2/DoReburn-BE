@@ -1,11 +1,8 @@
 package com.dubu.backend.notification.application;
 
-import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.member.core.exception.MemberNotFoundException;
-import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.notification.domain.FcmToken;
-import com.dubu.backend.notification.api.dto.FcmTokenDto;
 import com.dubu.backend.notification.api.dto.PushMessageDto;
+import com.dubu.backend.notification.application.response.MemberResponse;
+import com.dubu.backend.notification.domain.FcmToken;
 import com.dubu.backend.notification.domain.repository.FcmTokenRepository;
 import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
@@ -20,25 +17,25 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class FcmService {
-    private final MemberRepository memberRepository;
+    private final MemberApi memberApi;
     private final FcmTokenRepository fcmTokenRepository;
 
     @Transactional
-    public void saveToken(Long memberId, FcmTokenDto fcmTokenDto) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+    public void saveToken(String token, String deviceToken) {
+        MemberResponse memberResponse = memberApi.getMemberByToken(token);
 
-        boolean exists = fcmTokenRepository.findByMemberId(memberId)
+        boolean exists = fcmTokenRepository.findByMemberId(memberResponse.memberId())
                 .stream()
-                .anyMatch(token -> Objects.equals(token.getDeviceToken(), fcmTokenDto.deviceToken()));
+                .anyMatch(fcmToken -> Objects.equals(fcmToken.getDeviceToken(), deviceToken));
 
         if (!exists) {
-            fcmTokenRepository.save(FcmToken.createFcmToken(member, fcmTokenDto.deviceToken()));
-            log.info("[FCM Token 신규 저장] memberId={}", memberId);
+            fcmTokenRepository.save(FcmToken.createFcmToken(memberResponse.memberId(), deviceToken));
+            log.info("[FCM Token 신규 저장] memberId={}", memberResponse.memberId());
         }
     }
 
-    public void sendMessage(PushMessageDto message) {
+    @Transactional(readOnly = true)
+    public void send(PushMessageDto message) {
         List<FcmToken> fcmTokens = fcmTokenRepository.findByMemberId(message.memberId());
 
         for (FcmToken fcmToken : fcmTokens) {

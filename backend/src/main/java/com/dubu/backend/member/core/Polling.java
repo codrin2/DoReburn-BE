@@ -1,4 +1,4 @@
-package com.dubu.backend.core.anotation;
+package com.dubu.backend.member.core;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

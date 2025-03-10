@@ -111,6 +111,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleNotFoundException(ConflictException e){
+        log.warn(e.getMessage());
+
+        return new ErrorResponse(e);
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     public ErrorResponse handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
         log.warn(e.getMessage());

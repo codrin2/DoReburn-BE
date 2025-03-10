@@ -4,7 +4,7 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.notification.application.NotificationService;
+import com.dubu.backend.notification.application.WebPushService;
 import com.dubu.backend.plan.domain.Feedback;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor
 public class PlanService {
     private final RouteService routeService;
-    private final NotificationService notificationService;
+    private final WebPushService webPushService;
     private final MemberRepository memberRepository;
     private final PlanRepository planRepository;
     private final PathRepository pathRepository;
@@ -88,7 +88,7 @@ public class PlanService {
 
         currentMember.updateStatus(Status.MOVE);
 
-        notificationService.sendPushAndMemberStatusChange(memberId, savedPlan);
+        webPushService.sendPushAndMemberStatusChange(memberId, savedPlan);
 
         return savedPlan.getId();
     }

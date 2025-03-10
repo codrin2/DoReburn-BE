@@ -4,7 +4,7 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.notification.application.NotificationService;
+import com.dubu.backend.notification.application.WebPushService;
 import com.dubu.backend.plan.domain.Feedback;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.Plan;
@@ -48,7 +48,7 @@ class PlanServiceTest {
     @Mock
     private RouteService routeService;
     @Mock
-    private NotificationService notificationService;
+    private WebPushService webPushService;
     @Mock
     private MemberRepository memberRepository;
     @Mock
@@ -112,7 +112,7 @@ class PlanServiceTest {
             verify(memberRepository).findById(memberId);
             verify(mockMember).updateStatus(Status.MOVE);
             verify(planRepository).save(any(Plan.class));
-            verify(notificationService).sendPushAndMemberStatusChange(eq(memberId), any(Plan.class));
+            verify(webPushService).sendPushAndMemberStatusChange(eq(memberId), any(Plan.class));
         }
 
         @Test

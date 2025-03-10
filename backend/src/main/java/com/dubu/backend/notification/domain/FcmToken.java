@@ -1,6 +1,5 @@
 package com.dubu.backend.notification.domain;
 
-import com.dubu.backend.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,16 +16,15 @@ public class FcmToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @Column(name = "member_id", nullable = false)
+    private Long memberId;
 
     @Column(nullable = false)
     private String deviceToken;
 
-    public static FcmToken createFcmToken(Member member, String deviceToken) {
+    public static FcmToken createFcmToken(Long memberId, String deviceToken) {
         return FcmToken.builder()
-                .member(member)
+                .memberId(memberId)
                 .deviceToken(deviceToken)
                 .build();
     }

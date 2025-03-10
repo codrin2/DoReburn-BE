@@ -1,7 +1,6 @@
 package com.dubu.backend.notification.domain;
 
 import com.dubu.backend.core.domain.BaseTimeEntity;
-import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.notification.api.dto.PushSubscriptionDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,22 +18,21 @@ public class PushSubscription extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @Column(name = "member_id", nullable = false)
+    private Long memberId;
 
-    @Column(nullable = false)
+    @Column(name = "end_point", nullable = false)
     private String endPoint;
 
-    @Column(nullable = false)
+    @Column(name = "p256dh", nullable = false)
     private String p256dh;
 
-    @Column(nullable = false)
+    @Column(name = "auth", nullable = false)
     private String auth;
 
-    public static PushSubscription createSubscription(Member member, PushSubscriptionDto pushSubscriptionDto) {
+    public static PushSubscription createSubscription(Long memberId, PushSubscriptionDto pushSubscriptionDto) {
         return PushSubscription.builder()
-                .member(member)
+                .memberId(memberId)
                 .endPoint(pushSubscriptionDto.endpoint())
                 .p256dh(pushSubscriptionDto.keys().p256dh())
                 .auth(pushSubscriptionDto.keys().auth())

@@ -1,20 +1,18 @@
 package com.dubu.backend.notification.application;
 
-import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.application.event.MovementCompletedEvent;
-import com.dubu.backend.member.core.exception.MemberNotFoundException;
-import com.dubu.backend.plan.infra.RabbitMQMovementCompletedPublisher;
-import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.notification.core.VapidKeyProperties;
-import com.dubu.backend.notification.domain.PushSubscription;
 import com.dubu.backend.notification.api.dto.PushMessageDto;
 import com.dubu.backend.notification.api.dto.PushSubscriptionDto;
+import com.dubu.backend.notification.application.response.MemberResponse;
+import com.dubu.backend.notification.core.VapidKeyProperties;
 import com.dubu.backend.notification.core.exception.DuplicateSubscriptionException;
 import com.dubu.backend.notification.core.exception.UnavailablePushServiceException;
-import com.dubu.backend.plan.infra.RabbitMQPushMessagePublisher;
+import com.dubu.backend.notification.domain.PushSubscription;
 import com.dubu.backend.notification.domain.repository.PushSubscriptionRepository;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.exception.PlanNotFoundException;
+import com.dubu.backend.plan.infra.RabbitMQMovementCompletedPublisher;
+import com.dubu.backend.plan.infra.RabbitMQPushMessagePublisher;
 import com.dubu.backend.plan.infra.repository.PlanRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +32,9 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class NotificationService {
+public class WebPushService {
     private final VapidKeyProperties vapidKeyProperties;
-    private final MemberRepository memberRepository;
+    private final MemberApi memberApi;
     private final PlanRepository planRepository;
     private final PushSubscriptionRepository subscriptionRepository;
     private final RabbitMQPushMessagePublisher rabbitMQPushMessagePublisher;
@@ -49,21 +47,20 @@ public class NotificationService {
     private String planUrl;
 
     @Transactional
-    public void saveSubscription(Long memberId, PushSubscriptionDto subscriptionDto) {
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
-
-        PushSubscription pushSubscription = PushSubscription.createSubscription(currentMember, subscriptionDto);
+    public void saveSubscription(String token, PushSubscriptionDto subscriptionDto) {
+        MemberResponse memberResponse = memberApi.getMemberByToken(token);
+        PushSubscription pushSubscription = PushSubscription.createSubscription(memberResponse.memberId(), subscriptionDto);
 
         try {
             subscriptionRepository.save(pushSubscription);
-            log.info("[구독 저장] memberId={}, endpoint={}", memberId, subscriptionDto.endpoint());
+            log.info("[구독 저장] memberId={}, endpoint={}", memberResponse.memberId(), subscriptionDto.endpoint());
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateSubscriptionException();
         }
     }
 
-    public void sendPushNotification(PushMessageDto message) {
+    @Transactional(readOnly = true)
+    public void send(PushMessageDto message) {
         Plan currentPlan = planRepository.findById(message.planId())
                 .orElseThrow(() -> new PlanNotFoundException(message.planId()));
 
