@@ -57,6 +57,8 @@ class MemberFacadeTest {
     private LocationRedisRepository locationRedisRepository;
 
     @InjectMocks
+    private MemberQueryFacade memberQueryFacade;
+    @InjectMocks
     private MemberFacade memberFacade;
 
     private Long memberId;
@@ -112,7 +114,7 @@ class MemberFacadeTest {
             when(addressRepository.findByMemberId(memberId)).thenReturn(List.of(homeAddress, schoolAddress));
 
             // when
-            MemberInfoResponse result = memberFacade.findMemberInfo(memberId);
+            MemberInfoResponse result = memberQueryFacade.findMemberInfo(memberId);
 
             // then
             assertThat(result).isNotNull();
@@ -132,7 +134,7 @@ class MemberFacadeTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberFacade.findMemberInfo(memberId))
+            assertThatThrownBy(() -> memberQueryFacade.findMemberInfo(memberId))
                     .isInstanceOf(MemberNotFoundException.class);
 
             verify(memberRepository).findById(memberId);
@@ -151,7 +153,7 @@ class MemberFacadeTest {
             when(defaultMember.getStatus()).thenReturn(Status.ONBOARDING);
 
             // when
-            MemberStatusResponse response = memberFacade.findMemberStatus(memberId);
+            MemberStatusResponse response = memberQueryFacade.findMemberStatus(memberId);
 
             // then
             assertThat(response.status()).isEqualTo("ONBOARDING");
@@ -165,7 +167,7 @@ class MemberFacadeTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberFacade.findMemberStatus(memberId))
+            assertThatThrownBy(() -> memberQueryFacade.findMemberStatus(memberId))
                     .isInstanceOf(MemberNotFoundException.class);
         }
     }
@@ -182,7 +184,7 @@ class MemberFacadeTest {
             when(addressRepository.findByMemberId(memberId)).thenReturn(List.of(homeAddress, schoolAddress));
 
             // when
-            MemberSavedAddressResponse response = memberFacade.findMemberSavedAddress(memberId);
+            MemberSavedAddressResponse response = memberQueryFacade.findMemberSavedAddress(memberId);
 
             // then
             assertThat(response).isNotNull();
@@ -201,7 +203,7 @@ class MemberFacadeTest {
             when(addressRepository.findByMemberId(memberId)).thenReturn(List.of());
 
             // when & then
-            assertThatThrownBy(() -> memberFacade.findMemberSavedAddress(memberId))
+            assertThatThrownBy(() -> memberQueryFacade.findMemberSavedAddress(memberId))
                     .isInstanceOf(MemberSavedAddressNotFoundException.class);
         }
 
@@ -212,7 +214,7 @@ class MemberFacadeTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
 
             // when & then
-            assertThatThrownBy(() -> memberFacade.findMemberSavedAddress(memberId))
+            assertThatThrownBy(() -> memberQueryFacade.findMemberSavedAddress(memberId))
                     .isInstanceOf(MemberNotFoundException.class);
         }
     }

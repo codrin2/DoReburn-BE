@@ -2,6 +2,7 @@ package com.dubu.backend.member.presentation;
 
 import com.dubu.backend.global.anotation.Polling;
 import com.dubu.backend.global.domain.SuccessResponse;
+import com.dubu.backend.member.application.MemberQueryFacade;
 import com.dubu.backend.member.application.MemberFacade;
 import com.dubu.backend.member.presentation.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.presentation.request.MemberOnboardingRequest;
@@ -21,13 +22,14 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RequiredArgsConstructor
 @RequestMapping("/members")
 public class MemberController implements MemberApi {
+    private final MemberQueryFacade memberQueryFacade;
     private final MemberFacade memberFacade;
 
     @GetMapping
     public SuccessResponse<MemberInfoResponse> getMemberInfo(
             @RequestAttribute("memberId") Long memberId
     ) {
-        MemberInfoResponse response = memberFacade.findMemberInfo(memberId);
+        MemberInfoResponse response = memberQueryFacade.findMemberInfo(memberId);
 
         return new SuccessResponse<>(response);
     }
@@ -36,7 +38,7 @@ public class MemberController implements MemberApi {
     public SuccessResponse<MemberStatusResponse> getMemberStatus(
             @RequestAttribute("memberId") Long memberId
     ) {
-        MemberStatusResponse response = memberFacade.findMemberStatus(memberId);
+        MemberStatusResponse response = memberQueryFacade.findMemberStatus(memberId);
 
         return new SuccessResponse<>(response);
     }
@@ -45,7 +47,7 @@ public class MemberController implements MemberApi {
     public SuccessResponse<MemberSavedAddressResponse> getMemberSavedAddress(
             @RequestAttribute("memberId") Long memberId
     ) {
-        MemberSavedAddressResponse response = memberFacade.findMemberSavedAddress(memberId);
+        MemberSavedAddressResponse response = memberQueryFacade.findMemberSavedAddress(memberId);
 
         return new SuccessResponse<>(response);
     }
@@ -54,7 +56,7 @@ public class MemberController implements MemberApi {
     public SuccessResponse<List<String>> getMemberCategory(
             @RequestAttribute("memberId") Long memberId
     ) {
-        return new SuccessResponse<>(memberFacade.findMemberCategory(memberId));
+        return new SuccessResponse<>(memberQueryFacade.findMemberCategory(memberId));
     }
 
     @ResponseStatus(NO_CONTENT)

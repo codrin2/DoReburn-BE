@@ -2,10 +2,11 @@ package com.dubu.backend.member.presentation;
 
 import com.dubu.backend.global.config.WebConfig;
 import com.dubu.backend.global.interceptor.TokenInterceptor;
+import com.dubu.backend.member.application.MemberQueryFacade;
 import com.dubu.backend.member.application.MemberFacade;
+import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.presentation.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.presentation.response.MemberInfoResponse;
-import com.dubu.backend.member.exception.MemberNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -46,6 +47,8 @@ class MemberControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
+    private MemberQueryFacade memberQueryFacade;
+    @MockBean
     private MemberFacade memberFacade;
 
     private static final String MEMBER_INFO_UPDATE_JSON = """
@@ -85,7 +88,7 @@ class MemberControllerTest {
                     37.4784966
             );
 
-            BDDMockito.given(memberFacade.findMemberInfo(memberId)).willReturn(mockResponse);
+            BDDMockito.given(memberQueryFacade.findMemberInfo(memberId)).willReturn(mockResponse);
 
             // when & then
             mockMvc.perform(get("/members")
@@ -101,7 +104,7 @@ class MemberControllerTest {
         void it_returns_404_when_member_not_found() throws Exception {
             // given
             Long memberId = 9999L;
-            BDDMockito.given(memberFacade.findMemberInfo(memberId))
+            BDDMockito.given(memberQueryFacade.findMemberInfo(memberId))
                     .willThrow(new MemberNotFoundException(memberId));
 
             // when & then

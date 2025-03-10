@@ -5,20 +5,17 @@ import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.MemberCategory;
 import com.dubu.backend.member.domain.enums.AddressType;
 import com.dubu.backend.member.domain.enums.Status;
+import com.dubu.backend.member.domain.repository.AddressRepository;
+import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
+import com.dubu.backend.member.domain.repository.MemberRepository;
+import com.dubu.backend.member.exception.MemberNotFoundException;
+import com.dubu.backend.member.exception.RedisUnavailableException;
+import com.dubu.backend.member.infrastructure.redis.LocationRedisRepository;
 import com.dubu.backend.member.presentation.MemberLocationDto;
 import com.dubu.backend.member.presentation.MemberStatusChangeDto;
 import com.dubu.backend.member.presentation.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.presentation.request.MemberOnboardingRequest;
 import com.dubu.backend.member.presentation.response.MemberInfoResponse;
-import com.dubu.backend.member.presentation.response.MemberSavedAddressResponse;
-import com.dubu.backend.member.presentation.response.MemberStatusResponse;
-import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.exception.MemberSavedAddressNotFoundException;
-import com.dubu.backend.member.exception.RedisUnavailableException;
-import com.dubu.backend.member.domain.repository.AddressRepository;
-import com.dubu.backend.member.infrastructure.redis.LocationRedisRepository;
-import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
-import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.exception.PlanNotFoundException;
@@ -36,6 +33,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.dubu.backend.member.application.MemberServiceHelper.findExistingMember;
+
 @Service
 @RequiredArgsConstructor
 public class MemberFacade {
@@ -46,53 +45,9 @@ public class MemberFacade {
     private final PlanRepository planRepository;
     private final LocationRedisRepository locationRedisRepository;
 
-    @Transactional(readOnly = true)
-    public MemberInfoResponse findMemberInfo(Long memberId) {
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
-
-        List<Category> categories = memberCategoryRepository.findCategoriesByMemberId(memberId);
-
-        List<Address> addresses = addressRepository.findByMemberId(memberId);
-
-        return MemberInfoResponse.of(currentMember, categories, addresses);
-    }
-
-    @Transactional(readOnly = true)
-    public MemberStatusResponse findMemberStatus(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
-
-        return new MemberStatusResponse(member.getStatus().name());
-    }
-
-    @Transactional(readOnly = true)
-    public MemberSavedAddressResponse findMemberSavedAddress(Long memberId) {
-        memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
-
-        List<Address> addresses = addressRepository.findByMemberId(memberId);
-        if (addresses.isEmpty()) {
-            throw new MemberSavedAddressNotFoundException(memberId);
-        }
-
-        return MemberSavedAddressResponse.from(addresses);
-    }
-
-    @Transactional(readOnly = true)
-    public List<String> findMemberCategory(Long memberId){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
-
-        return memberCategoryRepository.findMemberCategoriesWithCategoryByMember(member)
-                .stream().map(memberCategory -> memberCategory.getCategory().getName())
-                .toList();
-    }
-
     @Transactional
     public void completeOnboarding(Long memberId, MemberOnboardingRequest request) {
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+        Member currentMember = findExistingMember(memberRepository, memberId);
 
         if (currentMember.getStatus() != Status.ONBOARDING) {
             throw new InvalidMemberStatusException(currentMember.getStatus().name());
@@ -111,8 +66,7 @@ public class MemberFacade {
 
     @Transactional
     public MemberInfoResponse updateMemberInfo(Long memberId, MemberInfoUpdateRequest request) {
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+        Member currentMember = findExistingMember(memberRepository, memberId);
 
         updateMemberCategories(currentMember, request.categories());
 
@@ -132,16 +86,14 @@ public class MemberFacade {
 
     @Transactional
     public void updateMemberStatus(Long memberId, String status) {
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+        Member currentMember = findExistingMember(memberRepository, memberId);
 
         currentMember.updateStatus(Status.fromString(status));
     }
 
     @Transactional
     public void updateMemberStatusByPlanChange(MemberStatusChangeDto memberStatusChangeDto) {
-        Member currentMember = memberRepository.findById(memberStatusChangeDto.memberId())
-                .orElseThrow(() -> new MemberNotFoundException(memberStatusChangeDto.memberId()));
+        Member currentMember = findExistingMember(memberRepository, memberStatusChangeDto.memberId());
 
         Plan currentPlan = planRepository.findById(memberStatusChangeDto.planId())
                 .orElseThrow(() -> new PlanNotFoundException(memberStatusChangeDto.planId()));
