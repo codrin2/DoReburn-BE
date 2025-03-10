@@ -1,6 +1,6 @@
 package com.dubu.backend.plan.api;
 
-import com.dubu.backend.global.domain.SuccessResponse;
+import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.plan.dto.response.RouteSearchResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

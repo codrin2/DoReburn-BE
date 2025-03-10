@@ -1,6 +1,6 @@
 package com.dubu.backend.todo.application;
 
-import com.dubu.backend.global.domain.PageResponse;
+import com.dubu.backend.core.domain.PageResponse;
 import com.dubu.backend.todo.dto.common.Cursor;
 import com.dubu.backend.todo.dto.common.TodoIdentifier;
 import com.dubu.backend.todo.dto.request.RecommendTodoQueryRequest;

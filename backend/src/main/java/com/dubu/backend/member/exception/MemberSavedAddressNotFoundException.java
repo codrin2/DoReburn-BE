@@ -1,8 +1,8 @@
 package com.dubu.backend.member.exception;
 
-import com.dubu.backend.global.exception.NotFoundException;
+import com.dubu.backend.core.exception.NotFoundException;
 
-import static com.dubu.backend.global.exception.ErrorCode.MEMBER_SAVED_ADDRESS_NOT_FOUND;
+import static com.dubu.backend.core.exception.ErrorCode.MEMBER_SAVED_ADDRESS_NOT_FOUND;
 
 public class MemberSavedAddressNotFoundException extends NotFoundException {
     public MemberSavedAddressNotFoundException(Long memberId) {

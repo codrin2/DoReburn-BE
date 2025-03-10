@@ -1,8 +1,8 @@
 package com.dubu.backend.todo.exception;
 
-import com.dubu.backend.global.exception.BadRequestException;
+import com.dubu.backend.core.exception.BadRequestException;
 
-import static com.dubu.backend.global.exception.ErrorCode.*;
+import static com.dubu.backend.core.exception.ErrorCode.*;
 
 public class InvalidTodoRequestTypeException extends BadRequestException {
     public InvalidTodoRequestTypeException(String message) {

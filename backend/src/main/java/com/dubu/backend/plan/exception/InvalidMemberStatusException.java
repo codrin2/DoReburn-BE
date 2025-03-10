@@ -1,8 +1,8 @@
 package com.dubu.backend.plan.exception;
 
-import com.dubu.backend.global.exception.BadRequestException;
+import com.dubu.backend.core.exception.BadRequestException;
 
-import static com.dubu.backend.global.exception.ErrorCode.INVALID_MEMBER_STATUS;
+import static com.dubu.backend.core.exception.ErrorCode.INVALID_MEMBER_STATUS;
 
 public class InvalidMemberStatusException extends BadRequestException {
     public InvalidMemberStatusException(String memberStatus) {

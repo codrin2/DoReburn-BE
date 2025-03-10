@@ -1,8 +1,8 @@
 package com.dubu.backend.todo.exception;
 
-import com.dubu.backend.global.exception.NotFoundException;
+import com.dubu.backend.core.exception.NotFoundException;
 
-import static com.dubu.backend.global.exception.ErrorCode.CATEGORY_NOT_FOUND;
+import static com.dubu.backend.core.exception.ErrorCode.CATEGORY_NOT_FOUND;
 
 public class CategoryNotFoundException extends NotFoundException {
   public CategoryNotFoundException(String categoryName) {

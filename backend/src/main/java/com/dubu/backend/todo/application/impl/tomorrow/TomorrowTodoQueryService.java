@@ -1,6 +1,6 @@
 package com.dubu.backend.todo.application.impl.tomorrow;
 
-import com.dubu.backend.global.domain.PageResponse;
+import com.dubu.backend.core.domain.PageResponse;
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.exception.MemberNotFoundException;

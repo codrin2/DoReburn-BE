@@ -1,8 +1,8 @@
 package com.dubu.backend.auth.exception;
 
-import com.dubu.backend.global.exception.UnauthorizedException;
+import com.dubu.backend.core.exception.UnauthorizedException;
 
-import static com.dubu.backend.global.exception.ErrorCode.INVALID_TOKEN_HEADER;
+import static com.dubu.backend.core.exception.ErrorCode.INVALID_TOKEN_HEADER;
 
 public class InvalidTokenHeaderException extends UnauthorizedException {
     public InvalidTokenHeaderException() {

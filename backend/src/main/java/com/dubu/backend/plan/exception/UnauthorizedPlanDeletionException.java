@@ -1,8 +1,8 @@
 package com.dubu.backend.plan.exception;
 
-import com.dubu.backend.global.exception.UnauthorizedException;
+import com.dubu.backend.core.exception.UnauthorizedException;
 
-import static com.dubu.backend.global.exception.ErrorCode.UNAUTHORIZED_PLAN_DELETION;
+import static com.dubu.backend.core.exception.ErrorCode.UNAUTHORIZED_PLAN_DELETION;
 
 public class UnauthorizedPlanDeletionException extends UnauthorizedException {
     public UnauthorizedPlanDeletionException(Long memberId, Long planId) {

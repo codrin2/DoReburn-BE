@@ -1,8 +1,8 @@
 package com.dubu.backend.notification.exception;
 
-import com.dubu.backend.global.exception.ServiceUnavailableException;
+import com.dubu.backend.core.exception.ServiceUnavailableException;
 
-import static com.dubu.backend.global.exception.ErrorCode.UNAVAILABLE_PUSH_SERVICE;
+import static com.dubu.backend.core.exception.ErrorCode.UNAVAILABLE_PUSH_SERVICE;
 
 public class UnavailablePushServiceException extends ServiceUnavailableException {
     public UnavailablePushServiceException() {

@@ -1,6 +1,6 @@
 package com.dubu.backend.notification.domain;
 
-import com.dubu.backend.global.domain.BaseTimeEntity;
+import com.dubu.backend.core.domain.BaseTimeEntity;
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.notification.dto.PushSubscriptionDto;
 import jakarta.persistence.*;

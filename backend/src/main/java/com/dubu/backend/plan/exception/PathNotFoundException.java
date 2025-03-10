@@ -1,8 +1,8 @@
 package com.dubu.backend.plan.exception;
 
-import com.dubu.backend.global.exception.NotFoundException;
+import com.dubu.backend.core.exception.NotFoundException;
 
-import static com.dubu.backend.global.exception.ErrorCode.*;
+import static com.dubu.backend.core.exception.ErrorCode.*;
 
 public class PathNotFoundException extends NotFoundException {
     public PathNotFoundException(Long pathId) {

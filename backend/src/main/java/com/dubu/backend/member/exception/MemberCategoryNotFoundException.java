@@ -1,8 +1,8 @@
 package com.dubu.backend.member.exception;
 
-import com.dubu.backend.global.exception.NotFoundException;
+import com.dubu.backend.core.exception.NotFoundException;
 
-import static com.dubu.backend.global.exception.ErrorCode.*;
+import static com.dubu.backend.core.exception.ErrorCode.*;
 
 public class MemberCategoryNotFoundException extends NotFoundException {
     public MemberCategoryNotFoundException(Long memberId) {

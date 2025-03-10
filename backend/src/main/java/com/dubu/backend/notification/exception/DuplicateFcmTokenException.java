@@ -1,8 +1,8 @@
 package com.dubu.backend.notification.exception;
 
-import com.dubu.backend.global.exception.BadRequestException;
+import com.dubu.backend.core.exception.BadRequestException;
 
-import static com.dubu.backend.global.exception.ErrorCode.DUPLICATE_FCM_TOKEN;
+import static com.dubu.backend.core.exception.ErrorCode.DUPLICATE_FCM_TOKEN;
 
 public class DuplicateFcmTokenException extends BadRequestException {
     public DuplicateFcmTokenException(Long memberId) {

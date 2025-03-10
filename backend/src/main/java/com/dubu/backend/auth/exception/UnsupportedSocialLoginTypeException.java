@@ -1,8 +1,8 @@
 package com.dubu.backend.auth.exception;
 
-import com.dubu.backend.global.exception.BadRequestException;
+import com.dubu.backend.core.exception.BadRequestException;
 
-import static com.dubu.backend.global.exception.ErrorCode.UNSUPPORTED_SOCIAL_LOGIN;
+import static com.dubu.backend.core.exception.ErrorCode.UNSUPPORTED_SOCIAL_LOGIN;
 
 public class UnsupportedSocialLoginTypeException extends BadRequestException {
     public UnsupportedSocialLoginTypeException() {

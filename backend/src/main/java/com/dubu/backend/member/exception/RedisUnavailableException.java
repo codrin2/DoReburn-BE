@@ -1,8 +1,8 @@
 package com.dubu.backend.member.exception;
 
-import com.dubu.backend.global.exception.InternalServerException;
+import com.dubu.backend.core.exception.InternalServerException;
 
-import static com.dubu.backend.global.exception.ErrorCode.REDIS_UNAVAILABLE;
+import static com.dubu.backend.core.exception.ErrorCode.REDIS_UNAVAILABLE;
 
 public class RedisUnavailableException extends InternalServerException {
     public RedisUnavailableException() {

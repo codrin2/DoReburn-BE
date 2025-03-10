@@ -1,8 +1,8 @@
 package com.dubu.backend.auth.exception;
 
-import com.dubu.backend.global.exception.UnauthorizedException;
+import com.dubu.backend.core.exception.UnauthorizedException;
 
-import static com.dubu.backend.global.exception.ErrorCode.TOKEN_BLACKLISTED;
+import static com.dubu.backend.core.exception.ErrorCode.TOKEN_BLACKLISTED;
 
 public class TokenBlacklistedException extends UnauthorizedException {
 

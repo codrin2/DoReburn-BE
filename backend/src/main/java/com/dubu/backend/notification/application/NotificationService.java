@@ -3,7 +3,7 @@ package com.dubu.backend.notification.application;
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.application.MovementCompletedEvent;
 import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infrastructure.amqp.MemberStatusEventProducer;
+import com.dubu.backend.notification.infra.MovementCompletedEventProducer;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.notification.config.VapidKeyConfig;
 import com.dubu.backend.notification.domain.PushSubscription;
@@ -40,7 +40,7 @@ public class NotificationService {
     private final PlanRepository planRepository;
     private final PushSubscriptionRepository subscriptionRepository;
     private final PushMessageEventProducer pushMessageEventProducer;
-    private final MemberStatusEventProducer memberStatusEventProducer;
+    private final MovementCompletedEventProducer movementCompletedEventProducer;
     private final ObjectMapper objectMapper;
 
     @Value("${admin.email}")
@@ -124,6 +124,6 @@ public class NotificationService {
                 memberId,
                 plan.getId()
         );
-        memberStatusEventProducer.send(movementCompletedEvent);
+        movementCompletedEventProducer.send(movementCompletedEvent);
     }
 }

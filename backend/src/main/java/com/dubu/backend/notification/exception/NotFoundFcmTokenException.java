@@ -1,8 +1,8 @@
 package com.dubu.backend.notification.exception;
 
-import com.dubu.backend.global.exception.NotFoundException;
+import com.dubu.backend.core.exception.NotFoundException;
 
-import static com.dubu.backend.global.exception.ErrorCode.NOT_FOUND_FCM_TOKEN;
+import static com.dubu.backend.core.exception.ErrorCode.NOT_FOUND_FCM_TOKEN;
 
 public class NotFoundFcmTokenException extends NotFoundException {
     public NotFoundFcmTokenException(Long memberId) {

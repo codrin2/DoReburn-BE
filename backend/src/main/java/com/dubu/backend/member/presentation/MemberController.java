@@ -1,7 +1,7 @@
 package com.dubu.backend.member.presentation;
 
-import com.dubu.backend.global.anotation.Polling;
-import com.dubu.backend.global.domain.SuccessResponse;
+import com.dubu.backend.core.anotation.Polling;
+import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.member.application.MemberFacade;
 import com.dubu.backend.member.application.MemberLocationFacade;
 import com.dubu.backend.member.application.MemberQueryFacade;

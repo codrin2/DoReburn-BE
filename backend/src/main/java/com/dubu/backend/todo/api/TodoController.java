@@ -1,7 +1,7 @@
 package com.dubu.backend.todo.api;
 
-import com.dubu.backend.global.domain.PageResponse;
-import com.dubu.backend.global.domain.SuccessResponse;
+import com.dubu.backend.core.domain.PageResponse;
+import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.todo.dto.common.Cursor;
 import com.dubu.backend.todo.dto.common.TodoIdentifier;
 import com.dubu.backend.todo.dto.enums.TodoRequestType;

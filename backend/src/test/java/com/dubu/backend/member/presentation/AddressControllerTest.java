@@ -1,7 +1,7 @@
 package com.dubu.backend.member.presentation;
 
-import com.dubu.backend.global.config.WebConfig;
-import com.dubu.backend.global.interceptor.TokenInterceptor;
+import com.dubu.backend.core.config.WebConfig;
+import com.dubu.backend.core.interceptor.TokenInterceptor;
 import com.dubu.backend.member.application.AddressFacade;
 import com.dubu.backend.member.presentation.response.AddressSearchResponse;
 import com.dubu.backend.member.exception.KakaoApiServerException;

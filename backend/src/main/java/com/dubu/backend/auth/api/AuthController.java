@@ -6,7 +6,7 @@ import com.dubu.backend.auth.dto.AccessTokenResponse;
 import com.dubu.backend.auth.dto.TokenResponse;
 import com.dubu.backend.auth.exception.MissingTokenInCookieException;
 import com.dubu.backend.auth.config.JwtConfig;
-import com.dubu.backend.global.domain.SuccessResponse;
+import com.dubu.backend.core.domain.SuccessResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

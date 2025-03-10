@@ -1,7 +1,7 @@
 package com.dubu.backend.plan.api;
 
 
-import com.dubu.backend.global.domain.SuccessResponse;
+import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.plan.application.RouteService;
 import com.dubu.backend.plan.dto.response.RouteSearchResponse;
 import lombok.RequiredArgsConstructor;

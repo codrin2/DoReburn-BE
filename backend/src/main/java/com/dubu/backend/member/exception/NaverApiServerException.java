@@ -1,8 +1,8 @@
 package com.dubu.backend.member.exception;
 
-import com.dubu.backend.global.exception.ServiceUnavailableException;
+import com.dubu.backend.core.exception.ServiceUnavailableException;
 
-import static com.dubu.backend.global.exception.ErrorCode.NAVER_SERVICE_UNAVAILABLE;
+import static com.dubu.backend.core.exception.ErrorCode.NAVER_SERVICE_UNAVAILABLE;
 
 public class NaverApiServerException extends ServiceUnavailableException {
     public NaverApiServerException() {

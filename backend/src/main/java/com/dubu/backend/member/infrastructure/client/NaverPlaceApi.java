@@ -4,6 +4,7 @@ import com.dubu.backend.member.application.PlaceApi;
 import com.dubu.backend.member.presentation.response.AddressSearchResponse;
 import com.dubu.backend.member.presentation.response.NaverPlaceApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -12,14 +13,18 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class NaverPlaceApi implements PlaceApi {
-    private final NaverApiProperties properties;
+    @Value("${naver.client.client-id}")
+    private String clientId;
+
+    @Value("${naver.client.client-secret}")
+    private String clientSecret;
 
     @Override
     public List<AddressSearchResponse> search(String query) {
         RestClient restClient = RestClient.builder()
                 .baseUrl("https://openapi.naver.com/v1/search/local.json")
-                .defaultHeader("X-Naver-Client-Id", properties.clientId())
-                .defaultHeader("X-Naver-Client-Secret", properties.clientSecret())
+                .defaultHeader("X-Naver-Client-Id", clientId)
+                .defaultHeader("X-Naver-Client-Secret", clientSecret)
                 .build();
 
         NaverPlaceApiResponse response = restClient.get()

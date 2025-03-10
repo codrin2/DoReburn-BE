@@ -1,9 +1,9 @@
 package com.dubu.backend.todo.exception;
 
-import com.dubu.backend.global.exception.BadRequestException;
+import com.dubu.backend.core.exception.BadRequestException;
 import com.dubu.backend.todo.domain.enums.TodoType;
 
-import static com.dubu.backend.global.exception.ErrorCode.*;
+import static com.dubu.backend.core.exception.ErrorCode.*;
 
 public class TodoTypeMismatchException extends BadRequestException {
     public TodoTypeMismatchException(TodoType todoType, TodoType requestType) {

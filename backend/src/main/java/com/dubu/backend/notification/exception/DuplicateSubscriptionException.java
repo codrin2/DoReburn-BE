@@ -1,8 +1,8 @@
 package com.dubu.backend.notification.exception;
 
-import com.dubu.backend.global.exception.ConflictException;
+import com.dubu.backend.core.exception.ConflictException;
 
-import static com.dubu.backend.global.exception.ErrorCode.DUPLICATE_SUBSCRIPTION;
+import static com.dubu.backend.core.exception.ErrorCode.DUPLICATE_SUBSCRIPTION;
 
 public class DuplicateSubscriptionException extends ConflictException {
     public DuplicateSubscriptionException() {

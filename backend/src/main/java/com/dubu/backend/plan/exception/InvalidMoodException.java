@@ -1,8 +1,8 @@
 package com.dubu.backend.plan.exception;
 
-import com.dubu.backend.global.exception.BadRequestException;
+import com.dubu.backend.core.exception.BadRequestException;
 
-import static com.dubu.backend.global.exception.ErrorCode.INVALID_MOOD;
+import static com.dubu.backend.core.exception.ErrorCode.INVALID_MOOD;
 
 public class InvalidMoodException extends BadRequestException {
     public InvalidMoodException(String mood) {

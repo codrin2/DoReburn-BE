@@ -1,6 +1,6 @@
 package com.dubu.backend.member.presentation;
 
-import com.dubu.backend.global.domain.SuccessResponse;
+import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.member.application.AddressFacade;
 import com.dubu.backend.member.presentation.response.AddressSearchResponse;
 import lombok.RequiredArgsConstructor;

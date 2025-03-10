@@ -1,6 +1,6 @@
 package com.dubu.backend.plan.api;
 
-import com.dubu.backend.global.domain.SuccessResponse;
+import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.member.presentation.MemberApi;
 import com.dubu.backend.plan.dto.request.PlanCreateRequest;
 import com.dubu.backend.plan.dto.request.PlanFeedbackCreateRequest;

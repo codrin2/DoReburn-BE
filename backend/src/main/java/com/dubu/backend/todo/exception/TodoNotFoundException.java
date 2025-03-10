@@ -1,8 +1,8 @@
 package com.dubu.backend.todo.exception;
 
-import com.dubu.backend.global.exception.NotFoundException;
+import com.dubu.backend.core.exception.NotFoundException;
 
-import static com.dubu.backend.global.exception.ErrorCode.TODO_NOT_FOUND;
+import static com.dubu.backend.core.exception.ErrorCode.TODO_NOT_FOUND;
 
 public class TodoNotFoundException extends NotFoundException {
     public TodoNotFoundException(Long todoId) {

@@ -1,6 +1,6 @@
 package com.dubu.backend.todo.api;
 
-import com.dubu.backend.global.domain.SuccessResponse;
+import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.todo.dto.request.SurroundingMemberQueryRequest;
 import com.dubu.backend.todo.dto.response.ShareInfo;
 import com.dubu.backend.todo.dto.response.SurroundingMemberInfo;

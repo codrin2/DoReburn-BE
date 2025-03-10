@@ -27,7 +27,7 @@ import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
 import com.dubu.backend.todo.application.support.TodoRandomSelector;
-import com.dubu.backend.global.domain.PageResponse;
+import com.dubu.backend.core.domain.PageResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
