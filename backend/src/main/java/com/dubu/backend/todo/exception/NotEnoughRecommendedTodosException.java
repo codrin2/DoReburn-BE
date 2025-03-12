@@ -1,8 +1,8 @@
 package com.dubu.backend.todo.exception;
 
-import com.dubu.backend.global.exception.BadRequestException;
+import com.dubu.backend.core.exception.BadRequestException;
 
-import static com.dubu.backend.global.exception.ErrorCode.NOT_ENOUGH_RECOMMENDED_TODOS;
+import static com.dubu.backend.core.exception.ErrorCode.NOT_ENOUGH_RECOMMENDED_TODOS;
 
 public class NotEnoughRecommendedTodosException extends BadRequestException {
     public NotEnoughRecommendedTodosException() {

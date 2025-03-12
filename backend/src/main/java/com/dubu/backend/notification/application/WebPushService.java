@@ -1,0 +1,126 @@
+package com.dubu.backend.notification.application;
+
+import com.dubu.backend.member.application.event.MovementCompletedEvent;
+import com.dubu.backend.notification.api.dto.PushMessageDto;
+import com.dubu.backend.notification.api.dto.PushSubscriptionDto;
+import com.dubu.backend.notification.application.response.MemberResponse;
+import com.dubu.backend.notification.core.VapidKeyProperties;
+import com.dubu.backend.notification.core.exception.DuplicateSubscriptionException;
+import com.dubu.backend.notification.core.exception.UnavailablePushServiceException;
+import com.dubu.backend.notification.domain.PushSubscription;
+import com.dubu.backend.notification.domain.repository.PushSubscriptionRepository;
+import com.dubu.backend.plan.domain.Plan;
+import com.dubu.backend.plan.core.exception.PlanNotFoundException;
+import com.dubu.backend.plan.infrastructure.RabbitMQMovementCompletedPublisher;
+import com.dubu.backend.plan.infrastructure.RabbitMQPushMessagePublisher;
+import com.dubu.backend.plan.domain.repository.PlanRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import nl.martijndwars.webpush.Notification;
+import nl.martijndwars.webpush.PushService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
+import java.util.List;
+import java.util.Map;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class WebPushService {
+    private final VapidKeyProperties vapidKeyProperties;
+    private final MemberApi memberApi;
+    private final PlanRepository planRepository;
+    private final PushSubscriptionRepository subscriptionRepository;
+    private final RabbitMQPushMessagePublisher rabbitMQPushMessagePublisher;
+    private final RabbitMQMovementCompletedPublisher rabbitMQMovementCompletedPublisher;
+    private final ObjectMapper objectMapper;
+
+    @Value("${admin.email}")
+    private String adminEmail;
+    @Value("${notification.url}")
+    private String planUrl;
+
+    @Transactional
+    public void saveSubscription(String token, PushSubscriptionDto subscriptionDto) {
+        MemberResponse memberResponse = memberApi.getMemberByToken(token);
+        PushSubscription pushSubscription = PushSubscription.createSubscription(memberResponse.memberId(), subscriptionDto);
+
+        try {
+            subscriptionRepository.save(pushSubscription);
+            log.info("[구독 저장] memberId={}, endpoint={}", memberResponse.memberId(), subscriptionDto.endpoint());
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateSubscriptionException();
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public void send(PushMessageDto message) {
+        Plan currentPlan = planRepository.findById(message.planId())
+                .orElseThrow(() -> new PlanNotFoundException(message.planId()));
+
+        if (currentPlan.isCompleted()) {
+            return;
+        }
+
+        List<PushSubscription> subscriptions = subscriptionRepository.findByMemberId((message.memberId()));
+        PushService pushService;
+
+        try {
+            pushService = new PushService(vapidKeyProperties.publicKey(), vapidKeyProperties.privateKey(), adminEmail);
+        } catch (GeneralSecurityException e) {
+            throw new UnavailablePushServiceException();
+        }
+
+        for (PushSubscription sub : subscriptions) {
+            try {
+                Map<String, Object> payloadMap = Map.of(
+                        "notification", Map.of(
+                                "title", message.title(),
+                                "body", message.body()
+                        ),
+                        "data", Map.of(
+                                "url", planUrl
+                        )
+                );
+
+                String payload = objectMapper.writeValueAsString(payloadMap);
+
+                Notification notification = new Notification(
+                        sub.getEndPoint(),
+                        sub.getP256dh(),
+                        sub.getAuth(),
+                        payload.getBytes(StandardCharsets.UTF_8)
+                );
+
+                pushService.send(notification);
+                log.info("[푸시 알림 전송] memberId={} ", message.memberId());
+            } catch (Exception e) {
+                throw new UnavailablePushServiceException();
+            }
+        }
+    }
+
+    public void sendPushAndMemberStatusChange(Long memberId, Plan plan) {
+        // 푸시 메시지 이벤트 발행
+        PushMessageDto pushMessageDto = new PushMessageDto(
+                memberId,
+                plan.getId(),
+                "잘 도착하셨나요? 30분 뒤면 오늘 한 일을 체크할 수 없어요😭",
+                "얼른 접속해서 오늘 한 일을 체크하고 피드백을 기록해 보세요~"
+        );
+        rabbitMQPushMessagePublisher.sendDelayedPush(pushMessageDto);
+
+        // 상태 변경 이벤트 발행
+        MovementCompletedEvent movementCompletedEvent = new MovementCompletedEvent(
+                memberId,
+                plan.getId()
+        );
+        rabbitMQMovementCompletedPublisher.send(movementCompletedEvent);
+    }
+}

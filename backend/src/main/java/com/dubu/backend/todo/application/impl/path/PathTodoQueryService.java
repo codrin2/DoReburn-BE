@@ -1,15 +1,15 @@
 package com.dubu.backend.todo.application.impl.path;
 
-import com.dubu.backend.global.domain.PageResponse;
+import com.dubu.backend.core.domain.PageResponse;
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
-import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infra.repository.MemberCategoryRepository;
-import com.dubu.backend.member.infra.repository.MemberRepository;
-import com.dubu.backend.plan.domain.Path;
-import com.dubu.backend.plan.exception.InvalidMemberStatusException;
-import com.dubu.backend.plan.exception.PathNotFoundException;
-import com.dubu.backend.plan.infra.repository.PathRepository;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
+import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
+import com.dubu.backend.member.domain.repository.MemberRepository;
+import com.dubu.backend.plan.domain.SubPath;
+import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
+import com.dubu.backend.plan.core.exception.PathNotFoundException;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.domain.Todo;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
@@ -41,7 +41,7 @@ public class PathTodoQueryService implements TargetTodoQueryService {
     private final MemberCategoryRepository memberCategoryRepository;
     private final CategoryRepository categoryRepository;
     private final TodoRepository todoRepository;
-    private final PathRepository pathRepository;
+    private final SubPathRepository subPathRepository;
 
     private final TodoRandomSelector todoRandomSelector;
 
@@ -54,9 +54,9 @@ public class PathTodoQueryService implements TargetTodoQueryService {
             throw new InvalidMemberStatusException(member.getStatus().name());
         }
 
-        Path path = pathRepository.findById(identifier.pathId()).orElseThrow(() -> new PathNotFoundException(identifier.pathId()));
+        SubPath subPath = subPathRepository.findById(identifier.pathId()).orElseThrow(() -> new PathNotFoundException(identifier.pathId()));
 
-        List<Todo> todos = todoRepository.findTodosWithCategoryByPath(path);
+        List<Todo> todos = todoRepository.findTodosWithCategoryByPath(subPath);
 
         return todos.stream().map(TodoInfo::fromEntity).toList();
     }
@@ -70,7 +70,7 @@ public class PathTodoQueryService implements TargetTodoQueryService {
             throw new InvalidMemberStatusException(member.getStatus().name());
         }
 
-        Path path = pathRepository.findById(identifier.pathId()).orElseThrow(() -> new PathNotFoundException(identifier.pathId()));
+        SubPath subPath = subPathRepository.findById(identifier.pathId()).orElseThrow(() -> new PathNotFoundException(identifier.pathId()));
 
         Slice<Todo> todoSlice = todoRepository.findTodosUsingSingleCursor(cursor,
                 TodoSearchCond.builder()
@@ -82,7 +82,7 @@ public class PathTodoQueryService implements TargetTodoQueryService {
         List<Todo> saveTodos = todoSlice.getContent();
 
         // 경로별 할 일 의 부모 할 일이 즐겨찾기 할 일이거나 같은 부모 할 일을 가진 경우 hasChild = true
-        List<Long> pathParentTodoIds = todoRepository.findParentTodoIdsByPathAndParentTodoNotNull(path);
+        List<Long> pathParentTodoIds = todoRepository.findParentTodoIdsByPathAndParentTodoNotNull(subPath);
 
         HashSet<Long> todayParentTodoIdSet = new HashSet<>(pathParentTodoIds);
         List<TodoInfo> todoInfos = saveTodos.stream()
@@ -109,7 +109,7 @@ public class PathTodoQueryService implements TargetTodoQueryService {
             throw new InvalidMemberStatusException(member.getStatus().name());
         }
 
-        Path path = pathRepository.findById(identifier.pathId()).orElseThrow(() -> new PathNotFoundException(identifier.pathId()));
+        SubPath subPath = subPathRepository.findById(identifier.pathId()).orElseThrow(() -> new PathNotFoundException(identifier.pathId()));
 
         // 회원의 카테고리 정보에 해당하는 추천 할 일을 가져온다.
         List<Long> categoryIds = memberCategoryRepository.findCategoryIdsByMember(member);
@@ -119,7 +119,7 @@ public class PathTodoQueryService implements TargetTodoQueryService {
         List<Todo> personalizedTodos = todoRepository.findAllById(personalizedTodoIds);
 
         // 경로별 할 일 의 부모 할 일이 추천 할 일이거나 즐겨찾기 할 일인데 즐겨찾기 할 일의 부모 할 일이 추천 할 일이라면 hasChild = true
-        List<Long> pathParentTodoIds = todoRepository.findParentTodoIdsByPathAndParentTodoNotNull(path);
+        List<Long> pathParentTodoIds = todoRepository.findParentTodoIdsByPathAndParentTodoNotNull(subPath);
         List<Long> saveParentTodoIds = todoRepository.findParentTodoIdsByIdsAndTypeAndParentTodoNotNull(pathParentTodoIds, TodoType.SAVE);
 
         HashSet<Long> parentTodoIds = new HashSet<>(pathParentTodoIds);
@@ -141,7 +141,7 @@ public class PathTodoQueryService implements TargetTodoQueryService {
             throw new InvalidMemberStatusException(member.getStatus().name());
         }
 
-        Path path = pathRepository.findById(identifier.pathId()).orElseThrow(() -> new PathNotFoundException(identifier.pathId()));
+        SubPath subPath = subPathRepository.findById(identifier.pathId()).orElseThrow(() -> new PathNotFoundException(identifier.pathId()));
 
         List<Category> categories = null;
         if(request.category() != null && !request.category().isEmpty()){
@@ -164,7 +164,7 @@ public class PathTodoQueryService implements TargetTodoQueryService {
         List<Todo> recommendTodos = todoSlice.getContent();
 
         // 경로별 할 일 의 부모 할 일이 추천 할 일이거나 즐겨찾기 할 일인데 즐겨찾기 할 일의 부모 할 일이 추천 할 일이라면 hasChild = true
-        List<Long> pathParentTodoIds = todoRepository.findParentTodoIdsByPathAndParentTodoNotNull(path);
+        List<Long> pathParentTodoIds = todoRepository.findParentTodoIdsByPathAndParentTodoNotNull(subPath);
         List<Long> saveParentTodoIds = todoRepository.findParentTodoIdsByIdsAndTypeAndParentTodoNotNull(pathParentTodoIds, TodoType.SAVE);
 
         HashSet<Long> parentTodoIds = new HashSet<>(pathParentTodoIds);

@@ -52,12 +52,6 @@ oauth2:
         redirect_uri: ${KAKAO_REDIRECT_URI}
         client_secret: ${KAKAO_CLIENT_SECRET} # Client Secret
         scope: account_email
-    provider:
-      kakao:
-        authorization-uri: https://kauth.kakao.com/oauth/authorize
-        token-uri: https://kauth.kakao.com/oauth/token
-        user-info-uri: https://kapi.kakao.com/v2/user/me
-        user-name-attribute: id
 
 jwt:
   secret: ${JWT_SECRET}
@@ -89,6 +83,9 @@ notification:
 
 firebase:
   service-account-json: ${FIREBASE_SERVICE_ACCOUNT_JSON}
+
+api:
+  base-url: ${PROD_SERVER_URL}
 
 management:
   endpoints:

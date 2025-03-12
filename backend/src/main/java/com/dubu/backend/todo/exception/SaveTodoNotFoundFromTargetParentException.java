@@ -1,10 +1,9 @@
 package com.dubu.backend.todo.exception;
 
 
-import com.dubu.backend.global.exception.ErrorCode;
-import com.dubu.backend.global.exception.NotFoundException;
+import com.dubu.backend.core.exception.NotFoundException;
 
-import static com.dubu.backend.global.exception.ErrorCode.*;
+import static com.dubu.backend.core.exception.ErrorCode.*;
 
 public class SaveTodoNotFoundFromTargetParentException extends NotFoundException {
     public SaveTodoNotFoundFromTargetParentException(Long parentId) {

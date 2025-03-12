@@ -2,9 +2,9 @@ package com.dubu.backend.todo.application.impl.today;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
-import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infra.repository.MemberRepository;
-import com.dubu.backend.plan.exception.InvalidMemberStatusException;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
+import com.dubu.backend.member.domain.repository.MemberRepository;
+import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.todo.domain.*;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;

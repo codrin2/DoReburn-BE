@@ -14,13 +14,10 @@ import java.util.ArrayList;
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.enums.Role;
-import com.dubu.backend.auth.domain.OauthProvider;
-import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.member.domain.enums.OauthProvider;
 import com.dubu.backend.plan.domain.Plan;
-import com.dubu.backend.plan.exception.PlanNotFoundException;
-import com.dubu.backend.plan.infra.repository.PlanRepository;
-import com.dubu.backend.plan.infra.repository.PathRepository;
+import com.dubu.backend.plan.domain.repository.PlanRepository;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.domain.Schedule;
 import com.dubu.backend.todo.domain.Todo;
@@ -32,17 +29,11 @@ import com.dubu.backend.todo.dto.request.TodoCreateRequest;
 import com.dubu.backend.todo.dto.request.TodoUpdateRequest;
 import com.dubu.backend.todo.dto.response.TodoInfo;
 import com.dubu.backend.todo.dto.response.TodoManageResult;
-import com.dubu.backend.todo.exception.AlreadyAddedTodoFromArchivedException;
-import com.dubu.backend.todo.exception.CategoryNotFoundException;
-import com.dubu.backend.todo.exception.ScheduleNotFoundException;
 import com.dubu.backend.todo.exception.TodoLimitExceededException;
-import com.dubu.backend.todo.exception.TodoNotFoundException;
-import com.dubu.backend.todo.exception.TodoTypeMismatchException;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
-import com.dubu.backend.member.infra.repository.MemberRepository;
-import com.dubu.backend.todo.application.impl.tomorrow.TomorrowTodoManagementService;
+import com.dubu.backend.member.domain.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,7 +53,7 @@ class TomorrowTodoManagementServiceTest {
     @Mock private TodoRepository todoRepository;
     @Mock private ScheduleRepository scheduleRepository;
     @Mock private PlanRepository planRepository;
-    @Mock private PathRepository pathRepository;
+    @Mock private SubPathRepository subPathRepository;
     @Mock private EntityManager entityManager; // 필요 시
 
     @InjectMocks
@@ -255,7 +246,7 @@ class TomorrowTodoManagementServiceTest {
 
         // plan, path stubbing (빈 리스트)
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)).thenReturn(Optional.of(createPlan(10L)));
-        when(pathRepository.findByPlanAndType(any(), any())).thenReturn(Collections.emptyList());
+        when(subPathRepository.findByPlanAndType(any(), any())).thenReturn(Collections.emptyList());
         when(categoryRepository.findByName("NEW_CAT")).thenReturn(Optional.of(newCategory));
 
         // 수정 후 updateTodo() 내부에서 targetTodo의 값 변경됨 (모의)
@@ -305,7 +296,7 @@ class TomorrowTodoManagementServiceTest {
         when(todoRepository.findTodosWithCategoryBySchedule(schedule)).thenReturn(new ArrayList<>());
         // plan, path stubbing (빈 리스트)
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)).thenReturn(Optional.of(createPlan(10L)));
-        when(pathRepository.findByPlanAndType(any(), any())).thenReturn(Collections.emptyList());
+        when(subPathRepository.findByPlanAndType(any(), any())).thenReturn(Collections.emptyList());
         when(categoryRepository.findByName("NEW_CAT")).thenReturn(Optional.of(newCategory));
 
         // 수정 후 updateTodo() 내부에서 targetTodo의 값 변경됨 (모의)
@@ -344,7 +335,7 @@ class TomorrowTodoManagementServiceTest {
                 .thenReturn(Optional.empty());
         // plan, path stubbing (빈 리스트)
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)).thenReturn(Optional.of(createPlan(10L)));
-        when(pathRepository.findByPlanAndType(any(), any())).thenReturn(Collections.emptyList());
+        when(subPathRepository.findByPlanAndType(any(), any())).thenReturn(Collections.emptyList());
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(todoRepository.findById(todoId)).thenReturn(Optional.of(targetTodo));
 
@@ -383,14 +374,14 @@ class TomorrowTodoManagementServiceTest {
         // targetTodo가 삭제되었으므로 tomorrowTodos는 오늘 할 일 목록에서 targetTodo를 제거한 리스트
         for (Todo t : todayTodos) {
             if (!t.getId().equals(targetTodo.getId())) {
-                tomorrowTodos.add(Todo.of(t.getTitle(), TodoType.SCHEDULED, t.getDifficulty(), t.getMemo(), t.getMember(), t.getCategory(), t.getParentTodo(), tomorrowSchedule, t.getPath()));
+                tomorrowTodos.add(Todo.of(t.getTitle(), TodoType.SCHEDULED, t.getDifficulty(), t.getMemo(), t.getMember(), t.getCategory(), t.getParentTodo(), tomorrowSchedule, t.getSubPath()));
             }
         }
         tomorrowTodos = new ArrayList<>(tomorrowTodos);
         when(todoRepository.saveAll(any())).thenReturn(tomorrowTodos);
         // plan, path stubbing
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)).thenReturn(Optional.of(createPlan(10L)));
-        when(pathRepository.findByPlanAndType(any(), any())).thenReturn(Collections.emptyList());
+        when(subPathRepository.findByPlanAndType(any(), any())).thenReturn(Collections.emptyList());
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(todoRepository.findById(todoId)).thenReturn(Optional.of(targetTodo));
 

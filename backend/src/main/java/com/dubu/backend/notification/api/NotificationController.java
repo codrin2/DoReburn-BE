@@ -1,10 +1,10 @@
 package com.dubu.backend.notification.api;
 
+import com.dubu.backend.notification.api.dto.FcmTokenDto;
+import com.dubu.backend.notification.api.dto.PushSubscriptionDto;
 import com.dubu.backend.notification.application.FcmService;
-import com.dubu.backend.notification.application.NotificationService;
-import com.dubu.backend.notification.dto.FcmTokenDto;
-import com.dubu.backend.notification.dto.PushMessageDto;
-import com.dubu.backend.notification.dto.PushSubscriptionDto;
+import com.dubu.backend.notification.application.WebPushService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,30 +14,35 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/notification")
 public class NotificationController implements NotificationApi {
 
-    private final NotificationService notificationService;
+    private final WebPushService webPushService;
     private final FcmService fcmService;
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/subscribe")
     public void subscribe(
-            @RequestAttribute("memberId") Long memberId,
+            HttpServletRequest request,
             @RequestBody PushSubscriptionDto subscription
     ) {
-        notificationService.saveSubscription(memberId, subscription);
+        String bearerToken = request.getHeader("Authorization");
+        String token = parseAccessToken(bearerToken);
+        webPushService.saveSubscription(token, subscription);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/fcm/token")
     public void registerFcmToken(
-            @RequestAttribute("memberId") Long memberId,
+            HttpServletRequest request,
             @RequestBody FcmTokenDto fcmTokenDto
     ) {
-        fcmService.saveToken(memberId, fcmTokenDto);
+        String bearerToken = request.getHeader("Authorization");
+        String token = parseAccessToken(bearerToken);
+        fcmService.saveToken(token, fcmTokenDto.deviceToken());
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping
-    public void sendNotification(@RequestBody PushMessageDto message) {
-        notificationService.sendPushNotification(message);
+    private String parseAccessToken(String bearerToken) {
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return bearerToken;
     }
 }

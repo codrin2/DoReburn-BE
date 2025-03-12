@@ -1,6 +1,6 @@
 package com.dubu.backend.plan.domain.enums;
 
-import com.dubu.backend.plan.exception.InvalidTrafficTypeException;
+import com.dubu.backend.plan.core.exception.InvalidTrafficTypeException;
 
 import java.util.Arrays;
 

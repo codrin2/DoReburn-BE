@@ -1,11 +1,11 @@
 package com.dubu.backend.plan.api;
 
-import com.dubu.backend.global.domain.SuccessResponse;
+import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.member.api.MemberApi;
-import com.dubu.backend.plan.dto.request.PlanCreateRequest;
-import com.dubu.backend.plan.dto.request.PlanFeedbackCreateRequest;
-import com.dubu.backend.plan.dto.response.FeedbackWritePageInfoResponse;
-import com.dubu.backend.plan.dto.response.PlanRecentResponse;
+import com.dubu.backend.plan.api.request.PlanCreateRequest;
+import com.dubu.backend.plan.api.request.PlanFeedbackCreateRequest;
+import com.dubu.backend.plan.api.response.FeedbackWritePageInfoResponse;
+import com.dubu.backend.plan.api.response.PlanRecentResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -107,7 +107,7 @@ public interface PlanApi {
                                             {
                                               "totalTime": 50,
                                               "totalSectionTime": 40,
-                                              "paths": [
+                                              "subPaths": [
                                                 {
                                                   "trafficType": "SUBWAY",
                                                   "sectionTime": 20,
@@ -247,7 +247,7 @@ public interface PlanApi {
                                                 "planId": 15,
                                                 "totalSectionTime": 40,
                                                 "createdAt": "2025-02-11T09:00:00",
-                                                "paths": [
+                                                "subPaths": [
                                                   {
                                                     "pathId": 101,
                                                     "trafficType": "SUBWAY",

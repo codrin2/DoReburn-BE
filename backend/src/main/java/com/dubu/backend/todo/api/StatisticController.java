@@ -1,6 +1,6 @@
 package com.dubu.backend.todo.api;
 
-import com.dubu.backend.global.domain.SuccessResponse;
+import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.todo.dto.response.DayStatisticInfo;
 import com.dubu.backend.todo.dto.response.WeekStatisticInfo;
 import com.dubu.backend.todo.application.StatisticService;

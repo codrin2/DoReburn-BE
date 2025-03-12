@@ -1,9 +1,9 @@
 package com.dubu.backend.todo.application.impl.share;
 
-import com.dubu.backend.member.dto.MemberLocationDto;
-import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infra.repository.LocationRedisRepository;
-import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.member.domain.MemberLocation;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
+import com.dubu.backend.member.infrastructure.RedisMemberLocationRepository;
+import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.todo.dto.request.SurroundingMemberQueryRequest;
 import com.dubu.backend.todo.application.ShareService;
 import com.dubu.backend.todo.application.collection.share.MemberCategoryCollection;
@@ -23,7 +23,7 @@ public class ShareServiceImpl implements ShareService {
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
     private final TodoRepository todoRepository;
-    private final LocationRedisRepository locationRedisRepository;
+    private final RedisMemberLocationRepository redisMemberLocationRepository;
 
     @Override
     @Transactional
@@ -31,7 +31,7 @@ public class ShareServiceImpl implements ShareService {
         memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
         List<Category> categories = categoryRepository.findAll();
 
-        List<MemberLocationInfo> memberLocationInfos = locationRedisRepository.findMemberLocations(memberId, request);
+        List<MemberLocationInfo> memberLocationInfos = redisMemberLocationRepository.findMemberLocations(memberId, request);
 
         if(memberLocationInfos == null || memberLocationInfos.isEmpty()){
             return null;
@@ -41,7 +41,7 @@ public class ShareServiceImpl implements ShareService {
 
         MemberCategoryCollection memberCategoryCollection = new MemberCategoryCollection(memberCategoryInfos);
 
-        locationRedisRepository.saveMemberLocation(memberId, new MemberLocationDto(request.x_coordinate(), request.y_coordinate()));
+        redisMemberLocationRepository.saveMemberLocation(memberId, new MemberLocation(request.x_coordinate(), request.y_coordinate()));
 
         return ShareInfo.of(MemberInfo.from(memberLocationInfos, memberCategoryCollection.getMemberToCategories()), CategoryRankInfo.from(memberCategoryCollection.getCategoryMemberCount()));
     }

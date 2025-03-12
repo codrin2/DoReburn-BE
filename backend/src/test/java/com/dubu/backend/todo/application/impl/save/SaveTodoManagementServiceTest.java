@@ -7,21 +7,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.ArrayList;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.enums.Role;
-import com.dubu.backend.auth.domain.OauthProvider;
-import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.member.domain.enums.OauthProvider;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.plan.domain.Plan;
-import com.dubu.backend.plan.exception.InvalidMemberStatusException;
-import com.dubu.backend.plan.exception.PlanNotFoundException;
-import com.dubu.backend.plan.infra.repository.PathRepository;
-import com.dubu.backend.plan.infra.repository.PlanRepository;
+import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
+import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.domain.Schedule;
 import com.dubu.backend.todo.domain.Todo;
@@ -35,15 +31,12 @@ import com.dubu.backend.todo.dto.response.TodoInfo;
 import com.dubu.backend.todo.dto.response.TodoManageResult;
 import com.dubu.backend.todo.exception.AlreadyAddedTodoFromArchivedException;
 import com.dubu.backend.todo.exception.CategoryNotFoundException;
-import com.dubu.backend.todo.exception.ScheduleNotFoundException;
-import com.dubu.backend.todo.exception.TodoLimitExceededException;
 import com.dubu.backend.todo.exception.TodoNotFoundException;
 import com.dubu.backend.todo.exception.TodoTypeMismatchException;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
-import com.dubu.backend.member.infra.repository.MemberRepository;
-import com.dubu.backend.todo.application.impl.save.SaveTodoManagementService;
+import com.dubu.backend.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -59,7 +52,7 @@ class SaveTodoManagementServiceTest {
     @Mock private TodoRepository todoRepository;
     @Mock private ScheduleRepository scheduleRepository;
     @Mock private PlanRepository planRepository;
-    @Mock private PathRepository pathRepository;
+    @Mock private SubPathRepository subPathRepository;
 
     @InjectMocks
     private SaveTodoManagementService todoService;
@@ -282,7 +275,7 @@ class SaveTodoManagementServiceTest {
         Plan latestPlan = createPlan(10L);
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId))
                 .thenReturn(Optional.of(latestPlan));
-        when(pathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS))
+        when(subPathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS))
                 .thenReturn(Collections.emptyList());
         when(categoryRepository.findByName("NEW_CAT")).thenReturn(Optional.of(newCategory));
         when(todoRepository.findWithCategoryById(todoId)).thenReturn(Optional.of(todo));
@@ -379,7 +372,7 @@ class SaveTodoManagementServiceTest {
         // stubbing for plan and path
         Plan latestPlan = createPlan(10L);
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)).thenReturn(Optional.of(latestPlan));
-        when(pathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS)).thenReturn(Collections.emptyList());
+        when(subPathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS)).thenReturn(Collections.emptyList());
 
         // 마지막으로, 카테고리 조회 시 Optional.empty() 반환
         when(categoryRepository.findByName("NON_EXIST_CAT")).thenReturn(Optional.empty());
@@ -416,7 +409,7 @@ class SaveTodoManagementServiceTest {
         Plan latestPlan = createPlan(10L);
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId))
                 .thenReturn(Optional.of(latestPlan));
-        when(pathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS))
+        when(subPathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS))
                 .thenReturn(Collections.emptyList());
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));

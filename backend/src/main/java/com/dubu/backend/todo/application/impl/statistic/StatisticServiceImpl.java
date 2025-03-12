@@ -1,14 +1,14 @@
 package com.dubu.backend.todo.application.impl.statistic;
 
 import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
+import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Feedback;
-import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.domain.enums.TrafficType;
-import com.dubu.backend.plan.infra.repository.PathRepository;
-import com.dubu.backend.plan.infra.repository.PlanRepository;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
+import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.todo.dto.response.DayStatisticInfo;
 import com.dubu.backend.todo.dto.response.WeekStatisticInfo;
 import com.dubu.backend.todo.application.StatisticService;
@@ -37,7 +37,7 @@ public class StatisticServiceImpl implements StatisticService {
     private final CategoryRepository categoryRepository;
     private final PlanRepository planRepository;
     private final TodoRepository todoRepository;
-    private final PathRepository pathRepository;
+    private final SubPathRepository subPathRepository;
 
     @Override
     public DayStatisticInfo collectDayStatistic(Long memberId, LocalDate date) {
@@ -46,13 +46,13 @@ public class StatisticServiceImpl implements StatisticService {
 
         // 쿼리 최적 -> 쿼리 분리
         List<Plan> dayPlans = planRepository.findByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.atTime(LocalTime.MAX));
-        List<Path> dayPaths = pathRepository.findByPlansAndTypeAndIsCompleted(dayPlans, TodoType.DONE, true);
+        List<SubPath> daySubPaths = subPathRepository.findByPlansAndTypeAndIsCompleted(dayPlans, TodoType.DONE, true);
 
         if(dayPlans == null || dayPlans.isEmpty()){
             return DayStatisticInfo.of(member.getCreatedAt().toLocalDate());
         }
 
-        return buildDailyStatisticInfo(member.getCreatedAt().toLocalDate(), categories, dayPlans, dayPaths);
+        return buildDailyStatisticInfo(member.getCreatedAt().toLocalDate(), categories, dayPlans, daySubPaths);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class StatisticServiceImpl implements StatisticService {
         // 쿼리 최적 -> 쿼리 분리
         List<Plan> thisWeekPlans = planRepository.findWithPathsByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.plusDays(6).atTime(LocalTime.MAX));
 //        List<Long> pathIdsOfWeekPlans = planRepository.findPathIdsWithPathsByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.plusWeeks(1).atTime(LocalTime.MAX));
-        List<Long> pathIdsOfWeekPlans = pathRepository.findPathIdsByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.plusDays(6).atTime(LocalTime.MAX));
+        List<Long> pathIdsOfWeekPlans = subPathRepository.findPathIdsByMemberAndCreatedAtBetween(member, date.atStartOfDay(), date.plusDays(6).atTime(LocalTime.MAX));
         List<Todo> completedTodos = todoRepository.findByPathIdsAndTypeAndIsCompleted(pathIdsOfWeekPlans, TodoType.DONE);
 //        List<Path> thisWeekPaths = pathRepository.findByPlansAndTypeAndIsCompleted(thisWeekPlans, TodoType.DONE, true);
 
@@ -77,7 +77,7 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
 
-    private DayStatisticInfo buildDailyStatisticInfo(LocalDate memberCreateDate, List<Category> categories, List<Plan> plans, List<Path> paths) {
+    private DayStatisticInfo buildDailyStatisticInfo(LocalDate memberCreateDate, List<Category> categories, List<Plan> plans, List<SubPath> subPaths) {
         int totalAvailableTime = 0;
         int totalTodoCount = 0;
         List<Feedback> feedbacks = new ArrayList<>();
@@ -88,9 +88,9 @@ public class StatisticServiceImpl implements StatisticService {
             feedbacks.add(plan.getFeedback());
         }
 
-        for(Path path: paths){
-            if(path.getTrafficType() != TrafficType.WALK){
-                for(Todo todo: path.getTodos()){
+        for(SubPath subPath : subPaths){
+            if(subPath.getTrafficType() != TrafficType.WALK){
+                for(Todo todo: subPath.getTodos()){
                     categoryTodoStatistics.countDoneTodo(todo);
                     totalTodoCount++;
                 }
@@ -112,9 +112,9 @@ public class StatisticServiceImpl implements StatisticService {
             totalAvailableTime += plan.getTotalTime();
             moodCountCollection.addMood(plan.getFeedback().getMood());
 
-            for (Path path : plan.getPaths()) {
-                dateAvailableTimeStatistics.addUsageTimeAtDate(date, path.getSectionTime());
-                for (Todo todo : path.getTodos()) {
+            for (SubPath subPath : plan.getSubPaths()) {
+                dateAvailableTimeStatistics.addUsageTimeAtDate(date, subPath.getSectionTime());
+                for (Todo todo : subPath.getTodos()) {
                     totalTodoCount += 1;
                     categoryTodoStatistics.recordDoneTodo(todo);
                 }

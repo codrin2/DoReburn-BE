@@ -1,0 +1,41 @@
+package com.dubu.backend.plan.api.response;
+
+import com.dubu.backend.plan.domain.Plan;
+import com.dubu.backend.todo.domain.Todo;
+
+import java.util.List;
+
+public record FeedbackWritePageInfoResponse(
+        Long planId,
+        Integer totalSectionTime,
+        Integer totalTodoCount,
+        List<FeedbackTodoResponse> todos
+) {
+    public static FeedbackWritePageInfoResponse of(Plan plan) {
+        List<Todo> allTodos = plan.getSubPaths().stream()
+                .flatMap(path -> path.getTodos().stream())
+                .filter(todo -> Boolean.TRUE.equals(todo.getIsCompleted()))
+                .toList();
+
+        return new FeedbackWritePageInfoResponse(
+                plan.getId(),
+                plan.getTotalTime(),
+                allTodos.size(),
+                allTodos.isEmpty() ? List.of() : allTodos.stream()
+                        .map(FeedbackTodoResponse::of)
+                        .toList()
+        );
+    }
+
+    public record FeedbackTodoResponse(
+            String category,
+            String title
+    ) {
+        public static FeedbackTodoResponse of(Todo todo) {
+            return new FeedbackTodoResponse(
+                    todo.getCategory().getName(),
+                    todo.getTitle()
+            );
+        }
+    }
+}

@@ -2,9 +2,9 @@ package com.dubu.backend.todo.application.impl.tomorrow;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
-import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infra.repository.MemberRepository;
-import com.dubu.backend.plan.exception.InvalidMemberStatusException;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
+import com.dubu.backend.member.domain.repository.MemberRepository;
+import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.todo.domain.*;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;
@@ -220,7 +220,7 @@ public class TomorrowTodoManagementService implements TodoManagementService {
     }
 
     private List<Todo> createTomorrowTodosFromTodayTodos(Schedule tomorrowSchedule, List<Todo> todayTodos){
-        List<Todo> tomorrowTodos = todayTodos.stream().map(t -> Todo.of(t.getTitle(), TodoType.SCHEDULED, t.getDifficulty(), t.getMemo(), t.getMember(), t.getCategory(), t.getParentTodo(), tomorrowSchedule, t.getPath())).toList();
+        List<Todo> tomorrowTodos = todayTodos.stream().map(t -> Todo.of(t.getTitle(), TodoType.SCHEDULED, t.getDifficulty(), t.getMemo(), t.getMember(), t.getCategory(), t.getParentTodo(), tomorrowSchedule, t.getSubPath())).toList();
         return todoRepository.saveAll(tomorrowTodos);
     }
 }

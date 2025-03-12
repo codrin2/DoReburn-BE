@@ -1,8 +1,8 @@
 package com.dubu.backend.todo.domain;
 
-import com.dubu.backend.global.domain.BaseTimeEntity;
+import com.dubu.backend.core.domain.BaseTimeEntity;
 import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;
 import jakarta.persistence.*;
@@ -47,8 +47,8 @@ public class Todo extends BaseTimeEntity {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "path_id")
-    private Path path;
+    @JoinColumn(name = "sub_path_id")
+    private SubPath subPath;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
@@ -62,7 +62,7 @@ public class Todo extends BaseTimeEntity {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
-    public static Todo of(String title, TodoType type, TodoDifficulty difficulty, String memo, Member member, Category category, Todo parentTodo, Schedule schedule, Path path){
+    public static Todo of(String title, TodoType type, TodoDifficulty difficulty, String memo, Member member, Category category, Todo parentTodo, Schedule schedule, SubPath subPath){
         return Todo.builder()
                 .title(title)
                 .type(type)
@@ -72,7 +72,7 @@ public class Todo extends BaseTimeEntity {
                 .category(category)
                 .parentTodo(parentTodo)
                 .schedule(schedule)
-                .path(path)
+                .subPath(subPath)
                 .build();
     }
 
@@ -89,14 +89,14 @@ public class Todo extends BaseTimeEntity {
                 .build();
     }
 
-    public static Todo copyWithPlan(Member member, Todo originalTodo, Path assignedPath) {
+    public static Todo copyWithPlan(Member member, Todo originalTodo, SubPath assignedSubPath) {
         return Todo.builder()
                 .member(member)
                 .title(originalTodo.getTitle())
                 .type(TodoType.IN_PROGRESS)
                 .difficulty(originalTodo.getDifficulty())
                 .memo(originalTodo.getMemo())
-                .path(assignedPath)
+                .subPath(assignedSubPath)
                 .category(originalTodo.getCategory())
                 .build();
     }
@@ -134,8 +134,8 @@ public class Todo extends BaseTimeEntity {
         this.isCompleted = isCompleted;
     }
 
-    public void updatePath(Path path){
-        this.path = path;
+    public void updatePath(SubPath subPath){
+        this.subPath = subPath;
     }
 
     public void updateTodo(String title, Category category, TodoDifficulty difficulty, String memo){

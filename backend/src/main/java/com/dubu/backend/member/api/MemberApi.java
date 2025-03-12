@@ -1,13 +1,13 @@
 package com.dubu.backend.member.api;
 
-import com.dubu.backend.global.domain.SuccessResponse;
-import com.dubu.backend.member.dto.MemberLocationDto;
-import com.dubu.backend.member.dto.request.MemberInfoUpdateRequest;
-import com.dubu.backend.member.dto.request.MemberOnboardingRequest;
-import com.dubu.backend.member.dto.request.MemberStatusUpdateRequest;
-import com.dubu.backend.member.dto.response.MemberInfoResponse;
-import com.dubu.backend.member.dto.response.MemberSavedAddressResponse;
-import com.dubu.backend.member.dto.response.MemberStatusResponse;
+import com.dubu.backend.core.domain.SuccessResponse;
+import com.dubu.backend.member.domain.MemberLocation;
+import com.dubu.backend.member.api.request.MemberInfoUpdateRequest;
+import com.dubu.backend.member.api.request.MemberOnboardingRequest;
+import com.dubu.backend.member.api.request.MemberStatusUpdateRequest;
+import com.dubu.backend.member.api.response.MemberInfoResponse;
+import com.dubu.backend.member.api.response.MemberSavedAddressResponse;
+import com.dubu.backend.member.api.response.MemberStatusResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -551,7 +551,7 @@ public interface MemberApi {
                     required = true,
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = MemberLocationDto.class),
+                            schema = @Schema(implementation = MemberLocation.class),
                             examples = {
                                     @ExampleObject(name = "회원 위치 업데이트 요청 예시",
                                             value = """
@@ -563,7 +563,7 @@ public interface MemberApi {
                             }
                     )
             )
-            MemberLocationDto memberLocationDto
+            MemberLocation memberLocation
     );
 
     @Schema(name = "ErrorResponseExample", description = "에러 응답 예시")

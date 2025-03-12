@@ -2,14 +2,14 @@ package com.dubu.backend.todo.application.impl.save;
 
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.enums.Status;
-import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.member.infra.repository.MemberRepository;
-import com.dubu.backend.plan.domain.Path;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
+import com.dubu.backend.member.domain.repository.MemberRepository;
+import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.domain.Plan;
-import com.dubu.backend.plan.exception.InvalidMemberStatusException;
-import com.dubu.backend.plan.exception.PlanNotFoundException;
-import com.dubu.backend.plan.infra.repository.PathRepository;
-import com.dubu.backend.plan.infra.repository.PlanRepository;
+import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
+import com.dubu.backend.plan.core.exception.PlanNotFoundException;
+import com.dubu.backend.plan.domain.repository.SubPathRepository;
+import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.todo.domain.*;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;
@@ -40,7 +40,7 @@ public class SaveTodoManagementService implements TodoManagementService {
     private final TodoRepository todoRepository;
     private final ScheduleRepository scheduleRepository;
     private final PlanRepository planRepository;
-    private final PathRepository pathRepository;
+    private final SubPathRepository subPathRepository;
 
     @Override
     public TodoManageResult<?> createTodo(TodoIdentifier identifier, TodoCreateRequest todoCreateRequest) {
@@ -105,7 +105,7 @@ public class SaveTodoManagementService implements TodoManagementService {
             // 경로별 할 일 관련
             // 최근 계획(Plan 조회)
             Plan latestPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(identifier.memberId()).orElseThrow(PlanNotFoundException::new);
-            List<Path> pathsOfLatestPlan = pathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS);
+            List<SubPath> pathsOfLatestPlan = subPathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS);
 
             pathsOfLatestPlan.stream()
                     .flatMap(path -> path.getTodos().stream())
@@ -160,7 +160,7 @@ public class SaveTodoManagementService implements TodoManagementService {
         // 즐겨찾기 할 일로부터 생성된 경로별 할 일의 부모 id 삭제
         // 최근 계획(Plan 조회)
         Plan latestPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(identifier.memberId()).orElseThrow(PlanNotFoundException::new);
-        List<Path> pathsOfLatestPlan = pathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS);
+        List<SubPath> pathsOfLatestPlan = subPathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS);
 
         pathsOfLatestPlan.stream()
                 .flatMap(path -> path.getTodos().stream())

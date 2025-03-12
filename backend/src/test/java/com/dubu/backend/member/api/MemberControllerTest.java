@@ -1,11 +1,12 @@
 package com.dubu.backend.member.api;
 
-import com.dubu.backend.global.config.WebConfig;
-import com.dubu.backend.global.interceptor.TokenInterceptor;
-import com.dubu.backend.member.application.MemberService;
-import com.dubu.backend.member.dto.request.MemberInfoUpdateRequest;
-import com.dubu.backend.member.dto.response.MemberInfoResponse;
-import com.dubu.backend.member.exception.MemberNotFoundException;
+import com.dubu.backend.core.config.WebConfig;
+import com.dubu.backend.core.interceptor.TokenInterceptor;
+import com.dubu.backend.member.application.MemberQueryFacade;
+import com.dubu.backend.member.application.MemberCommandFacade;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
+import com.dubu.backend.member.api.request.MemberInfoUpdateRequest;
+import com.dubu.backend.member.api.response.MemberInfoResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,9 @@ class MemberControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private MemberService memberService;
+    private MemberQueryFacade memberQueryFacade;
+    @MockBean
+    private MemberCommandFacade memberCommandFacade;
 
     private static final String MEMBER_INFO_UPDATE_JSON = """
             {
@@ -85,7 +88,7 @@ class MemberControllerTest {
                     37.4784966
             );
 
-            BDDMockito.given(memberService.findMemberInfo(memberId)).willReturn(mockResponse);
+            BDDMockito.given(memberQueryFacade.findMemberInfo(memberId)).willReturn(mockResponse);
 
             // when & then
             mockMvc.perform(get("/members")
@@ -101,7 +104,7 @@ class MemberControllerTest {
         void it_returns_404_when_member_not_found() throws Exception {
             // given
             Long memberId = 9999L;
-            BDDMockito.given(memberService.findMemberInfo(memberId))
+            BDDMockito.given(memberQueryFacade.findMemberInfo(memberId))
                     .willThrow(new MemberNotFoundException(memberId));
 
             // when & then
@@ -136,7 +139,7 @@ class MemberControllerTest {
                     37.4784966
             );
 
-            BDDMockito.given(memberService.updateMemberInfo(eq(memberId), any(MemberInfoUpdateRequest.class)))
+            BDDMockito.given(memberCommandFacade.updateMemberInfo(eq(memberId), any(MemberInfoUpdateRequest.class)))
                     .willReturn(mockResponse);
 
             // when & then
@@ -155,7 +158,7 @@ class MemberControllerTest {
             // given
             Long memberId = 9999L;
             Mockito.doThrow(new MemberNotFoundException(memberId))
-                    .when(memberService).updateMemberInfo(eq(memberId), any(MemberInfoUpdateRequest.class));
+                    .when(memberCommandFacade).updateMemberInfo(eq(memberId), any(MemberInfoUpdateRequest.class));
 
             // when & then
             mockMvc.perform(patch("/members")

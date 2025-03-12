@@ -1,6 +1,6 @@
 package com.dubu.backend.plan.domain.enums;
 
-import com.dubu.backend.plan.exception.InvalidMoodException;
+import com.dubu.backend.plan.core.exception.InvalidMoodException;
 
 import java.util.Arrays;
 

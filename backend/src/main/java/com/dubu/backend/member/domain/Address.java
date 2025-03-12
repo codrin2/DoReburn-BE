@@ -1,6 +1,6 @@
 package com.dubu.backend.member.domain;
 
-import com.dubu.backend.global.domain.BaseTimeEntity;
+import com.dubu.backend.core.domain.BaseTimeEntity;
 import com.dubu.backend.member.domain.enums.AddressType;
 import jakarta.persistence.*;
 import lombok.*;

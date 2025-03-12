@@ -1,14 +1,14 @@
 package com.dubu.backend.plan.api;
 
-import com.dubu.backend.global.config.WebConfig;
-import com.dubu.backend.global.interceptor.TokenInterceptor;
-import com.dubu.backend.member.exception.MemberNotFoundException;
-import com.dubu.backend.plan.application.PlanService;
-import com.dubu.backend.plan.dto.request.PlanCreateRequest;
-import com.dubu.backend.plan.dto.request.PlanFeedbackCreateRequest;
-import com.dubu.backend.plan.dto.response.FeedbackWritePageInfoResponse;
-import com.dubu.backend.plan.dto.response.PlanRecentResponse;
-import com.dubu.backend.plan.exception.PlanNotFoundException;
+import com.dubu.backend.core.config.WebConfig;
+import com.dubu.backend.core.interceptor.TokenInterceptor;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
+import com.dubu.backend.plan.application.PlanFacade;
+import com.dubu.backend.plan.api.request.PlanCreateRequest;
+import com.dubu.backend.plan.api.request.PlanFeedbackCreateRequest;
+import com.dubu.backend.plan.api.response.FeedbackWritePageInfoResponse;
+import com.dubu.backend.plan.api.response.PlanRecentResponse;
+import com.dubu.backend.plan.core.exception.PlanNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -44,13 +44,13 @@ class PlanControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private PlanService planService;
+    private PlanFacade planFacade;
 
     private static final String PLAN_CREATE_JSON = """
             {
               "totalTime": 50,
               "totalSectionTime": 40,
-              "paths": [
+              "subPaths": [
                 {
                   "trafficType": "SUBWAY",
                   "sectionTime": 20,
@@ -90,7 +90,7 @@ class PlanControllerTest {
             // given
             Long memberId = 1L;
             Long planId = 12345L;
-            BDDMockito.given(planService.savePlan(eq(memberId), anyDouble(), anyDouble(), anyDouble(), anyDouble(), any(PlanCreateRequest.class)))
+            BDDMockito.given(planFacade.savePlan(eq(memberId), anyDouble(), anyDouble(), anyDouble(), anyDouble(), any(PlanCreateRequest.class)))
                     .willReturn(planId);
 
             // when & then
@@ -113,7 +113,7 @@ class PlanControllerTest {
             // given
             Long memberId = 9999L;
             Mockito.doThrow(new MemberNotFoundException(memberId))
-                    .when(planService).savePlan(eq(memberId), anyDouble(), anyDouble(), anyDouble(), anyDouble(), any(PlanCreateRequest.class));
+                    .when(planFacade).savePlan(eq(memberId), anyDouble(), anyDouble(), anyDouble(), anyDouble(), any(PlanCreateRequest.class));
 
             // when & then
             mockMvc.perform(post("/plans")
@@ -141,7 +141,7 @@ class PlanControllerTest {
             Long memberId = 1L;
             Long planId = 10L;
             Long feedbackId = 9876L;
-            BDDMockito.given(planService.savePlanFeedback(eq(memberId), eq(planId), any(PlanFeedbackCreateRequest.class)))
+            BDDMockito.given(planFacade.savePlanFeedback(eq(memberId), eq(planId), any(PlanFeedbackCreateRequest.class)))
                     .willReturn(feedbackId);
 
             // when & then
@@ -160,7 +160,7 @@ class PlanControllerTest {
             Long memberId = 1L;
             Long planId = 9999L;
             Mockito.doThrow(new PlanNotFoundException(planId))
-                    .when(planService).savePlanFeedback(eq(memberId), eq(planId), any(PlanFeedbackCreateRequest.class));
+                    .when(planFacade).savePlanFeedback(eq(memberId), eq(planId), any(PlanFeedbackCreateRequest.class));
 
             mockMvc.perform(post("/plans/{planId}/feedbacks", planId)
                             .requestAttr("memberId", memberId)
@@ -186,7 +186,7 @@ class PlanControllerTest {
                     null, // createdAt
                     List.of()
             );
-            BDDMockito.given(planService.findRecentPlan(memberId))
+            BDDMockito.given(planFacade.findRecentPlan(memberId))
                     .willReturn(mockResponse);
 
             // when & then
@@ -201,7 +201,7 @@ class PlanControllerTest {
         void it_returns_404_when_not_found() throws Exception {
             Long memberId = 9999L;
             Mockito.doThrow(new MemberNotFoundException(memberId))
-                    .when(planService).findRecentPlan(memberId);
+                    .when(planFacade).findRecentPlan(memberId);
 
             mockMvc.perform(get("/plans/recent")
                             .requestAttr("memberId", memberId))
@@ -222,7 +222,7 @@ class PlanControllerTest {
             FeedbackWritePageInfoResponse mockResponse = new FeedbackWritePageInfoResponse(
                     15L, 40, 3, List.of()
             );
-            BDDMockito.given(planService.findFeedbackWritePageInfo(memberId))
+            BDDMockito.given(planFacade.findFeedbackWritePageInfo(memberId))
                     .willReturn(mockResponse);
 
             // when & then
@@ -237,7 +237,7 @@ class PlanControllerTest {
         void it_returns_404_when_not_found() throws Exception {
             Long memberId = 9999L;
             Mockito.doThrow(new MemberNotFoundException(memberId))
-                    .when(planService).findFeedbackWritePageInfo(memberId);
+                    .when(planFacade).findFeedbackWritePageInfo(memberId);
 
             mockMvc.perform(get("/plans/feedbacks")
                             .requestAttr("memberId", memberId))
@@ -267,7 +267,7 @@ class PlanControllerTest {
         void it_returns_404_if_member_not_found() throws Exception {
             Long memberId = 9999L;
             Mockito.doThrow(new MemberNotFoundException(memberId))
-                    .when(planService).completeMove(memberId);
+                    .when(planFacade).completeMove(memberId);
 
             mockMvc.perform(patch("/plans/move-complete")
                             .requestAttr("memberId", memberId))
@@ -300,7 +300,7 @@ class PlanControllerTest {
             Long memberId = 9999L;
             Long planId = 999L;
             Mockito.doThrow(new MemberNotFoundException(memberId))
-                    .when(planService).removePlan(memberId, planId);
+                    .when(planFacade).removePlan(memberId, planId);
 
             mockMvc.perform(delete("/plans")
                             .requestAttr("memberId", memberId)
