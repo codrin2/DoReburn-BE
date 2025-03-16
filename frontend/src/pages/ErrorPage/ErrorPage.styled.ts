@@ -43,6 +43,4 @@ export const ErrorButton = styled.button`
   padding: 1.5rem 3rem;
   gap: 0.4rem;
   border-radius: 3.2rem;
-
-  width: 40%;
 `;
