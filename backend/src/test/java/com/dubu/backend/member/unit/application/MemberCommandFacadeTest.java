@@ -1,5 +1,9 @@
-package com.dubu.backend.member.application;
+package com.dubu.backend.member.unit.application;
 
+
+import com.dubu.backend.member.application.MemberCommandFacade;
+import com.dubu.backend.member.application.MemberLocationFacade;
+import com.dubu.backend.member.application.MemberQueryFacade;
 import com.dubu.backend.member.application.event.MovementCompletedEvent;
 import com.dubu.backend.member.domain.Address;
 import com.dubu.backend.member.domain.Member;

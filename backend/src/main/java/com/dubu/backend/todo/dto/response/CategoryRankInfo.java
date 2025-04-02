@@ -28,4 +28,26 @@ public record CategoryRankInfo(String category, Integer rank, Integer count) {
 
         return result;
     }
+
+    public static List<CategoryRankInfo> from(List<CategoryCountInfo> categoryCountInfos) {
+        List<CategoryCountInfo> sortedCategoryCountInfos = categoryCountInfos.stream()
+                .sorted(Comparator.comparing(CategoryCountInfo::count).reversed())
+                .toList();
+
+        List<CategoryRankInfo> result = new ArrayList<>();
+        int currentRank = 1;
+        Integer previousCount = null;
+
+        int index = 0;
+        for(CategoryCountInfo categoryCountInfo : sortedCategoryCountInfos){
+            index++;
+            if (previousCount != null && !previousCount.equals(categoryCountInfo.count().intValue())) {
+                currentRank = index;
+            }
+            result.add(new CategoryRankInfo(categoryCountInfo.category(), currentRank, categoryCountInfo.count().intValue()));
+            previousCount = categoryCountInfo.count().intValue();
+        }
+
+        return result;
+    }
 }

@@ -1,4 +1,4 @@
-package com.dubu.backend.config;
+package com.dubu.backend.global.config;
 
 // import com.dubu.backend.todo.infra.repository.querydsl.CustomTodoRepository;
 // import com.dubu.backend.todo.infra.repository.querydsl.CustomTodoRepositoryImpl;

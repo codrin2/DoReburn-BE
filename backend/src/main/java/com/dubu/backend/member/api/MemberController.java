@@ -14,9 +14,14 @@ import com.dubu.backend.member.application.MemberQueryFacade;
 import com.dubu.backend.member.core.Polling;
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.MemberLocation;
+
+import com.dubu.backend.member.application.MemberService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -112,6 +117,16 @@ public class MemberController implements MemberApi {
             @Valid @RequestBody MemberLocation memberLocation
     ) {
         memberLocationFacade.updateMemberLocation(memberId, memberLocation);
+    }
+
+    @Polling
+    @ResponseStatus(NO_CONTENT)
+    @PatchMapping("/location-temp")
+    public void updateMemberLocationTemp(
+            @RequestAttribute("memberId") Long memberId,
+            @Valid @RequestBody MemberLocation memberLocationDto
+    ){
+        memberService.updateTempMemberLocation(memberId, memberLocationDto);
     }
 
     private String parseAccessToken(String bearerToken) {

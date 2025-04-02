@@ -11,9 +11,9 @@ import com.dubu.backend.plan.core.exception.PlanNotFoundException;
 import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.todo.dto.response.ShareTodoInfo;
-import com.dubu.backend.todo.dto.response.SurroundingMemberInfo;
 import com.dubu.backend.todo.domain.Todo;
 import com.dubu.backend.todo.domain.enums.TodoType;
+import com.dubu.backend.todo.dto.response.SurroundingMemberTodoInfo;
 import com.dubu.backend.todo.exception.SaveTodoNotFoundFromTargetParentException;
 import com.dubu.backend.todo.exception.TodoNotFoundException;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
@@ -34,7 +34,7 @@ public class ShareTodoService {
     private final SubPathRepository subPathRepository;
 
     @Transactional(readOnly = true)
-    public SurroundingMemberInfo findTodosOfSurroundMember(Long memberId, Long surroundingMemberId) {
+    public SurroundingMemberTodoInfo findTodosOfSurroundMember(Long memberId, Long surroundingMemberId) {
         Member selfMember = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
         Member surroundingMember = memberRepository.findById(surroundingMemberId).orElseThrow(() -> new MemberNotFoundException(surroundingMemberId));
 
@@ -54,7 +54,7 @@ public class ShareTodoService {
                 .toList();
 
         List<Long> surroundMemberParentTodoIds = todoRepository.findParentTodoIdsByParentTodoAndMemberAndType(surroundMemberTodos, selfMember, TodoType.SAVE);
-         return SurroundingMemberInfo.of(surroundingMember.getNickname(),
+         return SurroundingMemberTodoInfo.of(surroundingMember.getNickname(),
                  surroundMemberTodos.stream()
                          .map(todo ->
                                  ShareTodoInfo.of(todo.getId(),

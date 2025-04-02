@@ -1,11 +1,10 @@
-package com.dubu.backend.todo.application.support;
+package com.dubu.backend.todo.application.util;
 
 import com.dubu.backend.todo.exception.NotEnoughRecommendedTodosException;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 public class TodoRandomSelector {

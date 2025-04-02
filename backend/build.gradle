@@ -50,6 +50,13 @@ dependencies {
 	// DB
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.redisson:redisson:3.45.0'
+
+	// 하이버네이트 - spatial 데이터
+	implementation 'org.hibernate.orm:hibernate-spatial:6.6.9.Final'
+
+	// geo hash 라이브러리
+	implementation 'ch.hsr:geohash:1.4.0'
 
 	// web -push
 	implementation 'nl.martijndwars:web-push:5.1.0'
@@ -67,6 +74,10 @@ dependencies {
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'com.h2database:h2'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:mysql'
+	testImplementation 'com.redis:testcontainers-redis:2.2.4'
+	testImplementation 'org.testcontainers:rabbitmq:1.20.4'
 }
 
 tasks.named('test') {

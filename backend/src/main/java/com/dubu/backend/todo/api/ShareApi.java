@@ -3,7 +3,7 @@ package com.dubu.backend.todo.api;
 import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.todo.dto.request.SurroundingMemberQueryRequest;
 import com.dubu.backend.todo.dto.response.ShareInfo;
-import com.dubu.backend.todo.dto.response.SurroundingMemberInfo;
+import com.dubu.backend.todo.dto.response.SurroundingMemberTodoInfo;
 import com.dubu.backend.todo.dto.response.TodoSuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -235,7 +235,7 @@ public interface ShareApi {
                     )
             ),
     })
-    SuccessResponse<SurroundingMemberInfo> getTodosForSurroundingMember(
+    SuccessResponse<SurroundingMemberTodoInfo> getTodosForSurroundingMember(
             @RequestAttribute Long memberId,
             @Parameter(description = "주변 사용자 id", example = "9999") @RequestParam Long surroundingMemberId
     );

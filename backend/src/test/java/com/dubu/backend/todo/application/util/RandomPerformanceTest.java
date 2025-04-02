@@ -1,4 +1,4 @@
-package com.dubu.backend.todo.application.support;
+package com.dubu.backend.todo.application.util;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,8 @@
-package com.dubu.backend.member.api;
+package com.dubu.backend.member.unit.api;
 
 import com.dubu.backend.core.config.WebConfig;
 import com.dubu.backend.core.interceptor.TokenInterceptor;
+import com.dubu.backend.member.api.MemberController;
 import com.dubu.backend.member.application.MemberQueryFacade;
 import com.dubu.backend.member.application.MemberCommandFacade;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;

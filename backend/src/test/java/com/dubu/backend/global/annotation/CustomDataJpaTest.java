@@ -1,10 +1,9 @@
-package com.dubu.backend.config.annotation;
+package com.dubu.backend.global.annotation;
 
-import com.dubu.backend.config.TestP6SpySqlFormatConfig;
-import com.dubu.backend.config.TestQueryDslConfig;
+import com.dubu.backend.global.config.TestP6SpySqlFormatConfig;
+import com.dubu.backend.global.config.TestQueryDslConfig;
 import com.github.gavlyukovskiy.boot.jdbc.decorator.DataSourceDecoratorAutoConfiguration;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
