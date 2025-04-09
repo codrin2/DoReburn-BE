@@ -1,8 +1,10 @@
 package com.dubu.backend.member.application;
 
+import ch.hsr.geohash.GeoHash;
 import com.dubu.backend.member.domain.Address;
 import com.dubu.backend.member.domain.Member;
 import com.dubu.backend.member.domain.MemberCategory;
+import com.dubu.backend.member.domain.TempMember;
 import com.dubu.backend.member.domain.enums.AddressType;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.dto.MemberLocationDto;
@@ -15,27 +17,34 @@ import com.dubu.backend.member.dto.response.MemberStatusResponse;
 import com.dubu.backend.member.exception.MemberNotFoundException;
 import com.dubu.backend.member.exception.MemberSavedAddressNotFoundException;
 import com.dubu.backend.member.exception.RedisUnavailableException;
-import com.dubu.backend.member.infra.repository.AddressRepository;
-import com.dubu.backend.member.infra.repository.LocationRedisRepository;
-import com.dubu.backend.member.infra.repository.MemberCategoryRepository;
-import com.dubu.backend.member.infra.repository.MemberRepository;
+import com.dubu.backend.member.infra.repository.*;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.exception.PlanNotFoundException;
 import com.dubu.backend.plan.infra.repository.PlanRepository;
 import com.dubu.backend.todo.domain.Category;
+import com.dubu.backend.todo.domain.CellCategoryCount;
+import com.dubu.backend.todo.domain.CellCategoryCountId;
+import com.dubu.backend.todo.domain.Todo;
 import com.dubu.backend.todo.exception.CategoryNotFoundException;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
+import com.dubu.backend.todo.infra.repository.CellCategoryCountRepository;
+import com.dubu.backend.todo.infra.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -45,6 +54,11 @@ public class MemberService {
     private final AddressRepository addressRepository;
     private final PlanRepository planRepository;
     private final LocationRedisRepository locationRedisRepository;
+
+    private final TempMemberRepository tempMemberRepository;
+    private final CellCategoryCountRepository cellCategoryCountRepository;
+    private static final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+    private final TodoRepository todoRepository;
 
     @Transactional(readOnly = true)
     public MemberInfoResponse findMemberInfo(Long memberId) {
@@ -238,5 +252,76 @@ public class MemberService {
         catch (RedisConnectionFailureException e) {
             throw new RedisUnavailableException();
         }
+    }
+
+    @Transactional
+    public void updateTempMemberLocation(Long memberId, MemberLocationDto location){
+        TempMember member = tempMemberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
+
+        Point prevLocation = member.getLocation();
+        Point newLocation = geometryFactory.createPoint(new Coordinate(location.y_coordinate(), location.x_coordinate()));
+
+        // 위치에 대한 GeoHash
+        GeoHash prevGeoHash = null;
+        GeoHash curGeoHash = GeoHash.withCharacterPrecision(location.y_coordinate(), location.x_coordinate(), 7);
+
+        // 이전 위치와 현재 위치가 같은 geo hash 를 갖는 경우
+        if (prevLocation != null) {
+            prevGeoHash = GeoHash.withCharacterPrecision(prevLocation.getY(), prevLocation.getX(), 7);
+
+            if (curGeoHash.equals(prevGeoHash)) {
+                return;
+            }
+        }
+        member.updateLocation(newLocation);
+
+        updateCellCategoryCount(prevGeoHash, curGeoHash, memberId);
+    }
+
+    private List<Long> extractCategoryIds(List<Todo> todos){
+        return todos.stream()
+                .map(Todo::getCategory)
+                .map(Category::getId)
+                .distinct()
+                .sorted()
+                .toList();
+    }
+
+    private void updateCellCategoryCount(GeoHash prevGeoHash, GeoHash curGeoHash, Long memberId){
+        // 최근 완료한 계획 조회
+        Plan plan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
+                .orElseThrow(PlanNotFoundException::new);
+        List<Todo> recentCompletedTodos = todoRepository.findByPlanAndIsCompleted(plan, true);
+        List<Long> categoryIds = extractCategoryIds(recentCompletedTodos);
+
+        // GeoHash 와 CategoryId 매칭되는 CellCategoryCount 찾기
+        int diff = prevGeoHash.compareTo(curGeoHash);
+
+        executeCellCategoryCountUpsertByFlag(diff, categoryIds, prevGeoHash, curGeoHash);
+    }
+
+    private List<GeoHash> compareGeoHash(GeoHash prevGeoHash, GeoHash curGeoHash){
+        if(prevGeoHash != null){
+            if (prevGeoHash.toBase32().compareTo(curGeoHash.toBase32()) < 0){
+                return List.of(prevGeoHash, curGeoHash);
+            }
+        }
+        return List.of(curGeoHash);
+    }
+
+    private void executeCellCategoryCountUpsertByFlag(int flag, List<Long> categoryIds, GeoHash prevGeoHash, GeoHash curGeoHash){
+        if(flag > 0){
+            categoryIds.forEach(categoryId -> {
+               cellCategoryCountRepository.upsertCellCategoryCount(curGeoHash.toBase32(), categoryId, 1);
+               cellCategoryCountRepository.upsertCellCategoryCount(prevGeoHash.toBase32(), categoryId, -1);
+            });
+            return;
+        }
+
+        categoryIds.forEach(categoryId -> {
+            cellCategoryCountRepository.upsertCellCategoryCount(prevGeoHash.toBase32(), categoryId, -1);
+            cellCategoryCountRepository.upsertCellCategoryCount(curGeoHash.toBase32(), categoryId, 1);
+        });
     }
 }

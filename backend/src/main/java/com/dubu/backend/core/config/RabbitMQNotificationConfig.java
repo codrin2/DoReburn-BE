@@ -1,6 +1,7 @@
 package com.dubu.backend.core.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,14 +39,14 @@ public class RabbitMQNotificationConfig {
     }
 
     @Bean
-    public Binding notificationDelayQueueBinding(Queue notificationDelayQueue, DirectExchange notificationExchange) {
+    public Binding notificationDelayQueueBinding(@Qualifier("notificationDelayQueue") Queue notificationDelayQueue, @Qualifier("notificationExchange") DirectExchange notificationExchange) {
         return BindingBuilder.bind(notificationDelayQueue)
                 .to(notificationExchange)
                 .with(DELAY_ROUTING_KEY);
     }
 
     @Bean
-    public Binding notificationDlxQueueBinding(Queue notificationDlxQueue, DirectExchange notificationExchange) {
+    public Binding notificationDlxQueueBinding(@Qualifier("notificationDlxQueue") Queue notificationDlxQueue, @Qualifier("notificationExchange") DirectExchange notificationExchange) {
         return BindingBuilder.bind(notificationDlxQueue)
                 .to(notificationExchange)
                 .with(DLX_ROUTING_KEY);

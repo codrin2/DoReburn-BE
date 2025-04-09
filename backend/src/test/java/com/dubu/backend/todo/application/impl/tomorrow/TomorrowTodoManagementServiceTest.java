@@ -246,7 +246,7 @@ class TomorrowTodoManagementServiceTest {
 
         // plan, path stubbing (빈 리스트)
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)).thenReturn(Optional.of(createPlan(10L)));
-        when(subPathRepository.findByPlanAndType(any(), any())).thenReturn(Collections.emptyList());
+        when(pathRepository.findByPlanAndType(any(), any())).thenReturn(Collections.emptyList());
         when(categoryRepository.findByName("NEW_CAT")).thenReturn(Optional.of(newCategory));
 
         // 수정 후 updateTodo() 내부에서 targetTodo의 값 변경됨 (모의)
@@ -296,7 +296,7 @@ class TomorrowTodoManagementServiceTest {
         when(todoRepository.findTodosWithCategoryBySchedule(schedule)).thenReturn(new ArrayList<>());
         // plan, path stubbing (빈 리스트)
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)).thenReturn(Optional.of(createPlan(10L)));
-        when(subPathRepository.findByPlanAndType(any(), any())).thenReturn(Collections.emptyList());
+        when(pathRepository.findByPlanAndType(any(), any())).thenReturn(Collections.emptyList());
         when(categoryRepository.findByName("NEW_CAT")).thenReturn(Optional.of(newCategory));
 
         // 수정 후 updateTodo() 내부에서 targetTodo의 값 변경됨 (모의)
@@ -335,7 +335,7 @@ class TomorrowTodoManagementServiceTest {
                 .thenReturn(Optional.empty());
         // plan, path stubbing (빈 리스트)
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)).thenReturn(Optional.of(createPlan(10L)));
-        when(subPathRepository.findByPlanAndType(any(), any())).thenReturn(Collections.emptyList());
+        when(pathRepository.findByPlanAndType(any(), any())).thenReturn(Collections.emptyList());
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(todoRepository.findById(todoId)).thenReturn(Optional.of(targetTodo));
 

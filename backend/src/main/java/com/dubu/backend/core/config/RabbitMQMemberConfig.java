@@ -1,6 +1,7 @@
 package com.dubu.backend.core.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,14 +39,14 @@ public class RabbitMQMemberConfig {
     }
 
     @Bean
-    public Binding memberDelayQueueBinding(Queue memberDelayQueue, DirectExchange memberExchange) {
+    public Binding memberDelayQueueBinding(@Qualifier("memberDelayQueue") Queue memberDelayQueue, @Qualifier("memberExchange") DirectExchange memberExchange) {
         return BindingBuilder.bind(memberDelayQueue)
                 .to(memberExchange)
                 .with(DELAY_ROUTING_KEY);
     }
 
     @Bean
-    public Binding memberDlxQueueBinding(Queue memberDlxQueue, DirectExchange memberExchange) {
+    public Binding memberDlxQueueBinding(@Qualifier("memberDlxQueue") Queue memberDlxQueue, @Qualifier("memberExchange") DirectExchange memberExchange) {
         return BindingBuilder.bind(memberDlxQueue)
                 .to(memberExchange)
                 .with(DLX_ROUTING_KEY);
