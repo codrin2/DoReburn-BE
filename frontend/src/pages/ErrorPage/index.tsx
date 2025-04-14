@@ -12,8 +12,6 @@ const ErrorPage = ({ message, onClick }: ErrorPageProps) => {
     window.location.href = '/';
   };
 
-  console.log('배포테스트2');
-
   return (
     <S.ErrorLayout>
       <Icon icon="Fire" width={240} height={240} />

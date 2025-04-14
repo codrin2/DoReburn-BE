@@ -5,6 +5,8 @@ import LandingMessage from './components/LandingMessage';
 import * as S from './LandingPage.styled';
 
 const LandingPage = () => {
+  console.log('배포3');
+
   return (
     <S.LandingPageLayout>
       <LandingHeader />
