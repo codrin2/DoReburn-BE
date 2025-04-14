@@ -25,7 +25,7 @@ public class MemberCommandFacade {
     public void completeOnboarding(Long memberId, MemberOnboardingRequest request) {
         Member currentMember = findExistingMember(memberRepository, memberId);
 
-        if (currentMember.isOnboarding()) {
+        if (!currentMember.isOnboarding()) {
             throw new InvalidMemberStatusException(currentMember.getStatus().name());
         }
 
