@@ -1,6 +1,6 @@
 package com.dubu.backend.todo.infra.repository;
 
-import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.todo.dto.response.MemberCategoryInfo;

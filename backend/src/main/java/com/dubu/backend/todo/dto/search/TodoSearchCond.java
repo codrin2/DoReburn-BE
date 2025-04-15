@@ -1,6 +1,6 @@
 package com.dubu.backend.todo.dto.search;
 
-import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;

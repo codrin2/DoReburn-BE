@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
 import com.dubu.backend.member.domain.repository.MemberRepository;

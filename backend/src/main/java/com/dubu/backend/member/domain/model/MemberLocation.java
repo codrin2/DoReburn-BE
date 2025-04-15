@@ -1,4 +1,4 @@
-package com.dubu.backend.member.domain;
+package com.dubu.backend.member.domain.model;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;

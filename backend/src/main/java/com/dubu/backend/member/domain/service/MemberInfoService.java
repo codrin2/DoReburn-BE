@@ -1,7 +1,10 @@
-package com.dubu.backend.member.domain;
+package com.dubu.backend.member.domain.service;
 
 import com.dubu.backend.member.domain.enums.AddressType;
 import com.dubu.backend.member.domain.enums.Status;
+import com.dubu.backend.member.domain.model.Address;
+import com.dubu.backend.member.domain.model.Member;
+import com.dubu.backend.member.domain.model.MemberCategory;
 import com.dubu.backend.member.domain.repository.AddressRepository;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
 import com.dubu.backend.member.api.request.MemberInfoUpdateRequest;

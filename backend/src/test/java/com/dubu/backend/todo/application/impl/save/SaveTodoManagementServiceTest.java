@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
 
-import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.enums.Role;
 import com.dubu.backend.member.domain.enums.OauthProvider;
@@ -275,7 +275,7 @@ class SaveTodoManagementServiceTest {
         Plan latestPlan = createPlan(10L);
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId))
                 .thenReturn(Optional.of(latestPlan));
-        when(pathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS))
+        when(subPathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS))
                 .thenReturn(Collections.emptyList());
         when(categoryRepository.findByName("NEW_CAT")).thenReturn(Optional.of(newCategory));
         when(todoRepository.findWithCategoryById(todoId)).thenReturn(Optional.of(todo));
@@ -372,7 +372,7 @@ class SaveTodoManagementServiceTest {
         // stubbing for plan and path
         Plan latestPlan = createPlan(10L);
         when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)).thenReturn(Optional.of(latestPlan));
-        when(pathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS)).thenReturn(Collections.emptyList());
+        when(subPathRepository.findByPlanAndType(latestPlan, TodoType.IN_PROGRESS)).thenReturn(Collections.emptyList());
 
         // 마지막으로, 카테고리 조회 시 Optional.empty() 반환
         when(categoryRepository.findByName("NON_EXIST_CAT")).thenReturn(Optional.empty());

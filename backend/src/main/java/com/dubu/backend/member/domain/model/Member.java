@@ -1,4 +1,4 @@
-package com.dubu.backend.member.domain;
+package com.dubu.backend.member.domain.model;
 
 import com.dubu.backend.core.domain.BaseTimeEntity;
 import com.dubu.backend.member.core.AggregateRoot;

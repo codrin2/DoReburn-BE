@@ -1,7 +1,7 @@
 package com.dubu.backend.todo.domain;
 
 import com.dubu.backend.core.domain.BaseTimeEntity;
-import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;

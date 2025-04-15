@@ -1,7 +1,7 @@
 package com.dubu.backend.member.api;
 
 import com.dubu.backend.core.domain.SuccessResponse;
-import com.dubu.backend.member.domain.MemberLocation;
+import com.dubu.backend.member.domain.model.MemberLocation;
 import com.dubu.backend.member.api.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.api.request.MemberOnboardingRequest;
 import com.dubu.backend.member.api.request.MemberStatusUpdateRequest;

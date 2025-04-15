@@ -1,7 +1,7 @@
 package com.dubu.backend.todo.application.impl.today;
 
 import com.dubu.backend.core.domain.PageResponse;
-import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberCategoryNotFoundException;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;

@@ -1,6 +1,6 @@
 package com.dubu.backend.todo.infra.repository.querydsl;
 
-import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.todo.domain.Schedule;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
