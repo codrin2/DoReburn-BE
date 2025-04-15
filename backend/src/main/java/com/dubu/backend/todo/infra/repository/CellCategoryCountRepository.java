@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CellCategoryCountRepository extends JpaRepository<CellCategoryCount, CellCategoryCountId> {
-    @Query("SELECT new com.dubu.backend.todo.dto.response.CategoryCountInfo(c.name, SUM(ccc.count)) " +
-            "FROM CellCategoryCount ccc JOIN ccc.category c " +
-            "WHERE ccc.id.cellId IN :cellIds " +
-            "GROUP BY ccc.id.categoryId")
-    List<CategoryCountInfo> findByCellIds(@Param("cellIds") List<String> cellIds);
+    // @Query("SELECT new com.dubu.backend.todo.dto.response.CategoryCountInfo(c.name, SUM(ccc.count)) " +
+    //         "FROM CellCategoryCount ccc JOIN ccc.category c " +
+    //         "WHERE ccc.id.cellId IN :cellIds " +
+    //         "GROUP BY ccc.id.categoryId")
+    // List<CategoryCountInfo> findByCellIds(@Param("cellIds") List<String> cellIds);
 }
