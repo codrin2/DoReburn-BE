@@ -7,17 +7,17 @@ import java.util.*;
 
 @Getter
 public class MemberCategoryCollection {
-    private final Map<Long, List<String>> memberToCategories = new HashMap<>();
-    private final Map<String, Integer> categoryMemberCount = new HashMap<>();
+    private final Map<Long, List<String>> memberCategoryMap = new HashMap<>();
+    private final Map<String, Integer> categoryMemberCountMap = new HashMap<>();
 
     public MemberCategoryCollection(List<MemberCategoryInfo> memberCategoryInfos) {
         memberCategoryInfos
                 .forEach(info -> {
-                    memberToCategories
+                    memberCategoryMap
                             .computeIfAbsent(info.memberId(), k -> new ArrayList<>())
                             .add(info.category());
 
-                    categoryMemberCount.merge(info.category(), 1, Integer::sum);
+                    categoryMemberCountMap.merge(info.category(), 1, Integer::sum);
                 });
     }
 }

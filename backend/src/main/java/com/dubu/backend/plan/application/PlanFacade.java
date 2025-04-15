@@ -1,10 +1,14 @@
 package com.dubu.backend.plan.application;
 
-import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
+import com.dubu.backend.member.domain.model.TempMember;
 import com.dubu.backend.member.domain.repository.MemberRepository;
+import com.dubu.backend.member.domain.repository.TempMemberRepository;
 import com.dubu.backend.notification.application.WebPushService;
+import com.dubu.backend.plan.api.response.RecentPlanTodosResponse;
+import com.dubu.backend.plan.application.event.PlanEndedEvent;
 import com.dubu.backend.plan.domain.Feedback;
 import com.dubu.backend.plan.domain.Path;
 import com.dubu.backend.plan.domain.SubPath;
@@ -28,6 +32,7 @@ import com.dubu.backend.todo.exception.ScheduleNotFoundException;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,11 +48,13 @@ public class PlanFacade {
     private final PathFacade pathFacade;
     private final WebPushService webPushService;
     private final MemberRepository memberRepository;
+    private final TempMemberRepository tempMemberRepository;
     private final PlanRepository planRepository;
     private final SubPathRepository subPathRepository;
     private final ScheduleRepository scheduleRepository;
     private final TodoRepository todoRepository;
     private final FeedbackRepository feedbackRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public Long savePlan(
@@ -130,6 +137,18 @@ public class PlanFacade {
     }
 
     @Transactional(readOnly = true)
+    public RecentPlanTodosResponse findTodosOfRecentPlan(Long memberId){
+        TempMember member = tempMemberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
+
+        Plan recentPlan = planRepository.findTopByMemberIdAndIsCompletedOrderByCreatedAtDesc(member.getId(), true)
+            .orElseThrow(PlanNotFoundException::new);
+        List<Todo> recentTodos = todoRepository.findByPlanAndIsCompleted(recentPlan, true);
+
+        return RecentPlanTodosResponse.from(recentTodos);
+    }
+
+    @Transactional(readOnly = true)
     public FeedbackWritePageInfoResponse findFeedbackWritePageInfo(Long memberId) {
         Member currentMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
@@ -171,6 +190,8 @@ public class PlanFacade {
 
         recentPlan.updateIsCompleted(true);
         currentMember.updateStatus(Status.FEEDBACK);
+
+        eventPublisher.publishEvent(new PlanEndedEvent(memberId, recentPlan));
     }
 
     @Transactional

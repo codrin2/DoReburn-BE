@@ -1,8 +1,8 @@
 package com.dubu.backend.member.application;
 
 import com.dubu.backend.member.application.event.MovementCompletedEvent;
-import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.member.domain.MemberInfoService;
+import com.dubu.backend.member.domain.model.Member;
+import com.dubu.backend.member.domain.service.MemberInfoService;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.member.api.request.MemberInfoUpdateRequest;

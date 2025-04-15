@@ -1,0 +1,30 @@
+package com.dubu.backend.member.domain.model;
+
+import com.dubu.backend.core.domain.BaseTimeEntity;
+import com.dubu.backend.todo.domain.Category;
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"member_id", "category_id"})
+})
+public class MemberCategory extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_category_id")
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+}

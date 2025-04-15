@@ -1,6 +1,6 @@
 package com.dubu.backend.member.infrastructure;
 
-import com.dubu.backend.member.domain.MemberLocation;
+import com.dubu.backend.member.domain.model.MemberLocation;
 import com.dubu.backend.member.domain.repository.MemberLocationRepository;
 import com.dubu.backend.member.core.exception.RedisUnavailableException;
 import com.dubu.backend.todo.dto.request.SurroundingMemberQueryRequest;

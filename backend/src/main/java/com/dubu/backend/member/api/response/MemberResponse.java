@@ -1,6 +1,6 @@
 package com.dubu.backend.member.api.response;
 
-import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.domain.model.Member;
 
 public record MemberResponse(
         Long memberId,

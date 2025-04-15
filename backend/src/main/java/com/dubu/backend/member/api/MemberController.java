@@ -11,12 +11,14 @@ import com.dubu.backend.member.api.response.MemberStatusResponse;
 import com.dubu.backend.member.application.MemberCommandFacade;
 import com.dubu.backend.member.application.MemberLocationFacade;
 import com.dubu.backend.member.application.MemberQueryFacade;
-import com.dubu.backend.member.core.Polling;
-import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.member.domain.MemberLocation;
+import com.dubu.backend.member.domain.model.Member;
+import com.dubu.backend.member.domain.model.MemberLocation;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -104,7 +106,6 @@ public class MemberController implements MemberApi {
         memberCommandFacade.updateMemberStatus(memberId, request.status());
     }
 
-    @Polling
     @ResponseStatus(NO_CONTENT)
     @PutMapping("/location")
     public void updateMemberLocation(
@@ -112,6 +113,15 @@ public class MemberController implements MemberApi {
             @Valid @RequestBody MemberLocation memberLocation
     ) {
         memberLocationFacade.updateMemberLocation(memberId, memberLocation);
+    }
+
+    @ResponseStatus(NO_CONTENT)
+    @PatchMapping("/location-temp")
+    public void updateMemberLocationTemp(
+            @RequestAttribute("memberId") Long memberId,
+            @Valid @RequestBody MemberLocation memberLocationDto
+    ){
+        memberLocationFacade.updateTempMemberLocation(memberId, memberLocationDto);
     }
 
     private String parseAccessToken(String bearerToken) {

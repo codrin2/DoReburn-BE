@@ -1,6 +1,7 @@
 package com.dubu.backend.todo.infra.repository;
 
-import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.domain.model.Member;
+import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.todo.dto.response.MemberCategoryInfo;
 import com.dubu.backend.todo.domain.Schedule;
@@ -61,6 +62,10 @@ public interface TodoRepository extends JpaRepository<Todo, Long>, CustomTodoRep
 
     @Query("SELECT t FROM Todo t WHERE t.subPath.id IN :pathIds AND t.type = :type AND t.isCompleted = true")
     List<Todo> findByPathIdsAndTypeAndIsCompleted(List<Long> pathIds, TodoType type);
+
+    // 계획으로 조회
+    @Query("SELECT t FROM Todo t join fetch t.category join fetch t.subPath p WHERE p.plan = :plan AND t.isCompleted = :isCompleted")
+    List<Todo> findByPlanAndIsCompleted(Plan plan, Boolean isCompleted);
 
     @Query(value = """
         WITH ranked_plan AS (

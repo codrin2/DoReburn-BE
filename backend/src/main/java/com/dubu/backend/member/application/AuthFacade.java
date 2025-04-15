@@ -5,7 +5,7 @@ import com.dubu.backend.member.domain.enums.OauthProvider;
 import com.dubu.backend.member.api.response.AccessToken;
 import com.dubu.backend.member.api.response.UserInfo;
 import com.dubu.backend.member.api.response.Token;
-import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

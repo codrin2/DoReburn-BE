@@ -1,7 +1,7 @@
 package com.dubu.backend.todo.application.impl.today;
 
 import com.dubu.backend.core.domain.PageResponse;
-import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberCategoryNotFoundException;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
@@ -22,7 +22,7 @@ import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
 import com.dubu.backend.todo.application.TargetTodoQueryService;
-import com.dubu.backend.todo.application.support.TodoRandomSelector;
+import com.dubu.backend.todo.application.util.TodoRandomSelector;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;

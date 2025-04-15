@@ -1,6 +1,5 @@
 package com.dubu.backend.todo.application.impl.today;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
@@ -27,7 +26,7 @@ import com.dubu.backend.todo.dto.search.TodoSearchCond;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
-import com.dubu.backend.todo.application.support.TodoRandomSelector;
+import com.dubu.backend.todo.application.util.TodoRandomSelector;
 import com.dubu.backend.core.domain.PageResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

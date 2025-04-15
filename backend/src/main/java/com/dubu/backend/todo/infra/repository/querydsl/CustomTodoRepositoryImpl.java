@@ -1,32 +1,22 @@
 package com.dubu.backend.todo.infra.repository.querydsl;
 
-import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.plan.domain.QPlan;
-import com.dubu.backend.todo.dto.response.MemberCategoryInfo;
+import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.domain.Todo;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;
 import com.dubu.backend.todo.dto.common.Cursor;
 import com.dubu.backend.todo.dto.search.TodoSearchCond;
-import com.dubu.backend.todo.domain.*;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
-import java.time.LocalDate;
 import java.util.List;
 
-import static com.dubu.backend.plan.domain.QPath.path;
-import static com.dubu.backend.plan.domain.QPlan.plan;
 import static com.dubu.backend.todo.domain.QCategory.category;
-import static com.dubu.backend.todo.domain.QSchedule.schedule;
 import static com.dubu.backend.todo.domain.QTodo.todo;
 
 @RequiredArgsConstructor
