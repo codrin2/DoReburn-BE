@@ -32,6 +32,7 @@ import com.dubu.backend.todo.exception.ScheduleNotFoundException;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,11 +48,13 @@ public class PlanFacade {
     private final PathFacade pathFacade;
     private final WebPushService webPushService;
     private final MemberRepository memberRepository;
+    private final TempMemberRepository tempMemberRepository;
     private final PlanRepository planRepository;
     private final SubPathRepository subPathRepository;
     private final ScheduleRepository scheduleRepository;
     private final TodoRepository todoRepository;
     private final FeedbackRepository feedbackRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public Long savePlan(
@@ -187,6 +190,8 @@ public class PlanFacade {
 
         recentPlan.updateIsCompleted(true);
         currentMember.updateStatus(Status.FEEDBACK);
+
+        eventPublisher.publishEvent(new PlanEndedEvent(memberId, recentPlan));
     }
 
     @Transactional
