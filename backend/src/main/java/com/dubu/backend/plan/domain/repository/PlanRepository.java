@@ -1,6 +1,6 @@
 package com.dubu.backend.plan.domain.repository;
 
-import com.dubu.backend.member.domain.Member;
+import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.plan.domain.Plan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +15,12 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
 
     @Query("SELECT p FROM Plan p LEFT JOIN FETCH p.feedback WHERE p.member= :member AND p.isCompleted = :isCompleted ORDER BY p.createdAt DESC LIMIT 1")
     Optional<Plan> findTopByMemberAndIsCompletedOrderByCreatedAtDesc(Member member, boolean isCompleted);
+
+    @Query("SELECT p FROM Plan p WHERE p.member.id = :memberId AND p.isCompleted = :isCompleted ORDER BY p.createdAt DESC LIMIT 1")
+    Optional<Plan> findTopByMemberIdAndIsCompletedOrderByCreatedAtDesc(Long memberId, boolean isCompleted);
+
+    @Query("SELECT p FROM Plan p WHERE p.member.id = :memberId AND p.isCompleted = :isCompleted AND p.id <> :excludedId ORDER BY p.createdAt DESC LIMIT 1")
+    Optional<Plan> findTopByMemberIdAndIsCompletedAndIdNotOrderByCreatedAtDesc(Long memberId, boolean isCompleted, Long excludedId);
 
     @Query("SELECT p FROM Plan p JOIN FETCH p.feedback WHERE p.member = :member AND p.createdAt between :startTime AND :endTime")
     List<Plan> findByMemberAndCreatedAtBetween(Member member, LocalDateTime startTime, LocalDateTime endTime);
