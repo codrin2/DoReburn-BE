@@ -1,10 +1,5 @@
 package com.dubu.backend.member.unit.application;
 
-import com.dubu.backend.member.api.response.KakaoPlaceApiResponse;
-import com.dubu.backend.member.api.response.KakaoPlaceApiResponse.DocumentsResponse;
-import com.dubu.backend.member.api.response.KakaoPlaceApiResponse.DocumentsResponse.RoadAddressResponse;
-import com.dubu.backend.member.api.response.NaverPlaceApiResponse;
-import com.dubu.backend.member.api.response.NaverPlaceApiResponse.NaverPlace;
 import com.dubu.backend.member.api.response.AddressSearchResponse;
 import com.dubu.backend.member.application.AddressFacade;
 import com.dubu.backend.member.infrastructure.KakaoRoadAddressApi;
@@ -49,22 +44,19 @@ class AddressFacadeTest {
             String query = "카페";
 
             // 네이버 Mock 응답
-            NaverPlace naver1 = new NaverPlace("네이버카페1", "서울 강남구 도산대로 1", 1270000, 370000);
-            NaverPlace naver2 = new NaverPlace("네이버카페2", "서울 강남구 도산대로 2", 1270500, 370500);
+            AddressSearchResponse naver1 = new AddressSearchResponse("네이버카페1", "서울 강남구 도산대로 1", (double)1270000, (double)370000);
+            AddressSearchResponse naver2 = new AddressSearchResponse("네이버카페2", "서울 강남구 도산대로 2", (double)1270500, (double)370500);
 
-            NaverPlaceApiResponse naverMockResponse = new NaverPlaceApiResponse(List.of(naver1, naver2));
+            List<AddressSearchResponse> naverMockResponse= List.of(naver1, naver2);
 
             // 카카오 Mock 응답
-            RoadAddressResponse kakaoRoad1 = new RoadAddressResponse("서울 강남구 학동로 1", "카카오카페1", "127.1", "37.1");
-            RoadAddressResponse kakaoRoad2 = new RoadAddressResponse("서울 강남구 학동로 2", "카카오카페2", "127.2", "37.2");
+            AddressSearchResponse kakao1 = new AddressSearchResponse("서울 강남구 학동로 1", "카카오카페1", 127.1, 37.1);
+            AddressSearchResponse kakao2 = new AddressSearchResponse("서울 강남구 학동로 2", "카카오카페2", 127.2, 37.2);
 
-            DocumentsResponse kakaoDoc1 = new DocumentsResponse(kakaoRoad1);
-            DocumentsResponse kakaoDoc2 = new DocumentsResponse(kakaoRoad2);
+            List<AddressSearchResponse> kakaoMockResponse = List.of(kakao1, kakao2);
 
-            KakaoPlaceApiResponse kakaoMockResponse = new KakaoPlaceApiResponse(List.of(kakaoDoc1, kakaoDoc2));
-
-            given(naverPlaceApi.searchPlaces(query)).willReturn(naverMockResponse);
-            given(kakaoRoadAddressApi.searchPlaces(query)).willReturn(kakaoMockResponse);
+            given(naverPlaceApi.search(query)).willReturn(naverMockResponse);
+            given(kakaoRoadAddressApi.search(query)).willReturn(kakaoMockResponse);
 
             // when
             List<AddressSearchResponse> result = addressFacade.searchPlaces(query);
