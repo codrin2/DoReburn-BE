@@ -1,6 +1,5 @@
 package com.dubu.backend.todo.api;
 
-import com.dubu.backend.member.core.Polling;
 import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.todo.dto.request.CategoryRankRequest;
 import com.dubu.backend.todo.dto.request.SurroundingMemberQueryRequest;
@@ -25,7 +24,6 @@ public class ShareController implements ShareApi{
     private final ShareService shareService;
     private final ShareTodoService shareTodoService;
 
-    @Polling
     @GetMapping("/members/surrounding")
     public SuccessResponse<ShareInfo> getSurroundingMembers(
             @RequestAttribute Long memberId,
@@ -34,7 +32,6 @@ public class ShareController implements ShareApi{
         return new SuccessResponse<>(shareService.findSurroundingMembersInfo(memberId, request));
     }
 
-    @Polling
     @GetMapping("/members/location")
     public SuccessResponse<List<SurroundingMemberLocationInfo>> getSurroundingMemberLocations(
         @RequestAttribute Long memberId,
@@ -43,7 +40,6 @@ public class ShareController implements ShareApi{
         return new SuccessResponse<>(shareService.findSurroundingTempMembers(memberId, request));
     }
 
-    @Polling
     @GetMapping("/category-rank")
     public SuccessResponse<List<CategoryRankInfo>> getSurroundingMemberCategoryRank(
             @RequestAttribute Long memberId,
