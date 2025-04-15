@@ -1,9 +1,13 @@
 package com.dubu.backend.todo.application.impl.share;
 
-import com.dubu.backend.member.domain.MemberLocation;
+import ch.hsr.geohash.GeoHash;
+import com.dubu.backend.member.domain.model.MemberLocation;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
+import com.dubu.backend.member.domain.model.TempMember;
+import com.dubu.backend.member.domain.repository.TempMemberRepository;
 import com.dubu.backend.member.infrastructure.RedisMemberLocationRepository;
 import com.dubu.backend.member.domain.repository.MemberRepository;
+import com.dubu.backend.todo.application.util.GeoSpatialUtils;
 import com.dubu.backend.todo.dto.request.SurroundingMemberQueryRequest;
 import com.dubu.backend.todo.application.ShareService;
 import com.dubu.backend.todo.application.collection.share.MemberCategoryCollection;
@@ -91,47 +95,7 @@ public class ShareServiceImpl implements ShareService {
         List<GeoHash> geoHashes = GeoSpatialUtils.deriveGeoHashInBoundingBox(bbCornergeoHashMap.get("NW"), bbCornergeoHashMap.get("NE"), bbCornergeoHashMap.get("SW"), request.x_coordinate(), request.y_coordinate(), request.radius());
 
         List<CategoryCountInfo> categoryCountInfos = null;
-                // cellCategoryCountRepository.findByCellIds(geoHashes.stream().map(GeoHash::toBase32).toList());
-
-        return CategoryRankInfo.from(categoryCountInfos);
-        return ShareInfo.of(MemberInfo.from(memberLocationInfos, memberCategoryCollection.getMemberCategoryMap()), CategoryRankInfo.from(memberCategoryCollection.getCategoryMemberCountMap()));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<SurroundingMemberLocationInfo> findSurroundingTempMembers(Long memberId, SurroundingMemberQueryRequest request) {
-        memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
-
-        List<Category> categories = categoryRepository.findAll();
-
-        List<TempMember> surroundingMemberIds = tempMemberRepository.findByLocation(geometryFactory.createPoint(new Coordinate(request.x_coordinate(), request.y_coordinate())), request.radius())
-                .stream()
-                .filter(m -> !m.getId().equals(memberId))
-                .toList();
-
-        List<MemberCategoryInfo> memberCategoryInfos = todoRepository.findTodoCountGroupByCategory(extractTempMemberIds(surroundingMemberIds));
-        MemberCategoryCollection memberCategoryCollection = new MemberCategoryCollection(memberCategoryInfos);
-
-        Map<Long, List<String>> memberCategoryMap = memberCategoryCollection.getMemberCategoryMap();
-
-        return surroundingMemberIds.stream()
-                .map(m -> {
-                    Point location = m.getLocation();
-                    return SurroundingMemberLocationInfo.of(m.getId(), location.getX(), location.getY(), memberCategoryMap.get(m.getId()));
-                }).toList();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<CategoryRankInfo> findCategoryRank(Long memberId, CategoryRankRequest request) {
-        memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
-
-        Map<String, GeoHash> bbCornergeoHashMap = GeoSpatialUtils.deriveBoundingBoxCornerGeoHash(request.y_coordinate(), request.x_coordinate(), request.radius());
-
-        List<GeoHash> geoHashes = GeoSpatialUtils.deriveGeoHashInBoundingBox(bbCornergeoHashMap.get("NW"), bbCornergeoHashMap.get("NE"), bbCornergeoHashMap.get("SW"), request.x_coordinate(), request.y_coordinate(), request.radius());
-
-        List<CategoryCountInfo> categoryCountInfos = null;
-                // cellCategoryCountRepository.findByCellIds(geoHashes.stream().map(GeoHash::toBase32).toList());
+                 cellCategoryCountRepository.findByCellIds(geoHashes.stream().map(GeoHash::toBase32).toList());
 
         return CategoryRankInfo.from(categoryCountInfos);
     }
