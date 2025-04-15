@@ -11,11 +11,8 @@ import com.dubu.backend.member.api.response.MemberStatusResponse;
 import com.dubu.backend.member.application.MemberCommandFacade;
 import com.dubu.backend.member.application.MemberLocationFacade;
 import com.dubu.backend.member.application.MemberQueryFacade;
-import com.dubu.backend.member.core.Polling;
-import com.dubu.backend.member.domain.Member;
-import com.dubu.backend.member.domain.MemberLocation;
-
-import com.dubu.backend.member.application.MemberService;
+import com.dubu.backend.member.domain.model.Member;
+import com.dubu.backend.member.domain.model.MemberLocation;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -109,7 +106,6 @@ public class MemberController implements MemberApi {
         memberCommandFacade.updateMemberStatus(memberId, request.status());
     }
 
-    @Polling
     @ResponseStatus(NO_CONTENT)
     @PutMapping("/location")
     public void updateMemberLocation(
@@ -119,14 +115,13 @@ public class MemberController implements MemberApi {
         memberLocationFacade.updateMemberLocation(memberId, memberLocation);
     }
 
-    @Polling
     @ResponseStatus(NO_CONTENT)
     @PatchMapping("/location-temp")
     public void updateMemberLocationTemp(
             @RequestAttribute("memberId") Long memberId,
             @Valid @RequestBody MemberLocation memberLocationDto
     ){
-        memberService.updateTempMemberLocation(memberId, memberLocationDto);
+        memberLocationFacade.updateTempMemberLocation(memberId, memberLocationDto);
     }
 
     private String parseAccessToken(String bearerToken) {
