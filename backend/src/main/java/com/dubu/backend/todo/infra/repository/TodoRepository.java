@@ -64,10 +64,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long>, CustomTodoRep
     List<Todo> findByPathIdsAndTypeAndIsCompleted(List<Long> pathIds, TodoType type);
 
     // 계획으로 조회
-    @Query("SELECT t FROM Todo t " +
-            "join fetch t.category " +
-            "join fetch t.subPath p " +
-            "WHERE p.plan = :plan AND t.isCompleted = :isCompleted")
+    @Query("SELECT t FROM Todo t join fetch t.category join fetch t.subPath p WHERE p.plan = :plan AND t.isCompleted = :isCompleted")
     List<Todo> findByPlanAndIsCompleted(Plan plan, Boolean isCompleted);
 
     @Query(value = """
