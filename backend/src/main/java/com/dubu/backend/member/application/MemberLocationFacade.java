@@ -76,7 +76,7 @@ public class MemberLocationFacade {
         cellCategoryManagementService.updateCellCategoryByLocationChange(request.oldGeoHash(), request.newGeoHash(), categories);
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateCellCategoryByPlanChange(Long memberId, CellCategoryUpdateByPlanRequest request){
         TempMember member = tempMemberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
