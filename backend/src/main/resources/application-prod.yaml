@@ -21,8 +21,9 @@ spring:
     redis:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
-      timeout: 10
+      timeout: 100
       password: ${REDIS_PASSWORD}
+      connect-timeout: 100
 
   rabbitmq:
     host: ${RABBITMQ_HOST}
