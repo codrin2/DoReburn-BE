@@ -6,7 +6,7 @@ export const PlanHeader = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.8rem;
+  gap: 1.4rem;
   padding: 0 2.4rem;
 `;
 
@@ -33,12 +33,18 @@ export const TotalUsableTime = styled.span`
   align-items: center;
   gap: 0.8rem;
 
-  ${({ theme }) => theme.fonts.title32};
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 30px;
   color: ${({ theme }) => theme.colors.green600};
 `;
 
 export const TotalUsableTimeText = styled.span`
-  ${({ theme }) => theme.fonts.body16};
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
   color: ${({ theme }) => theme.colors.green500};
 `;
 
@@ -47,7 +53,11 @@ export const DateHeader = styled.div`
   align-items: center;
   gap: 0.8rem;
 
-  ${({ theme }) => theme.fonts.label14Med};
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 21px;
+
   color: ${({ theme }) => theme.colors.gray500};
 `;
 
