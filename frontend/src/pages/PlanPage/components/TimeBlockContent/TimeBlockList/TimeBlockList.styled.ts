@@ -12,10 +12,10 @@ export const EmptyTimeBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.6rem;
+  gap: 0.6rem;
 `;
 
 export const EmptyTimeBlockText = styled.span`
-  ${({ theme }) => theme.fonts.body16};
-  color: ${({ theme }) => theme.colors.gray600};
+  ${({ theme }) => theme.fonts.label13};
+  color: ${({ theme }) => theme.colors.gray400};
 `;
