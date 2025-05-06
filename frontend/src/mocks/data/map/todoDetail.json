@@ -1,7 +1,7 @@
 {
   "data": {
     "nickname": "김두부",
-    "todo": [
+    "todos": [
       {
         "todoId": 0,
         "title": "독서",

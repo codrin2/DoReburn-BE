@@ -17,7 +17,7 @@ const getTodoDetailHandler = async ({ params }: { params: TodoDetailParams }) =>
 
 const addFavoriteFromOtherHandler = async ({ request }: { request: Request }) => {
   const { todoId } = await request.json();
-  const todo = TODO_DETAIL_DATA.data.todo.find((todo) => todo.todoId === todoId);
+  const todo = TODO_DETAIL_DATA.data.todos.find((todo) => todo.todoId === todoId);
 
   if (!todo) {
     return HttpResponse.json({ error: 'Todo not found' }, { status: 404 });
@@ -25,7 +25,7 @@ const addFavoriteFromOtherHandler = async ({ request }: { request: Request }) =>
 
   todo.isSaved = true;
 
-  TODO_DETAIL_DATA.data.todo.forEach((todo) => {
+  TODO_DETAIL_DATA.data.todos.forEach((todo) => {
     if (todo.todoId === todoId) {
       todo.isSaved = true;
     }
@@ -39,11 +39,11 @@ const deleteFavoriteFromOtherHandler = async ({ request }: { request: Request })
 
   const todoId = url.searchParams.get('todoId');
 
-  const filteredTodo = TODO_DETAIL_DATA.data.todo.map((todo) =>
+  const filteredTodo = TODO_DETAIL_DATA.data.todos.map((todo) =>
     todo.todoId === Number(todoId) ? { ...todo, isSaved: false } : todo,
   );
 
-  TODO_DETAIL_DATA.data.todo = filteredTodo;
+  TODO_DETAIL_DATA.data.todos = filteredTodo;
 
   return new HttpResponse(null, { status: 204 });
 };
