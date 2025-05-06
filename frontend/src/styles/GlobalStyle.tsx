@@ -84,18 +84,11 @@ body {
 	margin: 0 auto;
 	
   
-  -ms-overflow-style: none;
   overflow-y: hidden;
 
   position: relative;
 }
  
-/* 기본 스크롤바 제거 */
-::-webkit-scrollbar {
-  display: none;
-}
-
-
 #root {
   height: inherit;
 }
