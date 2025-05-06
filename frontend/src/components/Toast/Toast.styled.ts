@@ -26,6 +26,9 @@ export const ToastItem = styled.div<{ $isOpen: boolean }>`
   color: ${({ theme }) => theme.colors.gray950};
   background-color: ${({ theme }) => theme.colors.white};
   border: 0.1rem solid ${({ theme }) => theme.colors.gray300};
+  box-shadow:
+    0px 4px 8px 3px rgba(0, 0, 0, 0.15),
+    0px 1px 3px 0px rgba(0, 0, 0, 0.3);
 
   animation: ${({ $isOpen }) => ($isOpen ? fadeIn : fadeOut)} 0.3s ease forwards;
   transition: opacity 0.3s ease-in-out;
