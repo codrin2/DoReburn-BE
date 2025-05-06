@@ -28,7 +28,7 @@ export const RadioBadge = styled.span<{
   $category?: CategoryType | null;
   $isFilter?: boolean;
 }>`
-  ${({ theme }) => theme.fonts.label14Reg};
+  ${({ $isSelected, theme }) => ($isSelected ? theme.fonts.label14Semi : theme.fonts.label14Med)};
 
   padding: ${({ $isFilter }) => ($isFilter ? '0.5rem 0.8rem' : '0.5rem 1.2rem')};
   border-radius: 0.8rem;
