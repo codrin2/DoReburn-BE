@@ -1,15 +1,16 @@
 package com.dubu.backend.todo.domain.enums;
 
-public enum TodoType {
-    SCHEDULED, SAVE, RECOMMEND, IN_PROGRESS, DONE;
+import com.dubu.backend.todo.core.exception.InvalidTodoDifficultyException;
 
-    public static TodoType get(String type){
-        return switch(type.toUpperCase()){
-            case "TODAY", "TOMORROW" -> TodoType.SCHEDULED;
-            case "SAVE" -> TodoType.SAVE;
-            case "RECOMMEND" -> TodoType.RECOMMEND;
-            case "IN_PROGRESS" -> TodoType.IN_PROGRESS;
-            default -> TodoType.DONE;
-        };
+import java.util.Arrays;
+
+public enum TodoType {
+    SCHEDULED, FAVORITE, RECOMMEND, IN_PROGRESS, DONE;
+
+    public static TodoType fromString(String value){
+        return Arrays.stream(TodoType.values())
+                .filter(t -> t.name().equalsIgnoreCase(value))
+                .findFirst()
+                .orElseThrow(() -> new InvalidTodoDifficultyException(value));
     }
 }
