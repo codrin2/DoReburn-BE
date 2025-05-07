@@ -1,6 +1,6 @@
 package com.dubu.backend.plan.infrastructure.api;
 
-import com.dubu.backend.todo.domain.Todo;
+import com.dubu.backend.todo.domain.past.Todo;
 
 import java.util.List;
 

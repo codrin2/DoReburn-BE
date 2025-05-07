@@ -3,7 +3,7 @@ package com.dubu.backend.member.api.response;
 import com.dubu.backend.member.domain.model.Address;
 import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.enums.AddressType;
-import com.dubu.backend.todo.domain.Category;
+import com.dubu.backend.todo.domain.past.Category;
 
 import java.util.List;
 

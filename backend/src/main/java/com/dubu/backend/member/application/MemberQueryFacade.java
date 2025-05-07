@@ -9,7 +9,7 @@ import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.repository.AddressRepository;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.todo.domain.Category;
+import com.dubu.backend.todo.domain.past.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
