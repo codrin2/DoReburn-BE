@@ -1,4 +1,4 @@
-package com.dubu.backend.todo.exception;
+package com.dubu.backend.todo.core.exception;
 
 import com.dubu.backend.core.exception.NotFoundException;
 
