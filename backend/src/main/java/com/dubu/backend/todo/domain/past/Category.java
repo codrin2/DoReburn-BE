@@ -1,4 +1,4 @@
-package com.dubu.backend.todo.domain;
+package com.dubu.backend.todo.domain.past;
 
 import com.dubu.backend.core.domain.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -7,7 +7,7 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "PastCategory")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

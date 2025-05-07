@@ -1,7 +1,7 @@
-package com.dubu.backend.todo.domain;
+package com.dubu.backend.todo.domain.past;
 
-import com.dubu.backend.core.domain.BaseTimeEntity;
 import com.dubu.backend.member.domain.model.Member;
+import com.dubu.backend.core.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "PastSchedule")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

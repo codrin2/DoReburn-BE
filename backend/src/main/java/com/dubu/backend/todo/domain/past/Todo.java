@@ -1,14 +1,14 @@
-package com.dubu.backend.todo.domain;
+package com.dubu.backend.todo.domain.past;
 
-import com.dubu.backend.core.domain.BaseTimeEntity;
 import com.dubu.backend.member.domain.model.Member;
+import com.dubu.backend.core.domain.BaseTimeEntity;
 import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
+@Entity(name = "PastTodo")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -30,7 +30,7 @@ public class Todo extends BaseTimeEntity {
     private TodoType type;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "difficulty", nullable = false)
+    @Column(name = "cursorDifficulty", nullable = false)
     private TodoDifficulty difficulty;
 
     @Column(length = 500)
@@ -96,7 +96,7 @@ public class Todo extends BaseTimeEntity {
                 .type(TodoType.IN_PROGRESS)
                 .difficulty(originalTodo.getDifficulty())
                 .memo(originalTodo.getMemo())
-                .subPath(assignedSubPath)
+//                .subPath(assignedSubPath)
                 .category(originalTodo.getCategory())
                 .build();
     }
@@ -135,7 +135,7 @@ public class Todo extends BaseTimeEntity {
     }
 
     public void updatePath(SubPath subPath){
-        this.subPath = subPath;
+//        this.subPath = subPath;
     }
 
     public void updateTodo(String title, Category category, TodoDifficulty difficulty, String memo){
