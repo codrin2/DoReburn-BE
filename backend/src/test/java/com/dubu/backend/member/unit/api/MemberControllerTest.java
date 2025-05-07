@@ -3,6 +3,7 @@ package com.dubu.backend.member.unit.api;
 import com.dubu.backend.core.config.WebConfig;
 import com.dubu.backend.core.interceptor.TokenInterceptor;
 import com.dubu.backend.member.api.MemberController;
+import com.dubu.backend.member.application.MemberLocationFacade;
 import com.dubu.backend.member.application.MemberQueryFacade;
 import com.dubu.backend.member.application.MemberCommandFacade;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
@@ -21,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -47,10 +49,12 @@ class MemberControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private MemberQueryFacade memberQueryFacade;
-    @MockBean
+    @MockitoBean
     private MemberCommandFacade memberCommandFacade;
+    @MockitoBean
+    private MemberLocationFacade memberLocationFacade;
 
     private static final String MEMBER_INFO_UPDATE_JSON = """
             {

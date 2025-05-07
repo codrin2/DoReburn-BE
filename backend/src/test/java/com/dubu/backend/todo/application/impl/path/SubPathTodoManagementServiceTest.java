@@ -18,19 +18,13 @@ import com.dubu.backend.plan.domain.enums.TrafficType;
 import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.core.exception.PathNotFoundException;
 import com.dubu.backend.plan.domain.repository.SubPathRepository;
-import com.dubu.backend.todo.domain.Category;
-import com.dubu.backend.todo.domain.Todo;
+import com.dubu.backend.todo.domain.past.Category;
+import com.dubu.backend.todo.domain.past.Todo;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;
 import com.dubu.backend.todo.dto.common.TodoIdentifier;
-import com.dubu.backend.todo.dto.request.TodoCreateFromArchivedRequest;
-import com.dubu.backend.todo.dto.request.TodoCreateRequest;
-import com.dubu.backend.todo.dto.request.TodoPathUpdateRequest;
-import com.dubu.backend.todo.dto.request.TodoUpdateRequest;
-import com.dubu.backend.todo.dto.request.TodoCompletionToggleRequest;
 import com.dubu.backend.todo.dto.response.TodoInfo;
-import com.dubu.backend.todo.dto.response.TodoManageResult;
-import com.dubu.backend.todo.exception.TodoLimitExceededException;
+import com.dubu.backend.todo.core.exception.TodoCountExceededException;
 import com.dubu.backend.todo.exception.TodoNotFoundException;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
@@ -52,7 +46,7 @@ class SubPathTodoManagementServiceTest {
     @InjectMocks
     private PathTodoManagementService service;
 
-    // 헬퍼 메서드: Member 생성 (PathTodoManagementService는 회원 상태가 MOVE여야 함)
+    // 헬퍼 메서드: MemberEntity 생성 (PathTodoManagementService는 회원 상태가 MOVE여야 함)
     private Member createMember(Long memberId, Status status) {
         return Member.builder()
                 .id(memberId)
@@ -65,7 +59,7 @@ class SubPathTodoManagementServiceTest {
                 .build();
     }
 
-    // 헬퍼 메서드: Category 생성
+    // 헬퍼 메서드: CategoryEntity 생성
     private Category createCategory(String name) {
         return Category.builder().name(name).build();
     }
@@ -193,7 +187,7 @@ class SubPathTodoManagementServiceTest {
         when(subPathRepository.findById(pathId)).thenReturn(Optional.of(subPath));
         when(categoryRepository.findByName("CATEGORY")).thenReturn(Optional.of(category));
         when(todoRepository.findTodosByPath(subPath)).thenReturn(todosByPath);
-        assertThrows(TodoLimitExceededException.class, () -> service.createTodo(identifier, request));
+        assertThrows(TodoCountExceededException.class, () -> service.createTodo(identifier, request));
     }
 
     // =========================================================

@@ -18,18 +18,14 @@ import com.dubu.backend.member.domain.enums.OauthProvider;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.plan.domain.repository.SubPathRepository;
-import com.dubu.backend.todo.domain.Category;
-import com.dubu.backend.todo.domain.Schedule;
-import com.dubu.backend.todo.domain.Todo;
+import com.dubu.backend.todo.domain.past.Category;
+import com.dubu.backend.todo.domain.past.Schedule;
+import com.dubu.backend.todo.domain.past.Todo;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;
 import com.dubu.backend.todo.dto.common.TodoIdentifier;
-import com.dubu.backend.todo.dto.request.TodoCreateFromArchivedRequest;
-import com.dubu.backend.todo.dto.request.TodoCreateRequest;
-import com.dubu.backend.todo.dto.request.TodoUpdateRequest;
 import com.dubu.backend.todo.dto.response.TodoInfo;
-import com.dubu.backend.todo.dto.response.TodoManageResult;
-import com.dubu.backend.todo.exception.TodoLimitExceededException;
+import com.dubu.backend.todo.core.exception.TodoCountExceededException;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
@@ -170,7 +166,7 @@ class TomorrowTodoManagementServiceTest {
         when(scheduleRepository.findLatestSchedule(member, LocalDate.now().plusDays(1))).thenReturn(Optional.of(schedule));
         when(todoRepository.findTodosWithCategoryBySchedule(schedule)).thenReturn(todos);
 
-        assertThrows(TodoLimitExceededException.class, () -> todoService.createTodo(identifier, request));
+        assertThrows(TodoCountExceededException.class, () -> todoService.createTodo(identifier, request));
     }
 
     // --- createTodoFromArchived 테스트 ---
