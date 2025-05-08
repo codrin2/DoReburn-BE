@@ -28,6 +28,7 @@ public class Todo {
     private TodoDifficulty difficulty;
     private String memo;
 
+    @Column(name = "spent_time")
     private Integer spentTime;
     private Boolean isCompleted;
 
