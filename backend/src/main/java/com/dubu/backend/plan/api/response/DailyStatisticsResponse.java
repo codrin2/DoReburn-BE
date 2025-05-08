@@ -14,7 +14,7 @@ public record DailyStatisticsResponse(
         Integer totalTodoCount,
         Integer totalUsageTime,
         List<Feedback> feedbacks,
-        List<CategoryTodoCount> categoryTodoCount
+        List<CategoryTodoCount> categoryTodoCounts
 ) {
     public static DailyStatisticsResponse from(DailyStatisticsResult result){
         return DailyStatisticsResponse.builder()
