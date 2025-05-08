@@ -39,7 +39,7 @@ public class Todo extends BaseTimeEntity {
     @Column(length = 500)
     private String memo;
 
-    @Column(columnDefinition = "MEDIUMINT")
+    @Column(name = "spent_time", columnDefinition = "MEDIUMINT")
     private Integer spentTime;
 
     @Column(columnDefinition = "TINYINT")
