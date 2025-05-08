@@ -5,7 +5,7 @@ import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.plan.infrastructure.api.CellCategoryCommandApi;
 import com.dubu.backend.plan.application.event.PlanEndedEvent;
-import com.dubu.backend.todo.domain.Todo;
+import com.dubu.backend.todo.domain.past.Todo;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
