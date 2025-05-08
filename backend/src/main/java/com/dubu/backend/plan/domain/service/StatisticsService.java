@@ -66,7 +66,7 @@ public class StatisticsService {
     }
 
     public WeeklyFeedbackStats calculateWeeklyFeedbackStats(List<Feedback> feedbacks) {
-        Map<Mood, Integer> moodCountMap = new HashMap<>();
+        Map<Mood, Integer> moodCountMap = IntStream.range(0, 3).boxed().collect(HashMap::new, (m, i) -> m.put(Mood.values()[i], 0), HashMap::putAll);
 
         feedbacks.forEach(f -> moodCountMap.merge(f.getMood(), 1, Integer::sum));
 
