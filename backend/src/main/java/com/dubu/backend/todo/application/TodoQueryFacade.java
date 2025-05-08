@@ -129,7 +129,7 @@ public class TodoQueryFacade {
             case FAVORITE -> todoRepository.findTodosPaged(command.cursor(), TodoSearchCond.of(member.getId(), TodoType.FAVORITE), Pageable.ofSize(command.size()));
             case RECOMMEND -> {
                 List<Category> categories = categoryRepository.findByNameIn(command.categories());
-                List<TodoDifficulty> difficulties = command.difficulties().stream().map(TodoDifficulty::fromString).toList();
+                List<TodoDifficulty> difficulties = command.difficulties() != null ? command.difficulties().stream().map(TodoDifficulty::fromString).toList() : null;
                 yield todoRepository.findTodosPaged(command.cursor(), TodoSearchCond.of(TodoType.RECOMMEND, categories, difficulties), Pageable.ofSize(command.size()));
             }
             default -> throw new UnsupportedOperationForTodoRequestTypeException(type);

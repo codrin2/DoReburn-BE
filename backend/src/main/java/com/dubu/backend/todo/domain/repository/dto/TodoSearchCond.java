@@ -17,15 +17,15 @@ public record TodoSearchCond(
     public static TodoSearchCond of(TodoType type, List<Category> categories){
         return TodoSearchCond.builder()
                 .type(type)
-                .categories(categories)
+                .categories(categories != null ? List.copyOf(categories): null)
                 .build();
     }
 
     public static TodoSearchCond of(TodoType type, List<Category> categories, List<TodoDifficulty> difficulties){
         return TodoSearchCond.builder()
                 .type(type)
-                .categories(categories)
-                .difficulties(difficulties)
+                .categories(categories != null ? List.copyOf(categories): null)
+                .difficulties(difficulties != null ? List.copyOf(difficulties): null)
                 .build();
     }
 
