@@ -44,7 +44,7 @@ public record WeeklyStatisticsResult(
                 )
                 .categoryTodoStats(
                         todoStats.categoryTodoStats().entrySet().stream()
-                                .sorted(Comparator.comparing(entry -> entry.getValue().count()))
+                                .sorted(Comparator.comparing(entry -> entry.getValue().usageTime().toMinutes(), Comparator.reverseOrder()))
                                 .map(entry -> new CategoryTodoStats(entry.getKey().getName(), (int)entry.getValue().usageTime().toMinutes(), entry.getValue().count()))
                                 .toList()
                 )
