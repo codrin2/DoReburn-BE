@@ -1,7 +1,6 @@
 package com.dubu.backend.todo.api.converter;
 
-import com.dubu.backend.todo.dto.enums.TodoRequestType;
-import jakarta.validation.constraints.NotNull;
+import com.dubu.backend.todo.api.dto.request.TodoRequestType;
 import org.springframework.core.convert.converter.Converter;
 
 public class StringToTodoRequestTypeConverter implements Converter<String, TodoRequestType> {

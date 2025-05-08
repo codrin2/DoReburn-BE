@@ -7,17 +7,17 @@ import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
-import com.dubu.backend.todo.domain.Category;
-import com.dubu.backend.todo.domain.Schedule;
-import com.dubu.backend.todo.domain.Todo;
+import com.dubu.backend.todo.core.exception.AlreadyAddedTodoFromArchiveException;
+import com.dubu.backend.todo.core.exception.CategoryNotFoundException;
+import com.dubu.backend.todo.core.exception.ScheduleNotFoundException;
+import com.dubu.backend.todo.core.exception.TodoCountExceededException;
+import com.dubu.backend.todo.domain.past.Category;
+import com.dubu.backend.todo.domain.past.Schedule;
+import com.dubu.backend.todo.domain.past.Todo;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;
 import com.dubu.backend.todo.dto.common.TodoIdentifier;
-import com.dubu.backend.todo.dto.request.TodoCreateFromArchivedRequest;
-import com.dubu.backend.todo.dto.request.TodoCreateRequest;
-import com.dubu.backend.todo.dto.request.TodoUpdateRequest;
 import com.dubu.backend.todo.dto.response.TodoInfo;
-import com.dubu.backend.todo.dto.response.TodoManageResult;
 import com.dubu.backend.todo.exception.*;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
@@ -66,7 +66,7 @@ class TodayTodoManagementServiceTest {
                 .status(status)
                 .build();
     }
-    // 헬퍼: Category 객체 생성
+    // 헬퍼: CategoryEntity 객체 생성
     private Category createCategory(String name) {
         return Category.builder()
                 .name(name)
@@ -200,7 +200,7 @@ class TodayTodoManagementServiceTest {
         when(scheduleRepository.findLatestSchedule(member, LocalDate.now())).thenReturn(Optional.of(schedule));
 
         // When & Then
-        assertThrows(TodoLimitExceededException.class, () -> todoService.createTodo(identifier, request));
+        assertThrows(TodoCountExceededException.class, () -> todoService.createTodo(identifier, request));
     }
 
     @Test
@@ -315,7 +315,7 @@ class TodayTodoManagementServiceTest {
         when(scheduleRepository.findLatestSchedule(member, LocalDate.now())).thenReturn(Optional.of(schedule));
 
         // When & Then
-        assertThrows(TodoLimitExceededException.class, () -> todoService.createTodoFromArchived(identifier, request));
+        assertThrows(TodoCountExceededException.class, () -> todoService.createTodoFromArchived(identifier, request));
     }
 
     @Test
@@ -366,7 +366,7 @@ class TodayTodoManagementServiceTest {
         when(todoRepository.findByParentTodoAndSchedule(parentTodo, schedule)).thenReturn(Optional.of(Todo.builder().build()));
 
         // When & Then
-        assertThrows(AlreadyAddedTodoFromArchivedException.class, () -> todoService.createTodoFromArchived(identifier, request));
+        assertThrows(AlreadyAddedTodoFromArchiveException.class, () -> todoService.createTodoFromArchived(identifier, request));
     }
     // 성공 케이스: modifyTodo 정상 수정
     @Test

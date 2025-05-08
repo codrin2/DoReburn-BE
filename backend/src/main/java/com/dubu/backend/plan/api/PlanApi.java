@@ -107,7 +107,7 @@ public interface PlanApi {
                                             {
                                               "totalTime": 50,
                                               "totalSectionTime": 40,
-                                              "subPaths": [
+                                              "paths": [
                                                 {
                                                   "trafficType": "SUBWAY",
                                                   "sectionTime": 20,

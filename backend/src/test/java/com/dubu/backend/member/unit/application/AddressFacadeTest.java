@@ -50,8 +50,8 @@ class AddressFacadeTest {
             List<AddressSearchResponse> naverMockResponse= List.of(naver1, naver2);
 
             // 카카오 Mock 응답
-            AddressSearchResponse kakao1 = new AddressSearchResponse("서울 강남구 학동로 1", "카카오카페1", 127.1, 37.1);
-            AddressSearchResponse kakao2 = new AddressSearchResponse("서울 강남구 학동로 2", "카카오카페2", 127.2, 37.2);
+            AddressSearchResponse kakao1 = new AddressSearchResponse("카카오카페1", "서울 강남구 학동로 1", 127.1, 37.1);
+            AddressSearchResponse kakao2 = new AddressSearchResponse("카카오카페2", "서울 강남구 도산대로 2", 127.2, 37.2);
 
             List<AddressSearchResponse> kakaoMockResponse = List.of(kakao1, kakao2);
 

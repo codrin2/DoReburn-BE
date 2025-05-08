@@ -1,6 +1,6 @@
 package com.dubu.backend.todo.infra.repository;
 
-import com.dubu.backend.todo.domain.Category;
+import com.dubu.backend.todo.domain.past.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

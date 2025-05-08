@@ -1,7 +1,6 @@
 package com.dubu.backend.plan.domain;
 
 import com.dubu.backend.core.domain.BaseTimeEntity;
-import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.plan.core.AggregateRoot;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,6 +36,9 @@ public class Plan extends BaseTimeEntity {
 
     private boolean isCompleted;
 
+    @Transient
+    private List<Todo> todos;
+
     public static Plan createPlan(Member member, Integer totalTime) {
         return Plan.builder()
                 .member(member)
@@ -46,5 +48,9 @@ public class Plan extends BaseTimeEntity {
 
     public void updateIsCompleted(boolean isCompleted) {
         this.isCompleted = isCompleted;
+    }
+
+    public  void defineTodos(List<Todo> todos){
+        this.todos = List.copyOf(todos);
     }
 }

@@ -1,12 +1,13 @@
 package com.dubu.backend.todo.domain;
 
 import com.dubu.backend.core.domain.BaseTimeEntity;
-import com.dubu.backend.member.domain.model.Member;
-import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;
+
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
@@ -16,6 +17,8 @@ import lombok.*;
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"parent_id", "schedule_id"})
 })
+@SQLDelete(sql = "UPDATE todo SET deleted = true where todo_id = ?")
+@SQLRestriction("deleted = false")
 public class Todo extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,114 +37,50 @@ public class Todo extends BaseTimeEntity {
     private TodoDifficulty difficulty;
 
     @Column(length = 500)
-    private String memo ;
+    private String memo;
 
-    @Column(name = "spent_time", columnDefinition = "MEDIUMINT")
+    @Column(columnDefinition = "MEDIUMINT")
     private Integer spentTime;
 
     @Column(columnDefinition = "TINYINT")
     private Boolean isCompleted;
 
-    @ManyToOne(fetch =  FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    private Long memberId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sub_path_id")
-    private SubPath subPath;
+    @Column(name = "sub_path_id")
+    private Long subPathId;
+    private Long scheduleId;
+
+    @Embedded
+    private ParentInfo parentInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Todo parentTodo;
+    @Builder.Default
+    private Long version = 0L;
+    private boolean deleted;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "schedule_id")
-    private Schedule schedule;
 
-    public static Todo of(String title, TodoType type, TodoDifficulty difficulty, String memo, Member member, Category category, Todo parentTodo, Schedule schedule, SubPath subPath){
-        return Todo.builder()
-                .title(title)
-                .type(type)
-                .difficulty(difficulty)
-                .memo(memo)
-                .member(member)
-                .category(category)
-                .parentTodo(parentTodo)
-                .schedule(schedule)
-                .subPath(subPath)
-                .build();
+    public void update(String title, Category category, TodoDifficulty difficulty, String memo){
+        if(title != null) this.title = title;
+        if(category != null) this.category = category;
+        if(difficulty != null) this.difficulty = difficulty;
+        if(memo != null) this.memo = memo;
+        this.version = this.version + 1;
     }
 
-    public static Todo copyOf(Todo originalTodo, Member member, Schedule schedule){
-        return Todo.builder()
-                .member(member)
-                .title(originalTodo.getTitle())
-                .category(originalTodo.getCategory())
-                .difficulty(originalTodo.getDifficulty())
-                .memo(originalTodo.getMemo())
-                .type(TodoType.SCHEDULED)
-                .parentTodo(originalTodo)
-                .schedule(schedule)
-                .build();
+    public void updateSubPathId(Long subPathId) {
+        this.subPathId = subPathId;
     }
 
-    public static Todo copyWithPlan(Member member, Todo originalTodo, SubPath assignedSubPath) {
-        return Todo.builder()
-                .member(member)
-                .title(originalTodo.getTitle())
-                .type(TodoType.IN_PROGRESS)
-                .difficulty(originalTodo.getDifficulty())
-                .memo(originalTodo.getMemo())
-                .subPath(assignedSubPath)
-                .category(originalTodo.getCategory())
-                .build();
-    }
-
-    public void clearParentTodo(){
-        this.parentTodo = null;
-    }
-
-    public void updateSpentTime(int sectionTimePerTodo){
-        this.spentTime = sectionTimePerTodo;
-    }
-
-    public void updateTodoType(TodoType todoType){
-        this.type = todoType;
-        this.parentTodo = null;
-    }
-
-    private void updateTitle(String title){
-        this.title = title;
-    }
-
-    private void updateCategory(Category category){
-        this.category = category;
-    }
-
-    private void updateDifficulty(TodoDifficulty difficulty){
-        this.difficulty = difficulty;
-    }
-
-    private void updateMemo(String memo){
-        this.memo = memo;
-    }
-
-    public void updateCompletedStatus(boolean isCompleted){
+    public void toggleCompletion(boolean isCompleted) {
         this.isCompleted = isCompleted;
     }
 
-    public void updatePath(SubPath subPath){
-        this.subPath = subPath;
-    }
-
-    public void updateTodo(String title, Category category, TodoDifficulty difficulty, String memo){
-        if(title != null) updateTitle(title);
-        if(category != null) updateCategory(category);
-        if(difficulty != null) updateDifficulty(difficulty);
-        if(memo != null) updateMemo(memo);
+    public void detachParentTodo(String title, Category category, TodoDifficulty difficulty){
+        if(title != null && category != null && difficulty != null)
+            this.parentInfo = null;
     }
 }

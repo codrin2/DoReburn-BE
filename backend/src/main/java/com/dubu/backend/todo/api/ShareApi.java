@@ -4,7 +4,6 @@ import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.todo.dto.request.SurroundingMemberQueryRequest;
 import com.dubu.backend.todo.dto.response.ShareInfo;
 import com.dubu.backend.todo.dto.response.SurroundingMemberTodoInfo;
-import com.dubu.backend.todo.dto.response.TodoSuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,7 +28,7 @@ public interface ShareApi {
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(
-                                    implementation = TodoSuccessResponse.class,
+//                                    implementation = TodoSuccessResponse.class,
                                     description = "지도(공유) 성공 응답"
                             ),
                             examples = {
@@ -179,7 +178,7 @@ public interface ShareApi {
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(
-                                    implementation = TodoSuccessResponse.class,
+//                                    implementation = TodoSuccessResponse.class,
                                     description = "지도(공유) 성공 응답"
                             ),
                             examples = {
@@ -247,7 +246,7 @@ public interface ShareApi {
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(
-                                    implementation = TodoSuccessResponse.class,
+//                                    implementation = TodoSuccessResponse.class,
                                     description = "지도(공유) 성공 응답"
                             ),
                             examples = {

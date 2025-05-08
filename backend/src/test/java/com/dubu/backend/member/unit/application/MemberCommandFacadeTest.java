@@ -26,15 +26,14 @@ import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.core.exception.PlanNotFoundException;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
-import com.dubu.backend.todo.domain.Category;
-import com.dubu.backend.todo.exception.CategoryNotFoundException;
+import com.dubu.backend.todo.domain.past.Category;
+import com.dubu.backend.todo.core.exception.CategoryNotFoundException;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.data.redis.RedisConnectionFailureException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +78,7 @@ class MemberCommandFacadeTest {
 
         memberId = 1L;
 
-        // 공통 Member / Address / Category Mock 세팅
+        // 공통 MemberEntity / Address / CategoryEntity Mock 세팅
         defaultMember = mock(Member.class);
         when(defaultMember.getId()).thenReturn(memberId);
 
@@ -547,7 +546,7 @@ class MemberCommandFacadeTest {
         void it_throws_redis_unavailable_exception() {
             // given
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(defaultMember));
-            doThrow(new RedisConnectionFailureException("Redis 연결 실패"))
+            doThrow(new RedisUnavailableException())
                     .when(redisMemberLocationRepository).saveMemberLocation(anyLong(), any(MemberLocation.class));
 
             // when & then

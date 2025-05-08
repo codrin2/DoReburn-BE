@@ -3,7 +3,7 @@ package com.dubu.backend.plan.infrastructure;
 import com.dubu.backend.member.api.request.CellCategoryUpdateByPlanRequest;
 import com.dubu.backend.member.application.MemberLocationFacade;
 import com.dubu.backend.plan.infrastructure.api.CellCategoryCommandApi;
-import com.dubu.backend.todo.domain.Todo;
+import com.dubu.backend.todo.domain.past.Todo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

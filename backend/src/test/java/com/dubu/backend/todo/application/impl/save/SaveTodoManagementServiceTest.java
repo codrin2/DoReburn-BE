@@ -18,19 +18,15 @@ import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
-import com.dubu.backend.todo.domain.Category;
-import com.dubu.backend.todo.domain.Schedule;
-import com.dubu.backend.todo.domain.Todo;
+import com.dubu.backend.todo.domain.past.Category;
+import com.dubu.backend.todo.domain.past.Schedule;
+import com.dubu.backend.todo.domain.past.Todo;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;
 import com.dubu.backend.todo.dto.common.TodoIdentifier;
-import com.dubu.backend.todo.dto.request.TodoCreateFromArchivedRequest;
-import com.dubu.backend.todo.dto.request.TodoCreateRequest;
-import com.dubu.backend.todo.dto.request.TodoUpdateRequest;
 import com.dubu.backend.todo.dto.response.TodoInfo;
-import com.dubu.backend.todo.dto.response.TodoManageResult;
-import com.dubu.backend.todo.exception.AlreadyAddedTodoFromArchivedException;
-import com.dubu.backend.todo.exception.CategoryNotFoundException;
+import com.dubu.backend.todo.core.exception.AlreadyAddedTodoFromArchiveException;
+import com.dubu.backend.todo.core.exception.CategoryNotFoundException;
 import com.dubu.backend.todo.exception.TodoNotFoundException;
 import com.dubu.backend.todo.exception.TodoTypeMismatchException;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
@@ -57,7 +53,7 @@ class SaveTodoManagementServiceTest {
     @InjectMocks
     private SaveTodoManagementService todoService;
 
-    // 헬퍼: Member 생성 (SaveTodo의 경우, 회원 상태는 STOP 또는 MOVE여야 함)
+    // 헬퍼: MemberEntity 생성 (SaveTodo의 경우, 회원 상태는 STOP 또는 MOVE여야 함)
     private Member createMember(Long memberId, Status status) {
         return Member.builder()
                 .id(memberId)
@@ -70,7 +66,7 @@ class SaveTodoManagementServiceTest {
                 .build();
     }
 
-    // 헬퍼: Category 생성
+    // 헬퍼: CategoryEntity 생성
     private Category createCategory(String name) {
         return Category.builder()
                 .name(name)
@@ -232,7 +228,7 @@ class SaveTodoManagementServiceTest {
         when(todoRepository.findByMemberAndParentTodoAndType(member, parentTodo, TodoType.SAVE))
                 .thenReturn(Optional.of(Todo.builder().build()));
 
-        assertThrows(AlreadyAddedTodoFromArchivedException.class,
+        assertThrows(AlreadyAddedTodoFromArchiveException.class,
                 () -> todoService.createTodoFromArchived(identifier, request));
     }
 

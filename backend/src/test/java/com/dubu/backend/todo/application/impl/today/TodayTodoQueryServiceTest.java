@@ -12,21 +12,18 @@ import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
-import com.dubu.backend.todo.domain.Category;
-import com.dubu.backend.todo.domain.Schedule;
-import com.dubu.backend.todo.domain.Todo;
+import com.dubu.backend.todo.domain.past.Category;
+import com.dubu.backend.todo.domain.past.Schedule;
+import com.dubu.backend.todo.domain.past.Todo;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;
 import com.dubu.backend.todo.dto.common.Cursor;
 import com.dubu.backend.todo.dto.common.TodoIdentifier;
-import com.dubu.backend.todo.dto.request.RecommendTodoQueryRequest;
-import com.dubu.backend.todo.dto.request.SaveTodoQueryRequest;
 import com.dubu.backend.todo.dto.response.TodoInfo;
 import com.dubu.backend.todo.dto.search.TodoSearchCond;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
-import com.dubu.backend.todo.application.util.TodoRandomSelector;
 import com.dubu.backend.core.domain.PageResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -75,7 +72,7 @@ class TodayTodoQueryServiceTest {
 
     private Todo createTodo(Long todoId, String title) {
         // Category를 반드시 생성해서 할당합니다.
-        Category category = createCategory("Default Category");
+        Category category = createCategory("Default CategoryEntity");
         return Todo.builder()
                 .id(todoId)
                 .title(title)
@@ -243,7 +240,7 @@ class TodayTodoQueryServiceTest {
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(scheduleRepository.findLatestSchedule(member, LocalDate.now())).thenReturn(Optional.of(todaySchedule));
 
-        // 요청에 포함된 카테고리 문자열을 기반으로 Category 목록 반환
+        // 요청에 포함된 카테고리 문자열을 기반으로 CategoryEntity 목록 반환
         List<Category> categories = List.of(createCategory("READING"));
         when(categoryRepository.findCategoriesByName(request.category())).thenReturn(categories);
 

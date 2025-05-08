@@ -11,7 +11,7 @@ import com.dubu.backend.plan.core.exception.PlanNotFoundException;
 import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.todo.dto.response.ShareTodoInfo;
-import com.dubu.backend.todo.domain.Todo;
+import com.dubu.backend.todo.domain.past.Todo;
 import com.dubu.backend.todo.domain.enums.TodoType;
 import com.dubu.backend.todo.dto.response.SurroundingMemberTodoInfo;
 import com.dubu.backend.todo.exception.SaveTodoNotFoundFromTargetParentException;
@@ -35,34 +35,35 @@ public class ShareTodoService {
 
     @Transactional(readOnly = true)
     public SurroundingMemberTodoInfo findTodosOfSurroundMember(Long memberId, Long surroundingMemberId) {
-        Member selfMember = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
-        Member surroundingMember = memberRepository.findById(surroundingMemberId).orElseThrow(() -> new MemberNotFoundException(surroundingMemberId));
-
-        Status surroundingMemberStatus = surroundingMember.getStatus();
-
-        // 회원의 상태가 ONBOARDING 이면 예외 발생
-        if(surroundingMemberStatus.equals(Status.ONBOARDING)){
-            throw new InvalidMemberStatusException(surroundingMemberStatus.name());
-        }
-
-        Plan latestPlan = planRepository.findTopByMemberAndIsCompletedOrderByCreatedAtDesc(surroundingMember, true).orElseThrow(PlanNotFoundException::new);
-
-        List<SubPath> pathsOfLatestPlan = subPathRepository.findPathsByPlanAndIsCompleted(latestPlan, true);
-
-        List<Todo> surroundMemberTodos = pathsOfLatestPlan.stream()
-                .flatMap(path -> path.getTodos().stream())
-                .toList();
-
-        List<Long> surroundMemberParentTodoIds = todoRepository.findParentTodoIdsByParentTodoAndMemberAndType(surroundMemberTodos, selfMember, TodoType.SAVE);
-         return SurroundingMemberTodoInfo.of(surroundingMember.getNickname(),
-                 surroundMemberTodos.stream()
-                         .map(todo ->
-                                 ShareTodoInfo.of(todo.getId(),
-                                         todo.getTitle(),
-                                         todo.getCategory().getName(),
-                                         surroundMemberParentTodoIds.contains(todo.getId())))
-                         .toList()
-         );
+//        MemberEntity selfMember = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
+//        MemberEntity surroundingMember = memberRepository.findById(surroundingMemberId).orElseThrow(() -> new MemberNotFoundException(surroundingMemberId));
+//
+//        Status surroundingMemberStatus = surroundingMember.getStatus();
+//
+//        // 회원의 상태가 ONBOARDING 이면 예외 발생
+//        if(surroundingMemberStatus.equals(Status.ONBOARDING)){
+//            throw new InvalidMemberStatusException(surroundingMemberStatus.name());
+//        }
+//
+//        Plan latestPlan = planRepository.findTopByMemberAndIsCompletedOrderByCreatedAtDesc(surroundingMember, true).orElseThrow(PlanNotFoundException::new);
+//
+//        List<SubPath> pathsOfLatestPlan = subPathRepository.findPathsByPlanAndIsCompleted(latestPlan, true);
+//
+//        List<Todo> surroundMemberTodos = pathsOfLatestPlan.stream()
+//                .flatMap(path -> path.getTodos().stream())
+//                .toList();
+//
+//        List<Long> surroundMemberParentTodoIds = todoRepository.findParentTodoIdsByParentTodoAndMemberAndType(surroundMemberTodos, selfMember, TodoType.FAVORITE);
+//         return SurroundingMemberTodoInfo.of(surroundingMember.getNickname(),
+//                 surroundMemberTodos.stream()
+//                         .map(todo ->
+//                                 ShareTodoInfo.of(todo.getId(),
+//                                         todo.getTitle(),
+//                                         todo.getCategory().getName(),
+//                                         surroundMemberParentTodoIds.contains(todo.getId())))
+//                         .toList()
+//         );
+        return null;
     }
 
     @Transactional
@@ -71,7 +72,7 @@ public class ShareTodoService {
 
         Todo parentTodo = todoRepository.findById(parentTodoId).orElseThrow(() -> new TodoNotFoundException(parentTodoId));
 
-        Todo targetTodo = todoRepository.findByMemberAndParentTodoAndType(selfMember, parentTodo, TodoType.SAVE).orElseThrow(() -> new SaveTodoNotFoundFromTargetParentException(parentTodoId));
+        Todo targetTodo = todoRepository.findByMemberAndParentTodoAndType(selfMember, parentTodo, TodoType.FAVORITE).orElseThrow(() -> new SaveTodoNotFoundFromTargetParentException(parentTodoId));
 
         todoRepository.delete(targetTodo);
     }

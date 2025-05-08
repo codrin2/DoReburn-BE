@@ -25,11 +25,9 @@ import com.dubu.backend.plan.domain.enums.Mood;
 import com.dubu.backend.plan.domain.enums.TrafficType;
 import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
-import com.dubu.backend.todo.domain.Category;
-import com.dubu.backend.todo.domain.Todo;
+import com.dubu.backend.todo.domain.past.Category;
+import com.dubu.backend.todo.domain.past.Todo;
 import com.dubu.backend.todo.domain.enums.TodoType;
-import com.dubu.backend.todo.dto.response.DayStatisticInfo;
-import com.dubu.backend.todo.dto.response.WeekStatisticInfo;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,7 +58,7 @@ class StatisticServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        // 헬퍼: 기본 Member
+        // 헬퍼: 기본 MemberEntity
         member = Member.builder()
                 .id(memberId)
                 .nickname("TestUser")
@@ -77,7 +75,7 @@ class StatisticServiceImplTest {
         // given
         LocalDate date = LocalDate.of(2023, 5, 3);
 
-        // 1) 원본 Member 인스턴스 생성 (아직 createdAt은 null일 수도)
+        // 1) 원본 MemberEntity 인스턴스 생성 (아직 createdAt은 null일 수도)
         //    - 실제 빌더로 만들되 createdAt 세팅 안 함 (어플리케이션 코드 수정 불가)
         Member realMember = Member.builder()
                 .nickname("TestUser")

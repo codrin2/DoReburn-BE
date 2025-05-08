@@ -12,19 +12,16 @@ import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
-import com.dubu.backend.todo.domain.Category;
-import com.dubu.backend.todo.domain.Todo;
+import com.dubu.backend.todo.domain.past.Category;
+import com.dubu.backend.todo.domain.past.Todo;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;
 import com.dubu.backend.todo.dto.common.Cursor;
 import com.dubu.backend.todo.dto.common.TodoIdentifier;
-import com.dubu.backend.todo.dto.request.RecommendTodoQueryRequest;
-import com.dubu.backend.todo.dto.request.SaveTodoQueryRequest;
 import com.dubu.backend.todo.dto.response.TodoInfo;
 import com.dubu.backend.todo.dto.search.TodoSearchCond;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
-import com.dubu.backend.todo.application.util.TodoRandomSelector;
 import com.dubu.backend.core.domain.PageResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,7 +46,7 @@ class SaveTodoQueryServiceTest {
     @InjectMocks
     private SaveTodoQueryService service;
 
-    // 헬퍼 메서드: Member 생성
+    // 헬퍼 메서드: MemberEntity 생성
     private Member createMember(Long memberId, Status status) {
         return Member.builder()
                 .id(memberId)
@@ -59,7 +56,7 @@ class SaveTodoQueryServiceTest {
                 .build();
     }
 
-    // 헬퍼 메서드: Category 생성
+    // 헬퍼 메서드: CategoryEntity 생성
     private Category createCategory(String name) {
         return Category.builder()
                 .name(name)

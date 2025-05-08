@@ -17,19 +17,16 @@ import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.core.exception.PathNotFoundException;
 import com.dubu.backend.plan.domain.repository.SubPathRepository;
-import com.dubu.backend.todo.domain.Category;
-import com.dubu.backend.todo.domain.Todo;
+import com.dubu.backend.todo.domain.past.Category;
+import com.dubu.backend.todo.domain.past.Todo;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
 import com.dubu.backend.todo.domain.enums.TodoType;
 import com.dubu.backend.todo.dto.common.Cursor;
 import com.dubu.backend.todo.dto.common.TodoIdentifier;
-import com.dubu.backend.todo.dto.request.RecommendTodoQueryRequest;
-import com.dubu.backend.todo.dto.request.SaveTodoQueryRequest;
 import com.dubu.backend.todo.dto.response.TodoInfo;
 import com.dubu.backend.todo.dto.search.TodoSearchCond;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
-import com.dubu.backend.todo.application.util.TodoRandomSelector;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,7 +51,7 @@ class SubPathTodoQueryServiceTest {
     @InjectMocks
     private PathTodoQueryService service;
 
-    // 헬퍼 메서드: Member 생성 (MOVE 상태여야 정상 로직)
+    // 헬퍼 메서드: MemberEntity 생성 (MOVE 상태여야 정상 로직)
     private Member createMember(Long memberId, Status status) {
         return Member.builder()
                 .id(memberId)
@@ -72,14 +69,14 @@ class SubPathTodoQueryServiceTest {
         return subPath;
     }
 
-    // Category 헬퍼
+    // CategoryEntity 헬퍼
     private Category createCategory(String name) {
         return Category.builder()
                 .name(name)
                 .build();
     }
 
-    // Todo 헬퍼 (difficulty 반드시 설정)
+    // Todo 헬퍼 (cursorDifficulty 반드시 설정)
     private Todo createTodo(Long id, String title, Member member, Category category, SubPath subPath, TodoType type) {
         return Todo.builder()
                 .id(id)
@@ -263,7 +260,7 @@ class SubPathTodoQueryServiceTest {
         Cursor cursor = Cursor.of(1L, TodoDifficulty.EASY, 10L);
         RecommendTodoQueryRequest request = new RecommendTodoQueryRequest(
                 List.of("READING"), // category
-                List.of("EASY"),    // difficulty
+                List.of("EASY"),    // cursorDifficulty
                 5
         );
 
