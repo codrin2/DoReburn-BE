@@ -26,7 +26,7 @@ public record DailyStatisticsResponse(
                                 .map(fi -> Feedback.of(fi.mood(), fi.memo()))
                                 .toList() : null
                 )
-                .categoryTodoCount(
+                .categoryTodoCounts(
                         result.categoryTodoCount() != null ? result.categoryTodoCount().stream()
                                 .map(c -> CategoryTodoCount.of(c.category(), c.todoCount()))
                                 .toList() : null
