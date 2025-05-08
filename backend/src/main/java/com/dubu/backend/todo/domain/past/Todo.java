@@ -13,7 +13,8 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-@Table(uniqueConstraints = {
+@Table(name = "todo",
+        uniqueConstraints = {
         @UniqueConstraint(columnNames = {"parent_id", "schedule_id"})
 })
 public class Todo extends BaseTimeEntity {
