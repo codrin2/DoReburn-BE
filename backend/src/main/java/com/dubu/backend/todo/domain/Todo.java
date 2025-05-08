@@ -45,10 +45,13 @@ public class Todo extends BaseTimeEntity {
     @Column(columnDefinition = "TINYINT")
     private Boolean isCompleted;
 
+    @Column(name = "member_id")
     private Long memberId;
 
     @Column(name = "sub_path_id")
     private Long subPathId;
+
+    @Column(name = "schedule_id")
     private Long scheduleId;
 
     @Embedded
