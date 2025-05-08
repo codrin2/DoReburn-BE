@@ -40,7 +40,7 @@ public record DailyStatisticsResponse(
         }
     }
 
-    private record CategoryTodoCount(String category, int todoCount){
+    private record CategoryTodoCount(String category, int count){
         static CategoryTodoCount of(String category, int todoCount){
             return new CategoryTodoCount(category, todoCount);
         }
