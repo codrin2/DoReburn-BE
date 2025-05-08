@@ -32,6 +32,7 @@ public class Todo {
     private Integer spentTime;
     private Boolean isCompleted;
 
+    @Column(name = "member_id")
     private Long memberId;
 
     @ManyToOne(fetch = FetchType.LAZY)
