@@ -19,14 +19,29 @@ export const TodoListContainerLayout = styled.div`
   backdrop-filter: blur(3.3rem);
 `;
 
-export const TodoList = styled.div`
+export const TodoList = styled.div<{ $isScroll: boolean }>`
   display: flex;
   align-items: center;
   flex-direction: column;
   gap: 0.8rem;
 
   max-height: 16.8rem;
-  overflow-y: scroll;
+  overflow-y: auto;
+  padding-right: ${({ $isScroll }) => ($isScroll ? '1.2rem' : '0')};
+
+  &::-webkit-scrollbar {
+    width: 0.15rem;
+    height: 0.15rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.colors.gray700};
+    border-radius: 1rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: ${({ theme }) => theme.colors.gray300};
+  }
 `;
 
 export const TodoItem = styled.div`

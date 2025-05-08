@@ -94,7 +94,7 @@ public class ShareServiceImpl implements ShareService {
 
         List<GeoHash> geoHashes = GeoSpatialUtils.deriveGeoHashInBoundingBox(bbCornergeoHashMap.get("NW"), bbCornergeoHashMap.get("NE"), bbCornergeoHashMap.get("SW"), request.x_coordinate(), request.y_coordinate(), request.radius());
 
-        List<CategoryCountInfo> categoryCountInfos = null;
+        List<CategoryCountInfo> categoryCountInfos = null
 //                 cellCategoryCountRepository.findByCellIds(geoHashes.stream().map(GeoHash::toBase32).toList());
 
         return CategoryRankInfo.from(categoryCountInfos);

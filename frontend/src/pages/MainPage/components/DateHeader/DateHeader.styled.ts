@@ -6,7 +6,7 @@ export const DateHeaderLayout = styled.header`
   align-items: center;
   gap: 0.8rem;
   color: ${({ theme }) => theme.colors.gray800};
-  ${({ theme }) => theme.fonts.body15};
+  ${({ theme }) => theme.fonts.headline17};
   word-spacing: 0.8rem;
 `;
 

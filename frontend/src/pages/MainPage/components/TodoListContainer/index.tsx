@@ -44,7 +44,7 @@ const TodoListContainer = () => {
         />
       </S.ContentHeader>
 
-      <S.TodoList>
+      <S.TodoList $isScroll={todoList ? todoList.length > 3 : false}>
         {isEmptyTodo && <Icon icon="Fire" width={96} height={96} color={colors.green25} />}
         {todoList?.map((todo) => (
           <S.TodoItem key={todo.todoId}>

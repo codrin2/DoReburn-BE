@@ -3,14 +3,21 @@ import styled from 'styled-components';
 export const TodoInputWrapper = styled.div`
   display: flex;
   align-items: center;
-
   gap: 0.8rem;
   padding: 0 0.1rem;
 `;
 
-export const TodoInputLabel = styled.span`
+export const TodoInputLabel = styled.span<{ $isTop?: boolean }>`
   width: 4.8rem;
   display: flex;
+
+  ${({ $isTop }) =>
+    $isTop &&
+    `
+    align-self: flex-start;
+    padding-top: 0.6rem;
+  `}
+
   ${({ theme }) => theme.fonts.body15Med};
   color: ${({ theme }) => theme.colors.gray950};
 `;
