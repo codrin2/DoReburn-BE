@@ -56,7 +56,9 @@ const TodoTab = ({ todoType, planId }: TodoTabProps) => {
 
   return (
     <S.TodoTabLayout>
-      <S.SloganWrapper>{TODO_TAB_TEXT[todoType]}</S.SloganWrapper>
+      <S.SloganWrapper>
+        <S.Slogan>{TODO_TAB_TEXT[todoType]}</S.Slogan>
+      </S.SloganWrapper>
       <S.TodoEditList>
         {todoList.map((todo) => (
           <TodoEditItem

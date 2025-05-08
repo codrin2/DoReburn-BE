@@ -1,6 +1,12 @@
 {
   "data": {
-    "memberLocations": [
+    "memberInfos": [
+      {
+        "memberId": 11,
+        "x_coordinate": 126.9188357,
+        "y_coordinate": 37.6397322,
+        "category": ["READING", "ENGLISH", "LANGUAGE"]
+      },
       {
         "memberId": 5,
         "x_coordinate": 127.0293465256691,

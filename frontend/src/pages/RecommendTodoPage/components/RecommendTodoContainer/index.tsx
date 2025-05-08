@@ -79,8 +79,9 @@ const RecommendTodoContainer = ({ isFavoritePage }: RecommendTodoContainerProps)
     }
   }, [isInitialized, memberInfo]);
 
-  // 데이터가 없을 경우
-  if (!recommendList) return <div>추천 할 일 데이터가 없습니다.</div>;
+  // 데이터가 로드되지 않았을 때
+  // TODO: 필터링 하위 부분만 컴포넌트 분리해서 로딩 처리
+  if (!recommendList) return null;
 
   return (
     <>

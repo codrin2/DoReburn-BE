@@ -27,7 +27,7 @@ export const RouteTitleWrapper = styled.div`
 `;
 
 export const Location = styled.span<{ $isToday: boolean }>`
-  ${({ theme }) => theme.fonts.body15};
+  ${({ theme }) => theme.fonts.body15Med};
   color: ${({ theme, $isToday }) => ($isToday ? theme.colors.green700 : theme.colors.gray500)};
 `;
 
@@ -41,6 +41,6 @@ export const AddressTextWrapper = styled.div`
 `;
 
 export const AddressText = styled.span`
-  ${({ theme }) => theme.fonts.body15};
+  ${({ theme }) => theme.fonts.body15Med};
   color: ${({ theme }) => theme.colors.gray400};
 `;

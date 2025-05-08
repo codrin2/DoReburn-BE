@@ -45,7 +45,7 @@ const TodoEditForm = ({ todo, handleEditTodo }: TodoEditFormProps) => {
       </S.TodoInputWrapper>
 
       <S.TodoInputWrapper>
-        <S.TodoInputLabel>목표</S.TodoInputLabel>
+        <S.TodoInputLabel $isTop>목표</S.TodoInputLabel>
         <RadioGroup
           name="category"
           filters={CATEGORY_OPTIONS}
@@ -65,7 +65,7 @@ const TodoEditForm = ({ todo, handleEditTodo }: TodoEditFormProps) => {
       </S.TodoInputWrapper>
 
       <S.TodoInputWrapper>
-        <S.TodoInputLabel>메모</S.TodoInputLabel>
+        <S.TodoInputLabel $isTop>메모</S.TodoInputLabel>
         <S.MemoTextarea
           value={memo}
           onChange={(e) => setMemo(e.target.value)}

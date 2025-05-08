@@ -45,7 +45,7 @@ export const ModalContent = styled.div`
 export const ModalFooter = styled.div`
   display: flex;
   width: 100%;
-  border-top: 0.1rem solid ${({ theme }) => theme.colors.gray300};
+  border-top: 0.05rem solid ${({ theme }) => theme.colors.gray300};
 `;
 
 export const ModalButton = styled.button`
@@ -56,7 +56,7 @@ export const ModalButton = styled.button`
 
 export const ModalCancelButton = styled(ModalButton)`
   ${({ theme }) => theme.fonts.headline17Reg};
-  border-right: 0.1rem solid ${({ theme }) => theme.colors.gray300};
+  border-right: 0.05rem solid ${({ theme }) => theme.colors.gray300};
 `;
 
 export const ModalConfirmButton = styled(ModalButton)`
