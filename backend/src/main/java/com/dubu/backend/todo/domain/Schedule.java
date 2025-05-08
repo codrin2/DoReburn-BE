@@ -20,6 +20,7 @@ public class Schedule extends BaseTimeEntity {
     @Column(name = "date", columnDefinition = "DATE", nullable = false)
     private LocalDate date;
 
+    @Column(name = "member_id")
     private Long memberId;
 
     public static Schedule of(Long memberId, LocalDate date){
