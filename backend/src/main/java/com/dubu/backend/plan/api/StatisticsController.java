@@ -30,9 +30,9 @@ public class StatisticsController implements StatisticsApi{
     @GetMapping("/week")
     public SuccessResponse<?> getWeekStatistics(
             @RequestAttribute Long memberId,
-            @RequestParam LocalDate date
+            @RequestParam LocalDate startDate
         ){
-        WeeklyStatisticsResult result = statisticsFacade.calculateWeeklyStatistics(memberId, date);
+        WeeklyStatisticsResult result = statisticsFacade.calculateWeeklyStatistics(memberId, startDate);
 
         return SuccessResponse.of(WeeklyStatisticsResponse.from(result));
     }

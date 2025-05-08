@@ -25,8 +25,8 @@ public record TodoFetchPagedCommand(
         return TodoFetchPagedCommand.builder()
                 .cursor(cursor)
                 .subPathId(subPathId)
-                .categories(categories)
-                .difficulties(difficulties)
+                .categories(categories != null ? List.copyOf(categories): null)
+                .difficulties(difficulties != null ? List.copyOf(difficulties): null)
                 .size(size)
                 .build();
     }
