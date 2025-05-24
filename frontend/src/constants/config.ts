@@ -19,7 +19,7 @@ export const USER_STATUS = {
 export const TODO_TYPE = {
   TODAY: 'TODAY',
   TOMORROW: 'TOMORROW',
-  SAVE: 'SAVE',
+  FAVORITE: 'FAVORITE',
   PATH: 'PATH',
 } as const;
 

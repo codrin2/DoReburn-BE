@@ -34,7 +34,7 @@ const FavoriteTab = ({ todoType, planId }: FavoriteTabProps) => {
   const openAddBottomSheet = useAddTodoBottomSheet({ todoType, planId });
   const openEditBottomSheet = useEditTodoBottomSheet({ todoType });
 
-  const isFavoritePage = todoType === TODO_TYPE.SAVE;
+  const isFavoritePage = todoType === TODO_TYPE.FAVORITE;
 
   const handleAddTodoFromFavorite = (todoId: number) => {
     addTodoFromArchived(

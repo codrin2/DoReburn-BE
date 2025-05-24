@@ -23,7 +23,7 @@ const FavoritePage = () => {
         ))}
       </S.TabList>
       <S.TabContent>
-        <FavoriteTab todoType={TODO_TYPE.SAVE} />
+        <FavoriteTab todoType={TODO_TYPE.FAVORITE} />
         <RecommendTodoContainer isFavoritePage />
       </S.TabContent>
     </Tab.Root>
