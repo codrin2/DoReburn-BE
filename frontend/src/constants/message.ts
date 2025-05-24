@@ -7,7 +7,7 @@ const DATE_TEXT = {
   TODAY: '오늘',
   TOMORROW: '내일',
   PATH: '',
-  SAVE: '',
+  FAVORITE: '',
 };
 
 export const TODO_TOAST_MESSAGE = {
