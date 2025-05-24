@@ -6,7 +6,7 @@ export const API_URL = {
   // 할 일
   todayTodo: `${BASE_URL}/api/v1/todos/today`,
   tomorrowTodo: `${BASE_URL}/api/v1/todos/tomorrow`,
-  favoriteTodo: (queryParams: string) => `${BASE_URL}/api/v1/todos/save${queryParams}`,
+  favoriteTodo: (queryParams: string) => `${BASE_URL}/api/v1/todos/favorite${queryParams}`,
   recommendLimitTodo: (modifyType: TodoType, planId?: number) =>
     `${BASE_URL}/api/v1/todos/recommend/personalized?modifyType=${modifyType}${planId ? `&pathId=${planId}` : ''}`,
   recommendAllTodo: (queryParams: string) => `${BASE_URL}/api/v1/todos/recommend/all${queryParams}`,
@@ -74,7 +74,7 @@ export const MOCK_API_URL = {
   // 할 일
   todayTodo: `${BASE_URL}/api/v1/todos/today`,
   tomorrowTodo: `${BASE_URL}/api/v1/todos/tomorrow`,
-  favoriteTodo: `${BASE_URL}/api/v1/todos/save`,
+  favoriteTodo: `${BASE_URL}/api/v1/todos/favorite`,
   recommendLimitTodo: `${BASE_URL}/api/v1/todos/recommend/personalized`,
   recommendAllTodo: `${BASE_URL}/api/v1/todos/recommend/all`,
   addTodo: `${BASE_URL}/api/v1/todos/:todoType/manual`,

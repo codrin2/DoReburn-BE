@@ -34,7 +34,7 @@ export const getTodoType = ({ planId, isFavoritePage, dateType }: GetTodoTypePar
   if (planId) {
     return TODO_TYPE.PATH;
   } else if (isFavoritePage) {
-    return TODO_TYPE.SAVE;
+    return TODO_TYPE.FAVORITE;
   }
 
   return dateType;

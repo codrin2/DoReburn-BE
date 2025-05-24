@@ -8,7 +8,7 @@ const useAddFavoriteFromOther = () => {
 
   return useMutation({
     mutationFn: ({ todoId, memberId }: { todoId: number; memberId: number }) => {
-      return addTodoFromArchived('SAVE', todoId);
+      return addTodoFromArchived('FAVORITE', todoId);
     },
     onSuccess: (_, { memberId }) => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.detailTodo, memberId] });

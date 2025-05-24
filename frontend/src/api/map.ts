@@ -65,7 +65,7 @@ export const getTodoDetail = async (memberId: number) => {
 
 export const addFavoriteFromOther = async (todoId: number) => {
   const result = await fetchClient.post<TodoFavoriteFromOtherResponse>(
-    API_URL.addTodoFromArchived('SAVE'),
+    API_URL.addTodoFromArchived('FAVORITE'),
     { body: { todoId } },
   );
 

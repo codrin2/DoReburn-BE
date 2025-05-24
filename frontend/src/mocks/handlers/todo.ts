@@ -142,7 +142,7 @@ const addTodoHandler = async ({
     });
 
     return HttpResponse.json(newTodo);
-  } else if (requestParams.todoType === 'SAVE') {
+  } else if (requestParams.todoType === 'FAVORITE') {
     /** 즐겨찾기 */
     FAVORITE_TODO.data.push({
       ...newTodo,
@@ -272,7 +272,7 @@ const addTodoFromArchivedHandler = async ({
     applyCheckStatus(newTodo);
 
     return HttpResponse.json(newTodo);
-  } else if (requestParams.todoType === 'SAVE') {
+  } else if (requestParams.todoType === 'FAVORITE') {
     /** 즐겨찾기 */
     const newTodo = getNewTodo(todoId);
 
