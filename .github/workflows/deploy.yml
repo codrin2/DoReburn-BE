@@ -95,6 +95,7 @@ jobs:
               -e NOTIFICATION_URL=${{ secrets.NOTIFICATION_URL }} \
               -e FIREBASE_SERVICE_ACCOUNT_JSON=${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }} \
               -e PROD_SERVER_URL=${{ secrets.PROD_SERVER_URL }} \
+              -e LOCAL_SERVER_URL=${{ secrets.LOCAL_SERVER_URL }} \
               -v /home/ec2-user/do-reburn-firebase.json:/app/do-reburn-firebase.json \
               --name ${{ secrets.DOCKER_REPOSITORY }} \
               ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
