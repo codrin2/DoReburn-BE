@@ -2,9 +2,9 @@ package com.dubu.backend.member.domain.model;
 
 import com.dubu.backend.core.domain.BaseTimeEntity;
 import com.dubu.backend.member.core.AggregateRoot;
+import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.domain.enums.OauthProvider;
 import com.dubu.backend.member.domain.enums.Role;
-import com.dubu.backend.member.domain.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,7 +39,7 @@ public class Member extends BaseTimeEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private MemberStatus status;
 
     private String recentRoute;
 
@@ -49,7 +49,7 @@ public class Member extends BaseTimeEntity {
                 .oauthProvider(oauthProvider)
                 .oauthProviderId(oauthProviderId)
                 .role(Role.USER)
-                .status(Status.ONBOARDING)
+                .status(MemberStatus.ONBOARDING)
                 .build();
     }
 
@@ -57,11 +57,11 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
-    public void updateStatus(Status status) {
+    public void updateStatus(MemberStatus status) {
         this.status = status;
     }
 
     public boolean isOnboarding() {
-        return this.status == Status.ONBOARDING;
+        return this.status == MemberStatus.ONBOARDING;
     }
 }

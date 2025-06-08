@@ -1,12 +1,12 @@
 package com.dubu.backend.todo.application.impl.today;
 
+import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.domain.enums.OauthProvider;
 import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.enums.Role;
-import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
+import com.dubu.backend.member.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.todo.core.exception.AlreadyAddedTodoFromArchiveException;
 import com.dubu.backend.todo.core.exception.CategoryNotFoundException;
 import com.dubu.backend.todo.core.exception.ScheduleNotFoundException;
@@ -20,7 +20,6 @@ import com.dubu.backend.todo.dto.common.TodoIdentifier;
 import com.dubu.backend.todo.dto.response.TodoInfo;
 import com.dubu.backend.todo.exception.*;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
-import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,7 +54,7 @@ class TodayTodoManagementServiceTest {
     @InjectMocks
     private TodayTodoManagementService todoService;
 
-    private Member createMember(Long memberId, Status status) {
+    private Member createMember(Long memberId, MemberStatus status) {
         return Member.builder()
                 .id(memberId)
                 .nickname("testUser")
@@ -84,7 +83,7 @@ class TodayTodoManagementServiceTest {
         // TodoCreateRequest 생성 (필요한 필드만 예시로 전달)
         TodoCreateRequest request = new TodoCreateRequest("Test Todo", categoryName, "EASY", "메모 내용");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Category category = createCategory(categoryName);
         Schedule schedule = Schedule.of(LocalDate.now(), member);
         // 오늘 등록된 todo가 0개라고 가정
@@ -131,7 +130,7 @@ class TodayTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, null);
         TodoCreateRequest request = new TodoCreateRequest("Test Todo", "WORK", "EASY", "메모 내용");
 
-        Member member = createMember(memberId, Status.ONBOARDING); // STOP이 아님
+        Member member = createMember(memberId, MemberStatus.ONBOARDING); // STOP이 아님
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         // When & Then
@@ -148,7 +147,7 @@ class TodayTodoManagementServiceTest {
         String categoryName = "WORK";
         TodoCreateRequest request = new TodoCreateRequest("Test Todo", categoryName, "EASY", "메모 내용");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(categoryRepository.findByName(categoryName)).thenReturn(Optional.empty());
 
@@ -166,7 +165,7 @@ class TodayTodoManagementServiceTest {
         String categoryName = "WORK";
         TodoCreateRequest request = new TodoCreateRequest("Test Todo", categoryName, "EASY", "메모 내용");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Category category = createCategory(categoryName);
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
@@ -187,7 +186,7 @@ class TodayTodoManagementServiceTest {
         String categoryName = "WORK";
         TodoCreateRequest request = new TodoCreateRequest("Test Todo", categoryName, "EASY", "메모 내용");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Category category = createCategory(categoryName);
         Schedule schedule = Schedule.of(LocalDate.now(), member);
         // 스케줄에 이미 5개의 todo 추가
@@ -212,7 +211,7 @@ class TodayTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, parentTodoId, null);
         TodoCreateFromArchivedRequest request = new TodoCreateFromArchivedRequest(parentTodoId);
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         // Schedule 생성 시 Schedule.of() 메서드를 활용
         Schedule schedule = Schedule.of(LocalDate.now(), member);
         // 아직 등록된 todo가 없도록 기본 리스트 사용 (Schedule.builderDefault에서 이미 new ArrayList<>())
@@ -270,7 +269,7 @@ class TodayTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, parentTodoId, null);
         TodoCreateFromArchivedRequest request = new TodoCreateFromArchivedRequest(parentTodoId);
 
-        Member member = createMember(memberId, Status.ONBOARDING); // STOP이 아닌 상태
+        Member member = createMember(memberId, MemberStatus.ONBOARDING); // STOP이 아닌 상태
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         // When & Then
@@ -286,7 +285,7 @@ class TodayTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, parentTodoId, null);
         TodoCreateFromArchivedRequest request = new TodoCreateFromArchivedRequest(parentTodoId);
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(scheduleRepository.findLatestSchedule(member, LocalDate.now())).thenReturn(Optional.empty());
 
@@ -303,7 +302,7 @@ class TodayTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, parentTodoId, null);
         TodoCreateFromArchivedRequest request = new TodoCreateFromArchivedRequest(parentTodoId);
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         // Schedule 생성 후, todos 리스트에 5개의 Todo 추가하여 제한 초과 상황 구성
         Schedule schedule = Schedule.of(LocalDate.now(), member);
         List<Todo> todos = schedule.getTodos();
@@ -327,7 +326,7 @@ class TodayTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, parentTodoId, null);
         TodoCreateFromArchivedRequest request = new TodoCreateFromArchivedRequest(parentTodoId);
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Schedule schedule = Schedule.of(LocalDate.now(), member);
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
@@ -346,7 +345,7 @@ class TodayTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, parentTodoId, null);
         TodoCreateFromArchivedRequest request = new TodoCreateFromArchivedRequest(parentTodoId);
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Schedule schedule = Schedule.of(LocalDate.now(), member);
         Category category = createCategory("ARCHIVE");
 
@@ -379,7 +378,7 @@ class TodayTodoManagementServiceTest {
         // 수정 요청: 제목, 카테고리, 난이도, 메모 (카테고리 업데이트 시 신규 카테고리 존재해야 함)
         TodoUpdateRequest request = new TodoUpdateRequest("새 제목", "NEW_CAT", "HARD", "새 메모");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Category oldCategory = createCategory("OLD_CAT");
         // 기존 Todo는 SCHEDULED 타입이어야 함.
         Todo todo = Todo.builder()
@@ -440,7 +439,7 @@ class TodayTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
         TodoUpdateRequest request = new TodoUpdateRequest("새 제목", "NEW_CAT", "HARD", "새 메모");
 
-        Member member = createMember(memberId, Status.ONBOARDING); // STOP 상태 아님
+        Member member = createMember(memberId, MemberStatus.ONBOARDING); // STOP 상태 아님
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         // When & Then
@@ -457,7 +456,7 @@ class TodayTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
         TodoUpdateRequest request = new TodoUpdateRequest("새 제목", "NEW_CAT", "HARD", "새 메모");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(todoRepository.findWithCategoryById(todoId)).thenReturn(Optional.empty());
 
@@ -475,7 +474,7 @@ class TodayTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
         TodoUpdateRequest request = new TodoUpdateRequest("새 제목", "NEW_CAT", "HARD", "새 메모");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         // 기존 todo의 타입을 SCHEDULED가 아닌 다른 타입으로 설정
         Todo todo = Todo.builder()
                 .title("기존 제목")
@@ -504,7 +503,7 @@ class TodayTodoManagementServiceTest {
         // 수정 요청 시 카테고리 업데이트 요청
         TodoUpdateRequest request = new TodoUpdateRequest("새 제목", "NON_EXIST_CAT", "HARD", "새 메모");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Category oldCategory = createCategory("OLD_CAT");
         Todo todo = Todo.builder()
                 .title("기존 제목")
@@ -539,7 +538,7 @@ class TodayTodoManagementServiceTest {
         Long todoId = 200L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         // 삭제할 todo는 SCHEDULED 타입이어야 함.
         Todo todo = Todo.builder()
                 .title("삭제할 할 일")
@@ -585,7 +584,7 @@ class TodayTodoManagementServiceTest {
         Long todoId = 200L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
 
-        Member member = createMember(memberId, Status.ONBOARDING);
+        Member member = createMember(memberId, MemberStatus.ONBOARDING);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         // When & Then
@@ -601,7 +600,7 @@ class TodayTodoManagementServiceTest {
         Long todoId = 200L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(todoRepository.findById(todoId)).thenReturn(Optional.empty());
 
@@ -618,7 +617,7 @@ class TodayTodoManagementServiceTest {
         Long todoId = 200L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         // 삭제할 todo의 타입이 SCHEDULED가 아닌 경우
         Todo todo = Todo.builder()
                 .title("삭제할 할 일")

@@ -4,11 +4,11 @@ import com.dubu.backend.member.application.MemberCommandFacade;
 import com.dubu.backend.member.application.MemberLocationFacade;
 import com.dubu.backend.member.application.MemberQueryFacade;
 import com.dubu.backend.member.application.event.MovementCompletedEvent;
+import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.domain.model.Address;
 import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.model.MemberCategory;
 import com.dubu.backend.member.domain.enums.AddressType;
-import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.model.MemberLocation;
 import com.dubu.backend.member.api.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.api.request.MemberOnboardingRequest;
@@ -23,7 +23,7 @@ import com.dubu.backend.member.infrastructure.RedisMemberLocationRepository;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Plan;
-import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
+import com.dubu.backend.member.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.core.exception.PlanNotFoundException;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.todo.domain.past.Category;
@@ -154,7 +154,7 @@ class MemberCommandFacadeTest {
         void it_returns_member_status() {
             // given
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(defaultMember));
-            when(defaultMember.getStatus()).thenReturn(Status.ONBOARDING);
+            when(defaultMember.getStatus()).thenReturn(MemberStatus.ONBOARDING);
 
             // when
             MemberStatusResponse response = memberQueryFacade.findMemberStatus(memberId);
@@ -233,7 +233,7 @@ class MemberCommandFacadeTest {
             // given
             Member spyMember = spy(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(spyMember));
-            doReturn(Status.ONBOARDING).when(spyMember).getStatus();
+            doReturn(MemberStatus.ONBOARDING).when(spyMember).getStatus();
 
             MemberOnboardingRequest request = new MemberOnboardingRequest(
                     List.of("READING", "ENGLISH"),
@@ -250,7 +250,7 @@ class MemberCommandFacadeTest {
 
             // then
             verify(spyMember).updateNickname("새닉네임");
-            verify(spyMember).updateStatus(Status.STOP);
+            verify(spyMember).updateStatus(MemberStatus.STOP);
             verify(memberCategoryRepository).saveAll(anyList());
             verify(addressRepository, times(2)).save(any(Address.class));
         }
@@ -261,7 +261,7 @@ class MemberCommandFacadeTest {
             // given
             Member spyMember = spy(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(spyMember));
-            doReturn(Status.STOP).when(spyMember).getStatus();
+            doReturn(MemberStatus.STOP).when(spyMember).getStatus();
 
             MemberOnboardingRequest request = new MemberOnboardingRequest(
                     List.of("READING", "ENGLISH"),
@@ -281,7 +281,7 @@ class MemberCommandFacadeTest {
             // given
             Member spyMember = spy(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(spyMember));
-            doReturn(Status.ONBOARDING).when(spyMember).getStatus();
+            doReturn(MemberStatus.ONBOARDING).when(spyMember).getStatus();
 
             MemberOnboardingRequest request = new MemberOnboardingRequest(
                     List.of("없는카테고리"),
@@ -431,7 +431,7 @@ class MemberCommandFacadeTest {
             memberCommandFacade.updateMemberStatus(memberId, "MOVE");
 
             // then
-            verify(defaultMember).updateStatus(Status.MOVE);
+            verify(defaultMember).updateStatus(MemberStatus.MOVE);
         }
 
         @Test
@@ -465,7 +465,7 @@ class MemberCommandFacadeTest {
             memberCommandFacade.updateMemberStatusByPlanChange(dto);
 
             // then
-            verify(defaultMember).updateStatus(Status.FEEDBACK);
+            verify(defaultMember).updateStatus(MemberStatus.FEEDBACK);
         }
 
         @Test

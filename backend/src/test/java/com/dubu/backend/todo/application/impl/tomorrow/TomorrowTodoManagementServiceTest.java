@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
 
+import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.domain.model.Member;
-import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.enums.Role;
 import com.dubu.backend.member.domain.enums.OauthProvider;
 import com.dubu.backend.plan.domain.Plan;
@@ -27,7 +27,6 @@ import com.dubu.backend.todo.dto.common.TodoIdentifier;
 import com.dubu.backend.todo.dto.response.TodoInfo;
 import com.dubu.backend.todo.core.exception.TodoCountExceededException;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
-import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
@@ -56,7 +55,7 @@ class TomorrowTodoManagementServiceTest {
     private TomorrowTodoManagementService todoService;
 
     // --- 헬퍼 메서드 ---
-    private Member createMember(Long memberId, Status status) {
+    private Member createMember(Long memberId, MemberStatus status) {
         return Member.builder()
                 .id(memberId)
                 .nickname("testUser")
@@ -83,7 +82,7 @@ class TomorrowTodoManagementServiceTest {
         String categoryName = "READING";
         TodoCreateRequest request = new TodoCreateRequest("종이 책 읽기", categoryName, "EASY", "매일 30분 이상 독서");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Category category = createCategory(categoryName);
         // 내일 스케줄: 날짜가 LocalDate.now().plusDays(1)
         Schedule schedule = Schedule.of(LocalDate.now().plusDays(1), member);
@@ -113,7 +112,7 @@ class TomorrowTodoManagementServiceTest {
         String categoryName = "READING";
         TodoCreateRequest request = new TodoCreateRequest("종이 책 읽기", categoryName, "EASY", "매일 30분 이상 독서");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Category category = createCategory(categoryName);
         // 스케줄 조회 시 기존 schedule의 날짜가 내일과 다름 (예: 오늘 날짜)
         Schedule existingSchedule = Schedule.of(LocalDate.now(), member);
@@ -154,7 +153,7 @@ class TomorrowTodoManagementServiceTest {
         String categoryName = "READING";
         TodoCreateRequest request = new TodoCreateRequest("종이 책 읽기", categoryName, "EASY", "메모");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Category category = createCategory(categoryName);
         Schedule schedule = Schedule.of(LocalDate.now().plusDays(1), member);
         List<Todo> todos = new ArrayList<>();
@@ -178,7 +177,7 @@ class TomorrowTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, parentTodoId, null);
         TodoCreateFromArchivedRequest request = new TodoCreateFromArchivedRequest(parentTodoId);
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         // 내일 스케줄
         Schedule schedule = Schedule.of(LocalDate.now().plusDays(1), member);
         List<Todo> todos = new ArrayList<>();
@@ -218,7 +217,7 @@ class TomorrowTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
         TodoUpdateRequest request = new TodoUpdateRequest("새 제목", "NEW_CAT", "HARD", "새 메모");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Category oldCategory = createCategory("OLD_CAT");
         Todo targetTodo = Todo.builder()
                 .id(todoId)
@@ -266,7 +265,7 @@ class TomorrowTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
         TodoUpdateRequest request = new TodoUpdateRequest("새 제목", "NEW_CAT", "HARD", "새 메모");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Category oldCategory = createCategory("OLD_CAT");
         // 기존 할 일: 오늘 스케줄에 등록된 것으로 가정 (내일 스케줄과 다름)
         Todo targetTodo = Todo.builder()
@@ -314,7 +313,7 @@ class TomorrowTodoManagementServiceTest {
         Long memberId = 1L;
         Long todoId = 200L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Todo targetTodo = Todo.builder()
                 .id(todoId)
                 .title("삭제할 할 일")
@@ -348,7 +347,7 @@ class TomorrowTodoManagementServiceTest {
         Long memberId = 1L;
         Long todoId = 200L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         // 기존 할 일: 오늘 스케줄에 등록된 것으로 가정 (내일 스케줄과 다름)
         Todo targetTodo = Todo.builder()
                 .id(todoId)

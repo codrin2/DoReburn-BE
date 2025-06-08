@@ -32,11 +32,6 @@ public class SubPath extends BaseTimeEntity {
     @JoinColumn(name = "path_id")
     private Path path;
 
-//    @BatchSize(size = 100)
-    @Builder.Default
-    @OneToMany(mappedBy = "subPath", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Todo> todos = new ArrayList<>();
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TrafficType trafficType;
@@ -62,6 +57,9 @@ public class SubPath extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "SMALLINT")
     private Integer pathOrder;
 
+    @Transient
+    private List<Todo> todos = new ArrayList<>();
+
     public static SubPath createPath(Plan plan, Path path, PlanCreateRequest.Path pathRequest, int pathOrder) {
         return SubPath.builder()
                 .plan(plan)
@@ -76,4 +74,8 @@ public class SubPath extends BaseTimeEntity {
                 .pathOrder(pathOrder)
                 .build();
     }
+    public void assignTodos(List<Todo> todos){
+        if(todos != null && !todos.isEmpty()) this.todos = List.copyOf(todos);
+    }
+
 }

@@ -1,22 +1,23 @@
 package com.dubu.backend.plan.domain;
 
-import com.dubu.backend.core.domain.BaseTimeEntity;
 import com.dubu.backend.plan.domain.enums.MemberStatus;
-import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
-@Entity(name = "PlanMember")
-@Table(name = "member")
+import java.time.LocalDate;
+
+@Builder
 @Getter
-public class Member extends BaseTimeEntity {
-    @Id
-    @Column(name = "member_id")
+public class Member {
     private Long id;
-
-    @Enumerated(EnumType.STRING)
     private MemberStatus status;
+    private LocalDate createdAt;
 
-    public void updateStatus(MemberStatus status){
-        this.status = status;
+    public static Member of(Long id, String status, LocalDate createdAt){
+        return Member.builder()
+                .id(id)
+                .status(MemberStatus.fromString(status))
+                .createdAt(createdAt)
+                .build();
     }
 }

@@ -9,12 +9,12 @@ import java.util.Optional;
 
 import com.dubu.backend.core.domain.PageResponse;
 import com.dubu.backend.member.domain.model.Member;
-import com.dubu.backend.member.domain.enums.Status;
+import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.domain.SubPath;
-import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
+import com.dubu.backend.member.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.core.exception.PathNotFoundException;
 import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.todo.domain.past.Category;
@@ -52,7 +52,7 @@ class SubPathTodoQueryServiceTest {
     private PathTodoQueryService service;
 
     // 헬퍼 메서드: MemberEntity 생성 (MOVE 상태여야 정상 로직)
-    private Member createMember(Long memberId, Status status) {
+    private Member createMember(Long memberId, MemberStatus status) {
         return Member.builder()
                 .id(memberId)
                 .nickname("testUser")
@@ -100,7 +100,7 @@ class SubPathTodoQueryServiceTest {
         Long pathId = 100L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, pathId);
 
-        Member member = createMember(memberId, Status.MOVE);
+        Member member = createMember(memberId, MemberStatus.MOVE);
         SubPath subPath = createPath(pathId);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(subPathRepository.findById(pathId)).thenReturn(Optional.of(subPath));
@@ -136,7 +136,7 @@ class SubPathTodoQueryServiceTest {
     @DisplayName("findTargetTodos 실패: 회원 상태가 MOVE가 아님 -> InvalidMemberStatusException")
     void findTargetTodos_fail_invalidMemberStatus() {
         Long memberId = 1L;
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, 100L);
@@ -147,7 +147,7 @@ class SubPathTodoQueryServiceTest {
     @DisplayName("findTargetTodos 실패: path 미존재 -> PathNotFoundException")
     void findTargetTodos_fail_pathNotFound() {
         Long memberId = 1L;
-        Member member = createMember(memberId, Status.MOVE);
+        Member member = createMember(memberId, MemberStatus.MOVE);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         Long pathId = 999L;
@@ -167,7 +167,7 @@ class SubPathTodoQueryServiceTest {
         Long pathId = 10L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, pathId);
 
-        Member member = createMember(memberId, Status.MOVE);
+        Member member = createMember(memberId, MemberStatus.MOVE);
         SubPath subPath = createPath(pathId);
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
@@ -212,7 +212,7 @@ class SubPathTodoQueryServiceTest {
         Long pathId = 10L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, pathId);
 
-        Member member = createMember(memberId, Status.MOVE);
+        Member member = createMember(memberId, MemberStatus.MOVE);
         SubPath subPath = createPath(pathId);
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
@@ -251,7 +251,7 @@ class SubPathTodoQueryServiceTest {
         Long pathId = 10L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, pathId);
 
-        Member member = createMember(memberId, Status.MOVE);
+        Member member = createMember(memberId, MemberStatus.MOVE);
         SubPath subPath = createPath(pathId);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(subPathRepository.findById(pathId)).thenReturn(Optional.of(subPath));

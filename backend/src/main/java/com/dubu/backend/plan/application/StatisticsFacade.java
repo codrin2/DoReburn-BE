@@ -1,14 +1,11 @@
 package com.dubu.backend.plan.application;
 
+import com.dubu.backend.plan.application.api.MemberApi;
 import com.dubu.backend.plan.application.dto.DailyStatisticsResult;
 import com.dubu.backend.plan.application.dto.WeeklyStatisticsResult;
-import com.dubu.backend.plan.core.exception.MemberNotFoundException;
 import com.dubu.backend.plan.domain.Feedback;
 import com.dubu.backend.plan.domain.Member;
 import com.dubu.backend.plan.domain.Plan;
-import com.dubu.backend.plan.domain.repository.MemberRepository;
-import com.dubu.backend.plan.domain.repository.PlanRepository;
-import com.dubu.backend.plan.domain.repository.dto.PlanSearchCond;
 import com.dubu.backend.plan.domain.service.StatisticsService;
 import com.dubu.backend.plan.domain.vo.DailyStats;
 import com.dubu.backend.plan.domain.vo.WeeklyFeedbackStats;
@@ -25,54 +22,44 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class StatisticsFacade {
-    private final MemberRepository memberRepository;
-    private final PlanRepository planRepository;
+    private final PlanFacade planFacade;
 
     private final StatisticsService statisticsService;
 
-    public DailyStatisticsResult calculateDayStatistics(Long memberId, LocalDate date) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+    private final MemberApi memberApi;
 
-        List<Plan> plans = planRepository.findPlans(member,
-                PlanSearchCond.of(true, true, date.atStartOfDay(), date.atTime(LocalTime.MAX)));
+    public DailyStatisticsResult calculateDayStatistics(Long memberId, LocalDate date) {
+        Member member = memberApi.getMember(memberId);
+
+        List<Plan> plans = planFacade.findPlans(member, date.atStartOfDay(), date.atTime(LocalTime.MAX));
 
         if (plans.isEmpty()) {
-            return DailyStatisticsResult.of(member.getCreatedAt().toLocalDate());
+            return DailyStatisticsResult.of(member.getCreatedAt());
         }
         DailyStats dailyStats = statisticsService.calculateDailyStats(plans);
 
-        return DailyStatisticsResult.from(member.getCreatedAt().toLocalDate(),
+        return DailyStatisticsResult.from(member.getCreatedAt(),
                 dailyStats,
                 plans.stream().map(Plan::getFeedback).toList());
     }
 
     public WeeklyStatisticsResult calculateWeeklyStatistics(Long memberId, LocalDate startDate){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+        Member member = memberApi.getMember(memberId);
 
-        List<Plan> thisWeekPlans = planRepository.findPlans(member,
-                PlanSearchCond.of(true,
-                        true,
-                        startDate.atStartOfDay(),
-                        startDate.plusDays(6).atTime(LocalTime.MAX)));
+        List<Plan> thisWeekPlans = planFacade.findPlans(member, startDate.atStartOfDay(), startDate.plusDays(6).atTime(LocalTime.MAX));
 
         if(thisWeekPlans.isEmpty()){
-            return WeeklyStatisticsResult.of(member.getCreatedAt().toLocalDate());
+            return WeeklyStatisticsResult.of(member.getCreatedAt());
         }
 
-        List<Plan> lastWeekPlans = planRepository.findPlans(member,
-                PlanSearchCond.of(true,
-                        true,
-                        startDate.minusWeeks(1).atStartOfDay(),
-                        startDate.minusDays(1).atTime(LocalTime.MAX)));
+        List<Plan> lastWeekPlans = planFacade.findPlans(member, startDate.minusWeeks(1).atStartOfDay(), startDate.minusWeeks(1).atTime(LocalTime.MAX));
 
         WeeklyTodoStats weeklyTodoStats = statisticsService.calculateWeeklyTodoStats(startDate, lastWeekPlans, thisWeekPlans);
 
         List<Feedback> thisWeeeFeedbacks = thisWeekPlans.stream().map(Plan::getFeedback).toList();
         WeeklyFeedbackStats weeklyFeedbackStats = statisticsService.calculateWeeklyFeedbackStats(thisWeeeFeedbacks);
 
-        return WeeklyStatisticsResult.from(member.getCreatedAt().toLocalDate(),
+        return WeeklyStatisticsResult.from(member.getCreatedAt(),
                 weeklyTodoStats,
                 weeklyFeedbackStats);
     }

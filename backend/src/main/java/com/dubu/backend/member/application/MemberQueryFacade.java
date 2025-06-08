@@ -3,6 +3,7 @@ package com.dubu.backend.member.application;
 import com.dubu.backend.member.api.response.MemberInfoResponse;
 import com.dubu.backend.member.api.response.MemberSavedAddressResponse;
 import com.dubu.backend.member.api.response.MemberStatusResponse;
+import com.dubu.backend.member.application.dto.MemberDetailResult;
 import com.dubu.backend.member.core.exception.MemberSavedAddressNotFoundException;
 import com.dubu.backend.member.domain.model.Address;
 import com.dubu.backend.member.domain.model.Member;
@@ -47,6 +48,16 @@ public class MemberQueryFacade {
         Member currentMember = findExistingMember(memberRepository, memberId);
 
         return new MemberStatusResponse(currentMember.getStatus().name());
+    }
+
+    public String findMemberNickname(Long memberId){
+        Member member = findExistingMember(memberRepository, memberId);
+        return member.getNickname();
+    }
+
+    public MemberDetailResult findMember(Long memberId){
+        Member member = findExistingMember(memberRepository, memberId);
+        return MemberDetailResult.from(member);
     }
 
     public MemberSavedAddressResponse findMemberSavedAddress(Long memberId) {

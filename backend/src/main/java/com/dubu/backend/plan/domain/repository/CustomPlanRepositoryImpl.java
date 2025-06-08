@@ -4,31 +4,29 @@ import com.dubu.backend.plan.domain.*;
 import com.dubu.backend.plan.domain.repository.dto.PlanSearchCond;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.dubu.backend.plan.domain.QFeedback.*;
 import static com.dubu.backend.plan.domain.QPlan.*;
 import static com.dubu.backend.plan.domain.QSubPath.*;
-import static com.dubu.backend.plan.domain.QTodo.*;
 
 @RequiredArgsConstructor
-public class CustomPlanRepositoryImpl implements CustomPlanRepository{
+public class CustomPlanRepositoryImpl implements CustomPlanRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Plan> findPlans(Member member, PlanSearchCond cond) {
+    public List<Plan> findPlans(PlanSearchCond cond) {
         List<Plan> plans = queryFactory.selectFrom(plan)
                 .leftJoin(plan.subPaths, subPath)
                 .fetchJoin()
                 .leftJoin(plan.feedback, feedback)
                 .fetchJoin()
-                .where(planCond(member, cond))
+                .where(planCond(cond))
                 .fetch();
 
         List<SubPath> subPaths = plans.stream()
@@ -37,24 +35,23 @@ public class CustomPlanRepositoryImpl implements CustomPlanRepository{
 
         if(subPaths.isEmpty()) {return plans;}
 
-        List<Todo> todos = queryFactory.selectFrom(todo)
-                .leftJoin(todo.subPath, subPath)
-                .fetchJoin()
-                .where(subPathIn(subPath, subPaths), isCompletedEq(todo, cond.isTodoCompleted()))
-                .fetch();
-
-        Map<Long, List<Todo>> todosBySubPath = todos.stream()
-                .collect(Collectors.groupingBy(t -> t.getSubPath().getId()));
-
-        for(Plan plan: plans){
-            plan.defineTodos(plan.getSubPaths().stream()
-                            .flatMap(sp -> todosBySubPath.getOrDefault(sp.getId(), List.of()).stream())
-                            .toList());
-        }
-
         return plans;
     }
-    private BooleanBuilder planCond(Member member, PlanSearchCond cond){
+
+    @Override
+    public List<Long> findCompletedRecentPlansId(List<Long> memberIds) {
+        QPlan subPlan = new QPlan("subPlan");
+
+        return queryFactory.select(plan.id).from(plan)
+                .where(plan.memberId.in(memberIds), isCompletedEq(true), plan.createdAt.eq(
+                        JPAExpressions.select(subPlan.createdAt.max())
+                                .from(subPlan)
+                                .where(subPlan.memberId.in(memberIds), isCompletedEq(true))
+                ))
+                .fetch();
+    }
+
+    private BooleanBuilder planCond(PlanSearchCond cond){
         BooleanBuilder builder = new BooleanBuilder();
 
         if(cond == null){
@@ -62,13 +59,13 @@ public class CustomPlanRepositoryImpl implements CustomPlanRepository{
         }
 
         return builder
-                .and(memberEq(member))
+                .and(memberIdEq(cond.memberId()))
                 .and(createdAtBetween(cond.startTime(), cond.endTime()))
                 .and(isCompletedEq(cond.isPlanCompleted()));
     }
 
-    private BooleanExpression memberEq(Member member){
-        return member != null ? plan.member.eq(member) : null;
+    private BooleanExpression memberIdEq(Long memberId){
+        return memberId != null ? plan.memberId.eq(memberId) : null;
     }
 
     private BooleanExpression createdAtBetween(LocalDateTime startTime, LocalDateTime endTime){
@@ -77,10 +74,6 @@ public class CustomPlanRepositoryImpl implements CustomPlanRepository{
 
     private BooleanExpression isCompletedEq(Boolean isCompleted){
         return isCompleted != null ? plan.isCompleted.eq(isCompleted): null;
-    }
-
-    private BooleanExpression isCompletedEq(QTodo todo, Boolean isCompleted){
-        return isCompleted != null ? todo.isCompleted.eq(isCompleted) : null;
     }
 
     private BooleanExpression subPathIn(QSubPath subPath, List<SubPath> subPaths){

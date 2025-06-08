@@ -20,9 +20,8 @@ public class Plan extends BaseTimeEntity {
     @Column(name = "plan_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @Column(nullable = false)
+    private Long memberId;
 
     @Builder.Default
     @OneToMany(mappedBy = "plan", cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -37,11 +36,11 @@ public class Plan extends BaseTimeEntity {
     private boolean isCompleted;
 
     @Transient
-    private List<Todo> todos;
+    private List<Todo> todos = new ArrayList<>();
 
     public static Plan createPlan(Member member, Integer totalTime) {
         return Plan.builder()
-                .member(member)
+                .memberId(member.getId())
                 .totalTime(totalTime)
                 .build();
     }
@@ -50,7 +49,7 @@ public class Plan extends BaseTimeEntity {
         this.isCompleted = isCompleted;
     }
 
-    public  void defineTodos(List<Todo> todos){
-        this.todos = List.copyOf(todos);
+    public void assignTodos(List<Todo> todos){
+        if(todos != null && !todos.isEmpty()) this.todos = List.copyOf(todos);
     }
 }

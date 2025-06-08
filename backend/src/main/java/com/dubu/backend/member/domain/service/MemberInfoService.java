@@ -1,7 +1,7 @@
 package com.dubu.backend.member.domain.service;
 
 import com.dubu.backend.member.domain.enums.AddressType;
-import com.dubu.backend.member.domain.enums.Status;
+import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.domain.model.Address;
 import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.model.MemberCategory;
@@ -44,7 +44,7 @@ public class MemberInfoService {
                 request.schoolTitle(), request.schoolAddress(), request.schoolAddressX(), request.schoolAddressY());
 
         member.updateNickname(request.nickname());
-        member.updateStatus(Status.STOP);
+        member.updateStatus(MemberStatus.STOP);
     }
 
     /**
@@ -75,7 +75,7 @@ public class MemberInfoService {
                 .orElseThrow(() -> new PlanNotFoundException(planId));
 
         if (!plan.isCompleted()) {
-            member.updateStatus(Status.FEEDBACK);
+            member.updateStatus(MemberStatus.FEEDBACK);
         }
     }
 

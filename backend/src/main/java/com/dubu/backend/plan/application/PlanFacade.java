@@ -1,43 +1,40 @@
 package com.dubu.backend.plan.application;
 
-import com.dubu.backend.plan.application.event.PlanCreatedEvent;
+import com.dubu.backend.core.domain.event.FeedbackEndedEvent;
+import com.dubu.backend.core.domain.event.PlanEndedEvent;
+import com.dubu.backend.core.domain.event.PlanRemovedEvent;
+import com.dubu.backend.member.core.exception.MemberNotFoundException;
+import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.domain.enums.MemberStatus;
-import com.dubu.backend.plan.domain.Member;
-import com.dubu.backend.plan.core.exception.MemberNotFoundException;
+import com.dubu.backend.plan.application.api.MemberApi;
+import com.dubu.backend.plan.application.api.TodoApi;
+import com.dubu.backend.core.domain.event.PlanCreatedEvent;
+import com.dubu.backend.plan.application.event.PlanEventPublisher;
+import com.dubu.backend.plan.domain.*;
 import com.dubu.backend.member.domain.model.TempMember;
-import com.dubu.backend.plan.domain.enums.TodoType;
-import com.dubu.backend.plan.domain.repository.MemberRepository;
 import com.dubu.backend.member.domain.repository.TempMemberRepository;
 import com.dubu.backend.notification.application.WebPushService;
 import com.dubu.backend.plan.api.response.RecentPlanTodosResponse;
-import com.dubu.backend.plan.domain.Feedback;
-import com.dubu.backend.plan.domain.Path;
-import com.dubu.backend.plan.domain.SubPath;
-import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.domain.enums.TrafficType;
+import com.dubu.backend.plan.domain.repository.dto.PlanSearchCond;
 import com.dubu.backend.plan.domain.vo.PathIdentifier;
 import com.dubu.backend.plan.api.request.PlanCreateRequest;
 import com.dubu.backend.plan.api.request.PlanFeedbackCreateRequest;
 import com.dubu.backend.plan.api.response.FeedbackWritePageInfoResponse;
 import com.dubu.backend.plan.api.response.PlanRecentResponse;
-import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.core.exception.PlanNotFoundException;
 import com.dubu.backend.plan.core.exception.UnauthorizedPlanDeletionException;
 import com.dubu.backend.plan.domain.repository.FeedbackRepository;
 import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
-import com.dubu.backend.plan.domain.Todo;
-import com.dubu.backend.todo.infra.repository.ScheduleRepository;
-import com.dubu.backend.todo.infra.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,13 +42,15 @@ public class PlanFacade {
     private final PathFacade pathFacade;
     private final WebPushService webPushService;
 
-    private final MemberRepository memberRepository;
+    private final TodoApi todoApi;
+    private final MemberApi memberApi;
+
     private final TempMemberRepository tempMemberRepository;
     private final PlanRepository planRepository;
     private final SubPathRepository subPathRepository;
     private final FeedbackRepository feedbackRepository;
 
-    private final ApplicationEventPublisher eventPublisher;
+    private final PlanEventPublisher eventPublisher;
 
     @Transactional
     public Long savePlan(
@@ -60,8 +59,7 @@ public class PlanFacade {
             Double endX, Double endY,
             PlanCreateRequest request
     ) {
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+        Member currentMember = memberApi.getMember(memberId);
 
         // STOP인 상태의 유저만 사용 가능
         if (currentMember.getStatus() != MemberStatus.STOP) {
@@ -88,19 +86,19 @@ public class PlanFacade {
         List<SubPath> subPaths = createAndSavePaths(savedPlan, finalPath, request);
 
         // 오늘의 할 일(Todo) Path 할당 & Todo 내용 복제하여 저장
-        assignTodosToPaths(currentMember, subPaths);
+        SubPath assignedSubPath = subPaths.stream()
+                .filter(path -> path.getTrafficType()!= TrafficType.WALK)
+                .findFirst()
+                .orElse(null);
 
-        currentMember.updateStatus(MemberStatus.MOVE);
-
-        webPushService.sendPushAndMemberStatusChange(memberId, savedPlan);
-
+        eventPublisher.publishPlanCreatedEvent(new PlanCreatedEvent(currentMember.getId(), assignedSubPath != null ? assignedSubPath.getId(): null));
+//        webPushService.sendPushAndMemberStatusChange(memberId, savedPlan);
         return savedPlan.getId();
     }
 
     @Transactional
     public Long savePlanFeedback(Long memberId, Long planId, PlanFeedbackCreateRequest request) {
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+        Member currentMember = memberApi.getMember(memberId);
 
         if (currentMember.getStatus() != MemberStatus.FEEDBACK) {
             throw new InvalidMemberStatusException(currentMember.getStatus().name());
@@ -109,30 +107,34 @@ public class PlanFacade {
         Plan currentPlan = planRepository.findById(planId)
                 .orElseThrow(() -> new PlanNotFoundException(planId));
 
-        if (!currentPlan.getMember().getId().equals(memberId)) {
+        if (!currentPlan.getMemberId().equals(memberId)) {
             throw new UnauthorizedPlanDeletionException(memberId, planId);
         }
 
         Feedback newFeedback = Feedback.createFeedback(currentPlan, request.mood(), request.memo());
         feedbackRepository.save(newFeedback);
-        currentMember.updateStatus(MemberStatus.STOP);
+        eventPublisher.publishFeedbackEndedEvent(new FeedbackEndedEvent(memberId));
 
         return newFeedback.getId();
     }
 
     @Transactional(readOnly = true)
     public PlanRecentResponse findRecentPlan(Long memberId) {
-        memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+        memberApi.getMember(memberId);
 
         Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
                 .orElseThrow(PlanNotFoundException::new);
 
-        List<SubPath> subPaths = subPathRepository.findByPlanWithTodosOrderByPathOrder(recentPlan);
+        List<SubPath> subPaths = subPathRepository.findByPlanIdOrderByPathOrderAsc(recentPlan.getId());
+
+        List<Todo> todos = todoApi.getTodos(subPaths.stream().map(SubPath::getId).toList());
+
+        assignTodosToSubPath(subPaths, todos);
 
         return PlanRecentResponse.of(recentPlan, subPaths);
     }
 
+    // 임시
     @Transactional(readOnly = true)
     public RecentPlanTodosResponse findTodosOfRecentPlan(Long memberId){
         TempMember member = tempMemberRepository.findById(memberId)
@@ -145,55 +147,82 @@ public class PlanFacade {
     }
 
     @Transactional(readOnly = true)
+    protected List<Plan> findPlans(Member member, LocalDateTime startDate, LocalDateTime endDate){
+        List<Plan> plans = planRepository.findPlans(PlanSearchCond.of(member.getId(), true, startDate, endDate));
+        List<Long> subPathIds = plans.stream().map(Plan::getSubPaths).flatMap(List::stream).map(SubPath::getId).toList();
+        List<Todo> todos = todoApi.getCompletedTodos(subPathIds);
+
+        Map<Long, List<Todo>> subPahtIdTodosMap = todos.stream()
+                .collect(Collectors.groupingBy(Todo::getSubPathId));
+
+        for(Plan plan: plans){
+            List<Todo> planTodos = plan.getSubPaths().stream()
+                    .flatMap(sp -> subPahtIdTodosMap.getOrDefault(sp.getId(), Collections.emptyList()).stream())
+                    .toList();
+            plan.assignTodos(planTodos);
+        }
+        return plans;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long> findSubPathIdOfRecentPlans(List<Long> memberIds){
+        List<Long> planIds = planRepository.findCompletedRecentPlansId(memberIds);
+        return subPathRepository.findByPlanIdIn(planIds);
+    }
+
+    @Transactional(readOnly = true)
     public FeedbackWritePageInfoResponse findFeedbackWritePageInfo(Long memberId) {
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+        Member currentMember = memberApi.getMember(memberId);
 
         if (currentMember.getStatus() != MemberStatus.FEEDBACK) {
             throw new InvalidMemberStatusException(currentMember.getStatus().name());
         }
 
-        Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
-                .orElseThrow(PlanNotFoundException::new);
+        Plan recentPlan = findRecentPlanWithTodos(memberId);
 
         return FeedbackWritePageInfoResponse.of(recentPlan);
     }
 
     @Transactional
     public void completeMove(Long memberId) {
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+        Member currentMember = memberApi.getMember(memberId);
 
         if (currentMember.getStatus() != MemberStatus.MOVE) {
             throw new InvalidMemberStatusException(currentMember.getStatus().name());
         }
 
-        Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
-                .orElseThrow(PlanNotFoundException::new);
+        Plan recentPlan = findRecentPlanWithTodos(memberId);
+
+        List<Todo> todos = new ArrayList<>();
+        List<Todo> doneTodos = new ArrayList<>();
 
         recentPlan.getSubPaths().forEach(path -> {
-            List<Todo> todos = path.getTodos();
-            List<Todo> doneTodos = todos.stream().filter(todo -> todo.getIsCompleted() == Boolean.TRUE).toList();
+            List<Todo> pathTodos = path.getTodos();
+            List<Todo> pathDoneTodos = pathTodos.stream().filter(todo -> todo.getIsCompleted() == Boolean.TRUE).toList();
 
-            if (!doneTodos.isEmpty()) {
-                int sectionTimePerTodo = path.getSectionTime() / doneTodos.size();
+            if(!pathDoneTodos.isEmpty()){
+                int sectionTimePerTodo = path.getSectionTime() / pathDoneTodos.size();
 
-                doneTodos.forEach(doneTodo -> doneTodo.updateSpentTime(sectionTimePerTodo));
+                pathDoneTodos.forEach(doneTodo -> doneTodo.updateSpentTime(sectionTimePerTodo));
             }
-
-            todos.forEach(todo -> todo.updateTodoType(TodoType.DONE));
+            todos.addAll(pathTodos);
+            doneTodos.addAll(pathDoneTodos);
         });
 
-        recentPlan.updateIsCompleted(true);
-        currentMember.updateStatus(MemberStatus.FEEDBACK);
+        eventPublisher.publishPlanEndedEvent(
+                new PlanEndedEvent(memberId,
+                        todos.stream().map(Todo::getId).toList(),
+                        doneTodos.stream()
+                                .map(t -> new PlanEndedEvent.DoneTodo(t.getId(), t.getSpentTime()))
+                                .toList()
+                ));
 
-//        eventPublisher.publishEvent(new PlanEndedEvent(memberId, recentPlan));
+        recentPlan.updateIsCompleted(true);
     }
 
     @Transactional
     public void removePlan(Long memberId, Long planId) {
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+        Member currentMember = memberApi.getMember(memberId);
 
         if (currentMember.getStatus() != MemberStatus.MOVE) {
             throw new InvalidMemberStatusException(currentMember.getStatus().name());
@@ -202,11 +231,10 @@ public class PlanFacade {
         Plan planToDelete = planRepository.findById(planId)
                 .orElseThrow(() -> new PlanNotFoundException(planId));
 
-        if (!planToDelete.getMember().getId().equals(memberId)) {
+        if (!planToDelete.getMemberId().equals(memberId)) {
             throw new UnauthorizedPlanDeletionException(memberId, planId);
         }
-        currentMember.updateStatus(MemberStatus.STOP);
-
+        eventPublisher.publishPlanRemovedEvent(new PlanRemovedEvent(memberId));
         planRepository.delete(planToDelete);
     }
 
@@ -226,15 +254,26 @@ public class PlanFacade {
         return subPaths;
     }
 
-    /**
-     * Schedule에서 Todo를 가져와 첫번째 Paths에 모두 할당
-     */
-    private void assignTodosToPaths(Member member, List<SubPath> subPaths) {
-        SubPath assignedSubPath = subPaths.stream()
-                .filter(path -> path.getTrafficType()!= TrafficType.WALK)
-                .findFirst()
-                .orElse(null);
+    private Plan findRecentPlanWithTodos(Long memberId){
+        Plan recentPlan = planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId)
+                .orElseThrow(PlanNotFoundException::new);
 
-        eventPublisher.publishEvent(new PlanCreatedEvent(member.getId(), assignedSubPath != null ? assignedSubPath.getId(): null));
+        List<Long> subPathIds = recentPlan.getSubPaths().stream()
+                .map(SubPath::getId)
+                .toList();
+
+        List<Todo> todos = todoApi.getTodos(subPathIds);
+
+        recentPlan.assignTodos(todos);
+        assignTodosToSubPath(recentPlan.getSubPaths(), todos);
+
+        return recentPlan;
+    }
+
+    private void assignTodosToSubPath(List<SubPath> subPaths, List<Todo> todos) {
+        Map<Long, List<Todo>> subPathIdTodoMap = todos.stream()
+                .collect(Collectors.groupingBy(Todo::getSubPathId));
+
+        subPaths.forEach(path -> path.assignTodos(subPathIdTodoMap.get(path.getId())));
     }
 }

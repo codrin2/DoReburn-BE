@@ -3,8 +3,8 @@ package com.dubu.backend.todo.domain.repository;
 import com.dubu.backend.todo.core.dto.TodoCursor;
 import com.dubu.backend.todo.domain.dto.TodoChildExistenceInfo;
 import com.dubu.backend.todo.domain.dto.TodoInfo;
-import com.dubu.backend.todo.domain.repository.dto.TodoChildExistenceCond;
-import com.dubu.backend.todo.domain.repository.dto.TodoSearchCond;
+import com.dubu.backend.todo.domain.dto.TodoChildExistenceCond;
+import com.dubu.backend.todo.domain.dto.TodoSearchCond;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 

@@ -29,7 +29,7 @@ public record DailyStatisticsResult(
                 .feedbacks(feedbacks.stream().map(f -> new FeedbackInfo(f.getMood().name(), f.getMemo())).toList())
                 .categoryTodoCount(
                         stats.categoryCountMap().entrySet().stream()
-                                .map(e -> new CategoryTodoCount(e.getKey().getName(), e.getValue()))
+                                .map(e -> new CategoryTodoCount(e.getKey(), e.getValue()))
                                 .sorted(Comparator.comparing(CategoryTodoCount::todoCount).reversed()
                                         .thenComparing(CategoryTodoCount::category)
                                 )

@@ -1,6 +1,5 @@
 package com.dubu.backend.plan.domain.service;
 
-import com.dubu.backend.plan.domain.Category;
 import com.dubu.backend.plan.domain.Feedback;
 import com.dubu.backend.plan.domain.Plan;
 import com.dubu.backend.plan.domain.Todo;
@@ -23,7 +22,7 @@ public class StatisticsService {
     public DailyStats calculateDailyStats(List<Plan> plans){
         int totalTodoCount = 0;
         Duration totalUsageTime = Duration.ZERO;
-        Map<Category, Integer> categoryCountMap = new HashMap<>();
+        Map<String, Integer> categoryCountMap = new HashMap<>();
 
         for(Plan plan: plans){
             totalUsageTime = totalUsageTime.plusMinutes(plan.getTotalTime());
@@ -41,8 +40,8 @@ public class StatisticsService {
         int totalTodoCount = 0;
         Duration totalUsageTime = Duration.ZERO;
         Map<LocalDate, Duration> dayUsageTimeMap = IntStream.range(0, 7).boxed().collect(HashMap::new, (m, i) -> m.put(startDate.plusDays(i), Duration.ZERO), HashMap::putAll);
-        Map<Category, Integer> categoryCountMap = new HashMap<>();
-        Map<Category, Duration> categoryUsageTimeMap = new HashMap<>();
+        Map<String, Integer> categoryCountMap = new HashMap<>();
+        Map<String, Duration> categoryUsageTimeMap = new HashMap<>();
 
         for(Plan plan: thisWeekPlans){
             totalUsageTime = totalUsageTime.plusMinutes(plan.getTotalTime());
@@ -53,7 +52,7 @@ public class StatisticsService {
             totalTodoCount += todos.size();
             for(Todo todo: todos){
                 categoryCountMap.merge(todo.getCategory(), 1, Integer::sum);
-                categoryUsageTimeMap.merge(todo.getCategory(), Duration.ofMinutes(plan.getTotalTime()), Duration::plus);
+                categoryUsageTimeMap.merge(todo.getCategory(), Duration.ofMinutes(todo.getSpentTime()), Duration::plus);
             }
         }
 

@@ -8,6 +8,7 @@ import com.dubu.backend.todo.api.dto.response.TodoCommandResponse;
 import com.dubu.backend.todo.api.dto.response.TodoResponse;
 import com.dubu.backend.todo.application.TodoCommandFacade;
 import com.dubu.backend.todo.application.TodoQueryFacade;
+import com.dubu.backend.todo.application.dto.response.TodoItemResult;
 import com.dubu.backend.todo.application.dto.response.TomorrowTodoResult;
 import com.dubu.backend.todo.core.dto.TodoCursor;
 import com.dubu.backend.todo.application.dto.request.TodoFetchCommand;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.dubu.backend.todo.api.dto.mapper.TodoCommandMapper.*;
+import static com.dubu.backend.todo.api.dto.mapper.TodoResponseMapper.*;
 
 @RestController
 @RequestMapping("/todos")
@@ -50,8 +52,8 @@ public class TodoController implements TodoApi {
             case TOMORROW -> {
                 TomorrowTodoResult result = todoCommandFacade.createTomorrowTodo(memberId, type, toCommand(pathId, request));
                 if (result.isTomorrowScheduleCreated()) {
-                    List<TodoResult> todoResults = todoQueryFacade.findTodos(memberId, type, EditPageType.TOMORROW, TodoFetchCommand.empty());
-                    yield TodoCommandResponse.of(true, mapToResponse(todoResults));
+                    List<TodoItemResult> todoItemResults = todoQueryFacade.findTodo(memberId, type, EditPageType.TOMORROW, TodoFetchCommand.empty());
+                    yield TodoCommandResponse.of(true, mapTodoItemResultToResponse(todoItemResults));
                 }
                 yield TodoCommandResponse.of(false, TodoResponse.from(result.todoResult()));
             }
@@ -75,8 +77,8 @@ public class TodoController implements TodoApi {
             case TOMORROW -> {
                 TomorrowTodoResult result = todoCommandFacade.createTomorrowTodoFromArchive(memberId, type, toCommand(pathId, request));
                 if (result.isTomorrowScheduleCreated()) {
-                    List<TodoResult> todoResults = todoQueryFacade.findTodos(memberId, type, EditPageType.TOMORROW, TodoFetchCommand.empty());
-                    yield TodoCommandResponse.of(true, mapToResponse(todoResults));
+                    List<TodoItemResult> todoItemResults = todoQueryFacade.findTodo(memberId, type, EditPageType.TOMORROW, TodoFetchCommand.empty());
+                    yield TodoCommandResponse.of(true, mapTodoItemResultToResponse(todoItemResults));
                 }
                 yield TodoCommandResponse.of(false, TodoResponse.from(result.todoResult()));
             }
@@ -100,9 +102,9 @@ public class TodoController implements TodoApi {
             case TOMORROW ->  {
                 TomorrowTodoResult result = todoCommandFacade.updateTomorrowTodo(memberId, type, toCommand(todoId, request));
                 if(result.isTomorrowScheduleCreated()){
-                    List<TodoResult> todoResults = todoQueryFacade.findTodos(memberId, type, EditPageType.TOMORROW, TodoFetchCommand.empty());
+                    List<TodoItemResult> todoItemResults = todoQueryFacade.findTodo(memberId, type, EditPageType.TOMORROW, TodoFetchCommand.empty());
                     yield ResponseEntity.status(HttpStatus.CREATED)
-                            .body(TodoCommandResponse.of(true, mapToResponse(todoResults)));
+                            .body(TodoCommandResponse.of(true, mapTodoItemResultToResponse(todoItemResults)));
                 }
                 yield ResponseEntity.status(HttpStatus.OK)
                         .body(TodoCommandResponse.of(false, TodoResponse.from(result.todoResult())));
@@ -125,9 +127,9 @@ public class TodoController implements TodoApi {
             case TOMORROW -> {
                 TomorrowTodoResult result = todoCommandFacade.deleteTomorrowTodo(memberId, type, todoId);
                 if (result.isTomorrowScheduleCreated()) {
-                    List<TodoResult> todoResults = todoQueryFacade.findTodos(memberId, type, EditPageType.TOMORROW, TodoFetchCommand.empty());
+                    List<TodoItemResult> todoItemResults = todoQueryFacade.findTodo(memberId, type, EditPageType.TOMORROW, TodoFetchCommand.empty());
                     yield ResponseEntity.status(HttpStatus.CREATED)
-                            .body(TodoCommandResponse.of(true, mapToResponse(todoResults)));
+                            .body(TodoCommandResponse.of(true, mapTodoItemResultToResponse(todoItemResults)));
                 }
                 yield ResponseEntity.status(HttpStatus.OK)
                         .body(TodoCommandResponse.of(false, null));
@@ -143,9 +145,9 @@ public class TodoController implements TodoApi {
             @PathVariable("type") TodoRequestType type,
             @Nullable @RequestParam("pathId") Long subPathId
     ){
-        List<TodoResult> results = todoQueryFacade.findTodos(memberId, type, EditPageType.fromString(type.name()), TodoFetchCommand.of(subPathId));
+        List<TodoItemResult> results = todoQueryFacade.findTodo(memberId, type, EditPageType.fromString(type.name()), TodoFetchCommand.of(subPathId));
 
-        return SuccessResponse.of(mapToResponse(results));
+        return SuccessResponse.of(mapTodoItemResultToResponse(results));
     }
 
     @GetMapping("/recommend/personalized")
@@ -155,13 +157,13 @@ public class TodoController implements TodoApi {
         @RequestParam("modifyType") String editType,
         @Nullable @RequestParam("pathId") Long subPathId
     ){
-        List<TodoResult> results = todoQueryFacade.findTodos(
+        List<TodoItemResult> results = todoQueryFacade.findTodo(
                 memberId,
                 TodoRequestType.RECOMMEND,
                 EditPageType.fromString(editType),
                 TodoFetchCommand.of(subPathId));
 
-        return SuccessResponse.of(results);
+        return SuccessResponse.of(mapTodoItemResultToResponse(results));
     }
 
     @GetMapping("/favorite")
@@ -181,7 +183,7 @@ public class TodoController implements TodoApi {
 
         return PageResponse.of(result.hasNext(),
                 TodoCursorDto.from(result.cursor()),
-                mapToResponse(result.todoResults()));
+                mapTodoItemResultToResponse(result.todoItemResults()));
     }
 
     @GetMapping("/recommend/all")
@@ -203,7 +205,7 @@ public class TodoController implements TodoApi {
 
         return PageResponse.of(result.hasNext(),
                 TodoCursorDto.from(result.cursor()),
-                mapToResponse(result.todoResults()));
+                mapTodoItemResultToResponse(result.todoItemResults()));
     }
 
     @PatchMapping("/path")
@@ -224,12 +226,5 @@ public class TodoController implements TodoApi {
             @RequestBody TodoCompletionToggleRequest request
     ){
         todoCommandFacade.toggleCompletionOfTodo(memberId, todoId, request.isCompleted());
-    }
-
-
-    private List<TodoResponse> mapToResponse(List<TodoResult> results){
-        return results.stream()
-                .map(TodoResponse::from)
-                .toList();
     }
 }

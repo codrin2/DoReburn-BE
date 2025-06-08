@@ -78,6 +78,10 @@ public class Todo extends BaseTimeEntity {
         this.subPathId = subPathId;
     }
 
+    public void updateTodoType(TodoType type){ this.type = type;}
+
+    public void updateSpentTime(int time){ this.spentTime = time;}
+
     public void toggleCompletion(boolean isCompleted) {
         this.isCompleted = isCompleted;
     }

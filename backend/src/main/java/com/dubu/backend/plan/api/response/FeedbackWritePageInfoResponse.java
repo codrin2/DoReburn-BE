@@ -33,7 +33,7 @@ public record FeedbackWritePageInfoResponse(
     ) {
         public static FeedbackTodoResponse of(Todo todo) {
             return new FeedbackTodoResponse(
-                    todo.getCategory().getName(),
+                    todo.getCategory(),
                     todo.getTitle()
             );
         }

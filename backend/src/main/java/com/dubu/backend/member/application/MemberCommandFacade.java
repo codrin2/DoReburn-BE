@@ -1,14 +1,14 @@
 package com.dubu.backend.member.application;
 
 import com.dubu.backend.member.application.event.MovementCompletedEvent;
+import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.service.MemberInfoService;
-import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.member.api.request.MemberInfoUpdateRequest;
 import com.dubu.backend.member.api.request.MemberOnboardingRequest;
 import com.dubu.backend.member.api.response.MemberInfoResponse;
-import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
+import com.dubu.backend.member.core.exception.InvalidMemberStatusException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +41,7 @@ public class MemberCommandFacade {
     public void updateMemberStatus(Long memberId, String status) {
         Member currentMember = findExistingMember(memberRepository, memberId);
 
-        currentMember.updateStatus(Status.fromString(status));
+        currentMember.updateStatus(MemberStatus.fromString(status));
     }
 
     public void updateMemberStatusByPlanChange(MovementCompletedEvent event) {

@@ -9,13 +9,13 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
 
+import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.domain.model.Member;
-import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.enums.Role;
 import com.dubu.backend.member.domain.enums.OauthProvider;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.plan.domain.Plan;
-import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
+import com.dubu.backend.member.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.todo.domain.past.Category;
@@ -30,7 +30,6 @@ import com.dubu.backend.todo.core.exception.CategoryNotFoundException;
 import com.dubu.backend.todo.exception.TodoNotFoundException;
 import com.dubu.backend.todo.exception.TodoTypeMismatchException;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
-import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -54,7 +53,7 @@ class SaveTodoManagementServiceTest {
     private SaveTodoManagementService todoService;
 
     // 헬퍼: MemberEntity 생성 (SaveTodo의 경우, 회원 상태는 STOP 또는 MOVE여야 함)
-    private Member createMember(Long memberId, Status status) {
+    private Member createMember(Long memberId, MemberStatus status) {
         return Member.builder()
                 .id(memberId)
                 .nickname("testUser")
@@ -92,7 +91,7 @@ class SaveTodoManagementServiceTest {
         String categoryName = "READING";
         TodoCreateRequest request = new TodoCreateRequest("종이 책 읽기", categoryName, "EASY", "매일 30분 이상 독서");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Category category = createCategory(categoryName);
         // SaveTodo의 경우 Schedule은 사용하지 않으므로 null 전달
         Todo todo = request.toEntity(member, category, null, null, TodoType.SAVE);
@@ -128,7 +127,7 @@ class SaveTodoManagementServiceTest {
         TodoCreateRequest request = new TodoCreateRequest("종이 책 읽기", "READING", "EASY", "매일 30분 이상 독서");
 
         // ONBOARDING 상태는 허용되지 않음
-        Member member = createMember(memberId, Status.ONBOARDING);
+        Member member = createMember(memberId, MemberStatus.ONBOARDING);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         assertThrows(InvalidMemberStatusException.class, () -> todoService.createTodo(identifier, request));
     }
@@ -141,7 +140,7 @@ class SaveTodoManagementServiceTest {
         String categoryName = "READING";
         TodoCreateRequest request = new TodoCreateRequest("종이 책 읽기", categoryName, "EASY", "매일 30분 이상 독서");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(categoryRepository.findByName(categoryName)).thenReturn(Optional.empty());
         assertThrows(CategoryNotFoundException.class, () -> todoService.createTodo(identifier, request));
@@ -159,7 +158,7 @@ class SaveTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, parentTodoId, null);
         TodoCreateFromArchivedRequest request = new TodoCreateFromArchivedRequest(parentTodoId);
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         // 부모 todo (저장된 할 일) 생성
         Category category = createCategory("ARCHIVE");
         Todo parentTodo = Todo.builder()
@@ -196,7 +195,7 @@ class SaveTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, parentTodoId, null);
         TodoCreateFromArchivedRequest request = new TodoCreateFromArchivedRequest(parentTodoId);
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(todoRepository.findWithCategoryById(parentTodoId)).thenReturn(Optional.empty());
         assertThrows(TodoNotFoundException.class, () -> todoService.createTodoFromArchived(identifier, request));
@@ -210,7 +209,7 @@ class SaveTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, parentTodoId, null);
         TodoCreateFromArchivedRequest request = new TodoCreateFromArchivedRequest(parentTodoId);
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Category category = createCategory("ARCHIVE");
         Todo parentTodo = Todo.builder()
                 .id(parentTodoId)
@@ -245,7 +244,7 @@ class SaveTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
         TodoUpdateRequest request = new TodoUpdateRequest("새 제목", "NEW_CAT", "HARD", "새 메모");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Category oldCategory = createCategory("OLD_CAT");
         Todo todo = Todo.builder()
                 .id(todoId)
@@ -305,7 +304,7 @@ class SaveTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
         TodoUpdateRequest request = new TodoUpdateRequest("새 제목", "NEW_CAT", "HARD", "새 메모");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(todoRepository.findWithCategoryById(todoId)).thenReturn(Optional.empty());
         assertThrows(TodoNotFoundException.class, () -> todoService.modifyTodo(identifier, request));
@@ -319,7 +318,7 @@ class SaveTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
         TodoUpdateRequest request = new TodoUpdateRequest("새 제목", "NEW_CAT", "HARD", "새 메모");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         // 기존 todo의 타입이 SAVE가 아닌 경우
         Todo todo = Todo.builder()
                 .id(todoId)
@@ -341,7 +340,7 @@ class SaveTodoManagementServiceTest {
         // 수정 요청 시 업데이트할 카테고리 이름이 존재하지 않음
         TodoUpdateRequest request = new TodoUpdateRequest("새 제목", "NON_EXIST_CAT", "HARD", "새 메모");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Category oldCategory = createCategory("OLD_CAT");
         Todo todo = Todo.builder()
                 .id(todoId)
@@ -386,7 +385,7 @@ class SaveTodoManagementServiceTest {
         Long memberId = 1L;
         Long todoId = 200L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         // 삭제할 todo는 타입이 SAVE여야 함.
         Todo todo = Todo.builder()
                 .id(todoId)
@@ -433,7 +432,7 @@ class SaveTodoManagementServiceTest {
         Long memberId = 1L;
         Long todoId = 200L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(todoRepository.findById(todoId)).thenReturn(Optional.empty());
         assertThrows(TodoNotFoundException.class, () -> todoService.removeTodo(identifier));
@@ -445,7 +444,7 @@ class SaveTodoManagementServiceTest {
         Long memberId = 1L;
         Long todoId = 200L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         // 삭제할 todo 타입이 SAVE가 아닌 경우
         Todo todo = Todo.builder()
                 .id(todoId)

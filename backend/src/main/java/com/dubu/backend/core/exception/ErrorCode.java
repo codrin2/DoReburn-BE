@@ -64,7 +64,8 @@ public enum ErrorCode {
     MEMBER_CATEGORY_NOT_FOUND(NOT_FOUND, "회원의 카테고리 정보를 찾을 수 없습니다. memberId : %d"),
 
     // Todo
-    TODO_NOT_FOUND(NOT_FOUND, "해당 할 일이 존재하지 않습니다. todoId : %d"),
+    TODO_NOT_FOUND_WITH_ID(NOT_FOUND, "해당 할 일이 존재하지 않습니다. todoId : %d"),
+    TODO_NOT_FOUND(NOT_FOUND, "할 일이 존재하지 않습니다."),
     UNSUPPORTED_OPERATION_FOR_TODO_REQUEST_TYPE_EXCEPTION(BAD_REQUEST, "%s 타입에 대해서 지원하지 않은 기능입니다."),
 
     INVALID_TODO_DIFFICULTY(BAD_REQUEST, "유효하지 않을 할 일 난이도입니다. cursorDifficulty = %s"),

@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.domain.model.Member;
-import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.domain.SubPath;
 import com.dubu.backend.plan.domain.enums.TrafficType;
-import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
+import com.dubu.backend.member.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.core.exception.PathNotFoundException;
 import com.dubu.backend.plan.domain.repository.SubPathRepository;
 import com.dubu.backend.todo.domain.past.Category;
@@ -47,7 +47,7 @@ class SubPathTodoManagementServiceTest {
     private PathTodoManagementService service;
 
     // 헬퍼 메서드: MemberEntity 생성 (PathTodoManagementService는 회원 상태가 MOVE여야 함)
-    private Member createMember(Long memberId, Status status) {
+    private Member createMember(Long memberId, MemberStatus status) {
         return Member.builder()
                 .id(memberId)
                 .nickname("testUser")
@@ -108,7 +108,7 @@ class SubPathTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, pathId);
         TodoCreateRequest request = new TodoCreateRequest("할 일 제목", "CATEGORY", "EASY", "메모 내용");
 
-        Member member = createMember(memberId, Status.MOVE);
+        Member member = createMember(memberId, MemberStatus.MOVE);
         Category category = createCategory("CATEGORY");
         SubPath subPath = createPath(pathId);
         List<Todo> todosByPath = new ArrayList<>(); // 현재 등록된 할 일 없음
@@ -148,7 +148,7 @@ class SubPathTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, pathId);
         TodoCreateRequest request = new TodoCreateRequest("할 일 제목", "CATEGORY", "EASY", "메모 내용");
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         assertThrows(InvalidMemberStatusException.class, () -> service.createTodo(identifier, request));
     }
@@ -161,7 +161,7 @@ class SubPathTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, pathId);
         TodoCreateRequest request = new TodoCreateRequest("할 일 제목", "CATEGORY", "EASY", "메모 내용");
 
-        Member member = createMember(memberId, Status.MOVE);
+        Member member = createMember(memberId, MemberStatus.MOVE);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(subPathRepository.findById(pathId)).thenReturn(Optional.empty());
         assertThrows(PathNotFoundException.class, () -> service.createTodo(identifier, request));
@@ -175,7 +175,7 @@ class SubPathTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, pathId);
         TodoCreateRequest request = new TodoCreateRequest("할 일 제목", "CATEGORY", "EASY", "메모 내용");
 
-        Member member = createMember(memberId, Status.MOVE);
+        Member member = createMember(memberId, MemberStatus.MOVE);
         Category category = createCategory("CATEGORY");
         SubPath subPath = createPath(pathId);
         // 이미 10건의 할 일이 등록되어 있다고 가정
@@ -203,7 +203,7 @@ class SubPathTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, parentTodoId, pathId);
         TodoCreateFromArchivedRequest request = new TodoCreateFromArchivedRequest(parentTodoId);
 
-        Member member = createMember(memberId, Status.MOVE);
+        Member member = createMember(memberId, MemberStatus.MOVE);
         Category category = createCategory("ARCHIVE");
         SubPath subPath = createPath(pathId);
         // 부모 할 일
@@ -246,7 +246,7 @@ class SubPathTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, parentTodoId, pathId);
         TodoCreateFromArchivedRequest request = new TodoCreateFromArchivedRequest(parentTodoId);
 
-        Member member = createMember(memberId, Status.MOVE);
+        Member member = createMember(memberId, MemberStatus.MOVE);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(todoRepository.findWithCategoryById(parentTodoId)).thenReturn(Optional.empty());
         assertThrows(TodoNotFoundException.class, () -> service.createTodoFromArchived(identifier, request));
@@ -264,7 +264,7 @@ class SubPathTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
         TodoUpdateRequest request = new TodoUpdateRequest("수정 제목", "NEW_CAT", "HARD", "수정 메모");
 
-        Member member = createMember(memberId, Status.MOVE);
+        Member member = createMember(memberId, MemberStatus.MOVE);
         Category oldCategory = createCategory("OLD_CAT");
         Todo todo = Todo.builder()
                 .id(todoId)
@@ -304,7 +304,7 @@ class SubPathTodoManagementServiceTest {
         Long todoId = 400L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
 
-        Member member = createMember(memberId, Status.MOVE);
+        Member member = createMember(memberId, MemberStatus.MOVE);
         Todo todo = createTodo(todoId, member, createCategory("CAT"), createPath(10L), TodoType.IN_PROGRESS);
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
@@ -328,7 +328,7 @@ class SubPathTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
         TodoCompletionToggleRequest request = new TodoCompletionToggleRequest(true);
 
-        Member member = createMember(memberId, Status.MOVE);
+        Member member = createMember(memberId, MemberStatus.MOVE);
         Todo todo = createTodo(todoId, member, createCategory("CAT"), createPath(10L), TodoType.IN_PROGRESS);
         // 초기 완료 상태 false
         todo.updateCompletedStatus(false);
@@ -354,7 +354,7 @@ class SubPathTodoManagementServiceTest {
         TodoIdentifier identifier = new TodoIdentifier(memberId, todoId, null);
         TodoPathUpdateRequest request = new TodoPathUpdateRequest(newPathId);
 
-        Member member = createMember(memberId, Status.MOVE);
+        Member member = createMember(memberId, MemberStatus.MOVE);
         Todo todo = createTodo(todoId, member, createCategory("CAT"), createPath(10L), TodoType.IN_PROGRESS);
         SubPath newSubPath = createPath(newPathId);
 
