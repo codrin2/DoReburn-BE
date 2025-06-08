@@ -1,7 +1,6 @@
 package com.dubu.backend.todo.application.impl.share;
 
 import ch.hsr.geohash.GeoHash;
-import com.dubu.backend.member.domain.model.MemberLocation;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.model.TempMember;
 import com.dubu.backend.member.domain.repository.TempMemberRepository;
@@ -10,7 +9,6 @@ import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.todo.application.util.GeoSpatialUtils;
 import com.dubu.backend.todo.domain.past.Category;
 import com.dubu.backend.todo.dto.request.SurroundingMemberQueryRequest;
-import com.dubu.backend.todo.application.ShareService;
 import com.dubu.backend.todo.application.collection.share.MemberCategoryCollection;
 import com.dubu.backend.todo.dto.request.CategoryRankRequest;
 import com.dubu.backend.todo.dto.response.*;
@@ -30,7 +28,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class ShareServiceImpl implements ShareService {
+public class ShareServiceImpl{
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
     private final TodoRepository todoRepository;
@@ -40,28 +38,6 @@ public class ShareServiceImpl implements ShareService {
     private final TempMemberRepository tempMemberRepository;
     private static final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
-    @Override
-    @Transactional
-    public ShareInfo findSurroundingMembersInfo(Long memberId, SurroundingMemberQueryRequest request){
-        memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
-        List<Category> categories = categoryRepository.findAll();
-
-        List<MemberLocationInfo> memberLocationInfos = redisMemberLocationRepository.findMemberLocations(memberId, request);
-
-        if(memberLocationInfos == null || memberLocationInfos.isEmpty()){
-            return null;
-        }
-
-        List<MemberCategoryInfo> memberCategoryInfos = todoRepository.findTodoCountGroupByCategory(extractMemberIds(memberLocationInfos));
-
-        MemberCategoryCollection memberCategoryCollection = new MemberCategoryCollection(memberCategoryInfos);
-
-        redisMemberLocationRepository.saveMemberLocation(memberId, new MemberLocation(request.x_coordinate(), request.y_coordinate()));
-
-        return ShareInfo.of(MemberInfo.from(memberLocationInfos, memberCategoryCollection.getMemberCategoryMap()), CategoryRankInfo.from(memberCategoryCollection.getCategoryMemberCountMap()));
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public List<SurroundingMemberLocationInfo> findSurroundingTempMembers(Long memberId, SurroundingMemberQueryRequest request) {
         memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
@@ -85,7 +61,6 @@ public class ShareServiceImpl implements ShareService {
                 }).toList();
     }
 
-    @Override
     @Transactional(readOnly = true)
     public List<CategoryRankInfo> findCategoryRank(Long memberId, CategoryRankRequest request) {
         memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
@@ -98,12 +73,6 @@ public class ShareServiceImpl implements ShareService {
 //                 cellCategoryCountRepository.findByCellIds(geoHashes.stream().map(GeoHash::toBase32).toList());
 
         return CategoryRankInfo.from(categoryCountInfos);
-    }
-
-    private List<Long> extractMemberIds(List<MemberLocationInfo> memberLocationInfos) {
-        return memberLocationInfos.stream()
-                .map(MemberLocationInfo::memberId)
-                .toList();
     }
 
     private List<Long> extractTempMemberIds(List<TempMember> members) {
