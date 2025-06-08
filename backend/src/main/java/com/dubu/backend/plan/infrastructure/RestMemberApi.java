@@ -6,6 +6,7 @@ import com.dubu.backend.plan.application.api.MemberApi;
 
 import com.dubu.backend.plan.domain.Member;
 import com.dubu.backend.plan.infrastructure.response.MemberResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
@@ -16,6 +17,7 @@ import java.net.URI;
 import java.util.Objects;
 
 @Component("plan.restMemberApi")
+@Slf4j
 public class RestMemberApi implements MemberApi {
     private final RestClient restClient;
 
@@ -25,8 +27,14 @@ public class RestMemberApi implements MemberApi {
 
     @Override
     public Member getMember(Long memberId) {
+
+
         SuccessResponse<MemberResponse> response =  restClient.get()
-                .uri(URI.create("/internal/members"))
+                .uri(uriBuilder -> {
+                    URI uri = uriBuilder.path("/internal/members").build();
+                    log.info("uri: {}", uri.getPath());
+                    return uri;
+                })
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", TokenContext.getToken()))
                 .retrieve()
                 .body(new ParameterizedTypeReference<>(){});
