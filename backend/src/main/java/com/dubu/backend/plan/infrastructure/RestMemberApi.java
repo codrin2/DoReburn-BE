@@ -27,14 +27,8 @@ public class RestMemberApi implements MemberApi {
 
     @Override
     public Member getMember(Long memberId) {
-
-
         SuccessResponse<MemberResponse> response =  restClient.get()
-                .uri(uriBuilder -> {
-                    URI uri = uriBuilder.path("/internal/members").build();
-                    log.info("uri: {}", uri.getPath());
-                    return uri;
-                })
+                .uri(URI.create("/internal/members/"))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", TokenContext.getToken()))
                 .retrieve()
                 .body(new ParameterizedTypeReference<>(){});
