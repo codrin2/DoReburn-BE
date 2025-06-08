@@ -6,12 +6,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.Optional;
 
+import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.domain.model.Member;
-import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
 import com.dubu.backend.member.domain.repository.MemberRepository;
-import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
+import com.dubu.backend.member.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.todo.domain.past.Category;
 import com.dubu.backend.todo.domain.past.Todo;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;
@@ -47,7 +47,7 @@ class SaveTodoQueryServiceTest {
     private SaveTodoQueryService service;
 
     // 헬퍼 메서드: MemberEntity 생성
-    private Member createMember(Long memberId, Status status) {
+    private Member createMember(Long memberId, MemberStatus status) {
         return Member.builder()
                 .id(memberId)
                 .nickname("testUser")
@@ -87,7 +87,7 @@ class SaveTodoQueryServiceTest {
         SaveTodoQueryRequest request = new SaveTodoQueryRequest(5);
 
         // 회원 상태가 STOP (또는 MOVE)
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         // fake Slice 생성
@@ -132,7 +132,7 @@ class SaveTodoQueryServiceTest {
     void findSaveTodos_fail_invalidMemberStatus() {
         Long memberId = 1L;
         // ONBOARDING 상태
-        Member member = createMember(memberId, Status.ONBOARDING);
+        Member member = createMember(memberId, MemberStatus.ONBOARDING);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         SaveTodoQueryRequest request = new SaveTodoQueryRequest(5);
@@ -147,7 +147,7 @@ class SaveTodoQueryServiceTest {
     @DisplayName("findPersonalizedRecommendTodos 성공: 회원 상태 STOP/MOVE, 추천 할 일 목록 조회")
     void findPersonalizedRecommendTodos_success() {
         Long memberId = 1L;
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         // 카테고리 IDs
@@ -185,7 +185,7 @@ class SaveTodoQueryServiceTest {
     @DisplayName("findPersonalizedRecommendTodos 실패: 회원 상태가 ONBOARDING 또는 FEEDBACK이면 InvalidMemberStatusException 발생")
     void findPersonalizedRecommendTodos_fail_invalidMemberStatus() {
         Long memberId = 1L;
-        Member member = createMember(memberId, Status.ONBOARDING);
+        Member member = createMember(memberId, MemberStatus.ONBOARDING);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         assertThrows(InvalidMemberStatusException.class, () ->
@@ -199,7 +199,7 @@ class SaveTodoQueryServiceTest {
     @DisplayName("findAllRecommendTodos 성공: 회원 상태 STOP/MOVE, compositeCursor로 추천 할 일 페이지 반환")
     void findAllRecommendTodos_success() {
         Long memberId = 1L;
-        Member member = createMember(memberId, Status.MOVE); // MOVE도 가능
+        Member member = createMember(memberId, MemberStatus.MOVE); // MOVE도 가능
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         // 요청 DTO
@@ -262,7 +262,7 @@ class SaveTodoQueryServiceTest {
     @DisplayName("findAllRecommendTodos 실패: 회원 상태가 ONBOARDING, FEEDBACK이면 InvalidMemberStatusException 발생")
     void findAllRecommendTodos_fail_invalidMemberStatus() {
         Long memberId = 1L;
-        Member member = createMember(memberId, Status.ONBOARDING);
+        Member member = createMember(memberId, MemberStatus.ONBOARDING);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         RecommendTodoQueryRequest request = new RecommendTodoQueryRequest(List.of("READING"), List.of("EASY"), 5);
         Cursor cursor = Cursor.of(1L, TodoDifficulty.EASY, 10L);

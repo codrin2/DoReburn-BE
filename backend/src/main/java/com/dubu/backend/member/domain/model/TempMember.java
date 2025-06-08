@@ -1,9 +1,9 @@
 package com.dubu.backend.member.domain.model;
 
 import com.dubu.backend.core.domain.BaseTimeEntity;
+import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.domain.enums.OauthProvider;
 import com.dubu.backend.member.domain.enums.Role;
-import com.dubu.backend.member.domain.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -43,18 +43,10 @@ public class TempMember extends BaseTimeEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @ColumnDefault("'ONBOARDING'")
-    private Status status;
+    private MemberStatus status;
 
     @Column(columnDefinition = "POINT SRID 4326")
     private Point location;
-
-    public void updateNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void updateStatus(Status status) {
-        this.status = status;
-    }
 
     public void updateLocation(Point location){
         this.location = location;

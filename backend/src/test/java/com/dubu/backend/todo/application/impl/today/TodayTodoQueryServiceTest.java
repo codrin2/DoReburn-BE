@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.domain.model.Member;
-import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.member.domain.repository.MemberCategoryRepository;
 import com.dubu.backend.todo.domain.past.Category;
@@ -22,7 +22,6 @@ import com.dubu.backend.todo.dto.common.TodoIdentifier;
 import com.dubu.backend.todo.dto.response.TodoInfo;
 import com.dubu.backend.todo.dto.search.TodoSearchCond;
 import com.dubu.backend.todo.infra.repository.CategoryRepository;
-import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
 import com.dubu.backend.core.domain.PageResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -52,7 +51,7 @@ class TodayTodoQueryServiceTest {
     private TodayTodoQueryService service;
 
     // 헬퍼 메서드
-    private Member createMember(Long memberId, Status status) {
+    private Member createMember(Long memberId, MemberStatus status) {
         return Member.builder()
                 .id(memberId)
                 .nickname("testUser")
@@ -92,7 +91,7 @@ class TodayTodoQueryServiceTest {
     void findTargetTodos_success_existingSchedule() {
         Long memberId = 1L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, null);
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Schedule todaySchedule = createSchedule(LocalDate.now(), member);
         Category category = createCategory("READING");
 
@@ -160,7 +159,7 @@ class TodayTodoQueryServiceTest {
         Long memberId = 1L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, null);
         SaveTodoQueryRequest request = new SaveTodoQueryRequest(5);
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Schedule todaySchedule = createSchedule(LocalDate.now(), member);
 
         // stubbing: 회원, 스케줄 조회
@@ -196,7 +195,7 @@ class TodayTodoQueryServiceTest {
     void findPersonalizedRecommendTodos_success() {
         Long memberId = 1L;
         TodoIdentifier identifier = new TodoIdentifier(memberId, null, null);
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Schedule todaySchedule = createSchedule(LocalDate.now(), member);
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
@@ -233,7 +232,7 @@ class TodayTodoQueryServiceTest {
                 5                   // 페이지 크기
         );
 
-        Member member = createMember(memberId, Status.STOP);
+        Member member = createMember(memberId, MemberStatus.STOP);
         Schedule todaySchedule = createSchedule(LocalDate.now(), member);
 
         // stubbing: 회원 및 스케줄 조회

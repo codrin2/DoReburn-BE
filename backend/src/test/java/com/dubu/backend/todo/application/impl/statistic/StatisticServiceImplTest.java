@@ -14,7 +14,7 @@ import java.util.Optional;
 import com.dubu.backend.member.domain.enums.OauthProvider;
 import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.enums.Role;
-import com.dubu.backend.member.domain.enums.Status;
+import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.plan.domain.Feedback;
@@ -83,7 +83,7 @@ class StatisticServiceImplTest {
                 .oauthProvider(OauthProvider.KAKAO)
                 .oauthProviderId("some-oauth-id")
                 .role(Role.USER)
-                .status(Status.ONBOARDING)
+                .status(MemberStatus.ONBOARDING)
                 .build();
 
         // 2) spy()를 사용해 부분 모킹
@@ -145,7 +145,7 @@ class StatisticServiceImplTest {
                 .oauthProvider(OauthProvider.KAKAO)
                 .oauthProviderId("oauth_id_123")
                 .role(Role.USER)
-                .status(Status.ONBOARDING)
+                .status(MemberStatus.ONBOARDING)
                 .build();
         ReflectionTestUtils.setField(member, "id", memberId);
         ReflectionTestUtils.setField(member, "createdAt", LocalDateTime.of(2023, 5, 1, 0, 0));
@@ -188,7 +188,7 @@ class StatisticServiceImplTest {
                 .oauthProvider(OauthProvider.KAKAO)
                 .oauthProviderId("oauth_id_week")
                 .role(Role.USER)
-                .status(Status.ONBOARDING)
+                .status(MemberStatus.ONBOARDING)
                 .build();
         ReflectionTestUtils.setField(member, "id", 1L);
         ReflectionTestUtils.setField(member, "createdAt", LocalDateTime.of(2023, 4, 27, 0, 0));
@@ -264,7 +264,7 @@ class StatisticServiceImplTest {
                 .oauthProvider(OauthProvider.KAKAO)
                 .oauthProviderId("oauth123")
                 .role(Role.USER)
-                .status(Status.ONBOARDING)
+                .status(MemberStatus.ONBOARDING)
                 .build();
         ReflectionTestUtils.setField(member, "id", memberId);
         ReflectionTestUtils.setField(member, "createdAt", LocalDateTime.of(2023, 5, 1, 0, 0));
