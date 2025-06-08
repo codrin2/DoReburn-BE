@@ -1,4 +1,4 @@
-package com.dubu.backend.plan.application.event;
+package com.dubu.backend.core.domain.event;
 
 public record PlanCreatedEvent(
         Long memberId,
