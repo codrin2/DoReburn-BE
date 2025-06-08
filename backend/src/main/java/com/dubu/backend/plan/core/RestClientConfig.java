@@ -14,8 +14,6 @@ public class RestClientConfig {
 
     @Bean("plan.restClient")
     public RestClient restClient(){
-        log.info("Local URL: {}", LOCAL_URL);
-
         return RestClient.builder()
                 .baseUrl(LOCAL_URL)
                 .build();
