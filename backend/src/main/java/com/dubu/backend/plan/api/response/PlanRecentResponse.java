@@ -65,8 +65,8 @@ public record PlanRecentResponse(
                     todo.getId(),
                     todo.getIsCompleted() == Boolean.TRUE,
                     todo.getTitle(),
-                    todo.getCategory().getName(),
-                    todo.getDifficulty().name(),
+                    todo.getCategory(),
+                    todo.getDifficulty(),
                     todo.getMemo()
             );
         }
