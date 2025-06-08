@@ -26,7 +26,7 @@ public class RestMemberApi implements MemberApi {
     @Override
     public MemberStatus getMemberStatus(Long memberId) {
         SuccessResponse<MemberStatusResponse> response = restClient.get()
-                .uri(URI.create("/members/status"))
+                .uri("/members/status")
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", TokenContext.getToken()))
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {

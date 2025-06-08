@@ -27,7 +27,7 @@ public class RestMemberApi implements MemberApi {
     @Override
     public SurroundingMember getSurroundingMember(Long memberId) {
         SuccessResponse<MemberNicknameResponse> response = restClient.get()
-                .uri(URI.create("/internal/members/nickname"))
+                .uri("/internal/members/nickname")
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", TokenContext.getToken()))
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {
