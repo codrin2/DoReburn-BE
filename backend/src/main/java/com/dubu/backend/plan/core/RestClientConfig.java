@@ -10,7 +10,7 @@ public class RestClientConfig {
     @Value("${api.local-url}")
     private String LOCAL_URL;
 
-    @Value("${server.servlet.contextPath}")
+    @Value("${server.servlet.context-path}")
     private String CONTEXT_PATH;
 
     @Bean("plan.restClient")
