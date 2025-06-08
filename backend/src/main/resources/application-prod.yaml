@@ -87,6 +87,7 @@ firebase:
 
 api:
   base-url: ${PROD_SERVER_URL}
+  local-url: ${LOCAL_SERVER_URL}
 
 management:
   endpoints:
