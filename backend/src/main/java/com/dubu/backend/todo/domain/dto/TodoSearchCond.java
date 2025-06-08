@@ -1,4 +1,4 @@
-package com.dubu.backend.todo.domain.repository.dto;
+package com.dubu.backend.todo.domain.dto;
 
 import com.dubu.backend.todo.domain.Category;
 import com.dubu.backend.todo.domain.enums.TodoDifficulty;

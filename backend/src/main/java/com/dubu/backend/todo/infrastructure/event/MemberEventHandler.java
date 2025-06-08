@@ -1,4 +1,4 @@
-package com.dubu.backend.todo.infrastructure;
+package com.dubu.backend.todo.infrastructure.event;
 
 import com.dubu.backend.member.application.event.MemberCreatedEvent;
 import com.dubu.backend.todo.application.TodoInitFacade;
@@ -9,7 +9,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
-public class MemberCreatedEventHandler {
+public class MemberEventHandler {
     private final TodoInitFacade todoInitFacade;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

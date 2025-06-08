@@ -1,6 +1,5 @@
-package com.dubu.backend.todo.domain.repository.dto;
+package com.dubu.backend.todo.domain.dto;
 
-import com.dubu.backend.todo.domain.Member;
 import com.dubu.backend.todo.domain.Schedule;
 import com.dubu.backend.todo.domain.enums.TodoType;
 import lombok.Builder;
@@ -12,10 +11,9 @@ public record TodoChildExistenceCond(
         Long scheduleId,
         Long subPathId
 ) {
-
-    public static TodoChildExistenceCond of(Member member){
+    public static TodoChildExistenceCond of(Long memberId, TodoType type){
         return TodoChildExistenceCond.builder()
-                .memberId(member.getId())
+                .memberId(memberId)
                 .type(TodoType.FAVORITE)
                 .build();
     }

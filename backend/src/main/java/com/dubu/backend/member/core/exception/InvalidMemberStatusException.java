@@ -1,4 +1,4 @@
-package com.dubu.backend.plan.core.exception;
+package com.dubu.backend.member.core.exception;
 
 import com.dubu.backend.core.exception.BadRequestException;
 
