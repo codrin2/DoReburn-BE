@@ -24,11 +24,12 @@ public class InternalPlanQueryApi implements PlanQueryApi {
     }
 
     private List<Category> extractCategory(RecentPlanTodosResponse response){
-        return response.todos()
-                .stream()
-                .map(t -> new Category(t.getCategory().getId()))
-                .distinct()
-                .sorted(Comparator.comparing(Category::id))
-                .toList();
+//        return response.todos()
+//                .stream()
+//                .map(t -> new Category(t.getCategory().id()))
+//                .distinct()
+//                .sorted(Comparator.comparing(Category::id))
+//                .toList();
+        return null;
     }
 }
