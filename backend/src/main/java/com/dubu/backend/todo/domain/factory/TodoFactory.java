@@ -13,12 +13,12 @@ import static com.dubu.backend.todo.domain.enums.TodoType.*;
 public class TodoFactory {
     private final TodoValidationService todoValidationService;
 
-    public Todo createScheduleTodo(Member member, Schedule schedule, String title, Category category, TodoDifficulty difficulty, String memo){
+    public Todo createScheduleTodo(Long memberId, Schedule schedule, String title, Category category, TodoDifficulty difficulty, String memo){
         todoValidationService.validateScheduleTodoCount(schedule);
 
         return Todo.builder()
                 .type(SCHEDULED)
-                .memberId(member.getId())
+                .memberId(memberId)
                 .scheduleId(schedule.getId())
                 .category(category)
                 .title(title)
@@ -27,13 +27,13 @@ public class TodoFactory {
                 .build();
     }
 
-    public Todo createScheduleTodoFromParent(Member member, Schedule schedule, Todo parentTodo){
+    public Todo createScheduleTodoFromParent(Long memberId, Schedule schedule, Todo parentTodo){
         todoValidationService.validateDuplicateScheduleTodoFromParent(schedule, parentTodo);
         todoValidationService.validateScheduleTodoCount(schedule);
 
         return Todo.builder()
                 .type(SCHEDULED)
-                .memberId(member.getId())
+                .memberId(memberId)
                 .scheduleId(schedule.getId())
                 .parentInfo(new ParentInfo(parentTodo.getId(), parentTodo.getVersion()))
                 .category(parentTodo.getCategory())
@@ -43,10 +43,10 @@ public class TodoFactory {
                 .build();
     }
 
-    public Todo createFavoriteTodo(Member member, String title, Category category, TodoDifficulty difficulty, String memo){
+    public Todo createFavoriteTodo(Long memberId, String title, Category category, TodoDifficulty difficulty, String memo){
         return Todo.builder()
                 .type(FAVORITE)
-                .memberId(member.getId())
+                .memberId(memberId)
                 .category(category)
                 .title(title)
                 .difficulty(difficulty)
@@ -54,12 +54,12 @@ public class TodoFactory {
                 .build();
     }
 
-    public Todo createFavoriteTodoFromParent(Member member, Todo parentTodo){
-        todoValidationService.validateDuplicateFavoriteTodoFromParent(member, parentTodo);
+    public Todo createFavoriteTodoFromParent(Long memberId, Todo parentTodo){
+        todoValidationService.validateDuplicateFavoriteTodoFromParent(memberId, parentTodo);
 
         return Todo.builder()
                 .type(FAVORITE)
-                .memberId(member.getId())
+                .memberId(memberId)
                 .parentInfo(new ParentInfo(parentTodo.getId(), parentTodo.getVersion()))
                 .category(parentTodo.getCategory())
                 .title(parentTodo.getTitle())
@@ -68,12 +68,12 @@ public class TodoFactory {
                 .build();
     }
 
-    public Todo createPathTodo(Member member, Long subPathId, String title, Category category, TodoDifficulty difficulty, String memo){
+    public Todo createPathTodo(Long memberId, Long subPathId, String title, Category category, TodoDifficulty difficulty, String memo){
         todoValidationService.validatePathTodoCount(subPathId);
 
         return Todo.builder()
                 .type(IN_PROGRESS)
-                .memberId(member.getId())
+                .memberId(memberId)
                 .subPathId(subPathId)
                 .category(category)
                 .title(title)
@@ -82,12 +82,12 @@ public class TodoFactory {
                 .build();
     }
 
-    public Todo createPathTodoFromParent(Member member, Long subPathId, Todo parentTodo){
+    public Todo createPathTodoFromParent(Long memberId, Long subPathId, Todo parentTodo){
         todoValidationService.validateDuplicatePathTodoFromParent(subPathId, parentTodo);
 
         return Todo.builder()
                 .type(IN_PROGRESS)
-                .memberId(member.getId())
+                .memberId(memberId)
                 .subPathId(subPathId)
                 .parentInfo(new ParentInfo(parentTodo.getId(), parentTodo.getVersion()))
                 .category(parentTodo.getCategory())
@@ -97,10 +97,10 @@ public class TodoFactory {
                 .build();
     }
 
-    public Todo createScheduleTodoFromOrigin(Member member, Schedule schedule, Todo originTodo) {
+    public Todo createScheduleTodoFromOrigin(Long memberId, Schedule schedule, Todo originTodo) {
         return Todo.builder()
                 .type(SCHEDULED)
-                .memberId(member.getId())
+                .memberId(memberId)
                 .scheduleId(schedule.getId())
                 .parentInfo(originTodo.getParentInfo())
                 .title(originTodo.getTitle())
@@ -110,10 +110,10 @@ public class TodoFactory {
                 .build();
     }
 
-    public Todo createPathTodoFromOrigin(Member member, Long subPathId, Todo originTodo) {
+    public Todo createPathTodoFromOrigin(Long memberId, Long subPathId, Todo originTodo) {
         return Todo.builder()
                 .type(IN_PROGRESS)
-                .memberId(member.getId())
+                .memberId(memberId)
                 .subPathId(subPathId)
                 .parentInfo(originTodo.getParentInfo())
                 .title(originTodo.getTitle())

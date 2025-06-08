@@ -1,7 +1,7 @@
 package com.dubu.backend.plan.application;
 
+import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.domain.model.Member;
-import com.dubu.backend.member.domain.enums.Status;
 import com.dubu.backend.member.core.exception.MemberNotFoundException;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import com.dubu.backend.notification.application.WebPushService;
@@ -13,7 +13,7 @@ import com.dubu.backend.plan.api.request.PlanCreateRequest;
 import com.dubu.backend.plan.api.request.PlanFeedbackCreateRequest;
 import com.dubu.backend.plan.api.response.FeedbackWritePageInfoResponse;
 import com.dubu.backend.plan.api.response.PlanRecentResponse;
-import com.dubu.backend.plan.core.exception.InvalidMemberStatusException;
+import com.dubu.backend.member.core.exception.InvalidMemberStatusException;
 import com.dubu.backend.plan.core.exception.PlanNotFoundException;
 import com.dubu.backend.plan.core.exception.UnauthorizedPlanDeletionException;
 import com.dubu.backend.plan.domain.repository.FeedbackRepository;
@@ -22,7 +22,6 @@ import com.dubu.backend.plan.domain.repository.PlanRepository;
 import com.dubu.backend.todo.domain.past.Schedule;
 import com.dubu.backend.todo.domain.past.Todo;
 import com.dubu.backend.todo.domain.enums.TodoType;
-import com.dubu.backend.todo.infra.repository.ScheduleRepository;
 import com.dubu.backend.todo.infra.repository.TodoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -84,7 +83,7 @@ class PlanFacadeTest {
             Long memberId = 1L;
             Member mockMember = mock(Member.class);
             given(memberRepository.findById(memberId)).willReturn(Optional.of(mockMember));
-            given(mockMember.getStatus()).willReturn(Status.STOP);
+            given(mockMember.getStatus()).willReturn(MemberStatus.STOP);
 
             // 스케줄이 없으면 ScheduleNotFoundException 발생하므로 Mock 처리
             Schedule mockSchedule = mock(Schedule.class);
@@ -110,7 +109,7 @@ class PlanFacadeTest {
             assertThat(result).isNotNull();
             assertThat(result).isEqualTo(12345L);
             verify(memberRepository).findById(memberId);
-            verify(mockMember).updateStatus(Status.MOVE);
+            verify(mockMember).updateStatus(MemberStatus.MOVE);
             verify(planRepository).save(any(Plan.class));
             verify(webPushService).sendPushAndMemberStatusChange(eq(memberId), any(Plan.class));
         }
@@ -122,7 +121,7 @@ class PlanFacadeTest {
             Long memberId = 1L;
             Member mockMember = mock(Member.class);
             given(memberRepository.findById(memberId)).willReturn(Optional.of(mockMember));
-            given(mockMember.getStatus()).willReturn(Status.MOVE);
+            given(mockMember.getStatus()).willReturn(MemberStatus.MOVE);
 
             PlanCreateRequest request = new PlanCreateRequest(
                     50, 40, List.of()
@@ -167,7 +166,7 @@ class PlanFacadeTest {
             Member mockMember = mock(Member.class);
             Plan mockPlan = mock(Plan.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
-            when(mockMember.getStatus()).thenReturn(Status.FEEDBACK);
+            when(mockMember.getStatus()).thenReturn(MemberStatus.FEEDBACK);
             when(planRepository.findById(planId)).thenReturn(Optional.of(mockPlan));
             when(mockPlan.getMember()).thenReturn(mockMember);
             when(mockMember.getId()).thenReturn(memberId);
@@ -187,7 +186,7 @@ class PlanFacadeTest {
 
                 // then
                 assertThat(feedbackId).isEqualTo(999L);
-                verify(mockMember).updateStatus(Status.STOP);
+                verify(mockMember).updateStatus(MemberStatus.STOP);
             }
         }
 
@@ -199,7 +198,7 @@ class PlanFacadeTest {
             Long planId = 10L;
             Member mockMember = mock(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
-            when(mockMember.getStatus()).thenReturn(Status.MOVE);
+            when(mockMember.getStatus()).thenReturn(MemberStatus.MOVE);
 
             PlanFeedbackCreateRequest request = new PlanFeedbackCreateRequest("SATISFIED", "좋았어요!");
 
@@ -216,7 +215,7 @@ class PlanFacadeTest {
             Long planId = 9999L;
             Member mockMember = mock(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
-            when(mockMember.getStatus()).thenReturn(Status.FEEDBACK);
+            when(mockMember.getStatus()).thenReturn(MemberStatus.FEEDBACK);
 
             when(planRepository.findById(planId)).thenReturn(Optional.empty());
 
@@ -235,7 +234,7 @@ class PlanFacadeTest {
             Long planId = 10L;
             Member mockMember = mock(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
-            when(mockMember.getStatus()).thenReturn(Status.FEEDBACK);
+            when(mockMember.getStatus()).thenReturn(MemberStatus.FEEDBACK);
 
             Plan mockPlan = mock(Plan.class);
             when(planRepository.findById(planId)).thenReturn(Optional.of(mockPlan));
@@ -329,7 +328,7 @@ class PlanFacadeTest {
             Long memberId = 1L;
             Member mockMember = mock(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
-            when(mockMember.getStatus()).thenReturn(Status.FEEDBACK);
+            when(mockMember.getStatus()).thenReturn(MemberStatus.FEEDBACK);
 
             Plan mockPlan = mock(Plan.class);
             when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId))
@@ -351,7 +350,7 @@ class PlanFacadeTest {
             Long memberId = 1L;
             Member mockMember = mock(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
-            when(mockMember.getStatus()).thenReturn(Status.MOVE);
+            when(mockMember.getStatus()).thenReturn(MemberStatus.MOVE);
 
             // when & then
             assertThatThrownBy(() -> planFacade.findFeedbackWritePageInfo(memberId))
@@ -365,7 +364,7 @@ class PlanFacadeTest {
             Long memberId = 1L;
             Member mockMember = mock(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
-            when(mockMember.getStatus()).thenReturn(Status.FEEDBACK);
+            when(mockMember.getStatus()).thenReturn(MemberStatus.FEEDBACK);
 
             when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId))
                     .thenReturn(Optional.empty());
@@ -390,7 +389,7 @@ class PlanFacadeTest {
             Long memberId = 1L;
             Member mockMember = mock(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
-            when(mockMember.getStatus()).thenReturn(Status.MOVE);
+            when(mockMember.getStatus()).thenReturn(MemberStatus.MOVE);
 
             Plan mockPlan = mock(Plan.class);
             when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId))
@@ -413,7 +412,7 @@ class PlanFacadeTest {
             planFacade.completeMove(memberId);
 
             // then
-            verify(mockMember).updateStatus(Status.FEEDBACK);
+            verify(mockMember).updateStatus(MemberStatus.FEEDBACK);
             verify(mockPlan).updateIsCompleted(true);
             verify(todo1).updateSpentTime(20);
             verify(todo2).updateSpentTime(20);
@@ -427,7 +426,7 @@ class PlanFacadeTest {
             Long memberId = 1L;
             Member mockMember = mock(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
-            when(mockMember.getStatus()).thenReturn(Status.STOP);
+            when(mockMember.getStatus()).thenReturn(MemberStatus.STOP);
 
             assertThatThrownBy(() -> planFacade.completeMove(memberId))
                     .isInstanceOf(InvalidMemberStatusException.class);
@@ -439,7 +438,7 @@ class PlanFacadeTest {
             Long memberId = 1L;
             Member mockMember = mock(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
-            when(mockMember.getStatus()).thenReturn(Status.MOVE);
+            when(mockMember.getStatus()).thenReturn(MemberStatus.MOVE);
 
             when(planRepository.findTopByMemberIdOrderByCreatedAtDesc(memberId))
                     .thenReturn(Optional.empty());
@@ -465,7 +464,7 @@ class PlanFacadeTest {
 
             Member mockMember = mock(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
-            when(mockMember.getStatus()).thenReturn(Status.MOVE);
+            when(mockMember.getStatus()).thenReturn(MemberStatus.MOVE);
 
             Plan mockPlan = mock(Plan.class);
             when(planRepository.findById(planId)).thenReturn(Optional.of(mockPlan));
@@ -478,7 +477,7 @@ class PlanFacadeTest {
 
             // then
             verify(planRepository).delete(mockPlan);
-            verify(mockMember).updateStatus(Status.STOP);
+            verify(mockMember).updateStatus(MemberStatus.STOP);
         }
 
         @Test
@@ -489,7 +488,7 @@ class PlanFacadeTest {
 
             Member mockMember = mock(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
-            when(mockMember.getStatus()).thenReturn(Status.STOP);
+            when(mockMember.getStatus()).thenReturn(MemberStatus.STOP);
 
             assertThatThrownBy(() -> planFacade.removePlan(memberId, planId))
                     .isInstanceOf(InvalidMemberStatusException.class);
@@ -503,7 +502,7 @@ class PlanFacadeTest {
 
             Member mockMember = mock(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
-            when(mockMember.getStatus()).thenReturn(Status.MOVE);
+            when(mockMember.getStatus()).thenReturn(MemberStatus.MOVE);
 
             when(planRepository.findById(planId)).thenReturn(Optional.empty());
 
@@ -519,7 +518,7 @@ class PlanFacadeTest {
 
             Member mockMember = mock(Member.class);
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
-            when(mockMember.getStatus()).thenReturn(Status.MOVE);
+            when(mockMember.getStatus()).thenReturn(MemberStatus.MOVE);
             when(mockMember.getId()).thenReturn(memberId);
 
             Plan mockPlan = mock(Plan.class);

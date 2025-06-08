@@ -2,7 +2,6 @@ package com.dubu.backend.todo.application;
 
 import com.dubu.backend.todo.api.dto.request.TodoRequestType;
 import com.dubu.backend.todo.core.exception.InvalidMemberStatusException;
-import com.dubu.backend.todo.domain.Member;
 import com.dubu.backend.todo.domain.enums.MemberStatus;
 import org.springframework.stereotype.Component;
 
@@ -20,10 +19,9 @@ public class TodoQueryPermissionValidator {
         );
     }
 
-    public void validate(Member member, TodoRequestType type){
-        MemberStatus status = member.getStatus();
+    public void validate(MemberStatus status, TodoRequestType type){
         if(!accessibleRequestMap.getOrDefault(status, Set.of()).contains(type)){
-            throw new InvalidMemberStatusException(member.getStatus().name());
+            throw new InvalidMemberStatusException(status.name());
         }
     }
 }

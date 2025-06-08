@@ -1,6 +1,5 @@
 package com.dubu.backend.todo.domain.service;
 
-import com.dubu.backend.todo.domain.Member;
 import com.dubu.backend.todo.domain.Schedule;
 import com.dubu.backend.todo.domain.Todo;
 import com.dubu.backend.todo.domain.enums.TodoType;
@@ -32,8 +31,8 @@ public class TodoValidationService {
         }
     }
 
-    public void validateDuplicateFavoriteTodoFromParent(Member member, Todo parentTodo){
-        if(todoRepository.existsByMemberIdAndParentInfoParentIdAndType(member.getId(), parentTodo.getId(), TodoType.FAVORITE)){
+    public void validateDuplicateFavoriteTodoFromParent(Long memberId, Todo parentTodo){
+        if(todoRepository.existsByMemberIdAndParentInfoParentIdAndType(memberId, parentTodo.getId(), TodoType.FAVORITE)){
             throw new AlreadyAddedTodoFromArchiveException();
         }
     }
