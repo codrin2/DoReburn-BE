@@ -7,10 +7,10 @@ import java.util.List;
 public record TodoPageResult(
         Boolean hasNext,
         TodoCursor cursor,
-        List<TodoResult> todoResults
+        List<TodoItemResult> todoItemResults
 ) {
-    public static TodoPageResult of(Boolean hasNext, TodoCursor cursor, List<TodoResult> todoResults) {
+    public static TodoPageResult of(Boolean hasNext, TodoCursor cursor, List<TodoItemResult> todoItemResults) {
 
-        return new TodoPageResult(hasNext, cursor, todoResults);
+        return new TodoPageResult(hasNext, cursor, todoItemResults);
     }
 }
