@@ -16,7 +16,7 @@ public class RestClientConfig {
     @Bean("plan.restClient")
     public RestClient restClient(){
         return RestClient.builder()
-                .baseUrl(LOCAL_URL + CONTEXT_PATH)
+                .baseUrl(LOCAL_URL)
                 .build();
     }
 }
