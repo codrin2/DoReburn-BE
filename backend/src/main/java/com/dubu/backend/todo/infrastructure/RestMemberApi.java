@@ -40,7 +40,7 @@ public class RestMemberApi implements MemberApi {
     @Override
     public List<String> getMemberCategories(Long memberId) {
         SuccessResponse<List<String>> response = restClient.get()
-                .uri(URI.create("/members/category"))
+                .uri("/members/category")
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", TokenContext.getToken()))
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
