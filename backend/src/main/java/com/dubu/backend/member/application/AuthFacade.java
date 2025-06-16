@@ -1,7 +1,6 @@
 package com.dubu.backend.member.application;
 
 import com.dubu.backend.member.application.api.OauthApi;
-import com.dubu.backend.member.application.event.MemberCreatedEvent;
 import com.dubu.backend.member.domain.enums.OauthProvider;
 import com.dubu.backend.member.api.response.AccessToken;
 import com.dubu.backend.member.api.response.UserInfo;
@@ -10,7 +9,6 @@ import com.dubu.backend.member.domain.model.Member;
 import com.dubu.backend.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +19,6 @@ public class AuthFacade {
     private final OauthApi oauthApi;
     private final TokenFacade tokenFacade;
     private final MemberRepository memberRepository;
-    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public Token kakaoLogin(String code) {
@@ -52,8 +49,6 @@ public class AuthFacade {
                 OauthProvider.KAKAO,
                 userInfo.oauthProviderId()
         );
-
-        eventPublisher.publishEvent(new MemberCreatedEvent(newMember.getId()));
         return memberRepository.save(newMember);
     }
 }

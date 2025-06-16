@@ -1,5 +1,6 @@
 package com.dubu.backend.member.application;
 
+import com.dubu.backend.member.application.event.MemberOnboardingEndedEvent;
 import com.dubu.backend.member.application.event.MovementCompletedEvent;
 import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.domain.model.Member;
@@ -10,6 +11,7 @@ import com.dubu.backend.member.api.request.MemberOnboardingRequest;
 import com.dubu.backend.member.api.response.MemberInfoResponse;
 import com.dubu.backend.member.core.exception.InvalidMemberStatusException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,8 @@ public class MemberCommandFacade {
     private final MemberRepository memberRepository;
     private final MemberInfoService memberInfoService;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     public void completeOnboarding(Long memberId, MemberOnboardingRequest request) {
         Member currentMember = findExistingMember(memberRepository, memberId);
 
@@ -30,6 +34,7 @@ public class MemberCommandFacade {
         }
 
         memberInfoService.completeOnboarding(currentMember, request);
+        eventPublisher.publishEvent(new MemberOnboardingEndedEvent(currentMember.getId()));
     }
 
     public MemberInfoResponse updateMemberInfo(Long memberId, MemberInfoUpdateRequest request) {
