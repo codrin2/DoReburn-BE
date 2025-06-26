@@ -1,6 +1,7 @@
 package com.dubu.backend.member.api;
 
 import com.dubu.backend.core.domain.SuccessResponse;
+import com.dubu.backend.member.api.swagger.AddressSwagger;
 import com.dubu.backend.member.application.AddressFacade;
 import com.dubu.backend.member.api.response.AddressSearchResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/places")
-public class AddressController implements AddressApi {
+public class AddressController implements AddressSwagger {
     private final AddressFacade addressFacade;
 
     @GetMapping("/search")

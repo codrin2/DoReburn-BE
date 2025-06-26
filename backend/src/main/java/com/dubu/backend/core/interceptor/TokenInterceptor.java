@@ -2,7 +2,8 @@ package com.dubu.backend.core.interceptor;
 
 import com.dubu.backend.core.interceptor.context.TokenContext;
 import com.dubu.backend.member.application.TokenFacade;
-import com.dubu.backend.member.domain.repository.MemberRepository;
+import com.dubu.backend.member.core.exception.InvalidTokenHeaderException;
+import com.dubu.backend.member.core.exception.TokenMissingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,14 +15,15 @@ import org.springframework.web.servlet.ModelAndView;
 @Component
 @RequiredArgsConstructor
 public class TokenInterceptor implements HandlerInterceptor {
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer ";
 
     private final TokenFacade tokenFacade;
-    private final MemberRepository memberRepository;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (handler instanceof HandlerMethod handlerMethod) {
-            String token = tokenFacade.resolveToken(request);
+            String token = resolveToken(request);
             Long memberId = tokenFacade.validateToken(token);
             TokenContext.setToken(token);
             request.setAttribute("memberId", memberId);
@@ -32,5 +34,18 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         TokenContext.clear();
+    }
+
+    private String resolveToken(HttpServletRequest request) {
+        String jwtToken = request.getHeader(AUTHORIZATION_HEADER);
+        if (jwtToken == null) {
+            throw new TokenMissingException();
+        }
+
+        if (jwtToken.startsWith(BEARER_PREFIX)) {
+            return jwtToken.substring(BEARER_PREFIX.length());
+        } else {
+            throw new InvalidTokenHeaderException();
+        }
     }
 }

@@ -8,6 +8,7 @@ import com.dubu.backend.member.api.response.MemberInfoResponse;
 import com.dubu.backend.member.api.response.MemberResponse;
 import com.dubu.backend.member.api.response.MemberSavedAddressResponse;
 import com.dubu.backend.member.api.response.MemberStatusResponse;
+import com.dubu.backend.member.api.swagger.MemberSwagger;
 import com.dubu.backend.member.application.MemberCommandFacade;
 import com.dubu.backend.member.application.MemberLocationFacade;
 import com.dubu.backend.member.application.MemberQueryFacade;
@@ -28,7 +29,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/members")
-public class MemberController implements MemberApi {
+public class MemberController implements MemberSwagger {
     private final MemberQueryFacade memberQueryFacade;
     private final MemberCommandFacade memberCommandFacade;
     private final MemberLocationFacade memberLocationFacade;
