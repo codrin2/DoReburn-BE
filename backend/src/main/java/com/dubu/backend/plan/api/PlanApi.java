@@ -1,7 +1,7 @@
 package com.dubu.backend.plan.api;
 
 import com.dubu.backend.core.domain.SuccessResponse;
-import com.dubu.backend.member.api.MemberApi;
+import com.dubu.backend.member.api.swagger.MemberSwagger;
 import com.dubu.backend.plan.api.request.PlanCreateRequest;
 import com.dubu.backend.plan.api.request.PlanFeedbackCreateRequest;
 import com.dubu.backend.plan.api.response.FeedbackWritePageInfoResponse;
@@ -390,7 +390,7 @@ public interface PlanApi {
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(
-                                    implementation = MemberApi.ErrorResponseExample.class,
+                                    implementation = MemberSwagger.ErrorResponseExample.class,
                                     description = "에러 응답 예시"
                             ),
                             examples = {

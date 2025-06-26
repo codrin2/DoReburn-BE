@@ -1,4 +1,4 @@
-package com.dubu.backend.member.api;
+package com.dubu.backend.member.api.swagger;
 
 import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.member.domain.model.MemberLocation;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-public interface MemberApi {
+public interface MemberSwagger {
 
     @Operation(
             summary = "회원 정보 조회",

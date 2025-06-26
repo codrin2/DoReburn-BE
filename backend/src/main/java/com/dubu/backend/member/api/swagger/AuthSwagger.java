@@ -1,4 +1,4 @@
-package com.dubu.backend.member.api;
+package com.dubu.backend.member.api.swagger;
 
 import com.dubu.backend.member.api.response.AccessToken;
 import com.dubu.backend.member.api.response.Token;
@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 
 import java.util.Map;
 
-public interface AuthApi {
+public interface AuthSwagger {
     @Operation(
             summary = "카카오 로그인 콜백 처리",
             description = """

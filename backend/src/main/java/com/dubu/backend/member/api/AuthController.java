@@ -1,5 +1,6 @@
 package com.dubu.backend.member.api;
 
+import com.dubu.backend.member.api.swagger.AuthSwagger;
 import com.dubu.backend.member.application.AuthFacade;
 import com.dubu.backend.member.core.JwtProperties;
 import com.dubu.backend.member.api.response.AccessToken;
@@ -22,7 +23,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class AuthController implements AuthApi {
+public class AuthController implements AuthSwagger {
     public static final long HOURS_IN_MINIUTES = 60 * 60L;
 
     private final JwtProperties jwtProperties;

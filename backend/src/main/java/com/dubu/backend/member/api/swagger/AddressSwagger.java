@@ -1,4 +1,4 @@
-package com.dubu.backend.member.api;
+package com.dubu.backend.member.api.swagger;
 
 import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.member.api.response.AddressSearchResponse;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-public interface AddressApi {
+public interface AddressSwagger {
     @Operation(
             summary = "장소 검색",
             description = """
