@@ -63,6 +63,18 @@ public class TokenFacade {
         return token;
     }
 
+    public void logout(String refreshToken) {
+        try {
+            TokenInfo tokenInfo = tokenManager.parseClaimsFromRefreshToken(refreshToken);
+            String jti = tokenInfo.tokenId();
+            Instant expiration = tokenInfo.expiration();
+
+            redisTokenRepository.addBlacklistToken(jti, getRemainingDuration(expiration));
+        } catch (Exception e) {
+            log.warn("Invalid refresh token during logout. Token: {}", refreshToken, e);
+        }
+    }
+
     public Long validateToken(String accessToken) {
         Claims claims = jwtManager.parseClaims(accessToken);
         String memberId = claims.getSubject();
