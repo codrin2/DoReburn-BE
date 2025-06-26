@@ -64,4 +64,10 @@ public class Member extends BaseTimeEntity {
     public boolean isOnboarding() {
         return this.status == MemberStatus.ONBOARDING;
     }
+
+    public void deactivate() {
+        this.email = "deactivated-" + this.id;
+        this.oauthInfo = OauthInfo.of(this.getOauthInfo().getOauthProvider(), "0");
+        this.deletedAt = DateTimeUtils.nowSeoulInstant();
+    }
 }
