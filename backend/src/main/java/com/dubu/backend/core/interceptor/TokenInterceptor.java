@@ -43,7 +43,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         }
 
         if (jwtToken.startsWith(BEARER_PREFIX)) {
-            return jwtToken.substring(7);
+            return jwtToken.substring(BEARER_PREFIX.length());
         } else {
             throw new InvalidTokenHeaderException();
         }
