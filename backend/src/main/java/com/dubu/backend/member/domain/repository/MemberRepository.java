@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByOauthProviderId(String providerId);
+    Optional<Member> findByEmail(String email);
 
     @Query("SELECT m FROM Member m WHERE m.id IN :memberIds")
     List<Member> findMembersByMemberIds(List<Long> memberIds);
