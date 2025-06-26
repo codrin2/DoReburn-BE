@@ -1,17 +1,22 @@
 package com.dubu.backend.member.api.swagger;
 
+import com.dubu.backend.core.domain.ErrorResponse;
+import com.dubu.backend.core.domain.SuccessResponse;
 import com.dubu.backend.member.api.response.AccessToken;
 import com.dubu.backend.member.api.response.Token;
-import com.dubu.backend.core.domain.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.Map;
 
@@ -59,7 +64,7 @@ public interface AuthSwagger {
                     )
             )
     })
-    SuccessResponse<AccessToken> kakaoCallback(
+    SuccessResponse<AccessToken> kakaoLogin(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "카카오에서 인가 코드를 전달받을 때 사용되는 필드(code)",
                     required = true,
@@ -144,10 +149,58 @@ public interface AuthSwagger {
             )
     })
     SuccessResponse<AccessToken> reissue(
-            HttpServletRequest request,
+            String refreshToken,
             HttpServletResponse response
     );
 
+    /*──────────────────────────────────────────────────────
+     * 로그아웃
+     *──────────────────────────────────────────────────────*/
+    @Operation(
+            summary = "로그아웃",
+            description = """
+            쿠키에 위치한 Refresh Token을 블랙리스트 처리해 재사용을 차단합니다.<br>
+            클라이언트 측에서 기존에 관리하던 AccessToken을 제거해야합니다
+            """,
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "로그아웃 완료")
+            }
+    )
+    @PostMapping("/logout")
+    void logout(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+    );
+
+    /*──────────────────────────────────────────────────────
+     * 회원 탈퇴
+     *──────────────────────────────────────────────────────*/
+    @Operation(
+            summary = "회원 탈퇴",
+            description = """
+            존재하는 회원인지 여부를 확인한 후 회원의 계정을 삭제합니다.
+            """,
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "탈퇴 완료"),
+                    @ApiResponse(responseCode = "404",
+                            description = "NOT_FOUND_MEMBER",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class),
+                                    examples = @ExampleObject(
+                                            value = """
+                        {
+                          "errorCode": "NOT_FOUND_MEMBER",
+                          "message": "회원을 찾을 수 없습니다. MemberId : 42"
+                        }"""
+                                    )))
+            }
+    )
+    @DeleteMapping("/account")
+    void deleteAccount(
+            @RequestAttribute("memberId") Long memberId
+    );
+
+    /*──────────────────────────────────────────────────────
+     * 테스트용 토큰 발급
+     *──────────────────────────────────────────────────────*/
     @Operation(
             summary = "테스트용 토큰 발급",
             description = "회원 1번(고정)에 대한 임시 액세스 토큰을 발급한다."
