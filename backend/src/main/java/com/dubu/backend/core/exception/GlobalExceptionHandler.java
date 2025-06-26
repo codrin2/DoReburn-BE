@@ -87,6 +87,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleMissingCookie(MissingRequestCookieException ex) {
+        log.warn("Missing Cookie : {}", ex.getCookieName());
+
+        return new ErrorResponse(ErrorCode.MISSING_TOKEN_IN_COOKIE);
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(NotFoundException e){
         log.warn(e.getMessage());
