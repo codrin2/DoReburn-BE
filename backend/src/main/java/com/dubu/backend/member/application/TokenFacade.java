@@ -1,28 +1,27 @@
 package com.dubu.backend.member.application;
 
 import com.dubu.backend.member.api.response.Token;
-import com.dubu.backend.member.infrastructure.RedisTokenRepository;
+import com.dubu.backend.member.application.dto.TokenInfo;
 import com.dubu.backend.member.core.JwtProperties;
-import com.dubu.backend.member.core.exception.InvalidTokenHeaderException;
+import com.dubu.backend.member.core.exception.RefreshTokenExpiredException;
 import com.dubu.backend.member.core.exception.TokenBlacklistedException;
-import com.dubu.backend.member.core.exception.TokenMissingException;
-import io.jsonwebtoken.Claims;
+import com.dubu.backend.member.infrastructure.RedisTokenRepository;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Date;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TokenFacade {
     public static final long HOURS_IN_MILLIS = 60 * 60 * 1000L;
 
     private final JwtProperties jwtProperties;
-    private final JwtManager jwtManager;
+    private final TokenManager tokenManager;
     private final RedisTokenRepository redisTokenRepository;
     private long accessTokenTime;
     private long refreshTokenTime;
@@ -34,8 +33,8 @@ public class TokenFacade {
     }
 
     public Token issue(Long memberId) {
-        String newAccessToken = jwtManager.createToken(memberId, accessTokenTime);
-        String newRefreshToken = jwtManager.createToken(memberId, refreshTokenTime);
+        String newAccessToken = tokenManager.createToken(memberId, accessTokenTime);
+        String newRefreshToken = tokenManager.createToken(memberId, refreshTokenTime);
 
         redisTokenRepository.saveRefreshToken(memberId.toString(), newRefreshToken, refreshTokenTime);
 
@@ -43,24 +42,17 @@ public class TokenFacade {
     }
 
     public Token reissue(String oldRefreshToken) {
-        Claims claims = jwtManager.parseClaimsFromRefreshToken(oldRefreshToken);
-
-        String jti = claims.getId();
-        String memberId = claims.getSubject();
+        TokenInfo tokenInfo = tokenManager.parseClaimsFromRefreshToken(oldRefreshToken);
+        String jti = tokenInfo.tokenId();
+        String memberId = tokenInfo.memberId();
 
         if (redisTokenRepository.isBlacklisted(jti)) {
-            String currentRefreshToken = redisTokenRepository.getRefreshToken(memberId);
-            Date expiration = jwtManager.parseClaimsFromRefreshToken(currentRefreshToken).getExpiration();
-            redisTokenRepository.addBlacklistToken(currentRefreshToken, getRemainingDuration(expiration));
-
             throw new TokenBlacklistedException();
         }
 
-        redisTokenRepository.addBlacklistToken(jti, getRemainingDuration(claims.getExpiration()));
+        redisTokenRepository.addBlacklistToken(jti, getRemainingDuration(tokenInfo.expiration()));
 
-        Token token = issue(Long.valueOf(memberId));
-
-        return token;
+        return issue(Long.valueOf(memberId));
     }
 
     public void logout(String refreshToken) {
@@ -76,29 +68,18 @@ public class TokenFacade {
     }
 
     public Long validateToken(String accessToken) {
-        Claims claims = jwtManager.parseClaims(accessToken);
-        String memberId = claims.getSubject();
+        TokenInfo tokenInfo = tokenManager.parseClaims(accessToken);
+        String memberId = tokenInfo.memberId();
 
         return Long.parseLong(memberId);
     }
 
-    public String resolveToken(HttpServletRequest request) {
-        String jwtToken = request.getHeader("Authorization");
-        if (jwtToken == null) {
-            throw new TokenMissingException();
-        }
-
-        if (jwtToken.startsWith("Bearer ")) {
-            return jwtToken.substring(7);
-        } else {
-            throw new InvalidTokenHeaderException();
-        }
-    }
-
-    private Duration getRemainingDuration(Date expiration) {
+    private Duration getRemainingDuration(Instant expiration) {
         Instant now = Instant.now();
-        Instant expirationTime = expiration.toInstant();
+        if(now.isAfter(expiration)) {
+            throw new RefreshTokenExpiredException();
+        }
 
-        return Duration.between(now, expirationTime);
+        return Duration.between(now, expiration);
     }
 }
