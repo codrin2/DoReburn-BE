@@ -20,10 +20,10 @@ public class MemberService {
 
     public Member findOrCreateMember(UserInfo userInfo) {
         return memberRepository.findByEmail(userInfo.email())
-                .orElseGet(() -> creatMember(userInfo));
+                .orElseGet(() -> createMember(userInfo));
     }
 
-    private Member creatMember(UserInfo userInfo) {
+    private Member createMember(UserInfo userInfo) {
         Member newMember = Member.of(
                 userInfo.email(),
                 OauthProvider.KAKAO,
