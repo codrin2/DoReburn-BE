@@ -51,6 +51,22 @@ public class AuthController implements AuthSwagger {
         return new SuccessResponse<>(new AccessToken(token.accessToken()));
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/logout")
+    public void logout(
+            @CookieValue(value = "REFRESH_TOKEN", required = false) String refreshToken
+    ) {
+        tokenFacade.logout(refreshToken);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/account")
+    public void deleteAccount(
+            @RequestAttribute("memberId") Long memberId
+    ) {
+        authFacade.deleteAccount(memberId);
+    }
+
     @PostMapping("/test/token")
     public SuccessResponse<AccessToken> testToken() {
         AccessToken response = authFacade.issueTokenForTest();
