@@ -1,12 +1,15 @@
 package com.dubu.backend.member.domain.model;
 
 import com.dubu.backend.core.domain.BaseTimeEntity;
+import com.dubu.backend.core.util.DateTimeUtils;
 import com.dubu.backend.member.core.AggregateRoot;
 import com.dubu.backend.member.domain.enums.MemberStatus;
 import com.dubu.backend.member.domain.enums.OauthProvider;
 import com.dubu.backend.member.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.Instant;
 
 @AggregateRoot
 @Entity
@@ -26,12 +29,8 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private OauthProvider oauthProvider;
-
-    @Column(nullable = false)
-    private String oauthProviderId;
+    @Embedded
+    private OauthInfo oauthInfo;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -43,11 +42,13 @@ public class Member extends BaseTimeEntity {
 
     private String recentRoute;
 
+    @Column(name = "deleted_at")
+    private Instant deletedAt;
+
     public static Member of(String email, OauthProvider oauthProvider, String oauthProviderId) {
         return Member.builder()
                 .email(email)
-                .oauthProvider(oauthProvider)
-                .oauthProviderId(oauthProviderId)
+                .oauthInfo(OauthInfo.of(oauthProvider, oauthProviderId))
                 .role(Role.USER)
                 .status(MemberStatus.ONBOARDING)
                 .build();
