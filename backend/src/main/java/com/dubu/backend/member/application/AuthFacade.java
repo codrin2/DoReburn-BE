@@ -37,6 +37,12 @@ public class AuthFacade {
         return token;
     }
 
+    @Transactional
+    public void deleteAccount(Long memberId) {
+        Member member = memberService.findExistingMember(memberId);
+        member.deactivate();
+    }
+
     public AccessToken issueTokenForTest() {
         Token token = tokenFacade.issue(1L);
 
